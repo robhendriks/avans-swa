@@ -1,20 +1,24 @@
 cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
-project(city_defence)
+project(city_defence VERSION 1.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-find_package(OPENGL REQUIRED)
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+find_package(SDL2_ttf REQUIRED)
+
+set(SOURCES src/main.cpp)
 
 include_directories(
-    external/glfw/include/GLFW
-    external/glew/include
-    external/glm
+    ${SDL2_INCLUDE_DIR}
+    ${SDL2_IMAGE_INCLUDE_DIR}
+    ${SDL2_TTF_INCLUDE_DIRS}
 )
 
-add_subdirectory(external)
-
-set(ALL_LIBRARIES ${OPENGL_LIBRARY} glfw libglew_static)
-
-set(SOURCE_FILES src/main.cpp)
-add_executable(city_defence ${SOURCE_FILES})
-target_link_libraries(city_defence ${ALL_LIBRARIES})
+add_executable(city_defence ${SOURCES})
+target_link_libraries(
+    city_defence
+    ${SDL2_LIBRARY}
+    ${SDL2_IMAGE_LIBRARY}
+    ${SDL2_TTF_LIBRARIES}
+)
