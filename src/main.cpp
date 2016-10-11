@@ -7,13 +7,14 @@ const int HEIGHT = 600;
 SDL_Window *window;
 SDL_Renderer *renderer;
 
-int main (int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         fprintf(stderr, "Failed to initialize SDL: \n", SDL_GetError());
         return 1;
     }
 
-    window = SDL_CreateWindow("City Defence", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("City Defence", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT,
+                              SDL_WINDOW_SHOWN);
     if (!window) {
         fprintf(stderr, "Failed to create window: \n", SDL_GetError());
         return 1;
