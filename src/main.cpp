@@ -1,28 +1,40 @@
 #include <stdio.h>
-#include "SDL2/SDL.h"
+#include <iostream>
+#include "Simpleini.h"
+#include "SDL.h"
+#include "config/ini_config.h"
 
-const int WIDTH = 800;
-const int HEIGHT = 600;
+long window_w = 800;
+long window_h = 600;
 
 SDL_Window *window;
 SDL_Renderer *renderer;
 
 int main(int argc, char *argv[]) {
+    config::ini_config cfg("config.ini");
+
+    if (!cfg.load()) {
+        fprintf(stderr, "Failed to load configuration\n");
+        return -1;
+    }
+
+    window_w = cfg.get("window", "width", window_w);
+    window_h = cfg.get("window", "height", window_h);
+
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        fprintf(stderr, "Failed to initialize SDL: \n", SDL_GetError());
+        fprintf(stderr, "Failed to initialize SDL: %s\n", SDL_GetError());
         return 1;
     }
 
-    window = SDL_CreateWindow("City Defence", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT,
-                              SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("City Defence", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_w, window_h, SDL_WINDOW_SHOWN);
     if (!window) {
-        fprintf(stderr, "Failed to create window: \n", SDL_GetError());
+        fprintf(stderr, "Failed to create window: %s\n", SDL_GetError());
         return 1;
     }
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if (!renderer) {
-        fprintf(stderr, "Failed to create renderer: \n", SDL_GetError());
+        fprintf(stderr, "Failed to create renderer: %s\n", SDL_GetError());
         return 1;
     }
 
