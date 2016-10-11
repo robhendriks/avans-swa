@@ -14,9 +14,11 @@
   * Kopieer de map SDL2 van **i686-w64-mingw32/include** naar de include map van MinGW (**C:/MinGW/include**)
   * Kopieer de **.a files** van **i686-w64-mingw32/lib** naar de lib map van MinGW (**C:/MinGW/lib**)
 7. Open de gedownloade **SDL2_ttf-devel-2.0.14-mingw.tar.gz**
+  * Kopieer **.dll files** van **i686-w64-mingw32/bin/** naar **C:/Windows/SysWOW64**
   * Kopieer de **.h files** van **i686-w64-mingw32/include/SDL2** naar **C:/MinGW/include/SDL2**
   * Kopieer de **.a files** van **i686-w64-mingw32/lib** naar de lib map van MinGW (**C:/MinGW/lib**)
 8. Open de gedownloade **SDL2_image-devel-2.0.1-mingw.tar.gz**
+  * Kopieer **.dll files** van **i686-w64-mingw32/bin/** naar **C:/Windows/SysWOW64**
   * Kopieer de **.h files** van **i686-w64-mingw32/include/SDL2** naar **C:/MinGW/include/SDL2**
   * Kopieer de **.a files** van **i686-w64-mingw32/lib** naar de lib map van MinGW (**C:/MinGW/lib**)
 6. Haal het git project binnen en run het
