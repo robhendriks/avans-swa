@@ -150,3 +150,38 @@ math::box2_t box = {{0, 0}, {10, 10}};
 // OR
 math::box2_t box(box_to_copy); // Copy constructor
 ```
+
+#### Operations
+
+**size**
+
+Returns the size of the rectangle.
+
+```cpp
+auto box = {{5, 5}, {15, 15}};
+auto.size(); // Returns {10, 10}
+```
+
+**center**
+
+Returns the center point of the rectangle.
+
+```cpp
+auto box = {{0, 0}, {10, 10}};
+auto.center(); // Returns {5, 5}
+```
+
+**to_string**
+
+Returns a user friendly string representation.
+
+```cpp
+auto box = {{0, 0}, {10, 10}};
+printf("%s\n", box.to_string().c_str());
+```
+
+Outputs:
+
+```
+{min={x=0, y=0}, max={x=10, y=10}}
+```
