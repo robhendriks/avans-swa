@@ -1,7 +1,4 @@
 # Documentation
 
-## Compiling
-
-* *macOS*
-* *Linux*
-* [Windows](Windows.md)
+* [Building](building.md)
+* [API documentation](api.md)

@@ -1,3 +1,15 @@
+# Building
+
+## Linux
+
+*coming soon&hellip;*
+
+## macOS
+
+*coming soon&hellip;*
+
+## Windows
+
 1. Download and install **MinGW**
   * https://sourceforge.net/projects/mingw/files/latest/download?source=files
   * Selecteer minimaal de **mingw32-gcc-g++** en **mingw32-base** packages
