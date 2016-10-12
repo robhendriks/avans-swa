@@ -2,11 +2,64 @@
 
 ## Linux
 
-*coming soon&hellip;*
+This guide requires at least *Debian 8 (Jessie)* or *Ubuntu 16.04 (Xenial)*.
+
+**Step 1.**  
+Install the toolchain.
+
+```sh
+sudo apt-get install build-essential
+```
+
+**Step 2.**  
+Install the SDL2 development packages.
+
+```sh
+sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+```
+
+**Step 3.**  
+Clone the Git repository.
+
+```sh
+git clone git@github.com:robhendriks/city-defence.git
+```
+
+**Step 4.**  
+Create a new directory called *build* inside the project root directory, navigate to it and execute CMake.
+
+```sh
+mkdir build && cd $_
+cmake ..
+```
+
+**Step 5.**  
+Compile and run.
+
+```sh
+make && ./city_defence
+```
 
 ## macOS
 
-*coming soon&hellip;*
+This guide requires at least *macOS 10.10 (El Capitan)*.
+
+**Step 1.**  
+Install Homebrew.
+
+```sh
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+
+**Step 2.**
+Install CMake and the SDL2 development packages.
+
+```sh
+brew install cmake sdl2 sdl2_image sdl2_ttf
+```
+
+*Continue at Step 3 ([Linux](#linux)).*
+
 
 ## Windows
 
