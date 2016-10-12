@@ -1,3 +1,3 @@
 # API
 
-* [Math](math.md)
+* [Math](api-math.md)
