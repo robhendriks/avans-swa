@@ -13,13 +13,8 @@ SDL_Window *window;
 SDL_Renderer *renderer;
 
 int main(int argc, char *argv[]) {
-    math::box2_t a(
-        math::vec2_t(0, 0),
-        math::vec2_t(12, 12));
-    math::box2_t box = {{0, 0}, {10, 10}};
+    math::box2_t a = {{0, 0}, {10, 10}};
 
-    std::cout << a.to_string() << std::endl;
-    std::cout << a.center().to_string() << std::endl;
 
 
     /*config::ini_config cfg("config.ini");

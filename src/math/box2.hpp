@@ -26,6 +26,31 @@ namespace math {
             return (min + max) *= 0.5f;
         }
 
+        bool contains(const vec2_t &vec) {
+            if (vec.x < min.x || vec.x > max.x ||
+                vec.y < min.y || vec.y > max.y) {
+                return false;
+            }
+            return true;
+        }
+
+        bool contains(const box2_t &box) {
+            if ((min.x <= box.min.x) && (box.max.x <= max.x) &&
+                (min.y <= box.min.y) && (box.max.y <= max.y)) {
+                return true;
+            }
+            return false;
+        }
+
+        bool intersects(const box2_t &box) {
+            if (box.max.x < min.x || box.min.x > max.x ||
+                box.max.y < min.y || box.min.y > max.y) {
+                return false;
+
+            }
+            return true;
+        }
+
         bool operator==(const box2_t &b) {
             return (min == b.min) && (max == b.max);
         }

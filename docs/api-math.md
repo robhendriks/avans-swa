@@ -126,6 +126,13 @@ vec /= vec // Divide vectors
 --vec // Decrement
 ```
 
+**Equality**
+
+```
+vec == vec
+vec != vec
+```
+
 ## box2_t
 
 Represents a rectangular shape in two-dimensional space.
@@ -184,4 +191,39 @@ Outputs:
 
 ```
 {min={x=0, y=0}, max={x=10, y=10}}
+```
+
+**contains**
+
+Checks if the rectangle contains a point or rectangle.
+
+```cpp
+auto box = {{0, 0}, {10, 10}};
+
+// Point
+box.contains({5, 5}); // Returns true
+box.contains({11, 11}); // Returns false
+
+// Rectangle
+box.contains({{4, 4}, {8, 8}}); // Returns true
+box.contains({{8, 8}, {11, 11}}); // Returns false
+```
+
+**intersects**
+
+Checks if the rectangle intersects with another rectangle.
+
+```cpp
+auto box = {{0, 0}, {10, 10}};
+box.intersects({{5, 5}, {15, 15}}); // Returns true
+box.intersects({{11, 11}, {15, 15}}); // Returns false
+```
+
+#### Operators
+
+**Equality**
+
+```
+box == box
+box != box
 ```
