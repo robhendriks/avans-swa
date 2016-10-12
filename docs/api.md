@@ -1,3 +1,3 @@
 # API
 
-*coming soon&hellip;*
+* [Math](math.md)

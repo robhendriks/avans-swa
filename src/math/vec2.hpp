@@ -12,9 +12,9 @@
 namespace math {
 
     struct vec2_t {
-        int x, y;
+        float x, y;
 
-        vec2_t(int x, int y)
+        vec2_t(float x, float y)
             : x(x), y(y) {}
 
         vec2_t(const vec2_t &v)
@@ -24,7 +24,7 @@ namespace math {
             return vec2_t(x + v.x, y + v.y);
         }
 
-        vec2_t operator+(int scalar) {
+        vec2_t operator+(float scalar) {
             return vec2_t(x + scalar, y + scalar);
         }
 
@@ -32,7 +32,7 @@ namespace math {
             return vec2_t(x - v.x, y - v.y);
         }
 
-        vec2_t operator-(int scalar) {
+        vec2_t operator-(float scalar) {
             return vec2_t(x - scalar, y - scalar);
         }
 
@@ -40,7 +40,7 @@ namespace math {
             return vec2_t(x * v.x, y * v.y);
         }
 
-        vec2_t operator*(int scalar) {
+        vec2_t operator*(float scalar) {
             return vec2_t(x * scalar, y * scalar);
         }
 
@@ -48,7 +48,7 @@ namespace math {
             return vec2_t(x / v.x, y / v.y);
         }
 
-        vec2_t operator/(int scalar) {
+        vec2_t operator/(float scalar) {
             return vec2_t(x / scalar, y / scalar);
         }
 
@@ -64,7 +64,7 @@ namespace math {
             return *this;
         }
 
-        vec2_t &operator+=(int scalar) {
+        vec2_t &operator+=(float scalar) {
             x += scalar;
             y += scalar;
             return *this;
@@ -76,7 +76,7 @@ namespace math {
             return *this;
         }
 
-        vec2_t &operator-=(int scalar) {
+        vec2_t &operator-=(float scalar) {
             x -= scalar;
             y -= scalar;
             return *this;
@@ -88,7 +88,7 @@ namespace math {
             return *this;
         }
 
-        vec2_t &operator*=(int scalar) {
+        vec2_t &operator*=(float scalar) {
             x *= scalar;
             y *= scalar;
             return *this;
@@ -100,7 +100,7 @@ namespace math {
             return *this;
         }
 
-        vec2_t &operator/=(int scalar) {
+        vec2_t &operator/=(float scalar) {
             x /= scalar;
             y /= scalar;
             return *this;
@@ -132,7 +132,7 @@ namespace math {
             return *this;
         }
 
-        vec2_t &min(int scalar) {
+        vec2_t &min(float scalar) {
             return min(vec2_t(scalar, scalar));
         }
 
@@ -142,7 +142,7 @@ namespace math {
             return *this;
         }
 
-        vec2_t &max(int scalar) {
+        vec2_t &max(float scalar) {
             return max(vec2_t(scalar, scalar));
         }
 
@@ -152,7 +152,7 @@ namespace math {
             return *this;
         }
 
-        vec2_t &clamp(int min, int max) {
+        vec2_t &clamp(float min, float max) {
             return clamp(
                 vec2_t(min, min),
                 vec2_t(max, max));
@@ -160,7 +160,7 @@ namespace math {
 
         std::string to_string() {
             std::stringstream ss;
-            ss << "vec2_t{";
+            ss << "{";
             ss << "x=" << x;
             ss << ", y=" << y;
             ss << '}';

@@ -2,6 +2,8 @@
 #include <iostream>
 #include "SDL.h"
 #include "config/ini_config.h"
+
+#include "math/box2.hpp"
 #include "math/vec2.hpp"
 
 long window_w = 800;
@@ -11,12 +13,13 @@ SDL_Window *window;
 SDL_Renderer *renderer;
 
 int main(int argc, char *argv[]) {
-    math::vec2_t a = {5, 30};
-    math::vec2_t b = {10, 15};
-
-    a.clamp(3, 40);
+    math::box2_t a(
+        math::vec2_t(0, 0),
+        math::vec2_t(12, 12));
 
     std::cout << a.to_string() << std::endl;
+    std::cout << a.center().to_string() << std::endl;
+
 
     /*config::ini_config cfg("config.ini");
 
