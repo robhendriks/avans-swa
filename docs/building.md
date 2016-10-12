@@ -51,7 +51,7 @@ Install Homebrew.
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
-**Step 2.**
+**Step 2.**  
 Install CMake and the SDL2 development packages.
 
 ```sh
