@@ -43,13 +43,9 @@ using namespace math; // OPTIONAL
 ```
 
 ```cpp
-math::box2_t box(
-    math::vec2_t(0, 0),
-    math::vec2_t(10, 10));
-// OR
-math::box2_t box = {
-    math::vec2_t(0, 0), 
-    math::vec2_t(10, 10)};
+math::box2_t box(math::vec2_t(0, 0), math::vec2_t(10, 10));
 // OR
 math::box2_t box = {{0, 0}, {10, 10}};
+// OR
+math::box2_t box(box_to_copy); // Copy constructor
 ```
