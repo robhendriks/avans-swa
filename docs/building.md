@@ -42,7 +42,7 @@ make && ./city_defence
 
 ## macOS
 
-This guide requires at least *macOS 10.10 (El Capitan)*. We're also assuming you've got Xcode (including the command line tools) installed. 
+This guide requires at least *macOS 10.10 (El Capitan)* with Xcode and the command line tools installed. 
 
 **Step 1.**  
 Install Homebrew.
