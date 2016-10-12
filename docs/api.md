@@ -1,3 +1,4 @@
 # API
 
-*coming soon&hellip;*
+* [Math](api-math.md)
+* [Configuration](api-config.md)
