@@ -58,20 +58,20 @@ vec.clamp(0, 999); // Returns {0, 999}
 
 Returns a user friendly string representation.
 
-```
+```cpp
 auto vec = {42, 69};
 printf("%s\n", vec.to_string().c_str());
 ```
 
 Outputs:
 
-```
+```sh
 > {x=42, y=69}
 ```
 
 #### Operators
 
-##### Add
+**Add**
 
 ```cpp
 // Copy
@@ -83,7 +83,7 @@ vec += 10 // Add scalar
 vec += vec // Add vectors
 ```
 
-##### Subtract
+**Subtract**
 
 ```cpp
 // Copy
@@ -95,7 +95,7 @@ vec -= 10 // Sub scalar
 vec -= vec // Sub vectors
 ```
 
-##### Multiply
+**Multiply**
 
 ```cpp
 // Copy
@@ -107,7 +107,7 @@ vec *= 10 // Multiply scalar
 vec *= vec // Multiply vectors
 ```
 
-##### Divide
+**Divide**
 
 ```cpp
 // Copy
@@ -119,7 +119,7 @@ vec /= 10 // Divide scalar
 vec /= vec // Divide vectors
 ```
 
-##### Increment/decrement
+**Increment/decrement**
 
 ```cpp
 ++vec // Increment
