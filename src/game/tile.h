@@ -5,7 +5,6 @@
 #ifndef CITY_DEFENCE_TILE_HPP
 #define CITY_DEFENCE_TILE_HPP
 
-
 namespace game {
 
     class tile {
@@ -13,6 +12,5 @@ namespace game {
     };
 
 }
-
 
 #endif //CITY_DEFENCE_TILE_HPP

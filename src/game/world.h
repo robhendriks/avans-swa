@@ -5,12 +5,12 @@
 #ifndef CITY_DEFENCE_WORLD_H
 #define CITY_DEFENCE_WORLD_H
 
+namespace game {
 
+    class world {
 
-class world {
+    };
 
-};
-
-
+}
 
 #endif //CITY_DEFENCE_WORLD_H
