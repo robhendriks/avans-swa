@@ -66,7 +66,7 @@ printf("%s\n", vec.to_string().c_str());
 Outputs:
 
 ```
-> {x=42, y=69}
+{x=42, y=69}
 ```
 
 #### Operators
