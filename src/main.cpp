@@ -2,6 +2,7 @@
 #include <iostream>
 #include "SDL.h"
 #include "config/ini_config.h"
+#include "math/vec2.hpp"
 
 long window_w = 800;
 long window_h = 600;
@@ -10,7 +11,14 @@ SDL_Window *window;
 SDL_Renderer *renderer;
 
 int main(int argc, char *argv[]) {
-    config::ini_config cfg("config.ini");
+    math::vec2_t a = {5, 30};
+    math::vec2_t b = {10, 15};
+
+    a.clamp(3, 40);
+
+    std::cout << a.to_string() << std::endl;
+
+    /*config::ini_config cfg("config.ini");
 
     if (!cfg.load()) {
         fprintf(stderr, "Failed to load configuration\n");
@@ -55,7 +63,7 @@ int main(int argc, char *argv[]) {
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    SDL_Quit();
+    SDL_Quit();*/
 
     return 0;
 }
