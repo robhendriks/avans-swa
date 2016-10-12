@@ -54,71 +54,76 @@ auto vec = {-1, 1000};
 vec.clamp(0, 999); // Returns {0, 999}
 ```
 
+**to_string**
+
+Returns a user friendly string representation.
+
+```
+auto vec = {42, 69};
+printf("%s\n", vec.to_string().c_str());
+```
+
+Outputs:
+
+```
+> {x=42, y=69}
+```
+
 #### Operators
 
 ##### Add
 
 ```cpp
-// Add scalar (copy)
-vec + 10
-// Add vectors (copy)
-vec + vec
+// Copy
+vec + 10 // Add scalar
+vec + vec // Add vectors
 
-// Add scalar
-vec += 10
-// Add vectors
-vec += vec
+// Reference
+vec += 10 // Add scalar
+vec += vec // Add vectors
 ```
 
 ##### Subtract
 
 ```cpp
-// Sub scalar (copy)
-vec - 10
-// Sub vectors (copy)
-vec - vec
+// Copy
+vec - 10 // Sub scalar
+vec - vec // Sub vectors
 
-// Sub scalar
-vec -= 10
-// Sub vectors
-vec -= vec
+// Reference
+vec -= 10 // Sub scalar
+vec -= vec // Sub vectors
 ```
 
 ##### Multiply
 
 ```cpp
-// Multiply scalar (copy)
-vec * 10
-// Multiply vectors (copy)
-vec * vec
+// Copy
+vec * 10 // Multiply scalar
+vec * vec // Multiply vectors
 
-// Multiply scalar
-vec *= 10
-// Multiply vectors
-vec *= vec
+// Reference
+vec *= 10 // Multiply scalar
+vec *= vec // Multiply vectors
 ```
 
 ##### Divide
 
 ```cpp
-// Divide scalar (copy)
-vec / 10
-// Divide vectors (copy)
-vec / vec
+// Copy
+vec / 10 // Divide scalar
+vec / vec // Divide vectors
 
-// Divide scalar
-vec /= 10
-// Divide vectors
-vec /= vec
+// Reference
+vec /= 10 // Divide scalar
+vec /= vec // Divide vectors
 ```
 
 ##### Increment/decrement
 
 ```cpp
-// Increment
-++vec
-// Decrement
---vec
+++vec // Increment
+--vec // Decrement
 ```
 
 ## box2_t
