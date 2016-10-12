@@ -4,5 +4,9 @@
 
 [![Build Status][jenkins-image]][jenkins-url]
 
+## Documentation
+
+You can find the documentation [here](docs).
+
 [jenkins-image]: https://ci.greenfieldmc.com/buildStatus/icon?job=city-defence
 [jenkins-url]: https://ci.greenfieldmc.com/job/city-defence/
