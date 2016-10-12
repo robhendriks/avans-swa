@@ -17,7 +17,7 @@ struct vec2_t {
 using namespace math; // OPTIONAL
 ```
 
-```
+```cpp
 math::vec2_t vec(10, 10);
 // OR
 math::vec2_t vec = {10, 10};
