@@ -1,3 +1,2 @@
-# city-defence
+![City Defence](docs/logo-small.png)
 
-City Defence

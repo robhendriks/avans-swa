@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <iostream>
-#include "Simpleini.h"
 #include "SDL.h"
 #include "config/ini_config.h"
 
