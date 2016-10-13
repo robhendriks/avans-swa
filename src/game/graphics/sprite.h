@@ -8,7 +8,6 @@
 namespace game {
     namespace graphics {
         class sprite {
-
         };
     }
 }
