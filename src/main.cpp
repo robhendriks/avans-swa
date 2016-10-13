@@ -1,7 +1,10 @@
-#include <stdio.h>
 #include <iostream>
+
 #include "SDL.h"
 #include "config/ini_config.h"
+#include "game/graphics/texture.h"
+
+using namespace game::graphics;
 
 long window_w = 800;
 long window_h = 600;
@@ -25,7 +28,8 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    window = SDL_CreateWindow("City Defence", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_w, window_h, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("City Defence", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, window_w, window_h,
+                              SDL_WINDOW_SHOWN);
     if (!window) {
         fprintf(stderr, "Failed to create window: %s\n", SDL_GetError());
         return 1;
@@ -37,19 +41,50 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    SDL_SetRenderDrawColor(renderer, 0.0f, 0.0f, 0.0f, 1.0f);
+    int img_flags = IMG_INIT_PNG;
+    if (!(IMG_Init(img_flags) & img_flags)) {
+        fprintf(stderr, "Failed to initialize SDL_image: %s\n", SDL_GetError());
+        return 1;
+    }
+
+    /* ---------- TEXTURES ---------- */
+    texture tex_a("assets/images/city-defence-logo.png");
+    if (!tex_a.load(renderer)) {
+        fprintf(stderr, "Failed to load texture: %s\n", SDL_GetError());
+        return -1;
+    }
+
+    texture tex_b("assets/images/aesthetic-logo.png");
+    if (!tex_b.load(renderer)) {
+        fprintf(stderr, "Failed to load texture: %s\n", SDL_GetError());
+        return -1;
+    }
+    /* ---------- TEXTURES ---------- */
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
     bool running = true;
 
     while (running) {
         SDL_Event event;
-        while (SDL_PollEvent(&event)) {
+        while (SDL_PollEvent(&event) != 0) {
             if (event.type == SDL_QUIT) {
                 running = false;
             }
         }
 
         SDL_RenderClear(renderer);
+
+        SDL_Rect src = {0, 0, tex_a.get_width(), tex_a.get_height()};
+        SDL_Rect dst = {(int)((window_w / 2) - 320), (int)((window_h / 2) - 40), 640, 80};
+
+        SDL_RenderCopy(renderer, tex_a.get_texture(), &src, &dst);
+
+        src = {0, 0, tex_b.get_width(), tex_b.get_height()};
+        dst = {0, 0, 209, 224};
+
+        SDL_RenderCopy(renderer, tex_b.get_texture(), &src, &dst);
+
         SDL_RenderPresent(renderer);
     }
 
