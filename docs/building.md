@@ -86,5 +86,5 @@ brew install cmake sdl2 sdl2_image sdl2_ttf
   * Kopieer **.dll files** van **i686-w64-mingw32/bin/** naar **C:/Windows/SysWOW64**
   * Kopieer de **.h files** van **i686-w64-mingw32/include/SDL2** naar **C:/MinGW/include/SDL2**
   * Kopieer de **.a files** van **i686-w64-mingw32/lib** naar de lib map van MinGW (**C:/MinGW/lib**)
-6. Haal het git project binnen en run het
-  * Selecteer rechtsbovenin **city_defence** (ipv Build All) 
+6. Haal het git project binnen en open het in CLion
+  * Selecteer rechtsbovenin **city_defence** (ipv Build All) voor het runnen
