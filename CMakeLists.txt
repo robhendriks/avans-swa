@@ -25,7 +25,11 @@ set(SOURCES src/main.cpp
     src/game/graphics/texture.cpp
     src/game/graphics/texture.h
     src/game/graphics/sprite.cpp
-    src/game/graphics/sprite.h)
+    src/game/graphics/sprite.h
+    src/game/engine.cpp
+    src/game/engine.h
+    src/game/graphics/display.cpp
+    src/game/graphics/display.h)
 
 include_directories(third_party/simpleini
     ${SDL2_INCLUDE_DIR}
