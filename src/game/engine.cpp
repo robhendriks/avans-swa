@@ -32,7 +32,7 @@ namespace game {
 
     void engine::init() {
         if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-            fprintf(stderr, "Failed to initialize SDL: %s\n", SDL_GetError());
+            printf("Failed to initialize SDL: %s\n", SDL_GetError());
             return;
         }
 
@@ -42,7 +42,7 @@ namespace game {
 
             // TODO: Load resources
         } catch (std::runtime_error &e) {
-            fprintf(stderr, "Failed to initialize engine: %s\n", e.what());
+            printf("Failed to initialize engine: %s\n", e.what());
             return;
         }
 
