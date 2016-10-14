@@ -18,19 +18,19 @@ namespace config {
         return (ini->SaveFile(m_path) == 0);
     }
 
-    const char *ini_config::get(const char *section, const char *key, const char *default_value) {
+    const char *ini_config::get_value(const char *section, const char *key, const char *default_value) {
         return ini->GetValue(section, key, default_value);
     }
 
-    bool ini_config::get(const char *section, const char *key, bool default_value) {
+    bool ini_config::get_bool(const char *section, const char *key, bool default_value) {
         return ini->GetBoolValue(section, key, default_value);
     }
 
-    double ini_config::get(const char *section, const char *key, double default_value) {
+    double ini_config::get_double(const char *section, const char *key, double default_value) {
         return ini->GetDoubleValue(section, key, default_value);
     }
 
-    long ini_config::get(const char *section, const char *key, long default_value) {
+    long ini_config::get_long(const char *section, const char *key, long default_value) {
         return ini->GetLongValue(section, key, default_value);
     }
 

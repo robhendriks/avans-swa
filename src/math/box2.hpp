@@ -5,6 +5,7 @@
 #ifndef CITY_DEFENCE_BOX2_HPP
 #define CITY_DEFENCE_BOX2_HPP
 
+#include <SDL.h>
 #include "vec2.hpp"
 
 namespace math {
@@ -57,6 +58,11 @@ namespace math {
 
         bool operator!=(const box2_t &b) {
             return (min != b.min) || (max != b.max);
+        }
+
+        operator SDL_Rect() {
+            vec2_t s = size();
+            return SDL_Rect {(int) min.x, (int) min.y, (int) s.x, (int) s.y};
         }
 
         std::string to_string() {

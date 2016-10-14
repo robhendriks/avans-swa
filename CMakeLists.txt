@@ -15,7 +15,21 @@ set(SOURCES src/main.cpp
     src/config/config.h
     src/config/config.cpp
     src/config/ini_config.h
-    src/config/ini_config.cpp)
+    src/config/ini_config.cpp
+    src/math/vec2.hpp
+    src/math/box2.hpp
+    src/game/tile.h
+    src/game/tile.cpp
+    src/game/world.h
+    src/game/world.cpp
+    src/game/graphics/texture.cpp
+    src/game/graphics/texture.h
+    src/game/graphics/sprite.cpp
+    src/game/graphics/sprite.h
+    src/game/engine.cpp
+    src/game/engine.h
+    src/game/graphics/display.cpp
+    src/game/graphics/display.h)
 
 include_directories(third_party/simpleini
     ${SDL2_INCLUDE_DIR}

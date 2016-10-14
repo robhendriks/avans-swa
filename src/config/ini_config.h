@@ -23,13 +23,13 @@ namespace config {
 
         bool save();
 
-        const char *get(const char *section, const char *key, const char *default_value = "");
+        const char *get_value(const char *section, const char *key, const char *default_value = "");
 
-        bool get(const char *section, const char *key, bool default_value = false);
+        bool get_bool(const char *section, const char *key, bool default_value = false);
 
-        double get(const char *section, const char *key, double default_value = 0);
+        double get_double(const char *section, const char *key, double default_value = 0);
 
-        long get(const char *section, const char *key, long default_value = 0);
+        long get_long(const char *section, const char *key, long default_value = 0);
 
 
     private:
