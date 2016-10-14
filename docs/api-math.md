@@ -230,7 +230,7 @@ box != box
 
 #### Casting
 
-Aditionally, you can cast *box2_t* to *SDL_Rect*. While doing this, you'll have to remember that *box2_t* handles coordinates in a differently. Where *SDL_Rect* uses a position and size, *box2_t* uses a start and end position.
+Aditionally, you can cast *box2_t* to *SDL_Rect*. While doing this, you'll have to remember that *box2_t* handles coordinates differently. Where *SDL_Rect* uses a position and size, *box2_t* uses a start and end position.
 
 [![Rectangles](img/rectangles-small.png)](img/rectangles.png)
 
