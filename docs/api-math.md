@@ -227,3 +227,21 @@ box.intersects({{11, 11}, {15, 15}}); // Returns false
 box == box
 box != box
 ```
+
+#### Casting
+
+Additionally, you can cast box2_t to the following types:
+
+* SDL_Rect
+
+```
+// box2_t x1, y1, x2, y2
+math::box2_t box = {{10, 10}, {30, 30}};
+
+// SDL_Rect x, y, w, h
+// x: x1 = 10
+// y: y1 = 10
+// w: x2 - x1 = 20
+// h: y2 - y1 = 20
+SDL_Rect rect = (SDL_Rect) box;
+```
