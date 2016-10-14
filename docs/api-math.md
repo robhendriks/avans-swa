@@ -230,18 +230,11 @@ box != box
 
 #### Casting
 
-Additionally, you can cast box2_t to the following types:
+Aditionally, you can cast *box2_t* to *SDL_Rect*. While doing this, you'll have to remember that *box2_t* handles coordinates in a differently. Where *SDL_Rect* uses a position and size, *box2_t* uses a start and end position.
 
-* SDL_Rect
+[![Rectangles](img/rectangles-small.png)](img/rectangles.png)
 
-```
-// box2_t x1, y1, x2, y2
+```cpp
 math::box2_t box = {{10, 10}, {30, 30}};
-
-// SDL_Rect x, y, w, h
-// x: x1 = 10
-// y: y1 = 10
-// w: x2 - x1 = 20
-// h: y2 - y1 = 20
 SDL_Rect rect = (SDL_Rect) box;
 ```
