@@ -227,3 +227,14 @@ box.intersects({{11, 11}, {15, 15}}); // Returns false
 box == box
 box != box
 ```
+
+#### Casting
+
+Aditionally, you can cast *box2_t* to *SDL_Rect*. While doing this, you'll have to remember that *box2_t* handles coordinates differently. Where *SDL_Rect* uses a position and size, *box2_t* uses a start and end position.
+
+[![Rectangles](img/rectangles-small.png)](img/rectangles.png)
+
+```cpp
+math::box2_t box = {{10, 10}, {30, 30}};
+SDL_Rect rect = (SDL_Rect) box;
+```
