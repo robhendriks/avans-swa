@@ -32,6 +32,7 @@ set(SOURCES src/main.cpp
     src/game/graphics/display.h)
 
 include_directories(third_party/simpleini
+    third_party/json/src
     ${SDL2_INCLUDE_DIR}
     ${SDL2_IMAGE_INCLUDE_DIR}
     ${SDL2_TTF_INCLUDE_DIRS})

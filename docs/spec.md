@@ -19,15 +19,15 @@
 }
 ```
 
-### Entity
+### Object
 
 **Properties**
 
-| Name           | Type   | Description               | Required |
-| :------------- | :----- | :------------------------ | :------: |
-| id             | String | Unique entity ID          | yes      |
-| states         | Array  | State array               | no       |
-| states.{state} | Array  | Array with row and column | no       |
+| Name          | Type   | Description               | Required |
+| :------------ | :----- | :------------------------ | :------: |
+| id            | String | Unique object ID          | yes      |
+| states        | Array  | State array               | no       |
+| states.{name} | Array  | Array with row and column | no       |
 
 ```json
 {
