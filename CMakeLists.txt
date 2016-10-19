@@ -19,7 +19,11 @@ set(SOURCES src/main.cpp
     src/game/engine.h
     src/game/window.cpp
     src/game/window.h
-    src/game/window_config.h)
+    src/game/window_config.h
+    src/config/json_config.cpp
+    src/config/json_config.h
+    src/game/settings.cpp
+    src/game/settings.h)
 
 include_directories(third_party/simpleini
     third_party/json/src

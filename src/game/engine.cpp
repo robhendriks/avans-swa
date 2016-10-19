@@ -3,6 +3,7 @@
 //
 
 #include "engine.h"
+#include "settings.h"
 
 namespace game {
     engine &engine::get() {
@@ -12,6 +13,8 @@ namespace game {
 
     void engine::run() {
         try {
+            settings::get();
+
             init_sdl();
             create_window();
 
@@ -71,6 +74,10 @@ namespace game {
         if (!mWindow) {
             window_config cfg;
             cfg.title = "City Defence";
+
+            settings *s = &settings::get();
+            cfg.w = s->get_window_width();
+            cfg.h = s->get_window_height();
 
             mWindow = new window(cfg);
             mWindow->create();
