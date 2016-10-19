@@ -9,6 +9,7 @@
 #include <exception>
 #include <SDL.h>
 #include "window_config.h"
+#include "../graphics/color4.hpp"
 
 namespace game {
     class window {
@@ -18,6 +19,10 @@ namespace game {
         ~window();
 
         void create();
+
+        void clear();
+
+        void present();
 
         void destroy();
 
@@ -33,6 +38,8 @@ namespace game {
         window_config mConfig;
         SDL_Window *mWindow;
         SDL_Renderer *mRenderer;
+
+        static const graphics::color4_t BACKGROUND_COLOR;
     };
 }
 

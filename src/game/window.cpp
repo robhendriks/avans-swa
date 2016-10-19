@@ -42,6 +42,15 @@ namespace game {
         }
     }
 
+    void window::clear() {
+        SDL_SetRenderDrawColor(mRenderer, BACKGROUND_COLOR.r, BACKGROUND_COLOR.g, BACKGROUND_COLOR.b, BACKGROUND_COLOR.a);
+        SDL_RenderClear(mRenderer);
+    }
+
+    void window::present() {
+        SDL_RenderPresent(mRenderer);
+    }
+
     void window::destroy() {
         printf("[DEBUG] Destroying window...\n");
 
@@ -60,4 +69,6 @@ namespace game {
     SDL_Renderer *window::get_renderer() const {
         return mRenderer;
     }
+
+    const graphics::color4_t window::BACKGROUND_COLOR = graphics::color4_t(0xFF6495ED);
 }

@@ -14,6 +14,8 @@ namespace game {
         try {
             init_sdl();
             create_window();
+
+            // TODO: Load game objects
         } catch (std::runtime_error &e) {
             fprintf(stderr, "%s\n", e.what());
             return;
@@ -34,6 +36,12 @@ namespace game {
                     done = true;
                 }
             }
+
+            mWindow->clear();
+
+            // TODO: Render game objects
+
+            mWindow->present();
         }
 
         quit();
@@ -41,6 +49,8 @@ namespace game {
 
     void engine::quit() {
         printf("[DEBUG] Cleaning up...\n");
+
+        // TODO: Clean up game objects
 
         // Destroy the window if it was created
         if (mWindow) {

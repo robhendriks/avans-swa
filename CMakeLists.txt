@@ -12,14 +12,14 @@ find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 
 set(SOURCES src/main.cpp
-    src/config/config.h
-    src/config/config.cpp
-    src/config/ini_config.h
-    src/config/ini_config.cpp
     src/math/vec2.hpp
     src/math/box2.hpp
+    src/graphics/color4.hpp
     src/game/engine.cpp
-    src/game/engine.h src/game/window.cpp src/game/window.h src/game/window_config.h)
+    src/game/engine.h
+    src/game/window.cpp
+    src/game/window.h
+    src/game/window_config.h)
 
 include_directories(third_party/simpleini
     third_party/json/src
