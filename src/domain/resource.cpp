@@ -8,7 +8,7 @@ namespace domain {
         return this->_count;
     }
 
-    void resource::set_count(const int count) {
+    void resource::set_count(int count) {
         this->_count = count;
     }
 
