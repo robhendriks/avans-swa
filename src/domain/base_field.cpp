@@ -1,3 +1,4 @@
+#pragma once
 #include "base_field.h"
 
 namespace domain {

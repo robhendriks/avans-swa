@@ -1,3 +1,4 @@
+#pragma once
 #include "game_world.h"
 
 namespace domain {
