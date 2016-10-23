@@ -6,19 +6,19 @@ namespace domain {
     }
 
     int building::getHitPoints() {
-        return this->_hitPoints;
+        return this->_hit_points;
     }
 
-    void building::setHitPoints(const int hitPoints) {
-        this->_hitPoints = hitPoints;
+    void building::sethit_points(const int hit_points) {
+        this->_hit_points = hit_points;
     }
 
-    int building::getRegenPerSec() {
-        this->_regenPerSec;
+    int building::get_regen_per_sec() {
+        this->_regen_per_sec;
     }
 
-    void building::setRegenPerSec(const int regenPerSec) {
-        this->_regenPerSec = regenPerSec;
+    void building::set_regen_per_sec(const int regen_per_sec) {
+        this->_regen_per_sec = regen_per_sec;
     }
 
     building::~building() {

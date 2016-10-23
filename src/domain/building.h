@@ -6,14 +6,14 @@ namespace domain {
 			public base_placable_object {
 	public:
 		building();
-		int getHitPoints();
-		void setHitPoints(const int hitPoints);
-        int getRegenPerSec();
-        void setRegenPerSec(const int regenPerSec);
+		int get_hit_points();
+		void set_hit_points(const int hit_points);
+        int get_regen_per_sec();
+        void set_regen_per_sec(const int regen_per_sec);
 		~building();
 
 	private:
-		int _hitPoints;
-		int _regenPerSec;
+		int _hit_points;
+		int _regen_per_sec;
 	};
 }

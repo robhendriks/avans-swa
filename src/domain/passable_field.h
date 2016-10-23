@@ -8,6 +8,6 @@ namespace domain {
 		~passable_field();
 
 	private:
-		base_placable_object _placedObject;
+		base_placable_object _placed_object;
 	};
 }

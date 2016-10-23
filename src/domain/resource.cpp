@@ -8,15 +8,15 @@ namespace domain {
         return this->_count;
     }
 
-    void resource::setCount(const int count) {
+    void resource::set_count(const int count) {
         this->_count = count;
     }
 
-    resource_type resource::getResourceType() {
+    resource_type resource::get_resource_type(){
         return this->_type;
     }
 
-    void resource::setResourceType(type) {
+    void resource::set_resource_type(type) {
         this->_type = type;
     }
 
