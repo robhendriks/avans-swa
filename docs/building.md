@@ -64,14 +64,14 @@ brew install cmake sdl2 sdl2_image sdl2_ttf
 ## Windows
 
 1. Download and install **MinGW**
-  * https://sourceforge.net/projects/mingw/files/latest/download?source=files
-  * Selecteer minimaal de **mingw32-gcc-g++** en **mingw32-base** packages
+  * http://downloads.sourceforge.net/project/mingw-w64/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/6.2.0/threads-posix/dwarf/i686-6.2.0-release-posix-dwarf-rt_v5-rev1.7z?r=https%3A%2F%2Fgithub.com%2F&ts=1477132921&use_mirror=kent
+  * Pak de folder uit (op C:\\) en hernoem deze (van mingw32) naar MinGW
   * Voeg **C:\MinGW\bin** toe aan de **PATH omgevingsvariabelen**
 2. Download and install **CLion**
   * https://www.jetbrains.com/clion/download/#section=windows-version
   * Gebruik MinGW als de toolchain
 3. Download de **SDL development libraries voor MinGW**
-  * https://www.libsdl.org/release/SDL2-devel-2.0.4-mingw.tar
+  * https://www.libsdl.org/release/SDL2-devel-2.0.4-mingw.tar.gz
   * https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.14-mingw.tar.gz
   * https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.1-mingw.tar.gz
 4. Open de gedownloade **SDL2-devel-2.0.4-mingw.tar**
