@@ -1,6 +1,6 @@
 #pragma once
-#include <vector>;
-#include "base_map.h";
+#include <vector>
+#include "base_map.h"
 namespace domain {
 	class game_world {
 	public:
