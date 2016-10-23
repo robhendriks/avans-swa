@@ -5,11 +5,11 @@ namespace domain {
     building::building() {
     }
 
-    int building::getHitPoints() {
+    int building::get_hit_points(){
         return this->_hit_points;
     }
 
-    void building::sethit_points(int hit_points) {
+    void building::set_hit_points(int hit_points) {
         this->_hit_points = hit_points;
     }
 
