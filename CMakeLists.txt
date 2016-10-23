@@ -29,7 +29,9 @@ set(SOURCES src/main.cpp
     src/game/engine.cpp
     src/game/engine.h
     src/game/graphics/display.cpp
-    src/game/graphics/display.h)
+    src/game/graphics/display.h
+    src/game/input/input_handler.cpp
+    src/game/input/input_handler.h)
 
 include_directories(third_party/simpleini
     ${SDL2_INCLUDE_DIR}

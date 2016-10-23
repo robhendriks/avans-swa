@@ -22,8 +22,8 @@ namespace game {
         void load_config();
         void init_display();
         void loop();
-        void update(SDL_Event *event);
-        void render();
+        void update();
+        void render(float interpolation);
 
         static const int DISPLAY_WIDTH;
         static const int DISPLAY_HEIGHT;

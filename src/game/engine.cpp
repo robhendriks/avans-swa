@@ -7,8 +7,12 @@
 #include <exception>
 #include "engine.h"
 #include "../math/box2.hpp"
+#include "input/input_handler.h"
 
 namespace game {
+    const int TICKS_PER_SECOND = 25;
+    const int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
+    const int MAX_FRAMESKIP = 5;
 
     void engine::load_config() {
         m_config = std::make_shared<config::ini_config>(CONFIG_PATH);
@@ -56,22 +60,38 @@ namespace game {
 
         m_running = true;
 
+        auto next_game_tick = SDL_GetTicks();
+        int loops;
+        float interpolation;
         while (m_running) {
-            SDL_Event event;
-            while (SDL_PollEvent(&event) != 0) {
-                update(&event);
+            loops = 0;
+            while(SDL_GetTicks() > next_game_tick && loops < MAX_FRAMESKIP) {
+                update(); // Update the game state
+
+                next_game_tick += SKIP_TICKS;
+                loops++;
             }
-            render();
+
+            interpolation = float(SDL_GetTicks() + SKIP_TICKS - next_game_tick) / float(SKIP_TICKS);
+            render(interpolation); // Display the game
         }
     }
 
-    void engine::update(SDL_Event *event) {
-        if (event->type == SDL_QUIT) {
-            m_running = false;
+    void engine::update() {
+        // Handle the SDL events
+        SDL_Event event;
+        while (SDL_PollEvent(&event) != 0) {
+            // Check for the QUIT event
+            if (event.type == SDL_QUIT) {
+                m_running = false;
+            }
+
+            // Update the input handler
+            input::input_handler::get_instance()->update(event);
         }
     }
 
-    void engine::render() {
+    void engine::render(float interpolation) {
         m_display->clear();
 
         // TODO: Render items
@@ -89,5 +109,4 @@ namespace game {
     const int engine::DISPLAY_HEIGHT = 720;
     const char *engine::DISPLAY_TITLE = "City Defence";
     const char *engine::CONFIG_PATH = "config.ini";
-
 }
