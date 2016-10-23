@@ -5,20 +5,20 @@ namespace domain {
     building::building() {
     }
 
-    int building::getHitPoints() {
-        return this->_hitPoints;
+    int building::get_hit_points(){
+        return this->_hit_points;
     }
 
-    void building::setHitPoints(const int hitPoints) {
-        this->_hitPoints = hitPoints;
+    void building::set_hit_points(int hit_points) {
+        this->_hit_points = hit_points;
     }
 
-    int building::getRegenPerSec() {
-        this->_regenPerSec;
+    int building::get_regen_per_sec() {
+        this->_regen_per_sec;
     }
 
-    void building::setRegenPerSec(const int regenPerSec) {
-        this->_regenPerSec = regenPerSec;
+    void building::set_regen_per_sec(int regen_per_sec) {
+        this->_regen_per_sec = regen_per_sec;
     }
 
     building::~building() {

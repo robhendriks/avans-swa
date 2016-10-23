@@ -12,6 +12,6 @@ namespace domain {
 
 	private:
 		std::vector<base_field> _fields;
-		std::vector<passable_field> _placedBuildingFields;
+		std::vector<passable_field> _placed_building_fields;
 	};
 }

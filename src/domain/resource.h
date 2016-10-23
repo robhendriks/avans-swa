@@ -12,10 +12,10 @@ namespace domain {
     class resource {
     public:
         resource();
-        void setResourceType(resource_type);
-        resource_type getResourceType();
-        void setCount(const int count);
-        int getCount();
+        void set_resource_type(resource_type);
+        resource_type get_resource_type();
+        void set_count(int count);
+        int get_count();
         ~resource();
 
     private:
