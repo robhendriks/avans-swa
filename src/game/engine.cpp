@@ -1,51 +1,33 @@
 //
-// Created by Rob Hendriks on 14/10/2016.
+// Created by Rob Hendriks on 19/10/2016.
 //
 
-#include <stdio.h>
-#include <memory>
-#include <exception>
 #include "engine.h"
-#include "../math/box2.hpp"
+#include "settings.h"
 
 namespace game {
+    engine &engine::get() {
+        static engine instance;
+        return instance;
+    }
+
     void engine::setActiveGUI(gui::base_gui* gui) {
-        m_gui = gui;
+        mActiveGUI = gui;
     }
 
-    void engine::load_config() {
-        m_config = std::make_shared<config::ini_config>(CONFIG_PATH);
-        if (!m_config->load()) {
-            throw std::runtime_error("Unable to load configuration");
-        }
-    }
-
-    void engine::init_display() {
-        int x, y, w, h;
-        x = SDL_WINDOWPOS_CENTERED;
-        y = SDL_WINDOWPOS_CENTERED;
-        w = m_config->get_long("window", "width", DISPLAY_WIDTH);
-        h = m_config->get_long("window", "height", DISPLAY_HEIGHT);
-
-        m_display = std::make_shared<graphics::display>();
-        if (!m_display->create(DISPLAY_TITLE, x, y, w, h)) {
-            throw std::runtime_error(SDL_GetError());
-        }
-    }
-
-    void engine::init() {
-        if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-            printf("Failed to initialize SDL: %s\n", SDL_GetError());
-            return;
-        }
-
+    void engine::run() {
         try {
-            load_config();
-            init_display();
+            settings::get();
 
-            // TODO: Load resources
+            init_sdl();
+            create_window();
+
+            // TODO: Load game objects
+            if(this->mActiveGUI != nullptr)
+                this->mActiveGUI->render(mWindow->get_renderer());
+
         } catch (std::runtime_error &e) {
-            printf("Failed to initialize engine: %s\n", e.what());
+            fprintf(stderr, "%s\n", e.what());
             return;
         }
 
@@ -53,45 +35,59 @@ namespace game {
     }
 
     void engine::loop() {
-        if (m_running) {
-            return; // Already running
-        }
+        printf("[DEBUG] Starting game loop...\n");
 
-        m_running = true;
+        bool done = false;
 
-        while (m_running) {
+        while (!done) {
             SDL_Event event;
-            while (SDL_PollEvent(&event) != 0) {
-                update(&event);
+            while (SDL_PollEvent(&event)) {
+                if (event.type == SDL_QUIT) {
+                    done = true;
+                }
             }
-            render();
+
+            mWindow->clear();
+
+            // TODO: Render game objects
+
+            mWindow->present();
+        }
+
+        quit();
+    }
+
+    void engine::quit() {
+        printf("[DEBUG] Cleaning up...\n");
+
+        // TODO: Clean up game objects
+
+        // Destroy the window if it was created
+        if (mWindow) {
+            mWindow->destroy();
+            delete mWindow;
         }
     }
 
-    void engine::update(SDL_Event *event) {
-        if (event->type == SDL_QUIT) {
-            m_running = false;
+    void engine::init_sdl() {
+        if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+            std::string error = SDL_GetError();
+            throw std::runtime_error("Failed to initialize SDL: " + error);
         }
     }
 
-    void engine::render() {
-        m_display->clear();
+    void engine::create_window() {
+        // Create the window of it wasn't already created
+        if (!mWindow) {
+            window_config cfg;
+            cfg.title = "City Defence";
 
-        // TODO: Render items
-        if(this->m_gui != nullptr)
-            this->m_gui->render(m_display->get_renderer());
-        m_display->present();
+            settings *s = &settings::get();
+            cfg.w = s->get_window_width();
+            cfg.h = s->get_window_height();
+
+            mWindow = new window(cfg);
+            mWindow->create();
+        }
     }
-
-    void engine::destroy() {
-        m_display->destroy();
-
-        SDL_Quit();
-    }
-
-    const int engine::DISPLAY_WIDTH = 1280;
-    const int engine::DISPLAY_HEIGHT = 720;
-    const char *engine::DISPLAY_TITLE = "City Defence";
-    const char *engine::CONFIG_PATH = "config.ini";
-
 }

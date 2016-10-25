@@ -3,14 +3,14 @@
 ## ini_config
 
 ```cpp
-#include "config/ini_config.h"
-using namespace config; // OPTIONAL
+#include "settings/ini_config.h"
+using namespace settings; // OPTIONAL
 ```
 
 ### Loading 
 
 ```cpp
-config::ini_config cfg("my_ini_file.ini");
+settings::ini_config cfg("my_ini_file.ini");
 
 if (!cfg.load()) {
     fprintf(stderr, "Failed to load configuration!\n");
