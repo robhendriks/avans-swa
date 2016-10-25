@@ -22,6 +22,22 @@ set(SOURCES src/main.cpp
     src/game/window_config.h
     src/config/json_config.cpp
     src/config/json_config.h
+    src/domain/base_field.h
+    src/domain/base_field.cpp
+    src/domain/base_map.h
+    src/domain/base_map.cpp
+    src/domain/base_placeable_object.h
+    src/domain/base_placeable_object.cpp
+    src/domain/building.h
+    src/domain/building.cpp
+    src/domain/game_world.h
+    src/domain/game_world.cpp
+    src/domain/map.h
+    src/domain/map.cpp
+    src/domain/passable_field.h
+    src/domain/passable_field.cpp
+    src/domain/resource.h
+    src/domain/resource.cpp
     src/game/settings.cpp
     src/game/settings.h)
 
