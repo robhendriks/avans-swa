@@ -5,7 +5,7 @@
 #ifndef CITY_DEFENCE_CONFIG_H
 #define CITY_DEFENCE_CONFIG_H
 
-#include <../../third_party/json/src/json.hpp>
+#include <json.hpp>
 #include "../config/json_config.h"
 
 namespace game {
