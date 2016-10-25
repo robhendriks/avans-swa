@@ -1,9 +1,8 @@
 #include "game/engine.h"
 
 int main(int argc, char *argv[]) {
-    game::engine *engine = new game::engine();
-    engine->init();
-    engine->destroy();
+    game::engine *engine = &game::engine::get();
+    engine->run();
 
     return 0;
 }
