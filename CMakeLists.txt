@@ -25,15 +25,13 @@ set(SOURCES src/main.cpp
     src/game/settings.cpp
     src/game/settings.h)
 
-include_directories(third_party/simpleini
-    third_party/json/src
+include_directories(third_party/json/src
     ${SDL2_INCLUDE_DIR}
     ${SDL2_IMAGE_INCLUDE_DIR}
     ${SDL2_TTF_INCLUDE_DIRS})
 
 add_executable(city_defence ${SOURCES})
 target_link_libraries(city_defence
-    simpleini
     ${SDL2_LIBRARY}
     ${SDL2_IMAGE_LIBRARY}
     ${SDL2_TTF_LIBRARIES})
