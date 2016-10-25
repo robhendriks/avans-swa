@@ -45,8 +45,7 @@ set(SOURCES src/main.cpp
     src/gui/base_gui.cpp
     src/gui/base_gui.h
     src/gui/menu_gui.cpp
-    src/gui/menu_gui.h
-    third_party/json/src/json.hpp)
+    src/gui/menu_gui.h)
 
 include_directories(third_party/simpleini
     ${SDL2_INCLUDE_DIR}
