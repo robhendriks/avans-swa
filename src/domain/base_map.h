@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CITY_DEFENCE_BASE_MAP_H
+#define CITY_DEFENCE_BASE_MAP_H
 namespace domain {
 
 	class base_map {
@@ -9,3 +10,4 @@ namespace domain {
 	};
 
 }
+#endif //CITY_DEFENCE_BASE_MAP_H

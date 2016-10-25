@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CITY_DEFENCE_BASE_FIELD_H
+#define CITY_DEFENCE_BASE_FIELD_H
 
 namespace domain {
 
@@ -9,3 +10,4 @@ namespace domain {
 	};
 
 }
+#endif //CITY_DEFENCE_BASE_FIELD_H

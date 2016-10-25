@@ -1,10 +1,11 @@
-#pragma once
+#ifndef CITY_DEFENCE_RESOURCE_CPP
+#define CITY_DEFENCE_RESOURCE_CPP
 #include "resource.h"
 namespace domain {
     resource::resource() {
     }
 
-    int resource::getCount() {
+    int resource::get_count() {
         return this->_count;
     }
 
@@ -16,10 +17,11 @@ namespace domain {
         return this->_type;
     }
 
-    void resource::set_resource_type(type) {
+    void resource::set_resource_type(resource_type type) {
         this->_type = type;
     }
 
     resource::~resource() {
     }
 }
+#endif //CITY_DEFENCE_RESOURCE_CPP

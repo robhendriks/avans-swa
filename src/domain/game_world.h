@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CITY_DEFENCE_GAME_WORLD_H
+#define CITY_DEFENCE_GAME_WORLD_H
 #include <vector>
 #include "base_map.h"
 namespace domain {
@@ -12,3 +13,4 @@ namespace domain {
 		std::vector<base_map> _map;
 	};
 }
+#endif //CITY_DEFENCE_GAME_WORLD_H

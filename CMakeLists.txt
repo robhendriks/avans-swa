@@ -32,8 +32,6 @@ set(SOURCES src/main.cpp
     src/domain/base_field.cpp
     src/domain/base_map.h
     src/domain/base_map.cpp
-    src/domain/base_placeable_object.h
-    src/domain/base_placeable_object.cpp
     src/domain/building.h
     src/domain/building.cpp
     src/domain/game_world.h
@@ -45,7 +43,9 @@ set(SOURCES src/main.cpp
     src/domain/resource.h
     src/domain/resource.cpp
     src/game/graphics/display.cpp
-    src/game/graphics/display.h)
+    src/game/graphics/display.h
+    src/domain/base_placeable_object.cpp
+    src/domain/base_placeable_object.h)
 
 include_directories(third_party/simpleini
     ${SDL2_INCLUDE_DIR}

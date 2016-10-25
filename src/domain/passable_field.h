@@ -1,5 +1,8 @@
-#pragma once
+#ifndef CITY_DEFENCE_PASSABLE_FIELD_H
+#define CITY_DEFENCE_PASSABLE_FIELD_H
+
 #include "base_placeable_object.h"
+
 namespace domain {
 	class passable_field {
 	public:
@@ -8,6 +11,7 @@ namespace domain {
 		~passable_field();
 
 	private:
-		base_placable_object _placed_object;
+		base_placeable_object _placed_object;
 	};
 }
+#endif //CITY_DEFENCE_PASSABLE_FIELD_H
