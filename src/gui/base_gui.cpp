@@ -12,6 +12,7 @@ namespace gui {
         this->_renderer = renderer; // set renderer
         //TODO clear handlers
         this->set_handlers(); // set handlers
+        this->_init = true;
     }
 
     SDL_Renderer* base_gui::get_renderer() {

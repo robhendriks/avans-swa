@@ -3,9 +3,9 @@
 
 int main(int argc, char *argv[]) {
     game::engine *engine = &game::engine::get();
+    gui::menu_gui *menu = new gui::menu_gui();
+    engine->setActiveGUI(menu);
     engine->run();
-    //gui::menu_gui *menu = new gui::menu_gui();
-    //engine->setActiveGUI(menu);
 
     return 0;
 }

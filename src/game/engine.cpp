@@ -23,8 +23,6 @@ namespace game {
             create_window();
 
             // TODO: Load game objects
-            if(this->mActiveGUI != nullptr)
-                this->mActiveGUI->render(mWindow->get_renderer());
 
         } catch (std::runtime_error &e) {
             fprintf(stderr, "%s\n", e.what());
@@ -49,6 +47,8 @@ namespace game {
 
             mWindow->clear();
 
+            if(this->mActiveGUI != nullptr)
+                this->mActiveGUI->render(mWindow->get_renderer());
             // TODO: Render game objects
 
             mWindow->present();
