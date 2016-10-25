@@ -1,11 +1,9 @@
 //
 // Created by te on 25-Oct-16.
 //
-
 #include "menu_gui.h"
 namespace gui{
-    menu_gui::menu_gui() {
-
+    menu_gui::menu_gui()  {
     }
 
     void menu_gui::init(SDL_Renderer* renderer) {
@@ -20,13 +18,11 @@ namespace gui{
         _destinationRectangle.y = _sourceRectangle.y = 0;
         _destinationRectangle.w = _sourceRectangle.w;
         _destinationRectangle.h = _sourceRectangle.h;
-
-        SDL_RenderCopy(this->get_renderer(), this->_pTexture, &this->_sourceRectangle,
-                       &this->_destinationRectangle);
     }
 
     void menu_gui::update() {
-
+            SDL_RenderCopy(this->get_renderer(), this->_pTexture, &this->_sourceRectangle,
+                       &this->_destinationRectangle);
     }
 
     void menu_gui::set_handlers() {

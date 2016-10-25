@@ -9,6 +9,9 @@
 #include "../math/box2.hpp"
 
 namespace game {
+    void engine::setActiveGUI(gui::base_gui* gui) {
+        m_gui = gui;
+    }
 
     void engine::load_config() {
         m_config = std::make_shared<config::ini_config>(CONFIG_PATH);
@@ -75,7 +78,8 @@ namespace game {
         m_display->clear();
 
         // TODO: Render items
-
+        if(this->m_gui != nullptr)
+            this->m_gui->render(m_display->get_renderer());
         m_display->present();
     }
 

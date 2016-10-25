@@ -9,13 +9,14 @@
 #include <SDL.h>
 #include "graphics/display.h"
 #include "../config/ini_config.h"
+#include "../gui/base_gui.h"
 
 namespace game {
 
     class engine {
     public:
         void init();
-
+        void setActiveGUI(gui::base_gui* gui);
         void destroy();
 
     private:
@@ -31,7 +32,7 @@ namespace game {
         static const char *CONFIG_PATH;
 
         bool m_running;
-
+        gui::base_gui* m_gui = nullptr;
         std::shared_ptr<config::ini_config> m_config;
         std::shared_ptr<graphics::display> m_display;
     };
