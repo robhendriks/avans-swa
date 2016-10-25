@@ -8,7 +8,7 @@
 #include <string>
 #include <fstream>
 #include <exception>
-#include <json.hpp>
+#include <../../third_party/json/src/json.hpp>
 
 using json = nlohmann::json;
 

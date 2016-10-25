@@ -12,20 +12,18 @@ find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 
 set(SOURCES src/main.cpp
-    src/config/config.h
-    src/config/config.cpp
-    src/config/ini_config.h
-    src/config/ini_config.cpp
     src/math/vec2.hpp
     src/math/box2.hpp
-    src/game/tile.h
-    src/game/tile.cpp
-    src/game/world.h
-    src/game/world.cpp
-    src/game/graphics/texture.cpp
-    src/game/graphics/texture.h
-    src/game/graphics/sprite.cpp
-    src/game/graphics/sprite.h
+    src/graphics/color4.hpp
+    src/game/engine.cpp
+    src/game/engine.h
+    src/game/window.cpp
+    src/game/window.h
+    src/game/window_config.h
+    src/config/json_config.cpp
+    src/config/json_config.h
+    src/game/settings.cpp
+    src/game/settings.h
     src/game/engine.cpp
     src/game/engine.h
     src/domain/base_field.h
@@ -42,10 +40,13 @@ set(SOURCES src/main.cpp
     src/domain/passable_field.cpp
     src/domain/resource.h
     src/domain/resource.cpp
-    src/game/graphics/display.cpp
-    src/game/graphics/display.h
     src/domain/base_placeable_object.cpp
-    src/domain/base_placeable_object.h)
+    src/domain/base_placeable_object.h
+    src/gui/base_gui.cpp
+    src/gui/base_gui.h
+    src/gui/menu_gui.cpp
+    src/gui/menu_gui.h
+    third_party/json/src/json.hpp)
 
 include_directories(third_party/simpleini
     ${SDL2_INCLUDE_DIR}

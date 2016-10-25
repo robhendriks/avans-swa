@@ -8,10 +8,14 @@ namespace gui {
 
     }
 
-    void base_gui::init() {
+    void base_gui::init(SDL_Renderer* renderer) {
         this->_renderer = renderer; // set renderer
         //TODO clear handlers
         this->set_handlers(); // set handlers
+    }
+
+    SDL_Renderer* base_gui::get_renderer() {
+        return this->_renderer;
     }
 
     void base_gui::render(SDL_Renderer* renderer) {
