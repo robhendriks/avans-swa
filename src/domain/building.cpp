@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CITY_DEFENCE_BUILDING_CPP
+#define CITY_DEFENCE_BUILDING_CPP
 #include "building.h"
 
 namespace domain {
@@ -14,7 +15,7 @@ namespace domain {
     }
 
     int building::get_regen_per_sec() {
-        this->_regen_per_sec;
+        return this->_regen_per_sec;
     }
 
     void building::set_regen_per_sec(int regen_per_sec) {
@@ -24,3 +25,4 @@ namespace domain {
     building::~building() {
     }
 }
+#endif //CITY_DEFENCE_BUILDING_CPP

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CITY_DEFENCE_RESOURCE_H
+#define CITY_DEFENCE_RESOURCE_H
 namespace domain {
     enum resource_type
     {
@@ -23,3 +24,4 @@ namespace domain {
         int _count;
     };
 }
+#endif //CITY_DEFENCE_RESOURCE_H
