@@ -100,6 +100,10 @@ namespace game {
     }
 
     void engine::destroy() {
+        // Clean the input handler
+        input::input_handler::get_instance()->clean();
+
+        // Destroy the display
         m_display->destroy();
 
         SDL_Quit();

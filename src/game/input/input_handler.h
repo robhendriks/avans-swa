@@ -6,14 +6,19 @@
 #define CITY_DEFENCE_INPUT_HANDLER_H
 
 #include <vector>
+#include <set>
+#include <functional>
 #include "SDL.h"
+#include "../../observer/observee.h"
 #include "../../math/vec2.hpp"
 
 namespace game {
     namespace input {
-         class input_handler {
+         class input_handler : public observer::observee<input_handler> {
          public:
              static input_handler* get_instance();
+             void clean();
+
              void update(const SDL_Event &event);
              void reset();
              bool is_right_mouse_button_pressed() const;
@@ -28,6 +33,8 @@ namespace game {
              input_handler();
 
              static input_handler* m_instance;
+
+             void update_states(const SDL_Event &event);
 
              bool m_right_mouse_button_pressed;
              bool m_middle_mouse_button_pressed;

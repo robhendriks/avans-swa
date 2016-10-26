@@ -18,6 +18,8 @@ set(SOURCES src/main.cpp
     src/config/ini_config.cpp
     src/math/vec2.hpp
     src/math/box2.hpp
+    src/observer/observee.h
+    src/observer/observer.h
     src/game/tile.h
     src/game/tile.cpp
     src/game/world.h

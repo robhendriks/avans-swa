@@ -57,6 +57,11 @@ namespace game {
         }
 
         void input_handler::update(const SDL_Event &event) {
+            update_states(event);
+            notify_observers(this);
+        }
+
+        void input_handler::update_states(const SDL_Event &event) {
             // Update/set the keyboard states
             m_key_states = SDL_GetKeyboardState(0);
             // Handle the different events
@@ -83,6 +88,13 @@ namespace game {
                 m_mouse_position->x = (float)event.motion.x;
                 m_mouse_position->y = (float)event.motion.y;
             }
+        }
+
+        /**
+         * Clean the input handler
+         */
+        void input_handler::clean() {
+            // Nothing to do at the moment
         }
     }
 }
