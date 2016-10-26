@@ -1,5 +1,2 @@
-include_directories(simpleini)
-include_directories(json)
-
-add_subdirectory(simpleini)
+include_directories(json/src)
 add_subdirectory(json)

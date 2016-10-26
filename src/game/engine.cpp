@@ -1,12 +1,9 @@
 //
-// Created by Rob Hendriks on 14/10/2016.
+// Created by Rob Hendriks on 19/10/2016.
 //
 
-#include <stdio.h>
-#include <memory>
-#include <exception>
 #include "engine.h"
-#include "../math/box2.hpp"
+#include "settings.h"
 #include "input/input_handler.h"
 
 namespace game {
@@ -14,39 +11,21 @@ namespace game {
     const int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
     const int MAX_FRAMESKIP = 5;
 
-    void engine::load_config() {
-        m_config = std::make_shared<config::ini_config>(CONFIG_PATH);
-        if (!m_config->load()) {
-            throw std::runtime_error("Unable to load configuration");
-        }
+    engine &engine::get() {
+        static engine instance;
+        return instance;
     }
 
-    void engine::init_display() {
-        int x, y, w, h;
-        x = SDL_WINDOWPOS_CENTERED;
-        y = SDL_WINDOWPOS_CENTERED;
-        w = m_config->get_long("window", "width", DISPLAY_WIDTH);
-        h = m_config->get_long("window", "height", DISPLAY_HEIGHT);
-
-        m_display = std::make_shared<graphics::display>();
-        if (!m_display->create(DISPLAY_TITLE, x, y, w, h)) {
-            throw std::runtime_error(SDL_GetError());
-        }
-    }
-
-    void engine::init() {
-        if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-            printf("Failed to initialize SDL: %s\n", SDL_GetError());
-            return;
-        }
-
+    void engine::run() {
         try {
-            load_config();
-            init_display();
+            settings::get();
 
-            // TODO: Load resources
+            init_sdl();
+            create_window();
+
+            // TODO: Load game objects
         } catch (std::runtime_error &e) {
-            printf("Failed to initialize engine: %s\n", e.what());
+            fprintf(stderr, "%s\n", e.what());
             return;
         }
 
@@ -54,9 +33,7 @@ namespace game {
     }
 
     void engine::loop() {
-        if (m_running) {
-            return; // Already running
-        }
+        printf("[DEBUG] Starting game loop...\n");
 
         m_running = true;
 
@@ -72,9 +49,15 @@ namespace game {
                 loops++;
             }
 
+            mWindow->clear();
+
             interpolation = float(SDL_GetTicks() + SKIP_TICKS - next_game_tick) / float(SKIP_TICKS);
             render(interpolation); // Display the game
+
+            mWindow->present();
         }
+
+        quit();
     }
 
     void engine::update() {
@@ -92,25 +75,40 @@ namespace game {
     }
 
     void engine::render(float interpolation) {
-        m_display->clear();
 
-        // TODO: Render items
-
-        m_display->present();
     }
 
-    void engine::destroy() {
-        // Clean the input handler
-        input::input_handler::get_instance()->clean();
+    void engine::quit() {
+        printf("[DEBUG] Cleaning up...\n");
 
-        // Destroy the display
-        m_display->destroy();
+        // TODO: Clean up game objects
 
-        SDL_Quit();
+        // Destroy the window if it was created
+        if (mWindow) {
+            mWindow->destroy();
+            delete mWindow;
+        }
     }
 
-    const int engine::DISPLAY_WIDTH = 1280;
-    const int engine::DISPLAY_HEIGHT = 720;
-    const char *engine::DISPLAY_TITLE = "City Defence";
-    const char *engine::CONFIG_PATH = "config.ini";
+    void engine::init_sdl() {
+        if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+            std::string error = SDL_GetError();
+            throw std::runtime_error("Failed to initialize SDL: " + error);
+        }
+    }
+
+    void engine::create_window() {
+        // Create the window of it wasn't already created
+        if (!mWindow) {
+            window_config cfg;
+            cfg.title = "City Defence";
+
+            settings *s = &settings::get();
+            cfg.w = s->get_window_width();
+            cfg.h = s->get_window_height();
+
+            mWindow = new window(cfg);
+            mWindow->create();
+        }
+    }
 }
