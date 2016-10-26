@@ -9,6 +9,7 @@
 #include <exception>
 #include <SDL.h>
 #include "window_config.h"
+#include <stdio.h>
 #include "../graphics/color4.hpp"
 
 namespace game {

@@ -8,12 +8,13 @@
 #include <string>
 #include <exception>
 #include "window.h"
+#include "../gui/base_gui.h"
 
 namespace game {
     class engine {
     public:
         static engine &get();
-
+        void set_active_gui(gui::base_gui* gui);
         void run();
 
         void loop();
@@ -38,7 +39,8 @@ namespace game {
         void create_window();
 
     private:
-        window *mWindow;
+        gui::base_gui* m_active_gui;
+        window* m_window;
 
         bool m_running;
     };

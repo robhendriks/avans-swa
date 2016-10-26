@@ -16,6 +16,10 @@ namespace game {
         return instance;
     }
 
+    void engine::set_active_gui(gui::base_gui* gui) {
+        m_active_gui = gui;
+    }
+
     void engine::run() {
         try {
             settings::get();
@@ -24,6 +28,7 @@ namespace game {
             create_window();
 
             // TODO: Load game objects
+
         } catch (std::runtime_error &e) {
             fprintf(stderr, "%s\n", e.what());
             return;
@@ -49,12 +54,12 @@ namespace game {
                 loops++;
             }
 
-            mWindow->clear();
+            m_window->clear();
 
             interpolation = float(SDL_GetTicks() + SKIP_TICKS - next_game_tick) / float(SKIP_TICKS);
             render(interpolation); // Display the game
 
-            mWindow->present();
+            m_window->present();
         }
 
         quit();
@@ -75,7 +80,9 @@ namespace game {
     }
 
     void engine::render(float interpolation) {
-
+        if (this->m_active_gui != nullptr) {
+            this->m_active_gui->render(m_window->get_renderer());
+        }
     }
 
     void engine::quit() {
@@ -84,9 +91,9 @@ namespace game {
         // TODO: Clean up game objects
 
         // Destroy the window if it was created
-        if (mWindow) {
-            mWindow->destroy();
-            delete mWindow;
+        if (m_window) {
+            m_window->destroy();
+            delete m_window;
         }
     }
 
@@ -99,7 +106,7 @@ namespace game {
 
     void engine::create_window() {
         // Create the window of it wasn't already created
-        if (!mWindow) {
+        if (!m_window) {
             window_config cfg;
             cfg.title = "City Defence";
 
@@ -107,8 +114,8 @@ namespace game {
             cfg.w = s->get_window_width();
             cfg.h = s->get_window_height();
 
-            mWindow = new window(cfg);
-            mWindow->create();
+            m_window = new window(cfg);
+            m_window->create();
         }
     }
 }
