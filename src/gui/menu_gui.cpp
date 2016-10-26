@@ -12,7 +12,7 @@ namespace gui{
         base_gui::init(renderer);
 
         // image test
-        this->_pTexture = IMG_LoadTexture(renderer, "docs/img/logo.png");
+        this->_pTexture = IMG_LoadTexture(renderer, "imgages/logo.png");
         SDL_QueryTexture(this->_pTexture, NULL, &this->_sourceRectangle.w, NULL, &this->_sourceRectangle.h);
         _destinationRectangle.x = _sourceRectangle.x = 0;
         _destinationRectangle.y = _sourceRectangle.y = 0;
