@@ -34,7 +34,7 @@ namespace game {
 
              static input_handler* m_instance;
 
-             void update_states(const SDL_Event &event);
+             bool update_states(const SDL_Event &event);
 
              bool m_right_mouse_button_pressed;
              bool m_middle_mouse_button_pressed;

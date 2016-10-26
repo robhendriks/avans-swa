@@ -57,37 +57,44 @@ namespace game {
         }
 
         void input_handler::update(const SDL_Event &event) {
-            update_states(event);
-            notify_observers(this);
+            if (update_states(event)) {
+                notify_observers(this);
+            }
         }
 
-        void input_handler::update_states(const SDL_Event &event) {
-            // Update/set the keyboard states
-            m_key_states = SDL_GetKeyboardState(0);
-            // Handle the different events
-            if (event.type == SDL_MOUSEBUTTONDOWN) {
-                if (event.button.button == SDL_BUTTON_LEFT) {
-                    m_left_mouse_button_pressed = true;
-                } else if (event.button.button == SDL_BUTTON_MIDDLE) {
-                    m_middle_mouse_button_pressed = true;
-                } else if (event.button.button == SDL_BUTTON_RIGHT) {
-                    m_right_mouse_button_pressed = true;
-                }
-            } else if (event.type == SDL_MOUSEBUTTONUP) {
-                if (event.button.button == SDL_BUTTON_LEFT) {
-                    m_left_mouse_button_pressed = false;
-                }
-                if (event.button.button == SDL_BUTTON_MIDDLE) {
-                    m_middle_mouse_button_pressed = false;
-                }
-                if (event.button.button == SDL_BUTTON_RIGHT) {
-                    m_right_mouse_button_pressed = false;
-                }
-            } else if (event.type == SDL_MOUSEMOTION)
-            {
-                m_mouse_position->x = (float)event.motion.x;
-                m_mouse_position->y = (float)event.motion.y;
+        bool input_handler::update_states(const SDL_Event &event) {
+            switch (event.type) {
+                case SDL_MOUSEBUTTONDOWN:
+                    if (event.button.button == SDL_BUTTON_LEFT) {
+                        m_left_mouse_button_pressed = true;
+                    } else if (event.button.button == SDL_BUTTON_MIDDLE) {
+                        m_middle_mouse_button_pressed = true;
+                    } else if (event.button.button == SDL_BUTTON_RIGHT) {
+                        m_right_mouse_button_pressed = true;
+                    }
+                    break;
+                case SDL_MOUSEBUTTONUP:
+                    if (event.button.button == SDL_BUTTON_LEFT) {
+                        m_left_mouse_button_pressed = false;
+                    } else if (event.button.button == SDL_BUTTON_MIDDLE) {
+                        m_middle_mouse_button_pressed = false;
+                    } else if (event.button.button == SDL_BUTTON_RIGHT) {
+                        m_right_mouse_button_pressed = false;
+                    }
+                    break;
+                case SDL_MOUSEMOTION:
+                    m_mouse_position->x = (float)event.motion.x;
+                    m_mouse_position->y = (float)event.motion.y;
+                    break;
+                case SDL_KEYDOWN:
+                case SDL_KEYUP:
+                    m_key_states = SDL_GetKeyboardState(0);
+                    break;
+                default:
+                    return false;
             }
+
+            return true;
         }
 
         /**
