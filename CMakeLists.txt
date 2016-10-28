@@ -50,7 +50,7 @@ set(SOURCES src/main.cpp
     src/gui/base_gui.cpp
     src/gui/base_gui.h
     src/gui/menu_gui.cpp
-    src/gui/menu_gui.h)
+    src/gui/menu_gui.h src/game/texture/texture_manager.cpp src/game/texture/texture_manager.h)
 
 include_directories(third_party/json/src
         ${SDL2_INCLUDE_DIR}

@@ -37,11 +37,12 @@ namespace game {
         void init_sdl();
 
         void create_window();
+        void create_texture_manager(SDL_Renderer *r);
 
     private:
         gui::base_gui* m_active_gui;
         window* m_window;
-
+        texture::texture_manager * texture_manager;
         bool m_running;
     };
 }

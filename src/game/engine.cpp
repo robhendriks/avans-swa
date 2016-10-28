@@ -26,7 +26,7 @@ namespace game {
 
             init_sdl();
             create_window();
-
+            create_texture_manager(this->m_window->get_renderer());
             // TODO: Load game objects
 
         } catch (std::runtime_error &e) {
@@ -81,7 +81,7 @@ namespace game {
 
     void engine::render(float interpolation) {
         if (this->m_active_gui != nullptr) {
-            this->m_active_gui->render(m_window->get_renderer());
+            this->m_active_gui->render(this->texture_manager);
         }
     }
 
@@ -102,6 +102,10 @@ namespace game {
             std::string error = SDL_GetError();
             throw std::runtime_error("Failed to initialize SDL: " + error);
         }
+    }
+
+    void engine::create_texture_manager(SDL_Renderer * r){
+        this->texture_manager = new texture::texture_manager(r);
     }
 
     void engine::create_window() {

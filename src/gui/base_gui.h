@@ -6,21 +6,22 @@
 #define CITY_DEFENCE_BASE_GUI_H
 #include <SDL.h>
 #include <memory>
+#include "../game/texture/texture_manager.h"
 
 namespace gui {
     class base_gui {
     public:
         base_gui();
-        virtual void render(SDL_Renderer* renderer);
+        virtual void render(game::texture::texture_manager* textureManager);
         virtual ~base_gui();
     protected:
-        SDL_Renderer* get_renderer();
         virtual void update() = 0;
-        virtual void init(SDL_Renderer* renderer) = 0;
+        virtual void init(game::texture::texture_manager* textureManager);
+        game::texture::texture_manager * get_texture_manager();
     private:
         virtual void set_handlers() = 0;
         bool _init;
-        SDL_Renderer* _renderer;
+        game::texture::texture_manager *_texture_manager;
     };
 }
 #endif //CITY_DEFENCE_BASE_GUI_H
