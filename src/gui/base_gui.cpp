@@ -3,29 +3,29 @@
 //
 
 #include "base_gui.h"
+
 namespace gui {
     base_gui::base_gui() {
-
     }
 
-    void base_gui::init(SDL_Renderer* renderer) {
-        this->_renderer = renderer; // set renderer
+    void base_gui::init(game::texture::texture_manager* textureManager) {
+        this->_texture_manager = textureManager;
         //TODO clear handlers
         this->set_handlers(); // set handlers
         this->_init = true;
     }
 
-    SDL_Renderer* base_gui::get_renderer() {
-        return this->_renderer;
-    }
-
-    void base_gui::render(SDL_Renderer* renderer) {
+    void base_gui::render(game::texture::texture_manager* textureManager) {
         if(this->_init)
-            this->init(renderer);
+            this->init(textureManager);
         this->update();
     }
 
     base_gui::~base_gui() {
 
+    }
+
+    game::texture::texture_manager *base_gui::get_texture_manager(){
+        return this->_texture_manager;
     }
 }

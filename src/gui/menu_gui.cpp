@@ -7,22 +7,17 @@ namespace gui{
     menu_gui::menu_gui()  {
     }
 
-    void menu_gui::init(SDL_Renderer* renderer) {
+    void menu_gui::init(game::texture::texture_manager* textureManager) {
         // set renderer and update the handlers using method set_handlers()
-        base_gui::init(renderer);
+        base_gui::init(textureManager);
 
-        // image test
-        this->_pTexture = IMG_LoadTexture(renderer, "images/logo.png");
-        SDL_QueryTexture(this->_pTexture, NULL, NULL, &this->_sourceRectangle.w, &this->_sourceRectangle.h);
-        _destinationRectangle.x = _sourceRectangle.x = 0;
-        _destinationRectangle.y = _sourceRectangle.y = 0;
-        _destinationRectangle.w = _sourceRectangle.w;
-        _destinationRectangle.h = _sourceRectangle.h;
+        this->get_texture_manager()->load_texture("images/menu.png", "menu_item_1" );
     }
 
     void menu_gui::update() {
-            SDL_RenderCopy(this->get_renderer(), this->_pTexture, &this->_sourceRectangle,
-                       &this->_destinationRectangle);
+        this->get_texture_manager()->draw("menu_item_1", 0, 0, 339, 122, 150,0);
+        this->get_texture_manager()->draw("menu_item_1", 0, 122, 339, 122, 150,122);
+        this->get_texture_manager()->draw("menu_item_1", 0, 244, 339, 122, 150,244);
     }
 
     void menu_gui::set_handlers() {
