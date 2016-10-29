@@ -70,7 +70,7 @@ You can control whether the turtle's movement will leave a trace using `PenUp()`
 Your program will normally use a real implementation of this interface. In tests, you can use a mock implementation instead. This allows you to easily check what drawing primitives your program is calling, with what arguments, and in which order. Tests written this way are much more robust (they won't break because your new machine does anti-aliasing differently), easier to read and maintain (the intent of a test is expressed in the code, not in some binary images), and run _much, much faster_.
 
 # Writing the Mock Class #
-If you are lucky, the mocks you need to use have already been implemented by some nice people. If, however, you find yourself in the position to write a mock class, relax - Google Mock turns this task into a fun game! (Well, almost.)
+If you are lucky, the mocks you need to use have already been implemented by some nice people. If, however, you find yourself in the position to write a mock class, relax - Google Mock turns this task into a fun router! (Well, almost.)
 
 ## How to Define It ##
 Using the `Turtle` interface as example, here are the simple steps you need to follow:

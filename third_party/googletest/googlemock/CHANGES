@@ -54,7 +54,7 @@ Changes for 1.6.0:
 Potentially breaking changes:
 
 * The description string for MATCHER*() changes from Python-style
-  interpolation to an ordinary C++ string expression.
+  m_nterpolation to an ordinary C++ string expression.
 * SetArgumentPointee is deprecated in favor of SetArgPointee.
 * Some non-essential project files for Visual Studio 2005 are removed.
 
