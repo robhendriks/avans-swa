@@ -28,7 +28,7 @@ namespace gui {
                 } else if (position->y >= 122 && position->y < 244) {
                     SDL_Log("LOAD");
                 } else if (position->y < 366){
-                    router::get_instance().use("quit");
+                    router::get_instance().use_and_perform("quit");
                 }
             }
         }

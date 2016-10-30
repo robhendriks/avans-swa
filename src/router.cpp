@@ -11,10 +11,14 @@ router &router::get_instance() {
     return instance;
 }
 
-void router::on_event(engine::events::window_cleared &event) {
+void router::perform() {
     if (m_action_map.find(current_action) != m_action_map.end()) {
         m_action_map[current_action]();
     }
+}
+
+void router::on_event(engine::events::window_cleared &event) {
+    perform();
 }
 
 void router::register_action(std::string name, std::function<void()> f) {
@@ -23,4 +27,9 @@ void router::register_action(std::string name, std::function<void()> f) {
 
 void router::use(std::string action) {
     current_action = action;
+}
+
+void router::use_and_perform(std::string action) {
+    use(action);
+    perform();
 }

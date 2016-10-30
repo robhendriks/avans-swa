@@ -15,10 +15,12 @@ class router : public engine::eventbus::subscriber<engine::events::window_cleare
 public:
     static router& get_instance();
 
+    void perform();
     void on_event(engine::events::window_cleared &event);
 
     void register_action(std::string name, std::function<void()> f);
     void use(std::string action);
+    void use_and_perform(std::string action);
 
 private:
     router() {};
