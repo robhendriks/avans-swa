@@ -3,15 +3,27 @@
 //
 
 #include "menu_controller.h"
+#include "../../engine/eventbus/eventbus.h"
 
 namespace gui {
     namespace controllers {
 
-        void menu_controller::show(gui::views::main_menu &view) {
-            view.draw();
+        void menu_controller::show(int call, gui::views::main_menu &view) {
+            if (call > 0) {
+                // Last call, unsubscribe
+                engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().unsubscribe(&view);
+            } else {
+                if (call < 0) {
+                    // First call, subscribe on eventbus
+                    engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().subscribe(&view);
+                }
+
+                // Draw the view
+                view.draw();
+            }
         }
 
-        void menu_controller::quit(engine::engine *engine1) {
+        void menu_controller::quit(int call, engine::engine *engine1) {
             engine1->stop();
         }
     }

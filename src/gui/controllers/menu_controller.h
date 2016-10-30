@@ -12,8 +12,8 @@ namespace gui {
     namespace controllers {
         class menu_controller {
         public:
-            void show(gui::views::main_menu &view);
-            void quit(engine::engine *engine1);
+            void show(int call, gui::views::main_menu &view);
+            void quit(int call, engine::engine *engine1);
         };
     }
 }

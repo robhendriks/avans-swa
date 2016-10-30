@@ -2,15 +2,12 @@
 // Created by te on 25-Oct-16.
 //
 #include "main_menu.h"
-#include "../../engine/eventbus/eventbus.h"
 #include "../../engine/input/input_handler.h"
 #include "../../router.h"
 
 namespace gui {
     namespace views {
         main_menu::main_menu(engine::texture::texture_manager &texture_manager) : m_texture_manager(texture_manager) {
-            // Subscribe self to event
-            engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().subscribe(this);
         }
 
         void main_menu::draw() {
@@ -31,11 +28,6 @@ namespace gui {
                     router::get_instance().use_and_perform("quit");
                 }
             }
-        }
-
-        main_menu::~main_menu() {
-            // Unsubscribe self
-            engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().unsubscribe(this);
         }
     }
 }

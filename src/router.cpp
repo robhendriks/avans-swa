@@ -11,25 +11,33 @@ router &router::get_instance() {
     return instance;
 }
 
-void router::perform() {
-    if (m_action_map.find(current_action) != m_action_map.end()) {
-        m_action_map[current_action]();
+void router::perform(int call) {
+    if (m_action_map.find(m_current_action) != m_action_map.end()) {
+        m_action_map[m_current_action](call);
+        m_current_action_is_called = true;
     }
 }
 
 void router::on_event(engine::events::window_cleared &event) {
-    perform();
+    perform(m_current_action_is_called ? 0 : -1);
 }
 
-void router::register_action(std::string name, std::function<void()> f) {
+void router::register_action(std::string name, std::function<void(int)> f) {
     m_action_map[name] = f;
 }
 
 void router::use(std::string action) {
-    current_action = action;
+    if (m_current_action != action) {
+        // Let the controller we stop calling him
+        perform(1);
+
+        // Change the action
+        m_current_action = action;
+        m_current_action_is_called = false;
+    }
 }
 
 void router::use_and_perform(std::string action) {
     use(action);
-    perform();
+    perform(-1);
 }

@@ -19,8 +19,6 @@ namespace gui {
             void draw();
 
             void on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event);
-
-            virtual ~main_menu();
         private:
             engine::texture::texture_manager& m_texture_manager;
         };
