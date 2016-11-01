@@ -9,27 +9,25 @@
 #include "../../engine/events/mouse_button_down.h"
 #include "../../engine/eventbus/subscriber.h"
 #include "../../domain/gameworld/game_world.h"
+#include "../../engine/window.h"
+#include "../models/main_map_model.h"
 
 namespace gui {
     namespace views {
         class main_map : public engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>{
         public:
-            main_map(engine::graphics::texture_manager &texture_manager);
-
-            void set_game_world(domain::gameworld::game_world game_world);
+            main_map(engine::graphics::texture_manager &texture_manager, engine::window &window);
 
             void before_first_draw();
 
-            void draw();
+            void draw(models::main_map_model &view_model);
 
             void after_last_draw();
 
             void on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event);
         private:
-            domain::gameworld::game_world _game_world;
-            engine::graphics::texture_manager& _texture_manager;
-
-            engine::math::box2_t m_play_dest;
+            engine::graphics::texture_manager& m_texture_manager;
+            engine::window &m_window;
         };
     }
 }

@@ -69,7 +69,7 @@ set(SOURCES src/main.cpp
     src/gui/views/main_map.cpp
     src/gui/views/main_map.h
     src/gui/controllers/main_map_controller.cpp
-    src/gui/controllers/main_map_controller.h)
+    src/gui/controllers/main_map_controller.h src/gui/models/main_map_model.h)
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include
