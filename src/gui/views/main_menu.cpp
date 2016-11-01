@@ -23,7 +23,7 @@ namespace gui {
             engine::math::vec2_t *position = engine::input::input_handler::get_instance()->get_mouse_position();
             if (m_play_dest.contains(*position)) {
                 SDL_Log("PLAY");
-                router::get_instance().use_and_perform_go_back("play");
+                router::get_instance().use_and_perform("play");
             } else if (m_load_dest.contains(*position)) {
                 SDL_Log("LOAD");
             } else if (m_quit_dest.contains(*position)){

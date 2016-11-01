@@ -25,9 +25,7 @@ namespace gui {
         void use(std::string action);
 
         void use_and_perform(std::string action);
-
-        void use_and_perform_go_back(std::string action);
-
+        void go_back();
     private:
         router() {};
 
@@ -38,6 +36,7 @@ namespace gui {
         std::map<std::string, std::function<void(int)>> m_action_map;
         std::string m_current_action;
         bool m_current_action_is_called;
+        std::string m_previous_action;
     };
 }
 

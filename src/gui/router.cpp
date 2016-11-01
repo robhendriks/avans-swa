@@ -32,6 +32,7 @@ namespace gui {
             perform(1);
 
             // Change the action
+            m_previous_action = m_current_action;
             m_current_action = action;
             m_current_action_is_called = false;
         }
@@ -42,11 +43,8 @@ namespace gui {
         perform(-1);
     }
 
-    void router::use_and_perform_go_back(std::string action) {
-        std::string original = m_current_action;
-        m_current_action = action;
-        perform(0);
-        m_current_action = original;
+    void router::go_back() {
+        m_current_action = m_previous_action;
     }
 
 }
