@@ -4,6 +4,7 @@
 #include "main_menu.h"
 #include "../../engine/input/input_handler.h"
 #include "../router.h"
+#include "../../engine/eventbus/eventbus.h"
 
 namespace gui {
     namespace views {
@@ -22,6 +23,7 @@ namespace gui {
             engine::math::vec2_t *position = engine::input::input_handler::get_instance()->get_mouse_position();
             if (m_play_dest.contains(*position)) {
                 SDL_Log("PLAY");
+                router::get_instance().use_and_perform("play");
             } else if (m_load_dest.contains(*position)) {
                 SDL_Log("LOAD");
             } else if (m_quit_dest.contains(*position)){
@@ -31,10 +33,12 @@ namespace gui {
 
         void main_menu::before_first_draw() {
             m_texture_manager.load("images/menu.png", "menu_item_1");
+            engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().subscribe(this);
         }
 
         void main_menu::after_last_draw() {
             m_texture_manager.unload("menu_item_1");
+            engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().unsubscribe(this);
         }
     }
 }

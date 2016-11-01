@@ -32,6 +32,7 @@ namespace gui {
             perform(1);
 
             // Change the action
+            m_previous_action = m_current_action;
             m_current_action = action;
             m_current_action_is_called = false;
         }
@@ -41,4 +42,9 @@ namespace gui {
         use(action);
         perform(-1);
     }
+
+    void router::go_back() {
+        m_current_action = m_previous_action;
+    }
+
 }
