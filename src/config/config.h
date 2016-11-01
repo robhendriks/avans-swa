@@ -14,6 +14,7 @@ namespace config {
         virtual int get_int(std::string key, int default_value = -1) = 0;
         virtual long get_long(std::string key, long default_value = -1) = 0;
         virtual float get_float(std::string key, float default_value = -1) = 0;
+        virtual ~config() = default;
     };
 }
 

@@ -28,8 +28,9 @@ int main(int argc, char *argv[]) {
     engine1->warmup();
 
     // Create the ioc container
+    auto *texture_manager = engine1->get_texture_manager();
     auto injector = boost::di::make_injector(
-        boost::di::bind<>.to(engine1->get_texture_manager())
+        boost::di::bind<>.to(*texture_manager)
     );
 
     // Create the router
@@ -48,6 +49,8 @@ int main(int argc, char *argv[]) {
     engine1->run();
 
     // Clean
+    delete json_config;
+    delete texture_manager;
     delete engine1;
 
     return 0;

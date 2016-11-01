@@ -49,7 +49,9 @@ namespace engine {
                 math::box2_t src_box(dest);
                 src_box.move_to_start(image_start_position);
 
-                SDL_RenderCopy(&_renderer, _texture_map[id], (SDL_Rect*) src_box, (SDL_Rect*) dest);
+                SDL_Rect sdl_src = (SDL_Rect) src_box;
+                SDL_Rect sdl_dest =(SDL_Rect) dest;
+                SDL_RenderCopy(&_renderer, _texture_map[id], &sdl_src, &sdl_dest);
             }
         }
     }

@@ -89,10 +89,8 @@ namespace engine {
         }
     }
 
-    texture::texture_manager &engine::get_texture_manager() {
-        auto *manager = new texture::texture_manager(*m_window->get_renderer());
-
-        return *manager;
+    texture::texture_manager *engine::get_texture_manager() {
+        return new texture::texture_manager(*m_window->get_renderer());
     }
 
     void engine::create_window() {
