@@ -39,6 +39,50 @@ namespace engine {
                 min = start;
             }
 
+            void to_top(const box2_t &box) {
+                if (min.y < box.min.y) {
+                    min.y = box.min.y;
+                } else {
+                    float y_diff = min.y - box.min.y;
+
+                    max.y -= y_diff;
+                    min.y -= y_diff;
+                }
+            }
+
+            void to_bottom(const box2_t &box) {
+                if (max.y > box.max.y) {
+                    max.y = box.max.y;
+                } else {
+                    float y_diff = box.max.y - max.y;
+
+                    max.y += y_diff;
+                    min.y += y_diff;
+                }
+            }
+
+            void to_left(const box2_t &box) {
+                if (min.x < box.min.x) {
+                    min.x = box.min.x;
+                } else {
+                    float x_diff = min.x - box.min.x;
+
+                    max.x -= x_diff;
+                    min.x -= x_diff;
+                }
+            }
+
+            void to_right(const box2_t &box) {
+                if (max.x > box.max.x) {
+                    max.x = box.max.x;
+                } else {
+                    float x_diff = box.max.x - max.x;
+
+                    max.x += x_diff;
+                    min.x += x_diff;
+                }
+            }
+
             void to_center(const box2_t &box) {
                 if (size().x >= box.size().x || size().y >= box.size().y) {
                     max = box.max;
@@ -51,29 +95,19 @@ namespace engine {
                 }
             }
 
-            bool contains(const vec2_t &vec) {
-                if (vec.x < min.x || vec.x > max.x ||
-                    vec.y < min.y || vec.y > max.y) {
-                    return false;
-                }
-                return true;
+            bool contains(const vec2_t &vec) const {
+                return !(vec.x < min.x || vec.x > max.x ||
+                    vec.y < min.y || vec.y > max.y);
             }
 
-            bool contains(const box2_t &box) {
-                if ((min.x <= box.min.x) && (box.max.x <= max.x) &&
-                    (min.y <= box.min.y) && (box.max.y <= max.y)) {
-                    return true;
-                }
-                return false;
+            bool contains(const box2_t &box) const {
+                return (min.x <= box.min.x) && (box.max.x <= max.x) &&
+                       (min.y <= box.min.y) && (box.max.y <= max.y);
             }
 
             bool intersects(const box2_t &box) {
-                if (box.max.x < min.x || box.min.x > max.x ||
-                    box.max.y < min.y || box.min.y > max.y) {
-                    return false;
-
-                }
-                return true;
+                return !(box.max.x < min.x || box.min.x > max.x ||
+                    box.max.y < min.y || box.min.y > max.y);
             }
 
             bool operator==(const box2_t &b) {
