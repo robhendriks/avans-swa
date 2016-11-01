@@ -29,7 +29,6 @@ namespace gui {
 
         void menu_controller::play(int call){
             if (call < 0) {
-                router::get_instance().go_back();
                 SDL_Log("PLAY CLICKED Controller");
                 router::get_instance().use_and_perform("main_map");
             }
