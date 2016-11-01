@@ -8,8 +8,9 @@
 #include <string>
 #include <exception>
 #include "window.h"
-#include "texture/texture_manager.h"
+#include "graphics/texture_manager.h"
 #include "engine_config.h"
+#include "graphics/color_manager.h"
 
 namespace engine {
     class engine {
@@ -22,7 +23,9 @@ namespace engine {
 
         void stop();
 
-        texture::texture_manager *get_texture_manager() const;
+        graphics::texture_manager *get_texture_manager() const;
+
+        graphics::color_manager *get_color_manager() const;
 
         window *get_window() const;
     protected:

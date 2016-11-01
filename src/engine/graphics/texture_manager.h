@@ -12,7 +12,7 @@
 #include "../math/box2.hpp"
 
 namespace engine {
-    namespace texture {
+    namespace graphics {
         class texture_manager {
         public:
             texture_manager(SDL_Renderer &r);

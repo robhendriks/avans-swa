@@ -89,8 +89,12 @@ namespace engine {
         }
     }
 
-    texture::texture_manager *engine::get_texture_manager() const {
-        return new texture::texture_manager(*m_window->get_renderer());
+    graphics::texture_manager *engine::get_texture_manager() const {
+        return new graphics::texture_manager(*m_window->get_renderer());
+    }
+
+    graphics::color_manager *engine::get_color_manager() const {
+        return new graphics::color_manager(*m_window->get_renderer());
     }
 
     void engine::create_window() {

@@ -6,7 +6,7 @@
 #include "texture_manager.h"
 
 namespace engine {
-    namespace texture{
+    namespace graphics {
 
         texture_manager::texture_manager(SDL_Renderer &r) : _renderer(r) {
         }

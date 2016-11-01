@@ -7,7 +7,7 @@
 
 namespace gui {
     namespace views {
-        main_menu::main_menu(engine::texture::texture_manager &texture_manager) : m_texture_manager(texture_manager),
+        main_menu::main_menu(engine::graphics::texture_manager &texture_manager) : m_texture_manager(texture_manager),
             m_play_dest({{150, 0}, {489, 122}}), m_load_dest({{150, 122}, {489, 244}}), m_quit_dest({{150, 244}, {489, 366}})
         {
         }

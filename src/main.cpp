@@ -29,6 +29,7 @@ int main(int argc, char *argv[]) {
 
     // Create the ioc container
     auto *texture_manager = engine1->get_texture_manager();
+    auto *color_manager = engine1->get_color_manager();
     auto *window = engine1->get_window();
     auto injector = boost::di::make_injector(
         boost::di::bind<>.to(*texture_manager),
@@ -53,6 +54,7 @@ int main(int argc, char *argv[]) {
     // Clean
     delete json_config;
     delete texture_manager;
+    delete color_manager;
     delete window;
     delete engine1;
 
