@@ -35,12 +35,6 @@ int main(int argc, char *argv[]) {
         boost::di::bind<>.to(*window)
     );
 
-    engine::math::box2_t box_in_the_middle({{0,0},{10, 10}});
-    auto display_box = window->get_display_box();
-    box_in_the_middle.to_center(display_box);
-
-    SDL_Log("test");
-
     // Create the router
     gui::router &router1 = gui::router::get_instance();
     engine::eventbus::eventbus<engine::events::window_cleared>::get_instance().subscribe(&router1);
