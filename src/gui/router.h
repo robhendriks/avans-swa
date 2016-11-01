@@ -26,6 +26,8 @@ namespace gui {
 
         void use_and_perform(std::string action);
 
+        void use_and_perform_go_back(std::string action);
+
     private:
         router() {};
 

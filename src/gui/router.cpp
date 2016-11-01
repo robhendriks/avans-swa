@@ -41,4 +41,12 @@ namespace gui {
         use(action);
         perform(-1);
     }
+
+    void router::use_and_perform_go_back(std::string action) {
+        std::string original = m_current_action;
+        m_current_action = action;
+        perform(0);
+        m_current_action = original;
+    }
+
 }
