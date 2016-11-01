@@ -8,7 +8,8 @@ namespace domain {
         class passable_field {
         public:
             passable_field();
-
+            void set_placed_object(buildings::base_placeable_object placeable_object);
+            buildings::base_placeable_object get_placed_object();
             ~passable_field();
 
         private:

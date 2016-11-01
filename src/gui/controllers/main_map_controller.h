@@ -12,6 +12,7 @@ namespace gui {
         class main_map_controller {
         public:
             void show(int call, gui::views::main_map &view);
+            bool click_tile(domain::map::base_field &f);
         };
     }
 }
