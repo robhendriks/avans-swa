@@ -21,35 +21,35 @@ namespace engine {
             vec2_t(const vec2_t &v)
                 : x(v.x), y(v.y) {}
 
-            vec2_t operator+(const vec2_t &v) {
+            vec2_t operator+(const vec2_t &v) const {
                 return vec2_t(x + v.x, y + v.y);
             }
 
-            vec2_t operator+(float scalar) {
+            vec2_t operator+(float scalar) const {
                 return vec2_t(x + scalar, y + scalar);
             }
 
-            vec2_t operator-(const vec2_t &v) {
+            vec2_t operator-(const vec2_t &v) const {
                 return vec2_t(x - v.x, y - v.y);
             }
 
-            vec2_t operator-(float scalar) {
+            vec2_t operator-(float scalar) const {
                 return vec2_t(x - scalar, y - scalar);
             }
 
-            vec2_t operator*(const vec2_t &v) {
+            vec2_t operator*(const vec2_t &v) const {
                 return vec2_t(x * v.x, y * v.y);
             }
 
-            vec2_t operator*(float scalar) {
+            vec2_t operator*(float scalar) const {
                 return vec2_t(x * scalar, y * scalar);
             }
 
-            vec2_t operator/(const vec2_t &v) {
+            vec2_t operator/(const vec2_t &v) const {
                 return vec2_t(x / v.x, y / v.y);
             }
 
-            vec2_t operator/(float scalar) {
+            vec2_t operator/(float scalar) const {
                 return vec2_t(x / scalar, y / scalar);
             }
 

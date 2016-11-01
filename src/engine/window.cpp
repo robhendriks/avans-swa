@@ -70,4 +70,19 @@ namespace engine {
     SDL_Renderer *window::get_renderer() const {
         return mRenderer;
     }
+
+    math::box2_t window::get_screen_box() {
+        SDL_DisplayMode dm;
+        if (SDL_GetDesktopDisplayMode(0, &dm) != 0) {
+            SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
+        }
+
+        return math::box2_t({{0, 0}, {(float)dm.w, (float)dm.h}});
+    }
+
+    math::box2_t window::get_display_box() {
+        auto surface = *SDL_GetWindowSurface(mWindow);
+
+        return math::box2_t({{0, 0}, {(float)surface.w, (float)surface.h}});
+    }
 }

@@ -10,6 +10,7 @@
 #include <SDL.h>
 #include "window_config.h"
 #include "graphics/color4.hpp"
+#include "math/box2.hpp"
 #include <stdio.h>
 
 namespace engine {
@@ -31,6 +32,10 @@ namespace engine {
 
         SDL_Renderer *get_renderer() const;
 
+        static math::box2_t get_screen_box();
+
+        math::box2_t get_display_box();
+
     private:
         void init_window();
 
@@ -39,8 +44,6 @@ namespace engine {
         window_config mConfig;
         SDL_Window *mWindow;
         SDL_Renderer *mRenderer;
-
-        static const graphics::color4_t BACKGROUND_COLOR;
     };
 }
 

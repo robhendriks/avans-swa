@@ -89,7 +89,7 @@ namespace engine {
         }
     }
 
-    texture::texture_manager *engine::get_texture_manager() {
+    texture::texture_manager *engine::get_texture_manager() const {
         return new texture::texture_manager(*m_window->get_renderer());
     }
 
@@ -99,5 +99,9 @@ namespace engine {
             m_window = new window(m_config.win_config);
             m_window->create();
         }
+    }
+
+    window *engine::get_window() const {
+        return m_window;
     }
 }

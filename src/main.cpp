@@ -29,9 +29,17 @@ int main(int argc, char *argv[]) {
 
     // Create the ioc container
     auto *texture_manager = engine1->get_texture_manager();
+    auto *window = engine1->get_window();
     auto injector = boost::di::make_injector(
-        boost::di::bind<>.to(*texture_manager)
+        boost::di::bind<>.to(*texture_manager),
+        boost::di::bind<>.to(*window)
     );
+
+    engine::math::box2_t box_in_the_middle({{0,0},{10, 10}});
+    auto display_box = window->get_display_box();
+    box_in_the_middle.to_center(display_box);
+
+    SDL_Log("test");
 
     // Create the router
     gui::router &router1 = gui::router::get_instance();
@@ -51,6 +59,7 @@ int main(int argc, char *argv[]) {
     // Clean
     delete json_config;
     delete texture_manager;
+    delete window;
     delete engine1;
 
     return 0;

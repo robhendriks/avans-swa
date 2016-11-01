@@ -22,7 +22,9 @@ namespace engine {
 
         void stop();
 
-        texture::texture_manager *get_texture_manager();
+        texture::texture_manager *get_texture_manager() const;
+
+        window *get_window() const;
     protected:
         void loop();
 

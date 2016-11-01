@@ -21,7 +21,7 @@ namespace engine {
             box2_t(const box2_t &b)
                 : min(vec2_t(b.min)), max(vec2_t(b.max)) {}
 
-            vec2_t size() {
+            vec2_t size() const {
                 return max - min;
             }
 
@@ -37,6 +37,18 @@ namespace engine {
                 max.y += y_diff;
 
                 min = start;
+            }
+
+            void to_center(const box2_t &box) {
+                if (size().x >= box.size().x || size().y >= box.size().y) {
+                    max = box.max;
+                    min = box.min;
+                } else {
+                    float x_start = (box.max.x - max.x) / 2;
+                    float y_start = (box.max.y - max.y) / 2;
+
+                    move_to_start({x_start, y_start});
+                }
             }
 
             bool contains(const vec2_t &vec) {
