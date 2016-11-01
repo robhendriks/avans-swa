@@ -8,16 +8,14 @@
 
 namespace domain {
     namespace map {
-        class map :
-            public base_map {
+        class map {
         public:
-            map();
-
+            map(int width, int height);
             ~map();
 
+            std::vector<std::vector<domain::map::base_field*>> &get_fields();
         private:
-            std::vector<base_field> _fields;
-            std::vector<passable_field> _placed_building_fields;
+            std::vector<std::vector<domain::map::base_field*>> *m_fields;
         };
     }
 }

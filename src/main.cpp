@@ -43,18 +43,23 @@ int main(int argc, char *argv[]) {
     engine::eventbus::eventbus<engine::events::window_cleared>::get_instance().subscribe(&router1);
 
     // Register actions
-    auto menu_controller = injector.create<gui::controllers::menu_controller>();
-    auto main_map_controller = injector.create<gui::controllers::main_map_controller>();
+    auto *menu_controller = injector.create<gui::controllers::menu_controller*>();
+    auto *main_map_controller = injector.create<gui::controllers::main_map_controller*>();
     router1.register_action("main_menu", std::bind(&gui::controllers::menu_controller::show, menu_controller , std::placeholders::_1, injector.create<gui::views::main_menu&>()));
     router1.register_action("quit", std::bind(&gui::controllers::menu_controller::quit, menu_controller, std::placeholders::_1, engine1));
     router1.register_action("play", std::bind(&gui::controllers::menu_controller::play, menu_controller , std::placeholders::_1));
     router1.register_action("main_map", std::bind(&gui::controllers::main_map_controller::show, main_map_controller , std::placeholders::_1, injector.create<gui::views::main_map&>()));
+    router1.register_action("click_tile", std::bind(&gui::controllers::main_map_controller::click_tile, main_map_controller , std::placeholders::_1));
+
     // Start with the main menu
     router1.use("main_menu");
+
     // Run the game
     engine1->run();
 
     // Clean
+    delete menu_controller;
+    delete main_map_controller;
     delete json_config;
     delete texture_manager;
     delete color_manager;

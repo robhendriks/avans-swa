@@ -9,9 +9,7 @@ namespace domain {
     namespace buildings {
         class base_placeable_object {
         public:
-            base_placeable_object();
-
-            ~base_placeable_object();
+            virtual ~base_placeable_object() = default;
         };
     }
 }

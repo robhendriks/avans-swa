@@ -18,9 +18,11 @@ namespace gui {
         public:
             main_map(engine::graphics::texture_manager &texture_manager, engine::window &window);
 
+            void set_map_model(models::main_map_model *main_map_model);
+
             void before_first_draw();
 
-            void draw(models::main_map_model &view_model);
+            void draw();
 
             void after_last_draw();
 
@@ -28,6 +30,7 @@ namespace gui {
         private:
             engine::graphics::texture_manager& m_texture_manager;
             engine::window &m_window;
+            models::main_map_model *m_view_model;
         };
     }
 }

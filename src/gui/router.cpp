@@ -44,7 +44,7 @@ namespace gui {
     }
 
     void router::go_back() {
-        m_current_action = m_previous_action;
+        use_and_perform(m_previous_action);
     }
 
 }

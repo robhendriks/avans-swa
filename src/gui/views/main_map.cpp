@@ -14,40 +14,53 @@ namespace gui {
              m_window(window) {
         }
 
+        void main_map::set_map_model(models::main_map_model *main_map_model) {
+            m_view_model = main_map_model;
+        }
+
         void main_map::before_first_draw() {
+            m_texture_manager.load("images/grass.png", "grass_1");
+            m_texture_manager.load("images/building.png", "building_1");
             engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().subscribe(this);
         }
 
-        void main_map::draw(models::main_map_model &view_model) {
-            // Create map and place it in the middle of the screen
-            engine::math::box2_t map({{0, 0}, {(float)(view_model.number_of_tiles * view_model.tile_width), (float)(view_model.number_of_tiles * view_model.tile_height)}});
-            map.to_center(m_window.get_display_box());
-
+        void main_map::draw() {
             // The position for the next tile
-            float x = map.min.x;
-            float y = map.max.y;
+            float x = m_view_model->map->min.x;
+            float y = m_view_model->map->min.y;
 
-            for (int i = 0; i < view_model.number_of_tiles; i++) {
+            for (size_t i = 0; i < m_view_model->tiles.size(); i++) {
                 if (i != 0) {
-                    x = 0;
-                    y = view_model.tile_height * i;
+                    x = m_view_model->map->min.x;
+                    y = m_view_model->map->min.y + (m_view_model->tile_height * i);
                 }
 
-                for (auto tile : view_model.tiles[0]) {
+                for (auto tile : m_view_model->tiles[i]) {
                     // Create tile box
-                    engine::math::box2_t tile_box({x, y}, {x + view_model.tile_width, y + view_model.tile_height});
+                    engine::math::box2_t tile_box({x, y}, {x + m_view_model->tile_width, y + m_view_model->tile_height});
 
-                    x += view_model.tile_width;
+                    // Let the tile draw
+                    tile->draw(m_texture_manager, tile_box);
+
+                    x += m_view_model->tile_width;
                 }
             }
         }
 
         void main_map::after_last_draw() {
+            m_texture_manager.unload("grass_1");
+            m_texture_manager.unload("building_1");
+
             engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().unsubscribe(this);
         }
 
         void main_map::on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event) {
-            SDL_Log("PLAY");
+            engine::math::vec2_t *position = engine::input::input_handler::get_instance()->get_mouse_position();
+
+            // Check if the position is on the map
+            if (m_view_model->map->contains(*position)) {
+                gui::router::get_instance().use_and_perform("click_tile");
+            }
         }
     }
 }

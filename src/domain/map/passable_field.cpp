@@ -4,19 +4,23 @@
 
 namespace domain {
     namespace map {
-        passable_field::passable_field() {
+        void passable_field::draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest) {
+            if (m_placed_object == nullptr) {
+                texture_manager.draw("grass_1", {0, 0}, dest);
+            } else {
+                texture_manager.draw("building_1", {0, 0}, dest);
+            }
         }
 
-
-        passable_field::~passable_field() {
+        buildings::base_placeable_object &passable_field::get_placed_object() {
+            return *m_placed_object;
         }
 
-        void passable_field::set_placed_object(buildings::base_placeable_object placeable_object) {
-            this->_placed_object = placeable_object;
-        }
-
-        buildings::base_placeable_object passable_field::get_placed_object() {
-            return buildings::base_placeable_object();
+        void passable_field::place(buildings::base_placeable_object &placeable_object) {
+            if (m_placed_object == nullptr) {
+                m_placed_object = &placeable_object;
+            }
+            SDL_Log("ALREADY SOMETHING PLACED");
         }
     }
 }

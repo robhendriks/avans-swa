@@ -5,24 +5,8 @@
 
 namespace domain {
     namespace buildings {
-        class building :
-            public base_placeable_object {
-        public:
-            building();
+        class building : public base_placeable_object {
 
-            int get_hit_points();
-
-            void set_hit_points(int hit_points);
-
-            int get_regen_per_sec();
-
-            void set_regen_per_sec(int regen_per_sec);
-
-            ~building();
-
-        private:
-            int _hit_points;
-            int _regen_per_sec;
         };
     }
 }

@@ -4,12 +4,7 @@
 
 namespace domain {
     namespace map {
-        base_field::base_field() {
-        }
-
-
-        base_field::~base_field() {
-        }
     }
 }
+
 #endif //CITY_DEFENCE_BASE_FIELD_CPP

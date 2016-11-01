@@ -8,12 +8,7 @@
 
 namespace domain {
     namespace buildings {
-        base_placeable_object::base_placeable_object() {
-        }
 
-
-        base_placeable_object::~base_placeable_object() {
-        }
     }
 }
 
