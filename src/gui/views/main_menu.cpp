@@ -4,6 +4,7 @@
 #include "main_menu.h"
 #include "../../engine/input/input_handler.h"
 #include "../../router.h"
+#include "../../engine/eventbus/eventbus.h"
 
 namespace gui {
     namespace views {
@@ -31,10 +32,13 @@ namespace gui {
 
         void main_menu::before_first_draw() {
             m_texture_manager.load("images/menu.png", "menu_item_1");
+            engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().subscribe(this);
         }
 
         void main_menu::after_last_draw() {
             m_texture_manager.unload("menu_item_1");
+            engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().unsubscribe(this);
+
         }
     }
 }
