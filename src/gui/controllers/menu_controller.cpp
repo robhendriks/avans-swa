@@ -7,7 +7,6 @@
 
 namespace gui {
     namespace controllers {
-
         void menu_controller::show(int call, gui::views::main_menu &view) {
             if (call > 0) {
                 // Last call, unsubscribe
@@ -25,6 +24,10 @@ namespace gui {
 
         void menu_controller::quit(int call, engine::engine *engine1) {
             engine1->stop();
+        }
+
+        void menu_controller::play(int call){
+            SDL_Log("PLAY2");
         }
     }
 }

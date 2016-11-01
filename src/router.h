@@ -21,7 +21,7 @@ public:
     void register_action(std::string name, std::function<void(int)> f);
     void use(std::string action);
     void use_and_perform(std::string action);
-
+    void use_and_perform_go_back(std::string action);
 private:
     router() {};
 

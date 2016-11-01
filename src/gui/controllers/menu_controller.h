@@ -14,6 +14,8 @@ namespace gui {
         public:
             void show(int call, gui::views::main_menu &view);
             void quit(int call, engine::engine *engine1);
+
+            void play(int call);
         };
     }
 }
