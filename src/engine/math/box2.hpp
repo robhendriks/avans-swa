@@ -6,6 +6,7 @@
 #define CITY_DEFENCE_BOX2_HPP
 
 #include <SDL.h>
+#include <cmath>
 #include "vec2.hpp"
 
 namespace engine {
@@ -26,6 +27,16 @@ namespace engine {
 
             vec2_t center() {
                 return (min + max) *= 0.5f;
+            }
+
+            void move_to_start(vec2_t start) {
+                float x_diff = start.x - min.x;
+                float y_diff = start.y - min.y;
+
+                max.x += x_diff;
+                max.y += y_diff;
+
+                min = start;
             }
 
             bool contains(const vec2_t &vec) {
@@ -64,6 +75,11 @@ namespace engine {
             operator SDL_Rect() {
                 vec2_t s = size();
                 return SDL_Rect {(int) min.x, (int) min.y, (int) s.x, (int) s.y};
+            }
+
+            operator SDL_Rect*() {
+                vec2_t s = size();
+                return new SDL_Rect {(int) min.x, (int) min.y, (int) s.x, (int) s.y};
             }
 
             std::string to_string() {

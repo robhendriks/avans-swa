@@ -12,10 +12,14 @@ namespace gui {
             if (call > 0) {
                 // Last call, unsubscribe
                 engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().unsubscribe(&view);
+
+                view.after_last_draw();
             } else {
                 if (call < 0) {
                     // First call, subscribe on eventbus
                     engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().subscribe(&view);
+
+                    view.before_first_draw();
                 }
 
                 // Draw the view

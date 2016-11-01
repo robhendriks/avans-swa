@@ -16,11 +16,18 @@ namespace gui {
         public:
             main_menu(engine::texture::texture_manager &texture_manager);
 
+            void before_first_draw();
+
             void draw();
+
+            void after_last_draw();
 
             void on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event);
         private:
             engine::texture::texture_manager& m_texture_manager;
+            engine::math::box2_t m_play_dest;
+            engine::math::box2_t m_load_dest;
+            engine::math::box2_t m_quit_dest;
         };
     }
 }
