@@ -20,7 +20,7 @@ namespace gui {
 
         void main_map::draw(models::main_map_model &view_model) {
             // Create map and place it in the middle of the screen
-            engine::math::box2_t map({{0, 0}, {view_model.number_of_tiles * view_model.tile_width, view_model.number_of_tiles * view_model.tile_height}});
+            engine::math::box2_t map({{0, 0}, {static_cast<float>(view_model.number_of_tiles * view_model.tile_width), static_cast<float>(view_model.number_of_tiles * view_model.tile_height)}});
             map.to_center(m_window.get_display_box());
 
             // The position for the next tile
@@ -34,7 +34,7 @@ namespace gui {
 
                 for (auto tile : view_model.tiles[0]) {
                     // Create tile box
-                    engine::math::box2_t tile_box({0, 0}, {view_model.tile_width, view_model.tile_height});
+                    engine::math::box2_t tile_box({0, 0}, {static_cast<float>(view_model.tile_width), static_cast<float>(view_model.tile_height)});
                     // Place the tile on the correct position
                     tile_box.move_to_start(tile_pos);
 

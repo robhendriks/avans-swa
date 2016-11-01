@@ -14,9 +14,9 @@ namespace gui {
                     // First call, subscribe on eventbus
                     view.before_first_draw();
                 }
-
+                models::main_map_model d = models::main_map_model();
                 // Draw the view
-                view.draw();
+                view.draw(d);
             }
         }
     }
