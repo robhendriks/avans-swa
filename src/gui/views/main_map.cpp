@@ -11,7 +11,7 @@ namespace gui {
     namespace views {
 
 
-        main_map::main_map(engine::texture::texture_manager &texture_manager)  : _texture_manager(texture_manager),
+        main_map::main_map(engine::graphics::texture_manager &texture_manager)  : _texture_manager(texture_manager),
              m_play_dest({{150, 0}, {489, 122}}){
         }
 
