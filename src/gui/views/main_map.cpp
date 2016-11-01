@@ -20,25 +20,24 @@ namespace gui {
 
         void main_map::draw(models::main_map_model &view_model) {
             // Create map and place it in the middle of the screen
-            engine::math::box2_t map({{0, 0}, {static_cast<float>(view_model.number_of_tiles * view_model.tile_width), static_cast<float>(view_model.number_of_tiles * view_model.tile_height)}});
+            engine::math::box2_t map({{0, 0}, {(float)(view_model.number_of_tiles * view_model.tile_width), (float)(view_model.number_of_tiles * view_model.tile_height)}});
             map.to_center(m_window.get_display_box());
 
             // The position for the next tile
-            engine::math::vec2_t tile_pos({0, 0});
+            float x = map.min.x;
+            float y = map.max.y;
 
             for (int i = 0; i < view_model.number_of_tiles; i++) {
                 if (i != 0) {
-                    tile_pos.x = 0;
-                    tile_pos.y = view_model.tile_height * i;
+                    x = 0;
+                    y = view_model.tile_height * i;
                 }
 
                 for (auto tile : view_model.tiles[0]) {
                     // Create tile box
-                    engine::math::box2_t tile_box({0, 0}, {static_cast<float>(view_model.tile_width), static_cast<float>(view_model.tile_height)});
-                    // Place the tile on the correct position
-                    tile_box.move_to_start(tile_pos);
+                    engine::math::box2_t tile_box({x, y}, {x + view_model.tile_width, y + view_model.tile_height});
 
-                    tile_pos.x += view_model.tile_width;
+                    x += view_model.tile_width;
                 }
             }
         }
