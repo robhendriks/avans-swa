@@ -4,6 +4,7 @@
 
 #include "menu_controller.h"
 #include "../../engine/eventbus/eventbus.h"
+#include "../router.h"
 
 namespace gui {
     namespace controllers {
@@ -27,7 +28,8 @@ namespace gui {
         }
 
         void menu_controller::play(int call){
-            SDL_Log("PLAY2");
+            SDL_Log("PLAY CLICKED Controller");
+            router::get_instance().use("main_map");
         }
     }
 }
