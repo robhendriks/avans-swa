@@ -31,7 +31,9 @@ namespace gui {
             }
             catch(std::exception e){
                 SDL_Log(e.what());
+                return false;
             }
+            return true;
         }
     }
 }
