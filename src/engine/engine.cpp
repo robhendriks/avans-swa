@@ -3,20 +3,16 @@
 //
 
 #include "engine.h"
-#include "settings.h"
 #include "input/input_handler.h"
 #include "eventbus/eventbus.h"
 #include "events/window_cleared.h"
 
 namespace engine {
-    const int TICKS_PER_SECOND = 25;
-    const int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
-    const int MAX_FRAMESKIP = 5;
+    engine::engine(engine_config config) : m_window(nullptr), m_config(config) {
+    }
 
     void engine::warmup() {
         try {
-            settings::get();
-
             init_sdl();
             create_window();
         } catch (std::runtime_error &e) {
@@ -38,16 +34,16 @@ namespace engine {
         float interpolation;
         while (m_running) {
             loops = 0;
-            while(SDL_GetTicks() > next_game_tick && loops < MAX_FRAMESKIP) {
+            while(SDL_GetTicks() > next_game_tick && loops < m_config.max_frameskip) {
                 update(); // Update the router state
 
-                next_game_tick += SKIP_TICKS;
+                next_game_tick += m_config.get_skip_ticks();
                 loops++;
             }
 
             m_window->clear();
 
-            interpolation = float(SDL_GetTicks() + SKIP_TICKS - next_game_tick) / float(SKIP_TICKS);
+            interpolation = float(SDL_GetTicks() + m_config.get_skip_ticks() - next_game_tick) / float(m_config.get_skip_ticks());
 
             // Fire event clear event
             auto *clear_event = new events::window_cleared(interpolation);
@@ -101,15 +97,8 @@ namespace engine {
 
     void engine::create_window() {
         // Create the window of it wasn't already created
-        if (!m_window) {
-            window_config cfg;
-            cfg.title = "City Defence";
-
-            settings *s = &settings::get();
-            cfg.w = s->get_window_width();
-            cfg.h = s->get_window_height();
-
-            m_window = new window(cfg);
+        if (m_window == nullptr) {
+            m_window = new window(m_config.win_config);
             m_window->create();
         }
     }

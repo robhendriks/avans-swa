@@ -6,10 +6,12 @@
 #define CITY_DEFENCE_WINDOW_CONFIG_H
 
 #include <SDL.h>
+#include "graphics/color4.hpp"
 
 namespace engine {
     struct window_config {
-        const char *title;
+        std::string title;
+        graphics::color4_t background_color;
         int x = SDL_WINDOWPOS_CENTERED;
         int y = SDL_WINDOWPOS_CENTERED;
         int w = 1024;

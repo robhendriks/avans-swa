@@ -21,7 +21,7 @@ namespace engine {
             return;
         }
 
-        mWindow = SDL_CreateWindow(mConfig.title, mConfig.x, mConfig.y, mConfig.w, mConfig.h, mConfig.flags);
+        mWindow = SDL_CreateWindow(mConfig.title.c_str(), mConfig.x, mConfig.y, mConfig.w, mConfig.h, mConfig.flags);
 
         if (!mWindow) {
             std::string error = SDL_GetError();
@@ -43,7 +43,8 @@ namespace engine {
     }
 
     void window::clear() {
-        SDL_SetRenderDrawColor(mRenderer, BACKGROUND_COLOR.r, BACKGROUND_COLOR.g, BACKGROUND_COLOR.b, BACKGROUND_COLOR.a);
+
+        SDL_SetRenderDrawColor(mRenderer, mConfig.background_color.r, mConfig.background_color.g, mConfig.background_color.b, mConfig.background_color.a);
         SDL_RenderClear(mRenderer);
     }
 
@@ -69,6 +70,4 @@ namespace engine {
     SDL_Renderer *window::get_renderer() const {
         return mRenderer;
     }
-
-    const graphics::color4_t window::BACKGROUND_COLOR = graphics::color4_t(0xFF6495ED);
 }

@@ -3,7 +3,7 @@
 //
 #include "main_menu.h"
 #include "../../engine/input/input_handler.h"
-#include "../../router.h"
+#include "../router.h"
 
 namespace gui {
     namespace views {

@@ -9,10 +9,13 @@
 #include <exception>
 #include "window.h"
 #include "texture/texture_manager.h"
+#include "engine_config.h"
 
 namespace engine {
     class engine {
     public:
+        engine(engine_config config);
+
         void warmup();
 
         void run();
@@ -34,6 +37,7 @@ namespace engine {
     private:
         window* m_window;
         bool m_running;
+        engine_config m_config;
     };
 }
 

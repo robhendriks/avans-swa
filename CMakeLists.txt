@@ -23,8 +23,6 @@ set(SOURCES src/main.cpp
     src/engine/window_config.h
     src/config/json_config.cpp
     src/config/json_config.h
-    src/engine/settings.cpp
-    src/engine/settings.h
     src/data/repository.h
     src/data/json/json_repository.h
     src/engine/observer/observee.h
@@ -48,7 +46,7 @@ set(SOURCES src/main.cpp
     src/domain/buildings/base_placeable_object.cpp
     src/domain/buildings/base_placeable_object.h
     src/gui/views/main_menu.cpp
-    src/gui/views/main_menu.h src/engine/texture/texture_manager.cpp src/engine/texture/texture_manager.h src/engine/eventbus/eventbus.h src/engine/eventbus/subscriber.h src/engine/events/key_down.h src/engine/input/keycodes.h src/gui/controllers/menu_controller.cpp src/gui/controllers/menu_controller.h src/engine/events/mouse_button_down.h src/engine/events/window_cleared.cpp src/engine/events/window_cleared.h src/router.cpp src/router.h src/engine/input/mouse_buttons.h src/engine/events/mouse_button_up.h)
+    src/gui/views/main_menu.h src/engine/texture/texture_manager.cpp src/engine/texture/texture_manager.h src/engine/eventbus/eventbus.h src/engine/eventbus/subscriber.h src/engine/events/key_down.h src/engine/input/keycodes.h src/gui/controllers/menu_controller.cpp src/gui/controllers/menu_controller.h src/engine/events/mouse_button_down.h src/engine/events/window_cleared.cpp src/engine/events/window_cleared.h src/gui/router.cpp src/gui/router.h src/engine/input/mouse_buttons.h src/engine/events/mouse_button_up.h src/engine/engine_config.h src/config/config.h src/utils/string_utils.h)
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include
