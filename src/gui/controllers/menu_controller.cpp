@@ -4,21 +4,17 @@
 
 #include "menu_controller.h"
 #include "../../engine/eventbus/eventbus.h"
+#include "../router.h"
 
 namespace gui {
     namespace controllers {
-
         void menu_controller::show(int call, gui::views::main_menu &view) {
             if (call > 0) {
                 // Last call, unsubscribe
-                engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().unsubscribe(&view);
-
                 view.after_last_draw();
             } else {
                 if (call < 0) {
                     // First call, subscribe on eventbus
-                    engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().subscribe(&view);
-
                     view.before_first_draw();
                 }
 
@@ -29,6 +25,13 @@ namespace gui {
 
         void menu_controller::quit(int call, engine::engine *engine1) {
             engine1->stop();
+        }
+
+        void menu_controller::play(int call){
+            if (call < 0) {
+                SDL_Log("PLAY CLICKED Controller");
+                router::get_instance().use_and_perform("main_map");
+            }
         }
     }
 }

@@ -6,6 +6,8 @@
 #include "engine/eventbus/eventbus.h"
 #include "config/json_config.h"
 #include "utils/string_utils.h"
+#include "gui/views/main_map.h"
+#include "gui/controllers/main_map_controller.h"
 
 int main(int argc, char *argv[]) {
 
@@ -41,12 +43,13 @@ int main(int argc, char *argv[]) {
 
     // Register actions
     auto menu_controller = injector.create<gui::controllers::menu_controller>();
+    auto main_map_controller = injector.create<gui::controllers::main_map_controller>();
     router1.register_action("main_menu", std::bind(&gui::controllers::menu_controller::show, menu_controller , std::placeholders::_1, injector.create<gui::views::main_menu&>()));
     router1.register_action("quit", std::bind(&gui::controllers::menu_controller::quit, menu_controller, std::placeholders::_1, engine1));
-
+    router1.register_action("play", std::bind(&gui::controllers::menu_controller::play, menu_controller , std::placeholders::_1));
+    router1.register_action("main_map", std::bind(&gui::controllers::main_map_controller::show, main_map_controller , std::placeholders::_1, injector.create<gui::views::main_map&>()));
     // Start with the main menu
     router1.use("main_menu");
-
     // Run the game
     engine1->run();
 
