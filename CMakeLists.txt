@@ -11,6 +11,7 @@ add_subdirectory(tests)
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
+find_package(SDL2_mixer REQUIRED)
 
 set(SOURCES src/main.cpp
     src/engine/math/vec2.hpp
@@ -79,14 +80,16 @@ include_directories(third_party/json/src
         third_party/di-cpp14/include
         ${SDL2_INCLUDE_DIR}
         ${SDL2_IMAGE_INCLUDE_DIR}
-        ${SDL2_TTF_INCLUDE_DIRS})
+        ${SDL2_TTF_INCLUDE_DIRS}
+        ${SDL2_MIXER_INCLUDE_DIR})
 
 add_executable(city_defence ${SOURCES})
 
 target_link_libraries(city_defence
         ${SDL2_LIBRARY}
         ${SDL2_IMAGE_LIBRARY}
-        ${SDL2_TTF_LIBRARIES})
+        ${SDL2_TTF_LIBRARIES}
+        ${SDL2_MIXER_INCLUDE_DIR})
 
 add_custom_command(TARGET city_defence PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
