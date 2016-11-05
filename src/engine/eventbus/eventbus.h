@@ -8,11 +8,12 @@
 #include <vector>
 #include <algorithm>
 #include <map>
+#include <typeinfo>
+#include "any.hpp"
 #include "subscriber.h"
 
 namespace engine {
     namespace eventbus {
-        template<class T>
         class eventbus {
         public:
             static eventbus &get_instance() {
@@ -21,20 +22,25 @@ namespace engine {
                 return instance;
             }
 
+            template<class T>
             void fire(T &event) {
-                for (auto &subscriber : subscribers) {
-                    subscriber->on_event(event);
+                for (auto &sub : subscribers[typeid(T).name()]) {
+                    sub.as<subscriber<T>*>()->on_event(event);
                 }
             }
 
-            void subscribe(subscriber <T> *subscriber1) {
-                subscribers.push_back(subscriber1);
+            template<class T>
+            void subscribe(subscriber<T> *subscriber1) {
+                subscribers[typeid(T).name()].push_back(subscriber1);
             }
 
+            template<class T>
             void unsubscribe(subscriber<T> *subscriber1) {
-                auto find = std::find(subscribers.begin(), subscribers.end(), subscriber1);
-                if (find != subscribers.end()) {
-                    subscribers.erase(find);
+                auto &subscribers_array = subscribers[typeid(T).name()];
+                for (size_t i = 0; i < subscribers_array.size(); i++) {
+                    if (subscribers_array[i].as<subscriber<T>*>() == subscriber1) {
+                        subscribers_array.erase(subscribers_array.begin() + i);
+                    }
                 }
             }
 
@@ -43,7 +49,7 @@ namespace engine {
             void operator=(eventbus const &) = delete;
 
         private:
-            std::vector<subscriber<T>*> subscribers;
+            std::map<std::string, std::vector<type::any>> subscribers;
 
             eventbus() {}
         };

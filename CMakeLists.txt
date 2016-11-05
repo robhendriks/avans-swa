@@ -78,6 +78,7 @@ set(SOURCES src/main.cpp
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include
+        third_party/type
         ${SDL2_INCLUDE_DIR}
         ${SDL2_IMAGE_INCLUDE_DIR}
         ${SDL2_TTF_INCLUDE_DIRS}

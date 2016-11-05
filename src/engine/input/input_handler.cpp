@@ -67,35 +67,36 @@ namespace engine {
         }
 
         bool input_handler::update_states(const SDL_Event &event) {
+            auto &eventbus = eventbus::eventbus::get_instance();
             switch (event.type) {
                 case SDL_MOUSEBUTTONDOWN:
                     if (event.button.button == SDL_BUTTON_LEFT) {
                         m_left_mouse_button_pressed = true;
                         events::mouse_button_down<input::mouse_buttons::LEFT> mouse_button_down_event;
-                        eventbus::eventbus<events::mouse_button_down<input::mouse_buttons::LEFT>>::get_instance().fire(mouse_button_down_event);
+                        eventbus.fire(mouse_button_down_event);
                     } else if (event.button.button == SDL_BUTTON_MIDDLE) {
                         m_middle_mouse_button_pressed = true;
                         events::mouse_button_down<input::mouse_buttons::MIDDLE> mouse_button_down_event;
-                        eventbus::eventbus<events::mouse_button_down<input::mouse_buttons::MIDDLE>>::get_instance().fire(mouse_button_down_event);
+                        eventbus.fire(mouse_button_down_event);
                     } else if (event.button.button == SDL_BUTTON_RIGHT) {
                         m_right_mouse_button_pressed = true;
                         events::mouse_button_down<input::mouse_buttons::RIGHT> mouse_button_down_event;
-                        eventbus::eventbus<events::mouse_button_down<input::mouse_buttons::RIGHT>>::get_instance().fire(mouse_button_down_event);
+                        eventbus.fire(mouse_button_down_event);
                     }
                     break;
                 case SDL_MOUSEBUTTONUP:
                     if (event.button.button == SDL_BUTTON_LEFT) {
                         m_left_mouse_button_pressed = false;
                         events::mouse_button_up<input::mouse_buttons::LEFT> mouse_button_up_event;
-                        eventbus::eventbus<events::mouse_button_up<input::mouse_buttons::LEFT>>::get_instance().fire(mouse_button_up_event);
+                        eventbus.fire(mouse_button_up_event);
                     } else if (event.button.button == SDL_BUTTON_MIDDLE) {
                         m_middle_mouse_button_pressed = false;
                         events::mouse_button_up<input::mouse_buttons::MIDDLE> mouse_button_up_event;
-                        eventbus::eventbus<events::mouse_button_up<input::mouse_buttons::MIDDLE>>::get_instance().fire(mouse_button_up_event);
+                        eventbus.fire(mouse_button_up_event);
                     } else if (event.button.button == SDL_BUTTON_RIGHT) {
                         m_right_mouse_button_pressed = false;
                         events::mouse_button_up<input::mouse_buttons::RIGHT> mouse_button_up_event;
-                        eventbus::eventbus<events::mouse_button_up<input::mouse_buttons::RIGHT>>::get_instance().fire(mouse_button_up_event);
+                        eventbus.fire(mouse_button_up_event);
                     }
                     break;
                 case SDL_MOUSEMOTION:

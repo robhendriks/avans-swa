@@ -47,7 +47,7 @@ namespace engine {
 
             // Fire event clear event
             auto *clear_event = new events::window_cleared(interpolation);
-            eventbus::eventbus<events::window_cleared>::get_instance().fire(*clear_event);
+            eventbus::eventbus::get_instance().fire(*clear_event);
             delete clear_event;
 
             m_window->present();

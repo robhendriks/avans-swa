@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
     );
 
     // Subscribe the game to the window cleared event
-    engine::eventbus::eventbus<engine::events::window_cleared>::get_instance().subscribe(game1);
+    engine::eventbus::eventbus::get_instance().subscribe(game1);
 
     // Start with show
     auto *menu_controller = injector.create<gui::controllers::menu_controller*>();
