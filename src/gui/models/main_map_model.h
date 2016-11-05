@@ -15,6 +15,7 @@ namespace gui {
             ~main_map_model() {
                 delete map;
             }
+
             std::vector<std::vector<domain::map::base_field*>> tiles;
             int tile_height;
             int tile_width;

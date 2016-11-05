@@ -3,14 +3,17 @@
 //
 #include "main_menu.h"
 #include "../../engine/input/input_handler.h"
-#include "../router.h"
 #include "../../engine/eventbus/eventbus.h"
 
 namespace gui {
     namespace views {
         main_menu::main_menu(engine::graphics::texture_manager &texture_manager) : m_texture_manager(texture_manager),
-            m_play_dest({{150, 0}, {489, 122}}), m_load_dest({{150, 122}, {489, 244}}), m_quit_dest({{150, 244}, {489, 366}})
-        {
+                                                                                   m_play_dest({{150, 0},
+                                                                                                {489, 122}}),
+                                                                                   m_load_dest({{150, 122},
+                                                                                                {489, 244}}),
+                                                                                   m_quit_dest({{150, 244},
+                                                                                                {489, 366}}) {
         }
 
         void main_menu::draw() {
@@ -21,24 +24,30 @@ namespace gui {
 
         void main_menu::on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event) {
             engine::math::vec2_t *position = engine::input::input_handler::get_instance()->get_mouse_position();
+
             if (m_play_dest.contains(*position)) {
-                SDL_Log("PLAY");
-                router::get_instance().use_and_perform("play");
+                m_menu_controller->play();
             } else if (m_load_dest.contains(*position)) {
-                SDL_Log("LOAD");
-            } else if (m_quit_dest.contains(*position)){
-                router::get_instance().use_and_perform("quit");
+                SDL_Log("LOAD MENU BUTTON");
+            } else if (m_quit_dest.contains(*position)) {
+                m_menu_controller->quit();
             }
         }
 
-        void main_menu::before_first_draw() {
+        void main_menu::before() {
             m_texture_manager.load("images/menu.png", "menu_item_1");
-            engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().subscribe(this);
+            engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().subscribe(
+                this);
         }
 
-        void main_menu::after_last_draw() {
+        void main_menu::after() {
             m_texture_manager.unload("menu_item_1");
-            engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().unsubscribe(this);
+            engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().unsubscribe(
+                this);
+        }
+
+        void main_menu::set_controller(controllers::menu_controller &menu_controller) {
+            m_menu_controller = &menu_controller;
         }
     }
 }

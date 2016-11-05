@@ -7,19 +7,24 @@
 
 #include "../views/main_map.h"
 #include "../../domain/map/map.h"
+#include "base_controller.h"
+
+namespace gui {
+    namespace views {
+        class main_map;
+    }
+}
 
 namespace gui {
     namespace controllers {
-        class main_map_controller {
+        class main_map_controller : public base_controller {
         public:
-            main_map_controller(engine::window &window);
-            ~main_map_controller();
-            void show(int call, gui::views::main_map &view);
-            void click_tile(int call);
+            main_map_controller(views::main_map &view, models::main_map_model &model, game &game1);
+            void show();
+            void tile_click(domain::map::base_field &tile);
         private:
-            engine::window &m_window;
-            models::main_map_model *m_main_map_model;
-            domain::map::map *m_map;
+            views::main_map &m_view;
+            models::main_map_model &m_model;
         };
     }
 }

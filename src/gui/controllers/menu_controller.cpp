@@ -3,35 +3,28 @@
 //
 
 #include "menu_controller.h"
-#include "../../engine/eventbus/eventbus.h"
-#include "../router.h"
 
 namespace gui {
     namespace controllers {
-        void menu_controller::show(int call, gui::views::main_menu &view) {
-            if (call > 0) {
-                // Last call, unsubscribe
-                view.after_last_draw();
-            } else {
-                if (call < 0) {
-                    // First call, subscribe on eventbus
-                    view.before_first_draw();
-                }
 
-                // Draw the view
-                view.draw();
-            }
+        menu_controller::menu_controller(views::main_menu &main_menu, engine::engine &engine,
+                                         controllers::main_map_controller &main_map_controller, game &game1)
+            : base_controller(game1), m_engine(engine), m_main_menu(main_menu),
+              m_main_map_controller(main_map_controller) {
+
+            m_main_menu.set_controller(*this);
         }
 
-        void menu_controller::quit(int call, engine::engine *engine1) {
-            engine1->stop();
+        void menu_controller::show() {
+            view(m_main_menu);
         }
 
-        void menu_controller::play(int call){
-            if (call < 0) {
-                SDL_Log("PLAY CLICKED Controller");
-                router::get_instance().use_and_perform("main_map");
-            }
+        void menu_controller::quit() {
+            m_engine.stop();
+        }
+
+        void menu_controller::play() {
+            m_main_map_controller.show();
         }
     }
 }

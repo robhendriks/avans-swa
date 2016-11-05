@@ -7,15 +7,32 @@
 
 #include "../../engine/engine.h"
 #include "../views/main_menu.h"
+#include "base_controller.h"
+#include "main_map_controller.h"
+
+namespace gui {
+    namespace views {
+        class main_menu;
+    }
+}
 
 namespace gui {
     namespace controllers {
-        class menu_controller {
+        class menu_controller : public base_controller {
         public:
-            void show(int call, gui::views::main_menu &view);
-            void quit(int call, engine::engine *engine1);
+            menu_controller(views::main_menu &main_menu, engine::engine &engine,
+                            controllers::main_map_controller &main_map_controller, game &game1);
 
-            void play(int call);
+            void show();
+
+            void quit();
+
+            void play();
+
+        private:
+            engine::engine &m_engine;
+            views::main_menu &m_main_menu;
+            controllers::main_map_controller &m_main_map_controller;
         };
     }
 }

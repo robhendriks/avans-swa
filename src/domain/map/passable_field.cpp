@@ -20,7 +20,6 @@ namespace domain {
             if (m_placed_object == nullptr) {
                 m_placed_object = &placeable_object;
             }
-            SDL_Log("ALREADY SOMETHING PLACED");
         }
     }
 }

@@ -58,7 +58,6 @@ set(SOURCES src/main.cpp
     src/engine/events/mouse_button_down.h
     src/engine/events/window_cleared.cpp
     src/engine/events/window_cleared.h
-    src/gui/router.cpp src/gui/router.h
     src/engine/input/mouse_buttons.h
     src/engine/events/mouse_button_up.h
     src/engine/engine_config.h
@@ -69,7 +68,12 @@ set(SOURCES src/main.cpp
     src/gui/views/main_map.cpp
     src/gui/views/main_map.h
     src/gui/controllers/main_map_controller.cpp
-    src/gui/controllers/main_map_controller.h src/gui/models/main_map_model.h)
+    src/gui/controllers/main_map_controller.h
+    src/gui/models/main_map_model.h
+    src/gui/views/base_view.h
+    src/gui/controllers/base_controller.cpp
+    src/gui/controllers/base_controller.h
+    src/services/registry/registry.h src/game.cpp src/game.h)
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include

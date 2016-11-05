@@ -4,63 +4,76 @@
 
 #include "main_map.h"
 #include "../../engine/input/input_handler.h"
-#include "../router.h"
 #include "../../engine/eventbus/eventbus.h"
 
 namespace gui {
     namespace views {
 
-        main_map::main_map(engine::graphics::texture_manager &texture_manager, engine::window &window) : m_texture_manager(texture_manager),
-             m_window(window) {
+        main_map::main_map(engine::graphics::texture_manager &texture_manager, engine::window &window,
+                           models::main_map_model &model)
+            : m_texture_manager(texture_manager),
+              m_window(window), m_model(model) {
         }
 
-        void main_map::set_map_model(models::main_map_model *main_map_model) {
-            m_view_model = main_map_model;
-        }
-
-        void main_map::before_first_draw() {
+        void main_map::before() {
             m_texture_manager.load("images/grass.png", "grass_1");
             m_texture_manager.load("images/building.png", "building_1");
-            engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().subscribe(this);
+
+            engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().subscribe(
+                this);
         }
 
         void main_map::draw() {
-            // The position for the next tile
-            float x = m_view_model->map->min.x;
-            float y = m_view_model->map->min.y;
+            // Draw the map in the middle of the screen
+            auto win_box = m_window.get_display_box();
+            m_model.map->to_left(win_box);
+            m_model.map->to_top(win_box);
+            m_model.map->to_center(win_box);
 
-            for (size_t i = 0; i < m_view_model->tiles.size(); i++) {
+            // The position for the next tile
+            float x = m_model.map->min.x;
+            float y = m_model.map->min.y;
+
+            for (size_t i = 0; i < m_model.tiles.size(); i++) {
                 if (i != 0) {
-                    x = m_view_model->map->min.x;
-                    y = m_view_model->map->min.y + (m_view_model->tile_height * i);
+                    x = m_model.map->min.x;
+                    y = m_model.map->min.y + (m_model.tile_height * i);
                 }
 
-                for (auto tile : m_view_model->tiles[i]) {
+                for (auto tile : m_model.tiles[i]) {
                     // Create tile box
-                    engine::math::box2_t tile_box({x, y}, {x + m_view_model->tile_width, y + m_view_model->tile_height});
+                    engine::math::box2_t tile_box({x, y}, {x + m_model.tile_width, y + m_model.tile_height});
 
                     // Let the tile draw
                     tile->draw(m_texture_manager, tile_box);
 
-                    x += m_view_model->tile_width;
+                    x += m_model.tile_width;
                 }
             }
         }
 
-        void main_map::after_last_draw() {
+        void main_map::after() {
             m_texture_manager.unload("grass_1");
             m_texture_manager.unload("building_1");
 
-            engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().unsubscribe(this);
+            engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().unsubscribe(
+                this);
         }
 
         void main_map::on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event) {
             engine::math::vec2_t *position = engine::input::input_handler::get_instance()->get_mouse_position();
 
             // Check if the position is on the map
-            if (m_view_model->map->contains(*position)) {
-                gui::router::get_instance().use_and_perform("click_tile");
+            if (m_model.map->contains(*position)) {
+                // Calculate which tile
+                int col = (int) ((position->x - m_model.map->min.x) / m_model.tile_width);
+                int row = (int) ((position->y - m_model.map->min.y) / m_model.tile_height);
+                m_controller->tile_click(*m_model.tiles[row][col]);
             }
+        }
+
+        void main_map::set_controller(controllers::main_map_controller &controller) {
+            m_controller = &controller;
         }
     }
 }

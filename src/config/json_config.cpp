@@ -20,7 +20,7 @@ namespace config {
 
     std::string json_config::get_string(std::string key, std::string default_value) {
         json root = get(key);
-        if (root != NULL && root.is_string()) {
+        if (root.is_string()) {
             return root;
         }
 
@@ -29,7 +29,7 @@ namespace config {
 
     int json_config::get_int(std::string key, int default_value) {
         json root = get(key);
-        if (root != NULL && root.is_number_integer()) {
+        if (root.is_number_integer()) {
             return root;
         }
 
@@ -38,7 +38,7 @@ namespace config {
 
     float json_config::get_float(std::string key, float default_value) {
         json root = get(key);
-        if (root != NULL && root.is_number_float()) {
+        if (root.is_number_float()) {
             return root;
         }
 

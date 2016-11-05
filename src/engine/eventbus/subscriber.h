@@ -11,6 +11,7 @@ namespace engine {
         class subscriber {
         public:
             virtual void on_event(T &event) = 0;
+            virtual ~subscriber() = default;
         };
     };
 }
