@@ -24,7 +24,6 @@ namespace engine {
 
             template<class T>
             void fire(T &event) {
-                std::string test = typeid(T).name();
                 for (auto &sub : subscribers[typeid(T).name()]) {
                     sub.as<subscriber<T>*>()->on_event(event);
                 }
