@@ -13,6 +13,7 @@
 #include "../models/main_map_model.h"
 #include "base_view.h"
 #include "../controllers/main_map_controller.h"
+#include "../../engine/audio/music_manager.h"
 
 
 namespace gui {
@@ -27,8 +28,8 @@ namespace gui {
             : public base_view,
               engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>> {
         public:
-            main_map(engine::graphics::texture_manager &texture_manager, engine::window &window,
-                     models::main_map_model &model);
+            main_map(engine::graphics::texture_manager &texture_manager, engine::audio::music_manager &music_manager,
+                     engine::window &window, models::main_map_model &model);
 
             void set_controller(controllers::main_map_controller &controller);
 
@@ -42,6 +43,7 @@ namespace gui {
 
         private:
             engine::graphics::texture_manager &m_texture_manager;
+            engine::audio::music_manager &m_music_manager;
             engine::window &m_window;
             models::main_map_model &m_model;
             controllers::main_map_controller *m_controller;

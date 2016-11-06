@@ -85,9 +85,9 @@ namespace engine {
         music_manager::~music_manager() {
             stop();
 
-            // Unload all songs
-            for (auto &pair : m_songs) {
-                unload(pair.first);
+            // Unload all songs, iterator loop because the m_songs will be changed inside
+            for (auto it = m_songs.begin(); it != m_songs.end();) {
+                unload(it->first);
             }
         }
     }

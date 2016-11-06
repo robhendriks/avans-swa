@@ -35,9 +35,9 @@ namespace engine {
         }
 
         sound_manager::~sound_manager() {
-            // Unload all sounds
-            for (auto &pair : m_sounds) {
-                unload(pair.first);
+            // Unload all sounds, iterator loop because the m_sounds will be changed inside
+            for (auto it = m_sounds.begin(); it != m_sounds.end();) {
+                unload(it->first);
             }
         }
     }

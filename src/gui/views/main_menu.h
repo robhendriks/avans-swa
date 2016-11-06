@@ -24,7 +24,7 @@ namespace gui {
             : public base_view,
               engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>> {
         public:
-            main_menu(engine::graphics::texture_manager &texture_manager);
+            main_menu(engine::graphics::texture_manager &texture_manager, engine::audio::music_manager &music_manager);
 
             void set_controller(controllers::menu_controller &menu_controller);
 
@@ -38,6 +38,7 @@ namespace gui {
 
         private:
             engine::graphics::texture_manager &m_texture_manager;
+            engine::audio::music_manager &m_music_manager;
             controllers::menu_controller *m_menu_controller;
             engine::math::box2_t m_play_dest;
             engine::math::box2_t m_load_dest;

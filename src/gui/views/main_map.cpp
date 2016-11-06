@@ -9,15 +9,17 @@
 namespace gui {
     namespace views {
 
-        main_map::main_map(engine::graphics::texture_manager &texture_manager, engine::window &window,
-                           models::main_map_model &model)
-            : m_texture_manager(texture_manager),
-              m_window(window), m_model(model) {
+        main_map::main_map(engine::graphics::texture_manager &texture_manager, engine::audio::music_manager &music_manager,
+                           engine::window &window, models::main_map_model &model)
+            : m_texture_manager(texture_manager), m_music_manager(music_manager), m_window(window), m_model(model) {
         }
 
         void main_map::before() {
             m_texture_manager.load("images/grass.png", "grass_1");
             m_texture_manager.load("images/building.png", "building_1");
+
+            m_music_manager.load("sounds/game.mp3", "game_bg_music");
+            m_music_manager.play("game_bg_music");
 
             engine::eventbus::eventbus::get_instance().subscribe(this);
         }
@@ -54,6 +56,8 @@ namespace gui {
         void main_map::after() {
             m_texture_manager.unload("grass_1");
             m_texture_manager.unload("building_1");
+
+            m_music_manager.unload("game_bg_music");
 
             engine::eventbus::eventbus::get_instance().unsubscribe(this);
         }

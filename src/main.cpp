@@ -3,8 +3,6 @@
 #include "boost/di.hpp"
 #include "config/json_config.h"
 #include "utils/string_utils.h"
-#include "gui/views/main_map.h"
-#include "gui/controllers/main_map_controller.h"
 #include "listeners/play_sound_when_object_is_placed_on_field.h"
 #include "listeners/play_sound_when_object_cannot_be_placed_on_field.h"
 
@@ -47,6 +45,7 @@ int main(int argc, char *argv[]) {
             boost::di::bind<>.to(*engine1),
             boost::di::bind<>.to(*texture_manager),
             boost::di::bind<>.to(*sound_manager),
+            boost::di::bind<>.to(*music_manager),
             boost::di::bind<>.to(*window)
         );
     };
@@ -61,11 +60,13 @@ int main(int argc, char *argv[]) {
 
     // Subscribe sound to object placed event
     auto placed_injector = boost::di::make_injector(boost::di::bind<std::string>.to("sounds/pop.wav"), di_config());
-    eventbus.subscribe(&placed_injector.create<listeners::play_sound_when_object_is_placed_on_field&>());
+    auto *placed_subscriber = placed_injector.create<listeners::play_sound_when_object_is_placed_on_field*>();
+    eventbus.subscribe(placed_subscriber);
 
     // Subscribe sound to object cannot be placed event
     auto cannot_placed_injector = boost::di::make_injector(boost::di::bind<std::string>.to("sounds/error.wav"), di_config());
-    eventbus.subscribe(&cannot_placed_injector.create<listeners::play_sound_when_object_cannot_be_placed_on_field&>());
+    auto *cannot_placed_subscriber = cannot_placed_injector.create<listeners::play_sound_when_object_cannot_be_placed_on_field*>();
+    eventbus.subscribe(cannot_placed_subscriber);
     /**
      * END OF SUBSCRIBERS REGISTRY
      */
@@ -78,6 +79,8 @@ int main(int argc, char *argv[]) {
     engine1->run();
 
     // Clean
+    delete placed_subscriber;
+    delete cannot_placed_subscriber;
     delete sound_manager;
     delete music_manager;
     delete game1;

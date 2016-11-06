@@ -7,13 +7,15 @@
 
 namespace gui {
     namespace views {
-        main_menu::main_menu(engine::graphics::texture_manager &texture_manager) : m_texture_manager(texture_manager),
-                                                                                   m_play_dest({{150, 0},
-                                                                                                {489, 122}}),
-                                                                                   m_load_dest({{150, 122},
-                                                                                                {489, 244}}),
-                                                                                   m_quit_dest({{150, 244},
-                                                                                                {489, 366}}) {
+        main_menu::main_menu(engine::graphics::texture_manager &texture_manager,
+                             engine::audio::music_manager &music_manager) : m_texture_manager(texture_manager),
+                                                                            m_music_manager(music_manager),
+                                                                            m_play_dest({{150, 0},
+                                                                                         {489, 122}}),
+                                                                            m_load_dest({{150, 122},
+                                                                                         {489, 244}}),
+                                                                            m_quit_dest({{150, 244},
+                                                                                         {489, 366}}) {
         }
 
         void main_menu::draw() {
@@ -36,11 +38,14 @@ namespace gui {
 
         void main_menu::before() {
             m_texture_manager.load("images/menu.png", "menu_item_1");
+            m_music_manager.load("sounds/menu.wav", "menu_bg_music");
+            m_music_manager.play("menu_bg_music");
             engine::eventbus::eventbus::get_instance().subscribe(this);
         }
 
         void main_menu::after() {
             m_texture_manager.unload("menu_item_1");
+            m_music_manager.unload("menu_bg_music");
             engine::eventbus::eventbus::get_instance().unsubscribe(this);
         }
 

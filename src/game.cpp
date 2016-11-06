@@ -5,12 +5,15 @@
 #include "game.h"
 
 void game::use_view(gui::views::base_view &view) {
-    if (m_current_view != nullptr) {
-        m_current_view->after();
-    }
+    // Only set the view when it is different
+    if (m_current_view != &view) {
+        if (m_current_view != nullptr) {
+            m_current_view->after();
+        }
 
-    m_current_view = &view;
-    m_current_view->before();
+        m_current_view = &view;
+        m_current_view->before();
+    }
 }
 
 void game::on_event(engine::events::window_cleared &event) {
