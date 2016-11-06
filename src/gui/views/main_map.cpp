@@ -19,8 +19,7 @@ namespace gui {
             m_texture_manager.load("images/grass.png", "grass_1");
             m_texture_manager.load("images/building.png", "building_1");
 
-            engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().subscribe(
-                this);
+            engine::eventbus::eventbus::get_instance().subscribe(this);
         }
 
         void main_map::draw() {
@@ -56,8 +55,7 @@ namespace gui {
             m_texture_manager.unload("grass_1");
             m_texture_manager.unload("building_1");
 
-            engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().unsubscribe(
-                this);
+            engine::eventbus::eventbus::get_instance().unsubscribe(this);
         }
 
         void main_map::on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event) {

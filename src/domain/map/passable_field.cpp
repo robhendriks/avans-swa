@@ -36,4 +36,5 @@ namespace domain {
         }
     }
 }
+
 #endif //CITY_DEFENCE_BASE_PLACEABLE_OBJECT_HPP

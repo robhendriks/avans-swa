@@ -36,14 +36,12 @@ namespace gui {
 
         void main_menu::before() {
             m_texture_manager.load("images/menu.png", "menu_item_1");
-            engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().subscribe(
-                this);
+            engine::eventbus::eventbus::get_instance().subscribe(this);
         }
 
         void main_menu::after() {
             m_texture_manager.unload("menu_item_1");
-            engine::eventbus::eventbus<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>::get_instance().unsubscribe(
-                this);
+            engine::eventbus::eventbus::get_instance().unsubscribe(this);
         }
 
         void main_menu::set_controller(controllers::menu_controller &menu_controller) {
