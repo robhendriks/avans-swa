@@ -11,6 +11,8 @@
 #include "graphics/texture_manager.h"
 #include "engine_config.h"
 #include "graphics/color_manager.h"
+#include "audio/sound_manager.h"
+#include "audio/music_manager.h"
 
 namespace engine {
     class engine {
@@ -26,6 +28,10 @@ namespace engine {
         graphics::texture_manager *get_texture_manager() const;
 
         graphics::color_manager *get_color_manager() const;
+
+        audio::sound_manager *get_sound_manager() const;
+
+        audio::music_manager *get_music_manager() const;
 
         window *get_window() const;
     protected:

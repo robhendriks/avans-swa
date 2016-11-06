@@ -19,12 +19,16 @@ namespace gui {
             view(m_main_menu);
         }
 
-        void menu_controller::quit() {
-            m_engine.stop();
-        }
-
         void menu_controller::play() {
             m_main_map_controller.show();
+        }
+
+        void menu_controller::load() {
+            SDL_Log("LOAD MENU BUTTON");
+        }
+
+        void menu_controller::quit() {
+            m_engine.stop();
         }
     }
 }

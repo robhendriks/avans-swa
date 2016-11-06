@@ -28,7 +28,7 @@ namespace gui {
             if (m_play_dest.contains(*position)) {
                 m_menu_controller->play();
             } else if (m_load_dest.contains(*position)) {
-                SDL_Log("LOAD MENU BUTTON");
+                m_menu_controller->load();
             } else if (m_quit_dest.contains(*position)) {
                 m_menu_controller->quit();
             }

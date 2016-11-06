@@ -25,9 +25,11 @@ namespace gui {
 
             void show();
 
-            void quit();
-
             void play();
+
+            void load();
+
+            void quit();
 
         private:
             engine::engine &m_engine;

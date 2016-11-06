@@ -2,6 +2,8 @@
 // Created by Rob Hendriks on 19/10/2016.
 //
 
+#include <SDL_image.h>
+#include <SDL_mixer.h>
 #include "engine.h"
 #include "input/input_handler.h"
 #include "eventbus/eventbus.h"
@@ -80,12 +82,29 @@ namespace engine {
             m_window->destroy();
             delete m_window;
         }
+
+        Mix_Quit();
+        IMG_Quit();
+        SDL_Quit();
     }
 
     void engine::init_sdl() {
-        if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
             std::string error = SDL_GetError();
             throw std::runtime_error("Failed to initialize SDL: " + error);
+        } else {
+            //Initialize PNG loading
+            int imgFlags = IMG_INIT_PNG;
+            if(!(IMG_Init( imgFlags ) & imgFlags)) {
+                std::string error = IMG_GetError();
+                throw std::runtime_error("Failed to initialize SDL image: " + error);
+            }
+
+            //Initialize SDL_mixer
+            if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0 ) {
+                std::string error = Mix_GetError();
+                throw std::runtime_error("Failed to initialize SDL mixer: " + error);
+            }
         }
     }
 
@@ -107,5 +126,13 @@ namespace engine {
 
     window *engine::get_window() const {
         return m_window;
+    }
+
+    audio::sound_manager *engine::get_sound_manager() const {
+        return new audio::sound_manager();
+    }
+
+    audio::music_manager *engine::get_music_manager() const {
+        return new audio::music_manager();
     }
 }

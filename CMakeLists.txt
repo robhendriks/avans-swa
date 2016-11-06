@@ -74,7 +74,7 @@ set(SOURCES src/main.cpp
     src/gui/views/base_view.h
     src/gui/controllers/base_controller.cpp
     src/gui/controllers/base_controller.h
-    src/services/registry/registry.h src/game.cpp src/game.h)
+    src/services/registry/registry.h src/game.cpp src/game.h src/engine/audio/sound_manager.cpp src/engine/audio/sound_manager.h src/engine/audio/music_manager.cpp src/engine/audio/music_manager.h src/events/object_placed_on_field.cpp src/events/object_placed_on_field.h src/events/object_cannot_be_placed_on_field.cpp src/events/object_cannot_be_placed_on_field.h)
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include
@@ -89,7 +89,7 @@ target_link_libraries(city_defence
         ${SDL2_LIBRARY}
         ${SDL2_IMAGE_LIBRARY}
         ${SDL2_TTF_LIBRARIES}
-        ${SDL2_MIXER_INCLUDE_DIR})
+        ${SDL2_MIXER_LIBRARY})
 
 add_custom_command(TARGET city_defence PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory

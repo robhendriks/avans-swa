@@ -29,12 +29,15 @@ int main(int argc, char *argv[]) {
     // Create the ioc container
     auto *texture_manager = engine1->get_texture_manager();
     auto *color_manager = engine1->get_color_manager();
+    auto *sound_manager = engine1->get_sound_manager();
+    auto *music_manager = engine1->get_music_manager();
     auto *window = engine1->get_window();
     auto *game1 = new game();
     auto injector = boost::di::make_injector(
         boost::di::bind<>.to(*game1),
         boost::di::bind<>.to(*engine1),
         boost::di::bind<>.to(*texture_manager),
+        boost::di::bind<>.to(*sound_manager),
         boost::di::bind<>.to(*window)
     );
 
@@ -49,6 +52,8 @@ int main(int argc, char *argv[]) {
     engine1->run();
 
     // Clean
+    delete sound_manager;
+    delete music_manager;
     delete game1;
     delete menu_controller;
     delete json_config;
