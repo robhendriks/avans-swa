@@ -74,17 +74,22 @@ brew install cmake sdl2 sdl2_image sdl2_ttf
   * https://www.libsdl.org/release/SDL2-devel-2.0.4-mingw.tar.gz
   * https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.14-mingw.tar.gz
   * https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.1-mingw.tar.gz
+  * https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-devel-2.0.1-mingw.tar.gz
 4. Open de gedownloade **SDL2-devel-2.0.4-mingw.tar**
   * Kopieer **i686-w64-mingw32/bin/SDL2.dll** naar **C:/Windows/SysWOW64**
   * Kopieer de map SDL2 van **i686-w64-mingw32/include** naar de include map van MinGW (**C:/MinGW/include**)
   * Kopieer de **.a files** van **i686-w64-mingw32/lib** naar de lib map van MinGW (**C:/MinGW/lib**)
-7. Open de gedownloade **SDL2_ttf-devel-2.0.14-mingw.tar.gz**
+5. Open de gedownloade **SDL2_ttf-devel-2.0.14-mingw.tar.gz**
   * Kopieer **.dll files** van **i686-w64-mingw32/bin/** naar **C:/Windows/SysWOW64**
   * Kopieer de **.h files** van **i686-w64-mingw32/include/SDL2** naar **C:/MinGW/include/SDL2**
   * Kopieer de **.a files** van **i686-w64-mingw32/lib** naar de lib map van MinGW (**C:/MinGW/lib**)
-8. Open de gedownloade **SDL2_image-devel-2.0.1-mingw.tar.gz**
+6. Open de gedownloade **SDL2_image-devel-2.0.1-mingw.tar.gz**
   * Kopieer **.dll files** van **i686-w64-mingw32/bin/** naar **C:/Windows/SysWOW64**
   * Kopieer de **.h files** van **i686-w64-mingw32/include/SDL2** naar **C:/MinGW/include/SDL2**
   * Kopieer de **.a files** van **i686-w64-mingw32/lib** naar de lib map van MinGW (**C:/MinGW/lib**)
-6. Haal het git project binnen en open het in CLion
+7. Open de gedownloade **SDL2_mixer-devel-2.0.1-mingw.tar.gz**
+  * Kopieer **.dll files** van **i686-w64-mingw32/bin/** naar **C:/Windows/SysWOW64**
+  * Kopieer de **.h files** van **i686-w64-mingw32/include/SDL2** naar **C:/MinGW/include/SDL2**
+  * Kopieer de **.a files** van **i686-w64-mingw32/lib** naar de lib map van MinGW (**C:/MinGW/lib**)
+8. Haal het git project binnen en open het in CLion
   * Selecteer rechtsbovenin **city_defence** (ipv Build All) voor het runnen
