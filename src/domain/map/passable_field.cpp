@@ -25,12 +25,12 @@ namespace domain {
                 m_placed_object = &placeable_object;
                 // Fire event
                 auto *event = new events::object_placed_on_field(*this, placeable_object);
-                engine::eventbus::eventbus::get_instance().fire(event);
+                engine::eventbus::eventbus::get_instance().fire(*event);
                 delete event;
             } else {
                 // Fire event
                 auto *event = new events::object_cannot_be_placed_on_field(*this, placeable_object);
-                engine::eventbus::eventbus::get_instance().fire(event);
+                engine::eventbus::eventbus::get_instance().fire(*event);
                 delete event;
             }
         }

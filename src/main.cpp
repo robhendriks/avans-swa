@@ -5,10 +5,14 @@
 #include "utils/string_utils.h"
 #include "gui/views/main_map.h"
 #include "gui/controllers/main_map_controller.h"
+#include "listeners/play_sound_when_object_is_placed_on_field.h"
+#include "listeners/play_sound_when_object_cannot_be_placed_on_field.h"
 
 int main(int argc, char *argv[]) {
 
-    // Config
+    /**
+     * CONFIG
+     */
     auto *json_config = new config::json_config("config.json");
     json_config->load();
 
@@ -21,6 +25,9 @@ int main(int argc, char *argv[]) {
     w_config.h = json_config->get_int("window.height", w_config.h);
 
     engine::engine_config e_config = { w_config };
+    /**
+     * END OF CONFIG
+     */
 
     // Get the engine
     engine::engine *engine1 = new engine::engine(e_config);
@@ -33,19 +40,38 @@ int main(int argc, char *argv[]) {
     auto *music_manager = engine1->get_music_manager();
     auto *window = engine1->get_window();
     auto *game1 = new game();
-    auto injector = boost::di::make_injector(
-        boost::di::bind<>.to(*game1),
-        boost::di::bind<>.to(*engine1),
-        boost::di::bind<>.to(*texture_manager),
-        boost::di::bind<>.to(*sound_manager),
-        boost::di::bind<>.to(*window)
-    );
+
+    auto di_config = [&]() {
+        return boost::di::make_injector(
+            boost::di::bind<>.to(*game1),
+            boost::di::bind<>.to(*engine1),
+            boost::di::bind<>.to(*texture_manager),
+            boost::di::bind<>.to(*sound_manager),
+            boost::di::bind<>.to(*window)
+        );
+    };
+
+    /**
+     *  ADD SUBSCRIBERS
+     */
+    auto &eventbus = engine::eventbus::eventbus::get_instance();
 
     // Subscribe the game to the window cleared event
-    engine::eventbus::eventbus::get_instance().subscribe(game1);
+    eventbus.subscribe(game1);
+
+    // Subscribe sound to object placed event
+    auto placed_injector = boost::di::make_injector(boost::di::bind<std::string>.to("sounds/pop.wav"), di_config());
+    eventbus.subscribe(&placed_injector.create<listeners::play_sound_when_object_is_placed_on_field&>());
+
+    // Subscribe sound to object cannot be placed event
+    auto cannot_placed_injector = boost::di::make_injector(boost::di::bind<std::string>.to("sounds/error.wav"), di_config());
+    eventbus.subscribe(&cannot_placed_injector.create<listeners::play_sound_when_object_cannot_be_placed_on_field&>());
+    /**
+     * END OF SUBSCRIBERS REGISTRY
+     */
 
     // Start with show
-    auto *menu_controller = injector.create<gui::controllers::menu_controller*>();
+    auto *menu_controller = boost::di::make_injector(di_config()).create<gui::controllers::menu_controller*>();
     menu_controller->show();
 
     // Run the game
