@@ -17,13 +17,15 @@
 namespace engine {
     class engine {
     public:
-        engine(engine_config config);
+        engine(engine_config &config);
 
         void warmup();
 
         void run();
 
         void stop();
+
+        void cooldown();
 
         graphics::texture_manager *get_texture_manager() const;
 
@@ -37,8 +39,6 @@ namespace engine {
     protected:
         void loop();
 
-        void quit();
-
         void update();
 
         void init_sdl();
@@ -48,7 +48,7 @@ namespace engine {
     private:
         window* m_window;
         bool m_running;
-        engine_config m_config;
+        engine_config &m_config;
     };
 }
 

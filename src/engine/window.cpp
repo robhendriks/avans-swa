@@ -5,9 +5,7 @@
 #include "window.h"
 
 namespace engine {
-    window::window(window_config config) : mConfig(config), mWindow(NULL), mRenderer(NULL) {}
-
-    window::~window() {}
+    window::window(window_config &config) : mConfig(config), mWindow(NULL), mRenderer(NULL) {}
 
     void window::create() {
         printf("[DEBUG] Creating window...\n");

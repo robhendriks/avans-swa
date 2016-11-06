@@ -9,6 +9,7 @@ namespace engine {
 
         music_manager::music_manager() {
             m_current_state = NOT_LOADED;
+            m_current_song = nullptr;
         }
 
         bool music_manager::load(std::string file, std::string id) {
@@ -24,12 +25,11 @@ namespace engine {
 
         void music_manager::unload(std::string id) {
             if (m_songs.find(id) != m_songs.end()) {
-                if (m_current_song->compare(id) == 0) {
+                if (m_current_song != nullptr && m_current_song->compare(id) == 0) {
                     stop();
                 }
 
                 Mix_FreeMusic(m_songs[id]);
-                //delete m_songs[id];
                 m_songs.erase(id);
             }
         }
@@ -53,6 +53,7 @@ namespace engine {
                 Mix_HaltMusic();
                 m_current_state = NOT_LOADED;
                 delete m_current_song;
+                m_current_song = nullptr;
             }
         }
 
@@ -71,7 +72,7 @@ namespace engine {
         }
 
         music_state music_manager::get_state(std::string id) {
-            if (m_current_song->compare(id) == 0) {
+            if (m_current_song != nullptr && m_current_song->compare(id) == 0) {
                 return m_current_state;
             }
 
@@ -88,6 +89,7 @@ namespace engine {
             // Unload all songs, iterator loop because the m_songs will be changed inside
             for (auto it = m_songs.begin(); it != m_songs.end();) {
                 unload(it->first);
+                it = m_songs.begin();
             }
         }
     }

@@ -9,7 +9,7 @@
 
 namespace engine {
     struct engine_config {
-        window_config win_config;
+        window_config &win_config;
         int ticks_per_second = 25;
         int skip_ticks = 1000;
         int max_frameskip = 5;

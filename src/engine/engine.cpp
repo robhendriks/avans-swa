@@ -10,7 +10,7 @@
 #include "events/window_cleared.h"
 
 namespace engine {
-    engine::engine(engine_config config) : m_window(nullptr), m_config(config) {
+    engine::engine(engine_config &config) : m_window(nullptr), m_config(config) {
     }
 
     void engine::warmup() {
@@ -54,8 +54,6 @@ namespace engine {
 
             m_window->present();
         }
-
-        quit();
     }
 
     void engine::update() {
@@ -76,7 +74,7 @@ namespace engine {
         m_running = false;
     }
 
-    void engine::quit() {
+    void engine::cooldown() {
         // Destroy the window if it was created
         if (m_window) {
             m_window->destroy();

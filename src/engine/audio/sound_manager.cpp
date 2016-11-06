@@ -29,7 +29,6 @@ namespace engine {
         void sound_manager::unload(std::string id) {
             if (m_sounds.find(id) != m_sounds.end()) {
                 Mix_FreeChunk(m_sounds[id]);
-                delete m_sounds[id];
                 m_sounds.erase(id);
             }
         }
@@ -38,6 +37,7 @@ namespace engine {
             // Unload all sounds, iterator loop because the m_sounds will be changed inside
             for (auto it = m_sounds.begin(); it != m_sounds.end();) {
                 unload(it->first);
+                it = m_sounds.begin();
             }
         }
     }

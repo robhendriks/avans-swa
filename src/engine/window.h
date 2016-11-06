@@ -16,9 +16,7 @@
 namespace engine {
     class window {
     public:
-        window(window_config config);
-
-        ~window();
+        window(window_config &config);
 
         void create();
 
@@ -41,7 +39,7 @@ namespace engine {
 
         void init_renderer();
 
-        window_config mConfig;
+        window_config &mConfig;
         SDL_Window *mWindow;
         SDL_Renderer *mRenderer;
     };

@@ -83,12 +83,16 @@ int main(int argc, char *argv[]) {
     delete cannot_placed_subscriber;
     delete sound_manager;
     delete music_manager;
+    delete texture_manager;
+    delete color_manager;
+
+    // Stop/cooldown the engine
+    engine1->cooldown();
+
+    // More cleaning
     delete game1;
     delete menu_controller;
     delete json_config;
-    delete texture_manager;
-    delete color_manager;
-    delete window;
     delete engine1;
 
     return 0;
