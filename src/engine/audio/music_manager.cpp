@@ -7,16 +7,10 @@
 namespace engine {
     namespace audio {
 
+        std::stack<int> music_manager::m_volume_stack = std::stack<int>();
+        std::string music_manager::m_current_song = "";
+        music::state music_manager::m_current_state = music::NOT_PLAYING;
         std::function<void()> music_manager::when_finished = NULL;
-
-        music_manager::music_manager() {
-            m_current_state = NOT_LOADED;
-            m_current_song = "";
-            m_volume = -1;
-            m_init_volume = -1;
-
-            Mix_HookMusicFinished(music_finished);
-        }
 
         bool music_manager::load(std::string file, std::string id) {
             if (id == "") {
@@ -34,8 +28,20 @@ namespace engine {
             return true;
         }
 
+        bool music_manager::load_if(std::string file, std::string id) {
+            if (!is_loaded(id)) {
+                return load(file, id);
+            }
+
+            return true;
+        }
+
+        bool music_manager::is_loaded(std::string id) {
+            return m_songs.find(id) != m_songs.end();
+        }
+
         void music_manager::unload(std::string id) {
-            if (m_songs.find(id) != m_songs.end()) {
+            if (is_loaded(id)) {
                 if (m_current_song.compare(id) == 0) {
                     stop();
                 }
@@ -46,87 +52,102 @@ namespace engine {
         }
 
         void music_manager::music_finished() {
-            if (music_manager::when_finished != NULL) {
-                music_manager::when_finished();
-                music_manager::when_finished = NULL;
+            if (when_finished != NULL) {
+                when_finished();
+                when_finished = NULL;
             }
         }
 
-        void music_manager::play(std::string id, std::function<void()> when_finished, int volume, int loops) {
-            if (m_current_state != NOT_LOADED) {
+        void music_manager::play(std::string id, std::function<void()> when_finished_callback, int volume, int loops) {
+            if (m_current_state != music::NOT_PLAYING) {
                 // Stop the music
                 stop();
             }
 
             // Play the song
-            if (m_songs.find(id) != m_songs.end()) {
+            if (is_loaded(id)) {
                 // Set finished callback
-                music_manager::when_finished = when_finished;
-                m_init_volume = volume;
+                Mix_HookMusicFinished(music_finished);
+                when_finished = when_finished_callback;
+
+                // Set state
+                m_current_state = music::PLAYING;
+
+                // Set volume
                 set_volume(volume);
+
+                // Play
                 Mix_PlayMusic(m_songs[id], loops);
                 m_current_song = id;
-                m_current_state = PLAYING;
             }
         }
 
         void music_manager::set_volume(int volume) {
-            if (m_current_state != NOT_LOADED) {
-                m_volume = volume;
+            if (m_current_state != music::NOT_PLAYING) {
+                m_volume_stack.push(volume);
                 Mix_VolumeMusic(volume);
             }
         }
 
-        int music_manager::get_current_volume() const {
-            return m_volume;
+        int music_manager::get_volume() {
+            if (m_volume_stack.size() > 0) {
+                return m_volume_stack.top();
+            }
+
+            return -1;
         }
 
-        int music_manager::get_init_volume() const {
-            return m_init_volume;
+        void music_manager::pop_volume() {
+            // Remove the top/current volume
+            m_volume_stack.pop();
+            // Set the volume to the previous volume
+            set_volume(m_volume_stack.top());
+            // Pop again because set_volume will push again
+            m_volume_stack.pop();
+        }
+
+        std::stack<int> &music_manager::get_volume_stack() {
+            return m_volume_stack;
         }
 
         void music_manager::stop() {
-            if (m_current_state != NOT_LOADED) {
+            if (m_current_state != music::NOT_PLAYING) {
                 Mix_HaltMusic();
-                m_current_state = NOT_LOADED;
+                m_current_state = music::NOT_PLAYING;
                 m_current_song = "";
-                m_volume = -1;
-                m_init_volume = -1;
+                // Just a new stack, instead of clearing in a while loop (while != empty { pop; })
+                m_volume_stack = std::stack<int>();
             }
         }
 
         void music_manager::pause() {
-            if (m_current_state == PLAYING) {
+            if (m_current_state == music::PLAYING) {
                 Mix_PauseMusic();
-                m_current_state = PAUSED;
+                m_current_state = music::PAUSED;
             }
         }
 
         void music_manager::resume() {
-            if (m_current_state == PAUSED) {
+            if (m_current_state == music::PAUSED) {
                 Mix_ResumeMusic();
-                m_current_state = PLAYING;
+                m_current_state = music::PLAYING;
             }
         }
 
-        std::string music_manager::get_current_song() const {
-            if (m_current_state != NOT_LOADED) {
+        std::string music_manager::get_current_playing_id() {
+            if (m_current_state != music::NOT_PLAYING) {
                 return m_current_song;
             }
 
             return "";
         }
 
-        music_state music_manager::get_state(std::string id) const {
+        music::state music_manager::get_state(std::string id) {
             if (id == "" || m_current_song.compare(id) == 0) {
                 return m_current_state;
             }
 
-            if (m_songs.find(id) != m_songs.end()) {
-                return LOADED;
-            }
-
-            return NOT_LOADED;
+            return music::NOT_PLAYING;
         }
 
         music_manager::~music_manager() {

@@ -17,12 +17,11 @@ namespace listeners {
     }
 
     void play_sound_when_object_is_placed_on_field::on_event(events::object_placed_on_field &event) {
-        if (m_music_manager.get_state() == engine::audio::music_state::PLAYING) {
+        if (m_music_manager.get_state() == engine::audio::music::state::PLAYING) {
             // Decrease bg music volume
-            int music_volume = m_music_manager.get_init_volume();
             m_music_manager.set_volume(50);
-            m_sound_manager.play("pop", [&, music_volume]() {
-                m_music_manager.set_volume(music_volume);
+            m_sound_manager.play("pop", [&]() {
+                m_music_manager.pop_volume();
             });
         } else {
             // No bg music

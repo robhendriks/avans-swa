@@ -47,6 +47,10 @@ namespace engine {
 
     private:
         window* m_window;
+        audio::sound_manager *m_sound_manager;
+        audio::music_manager *m_music_manager;
+        graphics::texture_manager *m_texture_manager;
+        graphics::color_manager *m_color_manager;
         bool m_running;
         engine_config &m_config;
     };

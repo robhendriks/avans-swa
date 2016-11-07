@@ -7,7 +7,6 @@
 #include "listeners/play_sound_when_object_cannot_be_placed_on_field.h"
 
 int main(int argc, char *argv[]) {
-
     /**
      * CONFIG
      */
@@ -32,21 +31,17 @@ int main(int argc, char *argv[]) {
     engine1->warmup();
 
     // Create the ioc container
-    auto *texture_manager = engine1->get_texture_manager();
-    auto *color_manager = engine1->get_color_manager();
-    auto *sound_manager = engine1->get_sound_manager();
-    auto *music_manager = engine1->get_music_manager();
-    auto *window = engine1->get_window();
     auto *game1 = new game();
 
     auto di_config = [&]() {
         return boost::di::make_injector(
             boost::di::bind<>.to(*game1),
             boost::di::bind<>.to(*engine1),
-            boost::di::bind<>.to(*texture_manager),
-            boost::di::bind<>.to(*sound_manager),
-            boost::di::bind<>.to(*music_manager),
-            boost::di::bind<>.to(*window)
+            boost::di::bind<>.to(*engine1->get_texture_manager()),
+            boost::di::bind<>.to(*engine1->get_color_manager()),
+            boost::di::bind<>.to(*engine1->get_sound_manager()),
+            boost::di::bind<>.to(*engine1->get_music_manager()),
+            boost::di::bind<>.to(*engine1->get_window())
         );
     };
 
@@ -81,10 +76,6 @@ int main(int argc, char *argv[]) {
     // Clean
     delete placed_subscriber;
     delete cannot_placed_subscriber;
-    delete sound_manager;
-    delete music_manager;
-    delete texture_manager;
-    delete color_manager;
 
     // Stop/cooldown the engine
     engine1->cooldown();
