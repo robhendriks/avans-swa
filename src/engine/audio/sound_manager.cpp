@@ -7,7 +7,7 @@
 namespace engine {
     namespace audio {
 
-        std::function<void()> sound_manager::when_finished = NULL;
+        std::map<int, std::function<void()>> sound_manager::when_finished;
 
         sound_manager::sound_manager() {
             Mix_ChannelFinished(sound_finished);
@@ -27,19 +27,19 @@ namespace engine {
         }
 
         void sound_manager::sound_finished(int channel) {
-            if (when_finished) {
+            if (when_finished.find(channel) != when_finished.end()) {
                 // Call callback
-                sound_manager::when_finished();
-                sound_manager::when_finished = NULL;
+                sound_manager::when_finished[channel]();
+                sound_manager::when_finished.erase(channel);
             }
         }
 
         void sound_manager::play(std::string id, std::function<void()> when_finished, int volume, int loops) {
             if (m_sounds.find(id) != m_sounds.end()) {
                 Mix_VolumeChunk(m_sounds[id], volume);
-                Mix_PlayChannel(-1, m_sounds[id], loops);
+                int channel = Mix_PlayChannel(-1, m_sounds[id], loops);
                 if (when_finished) {
-                    sound_manager::when_finished = when_finished;
+                    sound_manager::when_finished[channel] = when_finished;
                 }
             }
         }

@@ -23,7 +23,7 @@ namespace engine {
             static void sound_finished(int channel);
 
             std::map<std::string, Mix_Chunk*> m_sounds;
-            static std::function<void()> when_finished;
+            static std::map<int, std::function<void()>> when_finished;
         };
     }
 }
