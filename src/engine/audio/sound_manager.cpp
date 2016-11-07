@@ -38,7 +38,7 @@ namespace engine {
             if (m_sounds.find(id) != m_sounds.end()) {
                 Mix_VolumeChunk(m_sounds[id], volume);
                 int channel = Mix_PlayChannel(-1, m_sounds[id], loops);
-                if (when_finished) {
+                if (when_finished != NULL) {
                     sound_manager::when_finished[channel] = when_finished;
                 }
             }

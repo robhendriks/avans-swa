@@ -8,6 +8,7 @@
 #include <string>
 #include <map>
 #include <SDL_mixer.h>
+#include <functional>
 
 namespace engine {
     namespace audio {
@@ -17,7 +18,7 @@ namespace engine {
         public:
             music_manager();
             bool load(std::string file, std::string id);
-            void play(std::string id, int volume = 128, int loops = -1);
+            void play(std::string id, std::function<void()> when_finished = NULL, int volume = 128, int loops = -1);
             void set_volume(int volume);
             void stop();
             void pause();
@@ -29,11 +30,15 @@ namespace engine {
             std::string get_current_song() const;
             ~music_manager();
         private:
+            static void music_finished();
+
             std::map<std::string, Mix_Music*> m_songs;
             std::string m_current_song;
             music_state m_current_state;
             int m_volume;
             int m_init_volume;
+
+            static std::function<void()> when_finished;
         };
     }
 }

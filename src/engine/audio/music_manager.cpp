@@ -7,11 +7,15 @@
 namespace engine {
     namespace audio {
 
+        std::function<void()> music_manager::when_finished = NULL;
+
         music_manager::music_manager() {
             m_current_state = NOT_LOADED;
             m_current_song = "";
             m_volume = -1;
             m_init_volume = -1;
+
+            Mix_HookMusicFinished(music_finished);
         }
 
         bool music_manager::load(std::string file, std::string id) {
@@ -41,7 +45,14 @@ namespace engine {
             }
         }
 
-        void music_manager::play(std::string id, int volume, int loops) {
+        void music_manager::music_finished() {
+            if (music_manager::when_finished != NULL) {
+                music_manager::when_finished();
+                music_manager::when_finished = NULL;
+            }
+        }
+
+        void music_manager::play(std::string id, std::function<void()> when_finished, int volume, int loops) {
             if (m_current_state != NOT_LOADED) {
                 // Stop the music
                 stop();
@@ -49,6 +60,8 @@ namespace engine {
 
             // Play the song
             if (m_songs.find(id) != m_songs.end()) {
+                // Set finished callback
+                music_manager::when_finished = when_finished;
                 m_init_volume = volume;
                 set_volume(volume);
                 Mix_PlayMusic(m_songs[id], loops);
