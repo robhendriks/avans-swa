@@ -7,6 +7,12 @@
 namespace engine {
     namespace audio {
 
+        std::function<void()> sound_manager::when_finished = NULL;
+
+        sound_manager::sound_manager() {
+            Mix_ChannelFinished(sound_finished);
+        }
+
         bool sound_manager::load(std::string file, std::string id) {
             // Try to load the wav sound file
             Mix_Chunk *sound = Mix_LoadWAV(file.c_str());
@@ -20,9 +26,21 @@ namespace engine {
             return true;
         }
 
-        void sound_manager::play(std::string id) {
+        void sound_manager::sound_finished(int channel) {
+            if (when_finished) {
+                // Call callback
+                sound_manager::when_finished();
+                sound_manager::when_finished = NULL;
+            }
+        }
+
+        void sound_manager::play(std::string id, std::function<void()> when_finished, int volume, int loops) {
             if (m_sounds.find(id) != m_sounds.end()) {
-                Mix_PlayChannel(-1, m_sounds[id], 0);
+                Mix_VolumeChunk(m_sounds[id], volume);
+                Mix_PlayChannel(-1, m_sounds[id], loops);
+                if (when_finished) {
+                    sound_manager::when_finished = when_finished;
+                }
             }
         }
 

@@ -7,7 +7,8 @@
 namespace listeners {
 
     play_sound_when_object_is_placed_on_field::play_sound_when_object_is_placed_on_field(
-        engine::audio::sound_manager &sound_manager, std::string sound_file) : m_sound_manager(sound_manager) {
+        engine::audio::sound_manager &sound_manager, engine::audio::music_manager &music_manager,
+        std::string sound_file) : m_sound_manager(sound_manager), m_music_manager(music_manager) {
         m_sound_manager.load(sound_file, "pop");
     }
 
@@ -16,6 +17,16 @@ namespace listeners {
     }
 
     void play_sound_when_object_is_placed_on_field::on_event(events::object_placed_on_field &event) {
-        m_sound_manager.play("pop");
+        if (m_music_manager.get_state() == engine::audio::music_state::PLAYING) {
+            // Decrease bg music volume
+            int music_volume = m_music_manager.get_init_volume();
+            m_music_manager.set_volume(50);
+            m_sound_manager.play("pop", [&, music_volume]() {
+                m_music_manager.set_volume(music_volume);
+            });
+        } else {
+            // No bg music
+            m_sound_manager.play("pop");
+        }
     }
 }
