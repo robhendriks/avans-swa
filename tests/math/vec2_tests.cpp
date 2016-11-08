@@ -3,7 +3,7 @@
 //
 
 #include "gtest/gtest.h"
-#include "../../src/math/vec2.hpp"
+#include "../../src/engine/math/vec2.hpp"
 
 class vec2_fixture : public ::testing::Test {
 protected:
@@ -14,10 +14,10 @@ protected:
     }
 
 public:
-    math::vec2_t * vec2;
+    engine::math::vec2_t * vec2;
 
     vec2_fixture() : Test() {
-        vec2 = new math::vec2_t{5, 10};
+        vec2 = new engine::math::vec2_t{5, 10};
     }
 
     virtual ~vec2_fixture() {
