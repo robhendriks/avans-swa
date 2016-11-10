@@ -14,6 +14,7 @@ namespace engine {
         class sound_callback_wrapper {
         public:
             static void init();
+            static void destruct();
             static void channel_finished(int channel);
             static void add_callback(std::function<void(int)> callback);
         private:

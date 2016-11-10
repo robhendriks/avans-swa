@@ -81,17 +81,22 @@ namespace engine {
         if (m_window) {
             m_window->destroy();
             delete m_window;
+            m_window = nullptr;
             delete m_color_manager;
+            m_color_manager = nullptr;
             delete m_texture_manager;
+            m_texture_manager = nullptr;
         }
 
         // Delete audio manager when created
         if (m_music_manager) {
             delete m_music_manager;
+            m_music_manager = nullptr;
         }
 
         if (m_sound_manager) {
             delete m_sound_manager;
+            m_sound_manager = nullptr;
         }
 
         Mix_Quit();

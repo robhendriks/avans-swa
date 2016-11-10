@@ -321,7 +321,7 @@ namespace engine {
          */
         void sound_manager::stop_all(std::string id, int fade_out) {
             for (int channel : get_channels(id)) {
-                stop(channel);
+                stop(channel, fade_out);
             }
         }
 
@@ -346,6 +346,8 @@ namespace engine {
          */
         void sound_manager::unload(std::string id) {
             if (is_loaded(id)) {
+                stop_all(id);
+
                 Mix_FreeChunk(m_sounds[id]);
                 m_sounds.erase(id);
             }
@@ -372,6 +374,8 @@ namespace engine {
             }
 
             delete m_playing_sounds;
+
+            sound_callback_wrapper::destruct();
         }
     }
 }

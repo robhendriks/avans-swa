@@ -9,13 +9,6 @@
 const std::string MUSIC_FILE = "data/sounds/pop.wav";
 
 class music_manager_fixture : public ::testing::Test {
-protected:
-    virtual void TearDown() {
-    }
-
-    virtual void SetUp() {
-    }
-
 public:
     engine::engine *engine1;
     engine::audio::music_manager *manager;
@@ -35,8 +28,6 @@ public:
 
     virtual ~music_manager_fixture() {
         engine1->cooldown();
-
-        delete manager;
         delete engine1;
     }
 };
@@ -185,4 +176,18 @@ TEST_F(music_manager_fixture, volume_stack) {
     manager->pop_volume();
     EXPECT_EQ(1, (int)manager->get_volume_stack().size());
     EXPECT_EQ(128, manager->get_volume());
+}
+
+/**
+ * Test
+ */
+TEST_F(music_manager_fixture, finished_callback) {
+    EXPECT_TRUE(manager->load(MUSIC_FILE, "pop"));
+    bool callback_called = false;
+    manager->play("pop", [&callback_called]() {
+       callback_called = true;
+    });
+    EXPECT_FALSE(callback_called);
+    manager->stop();
+    EXPECT_TRUE(callback_called);
 }

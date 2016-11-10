@@ -29,5 +29,12 @@ namespace engine {
                 m_initialized = true;
             }
         }
+
+        void sound_callback_wrapper::destruct() {
+            if (m_initialized) {
+                m_callbacks.clear();
+                m_initialized = false;
+            }
+        }
     }
 }
