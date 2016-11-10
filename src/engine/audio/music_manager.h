@@ -20,9 +20,9 @@ namespace engine {
             bool load_if(std::string file, std::string id);
             bool is_loaded(std::string id);
             void unload(std::string id);
-            void play(std::string id, std::function<void()> when_finished = NULL, int volume = 128, int loops = -1);
+            void play(std::string id, std::function<void()> when_finished = NULL, int volume = 128, int fade_in = -1, int loops = -1);
 
-            static void stop();
+            static void stop(int fade_out = -1);
             static void pause();
             static void resume();
             static void set_volume(int volume);

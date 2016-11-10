@@ -93,9 +93,10 @@ namespace engine {
          * @param id - id of the music to play, the id should be loaded.
          * @param when_finished_callback - callback that will be called when the music is finished/stops
          * @param volume - the volume of the music: max = 128
+         * @param fade_in - fade in time in milliseconds, use -1 for no fade in
          * @param loops - the number of loops for the music, use -1 for a infinite number of loops
          */
-        void music_manager::play(std::string id, std::function<void()> when_finished_callback, int volume, int loops) {
+        void music_manager::play(std::string id, std::function<void()> when_finished_callback, int volume, int fade_in, int loops) {
             if (m_current_state != music::NOT_PLAYING) {
                 // Stop the music
                 stop();
@@ -114,7 +115,12 @@ namespace engine {
                 set_volume(volume);
 
                 // Play
-                Mix_PlayMusic(m_songs[id], loops);
+                if (fade_in < 0) {
+                    Mix_PlayMusic(m_songs[id], loops);
+                } else {
+                    Mix_FadeInMusic(m_songs[id], loops, fade_in);
+                }
+
                 m_current_song = id;
             }
         }
@@ -170,10 +176,17 @@ namespace engine {
 
         /**
          * Stops the currently playing (or paused) music
+         *
+         * @param fade_out - fade out time in milliseconds, use -1 for no fade out
          */
-        void music_manager::stop() {
+        void music_manager::stop(int fade_out) {
             if (m_current_state != music::NOT_PLAYING) {
-                Mix_HaltMusic();
+                if (fade_out < 0) {
+                    Mix_HaltMusic();
+                } else {
+                    Mix_FadeOutMusic(fade_out);
+                }
+
                 m_current_state = music::NOT_PLAYING;
                 m_current_song = "";
                 // Just a new stack, instead of clearing in a while loop (while != empty { pop; })

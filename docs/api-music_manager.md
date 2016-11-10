@@ -61,16 +61,19 @@ void unload(std::string id);
  * @param id - id of the music to play, the id should be loaded.
  * @param when_finished_callback - callback that will be called when the music is finished/stops
  * @param volume - the volume of the music: max = 128
+ * @param fade_in - fade in time in milliseconds, use -1 for no fade in
  * @param loops - the number of loops for the music, use -1 for a infinite number of loops
  */
-void play(std::string id, std::function<void()> when_finished = NULL, int volume = 128, int loops = -1);
+void play(std::string id, std::function<void()> when_finished = NULL, int volume = 128, int fade_in = -1, int loops = -1);
 ```
 
 ```cpp
 /**
  * Stops the currently playing (or paused) music
+ *
+ * @param fade_out - fade out time in milliseconds, use -1 for no fade out
  */
-void stop();
+void stop(int fade_out = -1);
 ```
 ```cpp
 /**
