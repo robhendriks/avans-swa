@@ -30,10 +30,13 @@ namespace engine {
             void pop_volume(int channel);
             std::stack<int> *get_volume_stack(int channel) const;
             void pause(int channel);
+            void pause_all(std::string id);
             void pause_all();
             void resume(int channel);
+            void resume_all(std::string id);
             void resume_all();
             void stop(int channel, int fade_out = -1);
+            void stop_all(std::string id, int fade_out = -1);
             void stop_all(int fade_out = -1);
             void unload(std::string id);
             std::map<int, std::tuple<std::string, sound::state, std::stack<int>>> *get_playing_sounds() const;
