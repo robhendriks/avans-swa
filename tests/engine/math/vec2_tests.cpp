@@ -3,7 +3,7 @@
 //
 
 #include "gtest/gtest.h"
-#include "../../src/engine/math/vec2.hpp"
+#include "../../../src/engine/math/vec2.hpp"
 
 class vec2_fixture : public ::testing::Test {
 protected:

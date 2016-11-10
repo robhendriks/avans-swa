@@ -85,6 +85,7 @@ include_directories(third_party/json/src
         ${SDL2_MIXER_INCLUDE_DIR})
 
 add_executable(city_defence ${SOURCES})
+add_library(city_defence_sources STATIC ${SOURCES})
 
 target_link_libraries(city_defence
         ${SDL2_LIBRARY}
