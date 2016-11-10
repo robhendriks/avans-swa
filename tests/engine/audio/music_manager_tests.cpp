@@ -21,7 +21,7 @@ public:
     engine::audio::music_manager *manager;
 
     music_manager_fixture() : Test() {
-        // Start the engine, so we can the SDL functions are initialized
+        // Start the engine, so the SDL functions are initialized
         engine::window_config w_config = {
            "test",
             engine::graphics::color4_t(0xFF6495ED)
