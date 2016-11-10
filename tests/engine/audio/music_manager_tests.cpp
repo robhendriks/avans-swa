@@ -34,6 +34,8 @@ public:
     }
 
     virtual ~music_manager_fixture() {
+        engine1->cooldown();
+
         delete manager;
         delete engine1;
     }
@@ -95,10 +97,92 @@ TEST_F(music_manager_fixture, unload_while_playing) {
 TEST_F(music_manager_fixture, stop) {
     EXPECT_TRUE(manager->load(MUSIC_FILE, "pop"));
     EXPECT_TRUE(manager->is_loaded("pop"));
+    EXPECT_EQ(engine::audio::music::state::NOT_PLAYING, manager->get_state());
     manager->play("pop");
     EXPECT_EQ(engine::audio::music::state::PLAYING, manager->get_state());
     EXPECT_EQ("pop", manager->get_current_playing_id());
     manager->stop();
     EXPECT_EQ(engine::audio::music::state::NOT_PLAYING, manager->get_state());
     EXPECT_EQ("", manager->get_current_playing_id());
+}
+
+/**
+ * Test pause and resume
+ */
+TEST_F(music_manager_fixture, pause_and_resume) {
+    EXPECT_TRUE(manager->load(MUSIC_FILE, "pop"));
+    manager->play("pop");
+    EXPECT_EQ(engine::audio::music::state::PLAYING, manager->get_state());
+    manager->pause();
+    EXPECT_EQ(engine::audio::music::state::PAUSED, manager->get_state());
+    manager->resume();
+    EXPECT_EQ(engine::audio::music::state::PLAYING, manager->get_state());
+}
+
+/**
+ * Test pause when not playing
+ */
+TEST_F(music_manager_fixture, pause_when_not_playing) {
+    EXPECT_TRUE(manager->load(MUSIC_FILE, "pop"));
+    EXPECT_EQ(engine::audio::music::state::NOT_PLAYING, manager->get_state());
+    manager->pause();
+    EXPECT_EQ(engine::audio::music::state::NOT_PLAYING, manager->get_state());
+}
+
+/**
+ * Test resume when not paused
+ */
+TEST_F(music_manager_fixture, resume_when_not_paused) {
+    EXPECT_TRUE(manager->load(MUSIC_FILE, "pop"));
+    manager->play("pop");
+    EXPECT_EQ(engine::audio::music::state::PLAYING, manager->get_state());
+    manager->resume();
+    EXPECT_EQ(engine::audio::music::state::PLAYING, manager->get_state());
+}
+
+/**
+ * Test get and set volume
+ */
+TEST_F(music_manager_fixture, get_and_set_volume) {
+    EXPECT_TRUE(manager->load(MUSIC_FILE, "pop"));
+    manager->play("pop", NULL, 128);
+    EXPECT_EQ(128, manager->get_volume());
+    manager->set_volume(68);
+    EXPECT_EQ(68, manager->get_volume());
+}
+
+/**
+ * Get and set volume when nothing is being played
+ */
+TEST_F(music_manager_fixture, get_and_set_volume_when_nothing_is_playing) {
+    EXPECT_EQ(-1, manager->get_volume());
+    manager->set_volume(68);
+    EXPECT_EQ(-1, manager->get_volume());
+}
+
+/**
+ * Test volume stack
+ */
+TEST_F(music_manager_fixture, volume_stack) {
+    EXPECT_EQ(0, (int)manager->get_volume_stack().size());
+    manager->set_volume(68);
+    EXPECT_EQ(0, (int)manager->get_volume_stack().size());
+    EXPECT_TRUE(manager->load(MUSIC_FILE, "pop"));
+    manager->play("pop", NULL, 128);
+    EXPECT_EQ(1, (int)manager->get_volume_stack().size());
+    EXPECT_EQ(128, manager->get_volume());
+    manager->pop_volume();
+    EXPECT_EQ(1, (int)manager->get_volume_stack().size());
+    manager->set_volume(65);
+    EXPECT_EQ(2, (int)manager->get_volume_stack().size());
+    EXPECT_EQ(65, manager->get_volume());
+    manager->set_volume(40);
+    EXPECT_EQ(3, (int)manager->get_volume_stack().size());
+    EXPECT_EQ(40, manager->get_volume());
+    manager->pop_volume();
+    EXPECT_EQ(2, (int)manager->get_volume_stack().size());
+    EXPECT_EQ(65, manager->get_volume());
+    manager->pop_volume();
+    EXPECT_EQ(1, (int)manager->get_volume_stack().size());
+    EXPECT_EQ(128, manager->get_volume());
 }
