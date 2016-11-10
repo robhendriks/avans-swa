@@ -9,7 +9,7 @@ namespace engine {
     namespace audio {
 
         sound_manager::sound_manager() {
-            m_playing_sounds = new std::map<int, std::tuple<std::string, sound::state, std::stack<int>>>();
+            m_playing_sounds = new std::map<int, std::tuple<std::string, sound::state, std::stack<int>*>>();
             sound_callback_wrapper::add_callback([&](int channel) {
                 sound_finished(channel);
             });
@@ -73,7 +73,7 @@ namespace engine {
             }
 
             // Remove from playing sounds
-            m_playing_sounds->erase(channel);
+            erase_playing_sound(channel);
         }
 
         /**
@@ -88,7 +88,7 @@ namespace engine {
          */
         int sound_manager::play(std::string id, std::function<void()> when_finished, int volume, int fade_in, int loops) {
             if (is_loaded(id)) {
-                Mix_VolumeChunk(m_sounds[id], volume);
+                //Mix_VolumeChunk(m_sounds[id], volume);
                 int channel;
                 if (fade_in < 0) {
                     channel = Mix_PlayChannel(-1, m_sounds[id], loops);
@@ -98,8 +98,12 @@ namespace engine {
 
                 if (channel != -1 ){
                     // Add to playing sounds
-                    (*m_playing_sounds)[channel] = std::make_tuple(id, sound::PLAYING, std::stack<int>());
+                    (*m_playing_sounds)[channel] = std::make_tuple(id, sound::PLAYING, new std::stack<int>());
 
+                    // Set volume
+                    set_volume(channel, volume);
+
+                    // Set callback
                     if (when_finished != NULL) {
                         m_when_finished[channel] = when_finished;
                     }
@@ -115,6 +119,7 @@ namespace engine {
          * Start playing a sound if the sound is not already being played
          *
          * @param id - id of the sound to play, the id should be loaded.
+         * @param count_paused - whether paused sounds are counting
          * @param when_finished - callback that will be called when the sound is finished/stops
          * @param volume - the volume of the sound: max = 128
          * @param fade_in - fade in time in milliseconds, use -1 for no fade in
@@ -185,7 +190,7 @@ namespace engine {
         int sound_manager::get_volume(int channel) const {
             auto stack = get_volume_stack(channel);
             if (stack) {
-                stack->top();
+                return stack->top();
             }
 
             return -1;
@@ -217,9 +222,9 @@ namespace engine {
          * channel a nullptr will be returned.
          */
         std::stack<int> *sound_manager::get_volume_stack(int channel) const {
-            if (m_playing_sounds->find(channel) != m_playing_sounds->find(channel)) {
+            if (m_playing_sounds->find(channel) != m_playing_sounds->end()) {
                 auto sound = m_playing_sounds->at(channel);
-                return &std::get<2>(sound);
+                return std::get<2>(sound);
             }
 
             return nullptr;
@@ -309,7 +314,7 @@ namespace engine {
                 }
 
                 // Don't wait for the callback, delete immediately
-                m_playing_sounds->erase(channel);
+                erase_playing_sound(channel);
             }
         }
 
@@ -362,8 +367,24 @@ namespace engine {
          *  sound::state = PLAYING OR PAUSED
          *  std::stack<int> = volume stack
          */
-        std::map<int, std::tuple<std::string, sound::state, std::stack<int>>> *sound_manager::get_playing_sounds() const {
+        std::map<int, std::tuple<std::string, sound::state, std::stack<int>*>> *sound_manager::get_playing_sounds() const {
             return m_playing_sounds;
+        }
+
+        /**
+         * Erase a channel from the playing sound map
+         *
+         * @param channel
+         */
+        void sound_manager::erase_playing_sound(int channel) {
+            // Delete the stack pointer
+            if (m_playing_sounds->find(channel) != m_playing_sounds->end()) {
+                auto &sound = m_playing_sounds->at(channel);
+                delete std::get<2>(sound);
+
+                // Erase from the map
+                m_playing_sounds->erase(channel);
+            }
         }
 
         sound_manager::~sound_manager() {

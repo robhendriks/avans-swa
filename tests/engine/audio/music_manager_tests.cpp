@@ -179,7 +179,7 @@ TEST_F(music_manager_fixture, volume_stack) {
 }
 
 /**
- * Test
+ * Test callback
  */
 TEST_F(music_manager_fixture, finished_callback) {
     EXPECT_TRUE(manager->load(MUSIC_FILE, "pop"));

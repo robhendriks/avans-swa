@@ -65,6 +65,7 @@ int play(std::string id, std::function<void()> when_finished = NULL, int volume 
  * Start playing a sound if the sound is not already being played
  *
  * @param id - id of the sound to play, the id should be loaded.
+ * @param count_paused - whether paused sounds are counting
  * @param when_finished - callback that will be called when the sound is finished/stops
  * @param volume - the volume of the sound: max = 128
  * @param fade_in - fade in time in milliseconds, use -1 for no fade in
@@ -72,7 +73,7 @@ int play(std::string id, std::function<void()> when_finished = NULL, int volume 
  * @return int - the channel where the sound is being played, if there are multiple channels where the sound
  * is being played the first channel will be returned
  */
-int play_if(std::string id, bool count_paused, std::function<void()> when_finished = NULL, int volume = 128, int fade_in = -1, int loops = 0);
+int play_if(std::string id, bool count_paused = true, std::function<void()> when_finished = NULL, int volume = 128, int fade_in = -1, int loops = 0);
 ```
 
 ```cpp
