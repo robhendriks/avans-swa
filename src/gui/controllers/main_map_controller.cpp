@@ -28,7 +28,8 @@ namespace gui {
         }
 
         void main_map_controller::tile_click(domain::map::base_field &tile) {
-            domain::buildings::building building;
+            engine::math::vec2_t* t = new engine::math::vec2_t(0,0);
+            domain::buildings::building* building =  new domain::buildings::building("building_1", "images/building.png", t);
             tile.place(building);
 
             show();

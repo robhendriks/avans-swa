@@ -4,9 +4,10 @@
 #include "base_placeable_object.h"
 
 namespace domain {
-    namespace buildings {
+    namespace buildings{
         class building : public base_placeable_object {
-
+        public:
+            building(const std::string &id, const std::string &file_loc, engine::math::vec2_t *image_start_position);
         };
     }
 }

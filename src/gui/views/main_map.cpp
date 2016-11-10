@@ -15,9 +15,6 @@ namespace gui {
         }
 
         void main_map::before() {
-            m_texture_manager.load("images/grass.png", "grass_1");
-            m_texture_manager.load("images/building.png", "building_1");
-
             m_music_manager.load("sounds/game.mp3", "game_bg_music");
             m_music_manager.play("game_bg_music");
 
@@ -46,14 +43,19 @@ namespace gui {
                     engine::math::box2_t tile_box({x, y}, {x + m_model.tile_width, y + m_model.tile_height});
 
                     // Let the tile draw
+                    try{
                     tile->draw(m_texture_manager, tile_box);
-
+                    }
+                    catch(std::exception e){
+                        e.what();
+                    }
                     x += m_model.tile_width;
                 }
             }
         }
 
         void main_map::after() {
+            // can be done by the objects as well
             m_texture_manager.unload("grass_1");
             m_texture_manager.unload("building_1");
 
