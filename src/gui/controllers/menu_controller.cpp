@@ -24,7 +24,9 @@ namespace gui {
         }
 
         void menu_controller::load() {
-            SDL_Log("LOAD MENU BUTTON");
+//            TODO: load map (level1)
+            m_main_map_controller.load("level1.json");
+            m_main_map_controller.show();
         }
 
         void menu_controller::quit() {
