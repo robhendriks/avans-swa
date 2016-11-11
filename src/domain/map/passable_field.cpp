@@ -8,11 +8,16 @@
 
 namespace domain {
     namespace map {
+        passable_field::passable_field(const std::string &id, const std::string &file_loc,
+                                       engine::math::vec2_t *image_start_position) : base_field(id, file_loc, image_start_position) {
+            m_placed_object = nullptr;
+        }
+
         void passable_field::draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest) {
             if (m_placed_object == nullptr) {
-                texture_manager.draw("grass_1", {0, 0}, dest);
+                base_field::draw(texture_manager, dest);
             } else {
-                texture_manager.draw("building_1", {0, 0}, dest);
+                m_placed_object->draw(texture_manager, dest);
             }
         }
 
@@ -20,16 +25,16 @@ namespace domain {
             return *m_placed_object;
         }
 
-        void passable_field::place(buildings::base_placeable_object &placeable_object) {
+        void passable_field::place(buildings::base_placeable_object* placeable_object) {
             if (m_placed_object == nullptr) {
-                m_placed_object = &placeable_object;
+                m_placed_object = placeable_object;
                 // Fire event
-                auto *event = new events::object_placed_on_field(*this, placeable_object);
+                auto *event = new events::object_placed_on_field(*this, *placeable_object);
                 engine::eventbus::eventbus::get_instance().fire(*event);
                 delete event;
             } else {
                 // Fire event
-                auto *event = new events::object_cannot_be_placed_on_field(*this, placeable_object);
+                auto *event = new events::object_cannot_be_placed_on_field(*this, *placeable_object);
                 engine::eventbus::eventbus::get_instance().fire(*event);
                 delete event;
             }

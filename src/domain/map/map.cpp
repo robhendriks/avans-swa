@@ -11,7 +11,8 @@ namespace domain {
                 std::vector<domain::map::base_field*> row_fields;
 
                 for (int c = 0; c < cols; c++) {
-                    row_fields.push_back(new passable_field());
+                    engine::math::vec2_t* v = new engine::math::vec2_t(0,0);
+                    row_fields.push_back(new passable_field("grass_1", "images/grass.png", v));
                 }
 
                 m_fields->push_back(row_fields);

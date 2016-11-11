@@ -6,10 +6,11 @@
 
 namespace domain {
     namespace map {
-        class base_field {
+        class base_field : public domain::drawable_game_object {
         public:
-            virtual void draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest) = 0;
-            virtual void place(buildings::base_placeable_object &placeable_object) = 0;
+            base_field(const std::string &id, const std::string &file_loc, engine::math::vec2_t *image_start_position);
+
+            virtual void place(buildings::base_placeable_object* placeable_object) = 0;
             virtual ~base_field() = default;
         };
     }
