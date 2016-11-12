@@ -19,7 +19,7 @@ add_executable(runCityDefenceTests
     data/json/person_json_repository.cpp
     data/json/json_repository_tests.cpp
     engine/math/vec2_tests.cpp
-    engine/audio/music_manager_tests.cpp engine/audio/sound_manager_tests.cpp engine/engine_tests.cpp)
+    engine/audio/music_manager_tests.cpp engine/audio/sound_manager_tests.cpp engine/engine_tests.cpp engine/eventbus/eventbus_tests.cpp engine/eventbus/test_classes/TestEvent.cpp engine/eventbus/test_classes/TestEvent.h engine/eventbus/test_classes/TestSubscriber.cpp engine/eventbus/test_classes/TestSubscriber.h)
 
 target_link_libraries(runCityDefenceTests gtest gtest_main)
 target_link_libraries(runCityDefenceTests city_defence_sources)

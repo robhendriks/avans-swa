@@ -24,6 +24,12 @@ namespace engine {
             }
 
             template<class T>
+            void fire(T *event) {
+                // This is needed because a pointer to an event has a different typeid than a reference to an event
+                fire(*event);
+            }
+
+            template<class T>
             void fire(T &event) {
                 std::string type_name = typeid(T).name();
 
