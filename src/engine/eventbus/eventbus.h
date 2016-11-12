@@ -17,18 +17,33 @@ namespace engine {
     namespace eventbus {
         class eventbus {
         public:
+            /**
+             * Get the instance of the eventbus
+             *
+             * @return eventbus
+             */
             static eventbus &get_instance() {
                 static eventbus instance;
 
                 return instance;
             }
 
+            /**
+             * Fire an event (pointer)
+             *
+             * @param event
+             */
             template<class T>
             void fire(T *event) {
                 // This is needed because a pointer to an event has a different typeid than a reference to an event
                 fire(*event);
             }
 
+            /**
+             * Fire an event (reference)
+             *
+             * @param event
+             */
             template<class T>
             void fire(T &event) {
                 std::string type_name = typeid(T).name();
@@ -45,11 +60,43 @@ namespace engine {
                 }
             }
 
+            /**
+             * Add a subscriber
+             *
+             * @param subscriber1
+             */
             template<class T>
             void subscribe(subscriber<T> *subscriber1) {
                 m_subscribers[typeid(T).name()].push_back(subscriber1);
             }
 
+            /**
+             * Add a callback as subscriber
+             *
+             * NOTE: When calling this with a lambda function you must specify the type for conversion e.g.
+             * This will work:
+             *      std::function<void(TestEvent &)> callback = [&](TestEvent &event) {
+             *          call_count++;
+             *      };
+             *
+             *      subscribe("name", callback);
+             *
+             *  But this will not:
+             *      auto callback = [&](TestEvent &event) {
+             *          call_count++;
+             *      };
+             *
+             *  subscribe("name", callback);
+             *
+             *  And this will also fail:
+             *
+             *      subscribe("name", [&](TestEvent &event) {
+             *          call_count++;
+             *      });
+             *
+             * @param name
+             * @param callback
+             */
             template<class T>
             void subscribe(std::string name, std::function<void(T)> callback) {
                 std::string type_name = typeid(T).name();
@@ -58,6 +105,11 @@ namespace engine {
                 m_subscribers[sub_id].push_back(callback);
             }
 
+            /**
+             * Unsubscribe a (class)subscriber
+             *
+             * @param subscriber1
+             */
             template<class T>
             void unsubscribe(subscriber<T> *subscriber1) {
                 auto &subscribers_array = m_subscribers[typeid(T).name()];
@@ -69,6 +121,11 @@ namespace engine {
                 }
             }
 
+            /**
+             * Unsubscribe a callback subscriber
+             *
+             * @param name
+             */
             void unsubscribe(std::string name) {
                 if (m_callbacks.find(name) != m_callbacks.end()) {
                     m_subscribers.erase(m_callbacks[name]);
