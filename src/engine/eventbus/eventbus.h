@@ -75,24 +75,18 @@ namespace engine {
              *
              * NOTE: When calling this with a lambda function you must specify the type for conversion e.g.
              * This will work:
-             *      std::function<void(TestEvent &)> callback = [&](TestEvent &event) {
-             *          call_count++;
-             *      };
+             *      std::function<void(TestEvent &)> callback = [&](TestEvent &event) {};
              *
              *      subscribe("name", callback);
              *
              *  But this will not:
-             *      auto callback = [&](TestEvent &event) {
-             *          call_count++;
-             *      };
+             *      auto callback = [&](TestEvent &event) {};
              *
              *  subscribe("name", callback);
              *
              *  And this will also fail:
              *
-             *      subscribe("name", [&](TestEvent &event) {
-             *          call_count++;
-             *      });
+             *      subscribe("name", [&](TestEvent &event) {});
              *
              * @param name
              * @param callback
