@@ -11,16 +11,17 @@ const std::string MUSIC_FILE = "data/sounds/pop.wav";
 class music_manager_fixture : public ::testing::Test {
 public:
     engine::engine *engine1;
+    engine::window_config *w_config;
+    engine::engine_config *e_config;
+
     engine::audio::music_manager *manager;
 
     music_manager_fixture() : Test() {
         // Start the engine, so the SDL functions are initialized
-        engine::window_config w_config = {
-           "test",
-            engine::graphics::color4_t(0xFF6495ED)
-        };
-        engine::engine_config e_config = { w_config };
-        engine1 = new engine::engine(e_config);
+        w_config = new engine::window_config("test", engine::graphics::color4_t(0xFF6495ED));
+        e_config = new engine::engine_config(*w_config);
+
+        engine1 = new engine::engine(*e_config);
         engine1->warmup();
 
         manager = engine1->get_music_manager();
@@ -29,6 +30,8 @@ public:
     virtual ~music_manager_fixture() {
         engine1->cooldown();
         delete engine1;
+        delete w_config;
+        delete e_config;
     }
 };
 

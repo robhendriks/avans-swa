@@ -11,13 +11,17 @@
 
 namespace engine {
     engine::engine(engine_config &config) : m_window(nullptr), m_sound_manager(nullptr), m_music_manager(nullptr),
-                                            m_texture_manager(nullptr), m_color_manager(nullptr), m_config(config) {
+                                            m_texture_manager(nullptr), m_color_manager(nullptr), m_config(config),
+                                            m_state(CREATED), m_ticks_when_paused(0), m_paused_ticks(0),
+                                            m_game_ticks(0) {
     }
 
     void engine::warmup() {
         try {
             init_sdl();
             create_window();
+
+            m_state = WARMEDUP;
         } catch (std::runtime_error &e) {
             fprintf(stderr, "%s\n", e.what());
             return;
@@ -25,23 +29,40 @@ namespace engine {
     }
 
     void engine::run() {
-        m_running = true;
-        loop();
+        if (m_state == WARMEDUP) {
+            m_state = RUNNING;
+            loop();
+        }
+    }
+
+    void engine::pause() {
+        if (m_state == RUNNING) {
+            m_state = PAUSED;
+            m_ticks_when_paused = m_game_ticks;
+        }
+    }
+
+    void engine::resume() {
+        if (m_state == PAUSED) {
+            m_state = RUNNING;
+            m_paused_ticks += (m_game_ticks - m_ticks_when_paused);
+        }
     }
 
     void engine::loop() {
-        printf("[DEBUG] Starting router loop...\n");
+        printf("[DEBUG] Starting gameloop...\n");
 
         auto next_game_tick = SDL_GetTicks();
         int loops;
         float interpolation;
-        while (m_running) {
+        while (m_state == RUNNING || m_state == PAUSED) {
             loops = 0;
             while (SDL_GetTicks() > next_game_tick && loops < m_config.max_frameskip) {
-                update(); // Update the router state
+                update();
 
                 next_game_tick += m_config.get_skip_ticks();
                 loops++;
+                m_game_ticks++;
             }
 
             m_window->clear();
@@ -73,7 +94,7 @@ namespace engine {
     }
 
     void engine::stop() {
-        m_running = false;
+        m_state = STOPPED;
     }
 
     void engine::cooldown() {
@@ -102,6 +123,8 @@ namespace engine {
         Mix_Quit();
         IMG_Quit();
         SDL_Quit();
+
+        m_state = COOLEDDOWN;
     }
 
     void engine::init_sdl() {
@@ -157,5 +180,29 @@ namespace engine {
 
     audio::music_manager *engine::get_music_manager() const {
         return m_music_manager;
+    }
+
+    unsigned int engine::get_time_elapsed() const {
+        if (m_state == RUNNING || m_state == PAUSED) {
+            return (m_game_ticks - get_paused_ticks()) * m_config.get_skip_ticks();
+        }
+
+        return 0;
+    }
+
+    state engine::get_state() const {
+        return m_state;
+    }
+
+    unsigned int engine::get_game_ticks() const {
+        return m_game_ticks;
+    }
+
+    unsigned int engine::get_paused_ticks() const {
+        if (m_state == PAUSED) {
+            return m_paused_ticks + (m_game_ticks - m_ticks_when_paused);
+        }
+
+        return m_paused_ticks;
     }
 }

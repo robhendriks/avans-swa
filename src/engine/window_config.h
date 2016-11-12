@@ -10,6 +10,7 @@
 
 namespace engine {
     struct window_config {
+        window_config(std::string title, graphics::color4_t bg_color) : title(title), background_color(bg_color) {}
         std::string title;
         graphics::color4_t background_color;
         int x = SDL_WINDOWPOS_CENTERED;

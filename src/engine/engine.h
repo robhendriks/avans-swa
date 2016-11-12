@@ -15,6 +15,11 @@
 #include "audio/music_manager.h"
 
 namespace engine {
+
+    enum state {
+        CREATED, WARMEDUP, RUNNING, PAUSED, STOPPED, COOLEDDOWN
+    };
+
     class engine {
     public:
         engine(engine_config &config);
@@ -23,9 +28,21 @@ namespace engine {
 
         void run();
 
+        void pause();
+
+        void resume();
+
         void stop();
 
         void cooldown();
+
+        unsigned int get_game_ticks() const;
+
+        unsigned int get_paused_ticks() const;
+
+        unsigned int get_time_elapsed() const;
+
+        state get_state() const;
 
         graphics::texture_manager *get_texture_manager() const;
 
@@ -51,8 +68,12 @@ namespace engine {
         audio::music_manager *m_music_manager;
         graphics::texture_manager *m_texture_manager;
         graphics::color_manager *m_color_manager;
-        bool m_running;
         engine_config &m_config;
+        state m_state;
+
+        unsigned int m_ticks_when_paused;
+        unsigned int m_paused_ticks;
+        unsigned int m_game_ticks;
     };
 }
 
