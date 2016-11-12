@@ -44,7 +44,7 @@ void unsubscribe(subscriber<T> *subscriber1);
  *  But this will not:
  *      auto callback = [&](TestEvent &event) {};
  *
- *  subscribe("name", callback);
+ *      subscribe("name", callback);
  *
  *  And this will also fail:
  *
