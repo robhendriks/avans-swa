@@ -2,7 +2,7 @@
 
 ## Running
 
-Before you use the engine you *must* always warmup the engine:
+Before you use the engine you **must** always warmup the engine:
 
 ```cpp
 /**
@@ -45,7 +45,7 @@ void engine::resume();
 void engine::stop();
 ```
 
-If the engine is warmed up and you stop using the engine, you *must* cool it down:
+If the engine is warmed up and you stop using the engine, you **must** cool it down:
 
 ```cpp
 /**
