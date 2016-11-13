@@ -5,8 +5,8 @@
 #include "drawable_game_object.h"
 namespace domain {
     drawable_game_object::drawable_game_object(std::string id, std::string file_loc,
-                                               engine::math::vec2_t *image_start_position) : id(id),
-                                                                                             file_loc(file_loc) {
+                                               engine::math::vec2_t *image_start_position, int rotation) : id(id),
+                                                                                             file_loc(file_loc), rotation(rotation) {
         this->image_start_position = std::unique_ptr<engine::math::vec2_t>(image_start_position);
         this->texture = nullptr;
     }
