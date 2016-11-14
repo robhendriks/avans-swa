@@ -7,7 +7,7 @@ namespace domain {
             for (int r = 0; r < 10; r++) {
                 for (int c = 0; c < 10; c++) {
                     engine::math::vec2_t *v = new engine::math::vec2_t(0, 0);
-                    this->add_field(new passable_field("grass_1", "images/grass.png", v, r, c));
+                    this->add_field(new passable_field("grass_1", "images/grass.png", v, r, c, 0));
                 }
             }
         }

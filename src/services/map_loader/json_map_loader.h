@@ -8,7 +8,7 @@
 #include "base_map_loader.h"
 #include "../../config/json_config.h"
 namespace services {
-    namespace map_loader {
+    namespace level_loader {
         class json_map_loader : public base_map_loader {
         public:
             json_map_loader();
@@ -17,6 +17,7 @@ namespace services {
         private:
             void load_tiles(json &root);
             void load_objects(json &root);
+            std::tuple<int, int> get_length_and_width(json &root);
         };
     }
 }

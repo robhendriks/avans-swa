@@ -8,7 +8,7 @@
 #include "../../domain/gameworld/game_world.h"
 
 namespace services {
-    namespace map_loader {
+    namespace level_loader {
         class base_map_loader {
         public:
             virtual domain::gameworld::game_world load(std::string file_location) = 0;

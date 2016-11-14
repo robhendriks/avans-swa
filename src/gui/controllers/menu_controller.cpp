@@ -9,7 +9,7 @@ namespace gui {
 
         menu_controller::menu_controller(views::main_menu &main_menu, engine::engine &engine,
                                          controllers::main_map_controller &main_map_controller, game &game1
-                , services::map_loader::base_map_loader &map_loader)
+                , services::level_loader::base_map_loader &map_loader)
             : base_controller(game1), m_engine(engine), m_main_menu(main_menu),
               m_main_map_controller(main_map_controller), _map_loader(map_loader) {
 

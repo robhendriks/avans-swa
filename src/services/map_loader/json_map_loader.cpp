@@ -4,11 +4,42 @@
 
 #include <SDL_log.h>
 #include "json_map_loader.h"
+#include "../../domain/map/map.h"
 
 namespace services {
-    namespace map_loader {
+    namespace level_loader {
 
         domain::gameworld::game_world json_map_loader::load(std::string file_location) {
+            std::ifstream file(file_location);
+            if (!file.is_open()) {
+                throw std::runtime_error(std::string("Unable to open file: ") + file_location);
+            }
+
+            SDL_Log("Loading level: %s\n", "");
+            json root;
+
+            try {
+                root << file;
+            } catch (std::exception &e) {
+                // TODO: proper error handling
+                throw;
+            }
+
+            // create map with tile length and width
+            std::tuple<int,int> result = this->get_length_and_width(root);
+            domain::map::map* map = new domain::map::map(std::get<0>(result), std::get<1>(result));
+
+            // create tiles
+
+            // create placeable_objects
+
+            // link placeable_object with the correct tile its placed on.
+
+            // add tiles to map with add_fields() method.
+
+            // add map to game world.
+
+            // return game world
 
             return domain::gameworld::game_world();
             std::ifstream file(file_location);
@@ -37,6 +68,10 @@ namespace services {
             load_objects(root, map_model);
 */
             // TODO:
+        }
+
+        std::tuple<int, int> json_map_loader::get_length_and_width(json &root){
+            return std::make_tuple(0,0);
         }
 
         void json_map_loader::load_tiles(json &root) {

@@ -33,6 +33,15 @@ namespace domain {
             return this->_current_lvl;
         }
 
+        void game_world::reset_level() {
+            this->_current_lvl = 0;
+        }
+
+        int game_world::next_level() {
+            this->_current_lvl++;
+            return this->_current_lvl;
+        }
+
 
     }
 }

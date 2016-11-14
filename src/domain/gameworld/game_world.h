@@ -16,6 +16,8 @@ namespace domain {
             void unload(engine::graphics::texture_manager &texture_manager);
             map::base_map* get_current_map();
             int get_current_lvl();
+            int next_level();
+            void reset_level();
             ~game_world();
 
         private:
