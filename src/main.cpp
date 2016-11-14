@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
             boost::di::bind<>.to(*engine1->get_sound_manager()),
             boost::di::bind<>.to(*engine1->get_music_manager()),
             boost::di::bind<>.to(*engine1->get_window()),
-            boost::di::bind<>.to(*load_map_service)
+            boost::di::bind<services::map_loader::base_map_loader>.to(*load_map_service)
         );
     };
 
