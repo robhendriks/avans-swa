@@ -13,13 +13,13 @@ namespace gui {
 
             view.set_controller(*this);
 
-            // This code should be placed somewhere else
-            m_model.tile_height = 32;
-            m_model.tile_width = 32;
-            auto *domain_map = new domain::map::map(10, 10);
-            m_model.tiles = domain_map->get_fields();
-            engine::math::box2_t *map = new engine::math::box2_t({{0, 0}, {(float) (10 * m_model.tile_width), (float) (10 * m_model.tile_height)}});
-            m_model.map = map;
+            // This code should be placed somewhere else TODO
+            auto * domain_map = new domain::map::map(32, 32);
+            std::vector<domain::map::base_map*> v = {};
+            v.push_back(domain_map);
+            m_model.world = new domain::gameworld::game_world(v);
+            engine::math::box2_t *map_box = new engine::math::box2_t({{0, 0}, {(float) (10 * domain_map->get_tile_width()), (float) (10 * domain_map->get_tile_height())}});
+            m_model.map_box = map_box;
         }
 
         void main_map_controller::load(const char *filename) {
@@ -37,19 +37,17 @@ namespace gui {
                 // TODO: proper error handling
                 throw;
             }
-
+/*
             size_t width = root["width"];
             size_t height = root["height"];
 
             // Create map model
             models::main_map_model map_model;
-            map_model.tile_width = 32;
-            map_model.tile_height = 32;
-            map_model.map = new engine::math::box2_t{0, 0, (float)(width * map_model.tile_width), (float)(height * map_model.tile_height)};
+            map_model.map_box = new engine::math::box2_t{0, 0, (float)(width * map_model.tile_width), (float)(height * map_model.tile_height)};
 
             load_tiles(root, map_model);
             load_objects(root, map_model);
-
+*/
             // TODO:
         }
 

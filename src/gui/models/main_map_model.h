@@ -13,13 +13,11 @@ namespace gui {
         struct main_map_model {
             main_map_model() {};
             ~main_map_model() {
-                delete map;
+                delete map_box;
             }
 
-            std::vector<std::vector<domain::map::base_field*>> tiles;
-            int tile_height;
-            int tile_width;
-            engine::math::box2_t *map;
+            domain::gameworld::game_world* world;
+            engine::math::box2_t* map_box;
         };
     }
 }

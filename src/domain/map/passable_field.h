@@ -9,12 +9,13 @@ namespace domain {
         class passable_field : public base_field {
         public:
             passable_field(const std::string &id, const std::string &file_loc,
-                           engine::math::vec2_t *image_start_position);
+                           engine::math::vec2_t* image_start_position, int x, int y);
 
             void draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest);
             void unload(engine::graphics::texture_manager &texture_manager);
             void place(buildings::base_placeable_object* placeable_object);
-            buildings::base_placeable_object &get_placed_object();
+            buildings::base_placeable_object* get_placed_object();
+            virtual ~passable_field();
         private:
             buildings::base_placeable_object * m_placed_object;
 
