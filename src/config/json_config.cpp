@@ -3,6 +3,7 @@
 //
 
 #include "json_config.h"
+#include "../utils/string_utils.h"
 
 namespace config {
     json_config::json_config(const char *fileName) : mFileName(fileName), mJSON(json()) {}
@@ -17,11 +18,58 @@ namespace config {
         ifs >> mJSON;
     }
 
-    const char *json_config::get_file_name() {
-        return mFileName;
+    std::string json_config::get_string(std::string key, std::string default_value) {
+        json root = get(key);
+        if (root.is_string()) {
+            return root;
+        }
+
+        return default_value;
     }
 
-    json json_config::get_json() {
-        return mJSON;
+    int json_config::get_int(std::string key, int default_value) {
+        json root = get(key);
+        if (root.is_number_integer()) {
+            return root;
+        }
+
+        return default_value;
+    }
+
+    float json_config::get_float(std::string key, float default_value) {
+        json root = get(key);
+        if (root.is_number_float()) {
+            return root;
+        }
+
+        return default_value;
+    }
+
+    long json_config::get_long(std::string key, long default_value) {
+        std::string string_value = get_string(key);
+        if (string_value != "") {
+            try {
+                return std::stol(string_value);
+            } catch (...) {
+                return default_value;
+            }
+        }
+
+        return default_value;
+    }
+
+    json json_config::get(std::string key) {
+        std::vector<std::string> keys = utils::string_utils::tokenize(key, ".");
+
+        json root = mJSON;
+        for (std::string const &k : keys) {
+            if (root.is_object() && root.find(k) != root.end()) {
+                root = root[k];
+            } else {
+                return -1;
+            }
+        }
+
+        return root;
     }
 }

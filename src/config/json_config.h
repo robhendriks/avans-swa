@@ -9,11 +9,12 @@
 #include <fstream>
 #include <exception>
 #include <json.hpp>
+#include "config.h"
 
 using json = nlohmann::json;
 
 namespace config {
-    class json_config {
+    class json_config : public ::config::config {
     public:
         json_config(const char *fileName);
 
@@ -21,10 +22,15 @@ namespace config {
 
         void load();
 
-        const char *get_file_name();
+        std::string get_string(std::string key, std::string default_value = "");
 
-        json get_json();
+        int get_int(std::string key, int default_value = -1);
 
+        float get_float(std::string key, float default_value = -1);
+
+        long get_long(std::string key, long default_value = -1);
+
+        json get(std::string key);
     private:
         const char *mFileName;
         json mJSON;
