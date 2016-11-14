@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
     // Create the ioc container
     auto *game1 = new game();
 
-    services::map_loader::base_map_loader *load_map_service = new services::map_loader::json_map_loader();
+    services::map_loader::json_map_loader *load_map_service = new services::map_loader::json_map_loader();
 
     auto di_config = [&]() {
         return boost::di::make_injector(
@@ -44,8 +44,8 @@ int main(int argc, char *argv[]) {
             boost::di::bind<>.to(*engine1->get_color_manager()),
             boost::di::bind<>.to(*engine1->get_sound_manager()),
             boost::di::bind<>.to(*engine1->get_music_manager()),
-            boost::di::bind<>.to(*engine1->get_window(),
-            boost::di::bind<>.to(*load_map_service))
+            boost::di::bind<>.to(*engine1->get_window()),
+            boost::di::bind<>.to(*load_map_service)
         );
     };
 

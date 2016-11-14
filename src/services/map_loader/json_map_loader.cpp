@@ -98,5 +98,13 @@ namespace services {
 
             }
         }
+
+        json_map_loader::~json_map_loader() {
+
+        }
+
+        json_map_loader::json_map_loader() {
+
+        }
     }
 }
