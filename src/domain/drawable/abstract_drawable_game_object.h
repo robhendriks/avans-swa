@@ -12,6 +12,7 @@ namespace domain {
     namespace drawable{
         class abstract_drawable_game_object{
         public:
+
             virtual void draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest) = 0;
             virtual void unload(engine::graphics::texture_manager &texture_manager)  = 0;
         };

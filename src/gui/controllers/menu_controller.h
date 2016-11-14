@@ -9,6 +9,7 @@
 #include "../views/main_menu.h"
 #include "base_controller.h"
 #include "main_map_controller.h"
+#include "../../services/map_loader/base_map_loader.h"
 
 namespace gui {
     namespace views {
@@ -21,7 +22,7 @@ namespace gui {
         class menu_controller : public base_controller {
         public:
             menu_controller(views::main_menu &main_menu, engine::engine &engine,
-                            controllers::main_map_controller &main_map_controller, game &game1);
+                            controllers::main_map_controller &main_map_controller, game &game1, services::map_loader::base_map_loader &map_loader);
 
             void show();
 
@@ -35,6 +36,8 @@ namespace gui {
             engine::engine &m_engine;
             views::main_menu &m_main_menu;
             controllers::main_map_controller &m_main_map_controller;
+            services::map_loader::base_map_loader &_map_loader;
+            domain::gameworld::game_world _game_world;
         };
     }
 }

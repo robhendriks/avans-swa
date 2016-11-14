@@ -33,13 +33,11 @@ namespace gui {
             engine::math::vec2_t* t = new engine::math::vec2_t(0,0);
             domain::buildings::building* building =  new domain::buildings::building("building_1", "images/building.png", t);
             tile.place(building);
-
             show();
         }
 
-        void main_map_controller::load(const char *filename) {
-
-
+        void main_map_controller::set_game_world(domain::gameworld::game_world game_world) {
+            this->m_model.world = new domain::gameworld::game_world(game_world);
         }
     }
 }

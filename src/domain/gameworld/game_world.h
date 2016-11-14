@@ -9,6 +9,8 @@ namespace domain {
     namespace gameworld {
         class game_world : public domain::drawable::abstract_drawable_game_object{
         public:
+            game_world();
+
             game_world(std::vector<map::base_map*> map);
             void draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest);
             void unload(engine::graphics::texture_manager &texture_manager);

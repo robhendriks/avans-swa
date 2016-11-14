@@ -4,15 +4,14 @@
 
 #ifndef CITY_DEFENCE_BASE_MAP_LOADER_H
 #define CITY_DEFENCE_BASE_MAP_LOADER_H
+#include <string>
+#include "../../domain/gameworld/game_world.h"
 
 namespace services {
     namespace map_loader {
         class base_map_loader {
         public:
-            base_map_loader(std:: location);
-
-        protected:
-            std::string location;
+            virtual domain::gameworld::game_world load(std::string file_location) = 0;
         };
     }
 }

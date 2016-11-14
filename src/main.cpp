@@ -5,6 +5,7 @@
 #include "utils/string_utils.h"
 #include "listeners/play_sound_when_object_is_placed_on_field.h"
 #include "listeners/play_sound_when_object_cannot_be_placed_on_field.h"
+#include "services/map_loader/json_map_loader.h"
 
 int main(int argc, char *argv[]) {
     /**
@@ -33,6 +34,8 @@ int main(int argc, char *argv[]) {
     // Create the ioc container
     auto *game1 = new game();
 
+    services::map_loader::base_map_loader *load_map_service = new services::map_loader::json_map_loader();
+
     auto di_config = [&]() {
         return boost::di::make_injector(
             boost::di::bind<>.to(*game1),
@@ -41,7 +44,8 @@ int main(int argc, char *argv[]) {
             boost::di::bind<>.to(*engine1->get_color_manager()),
             boost::di::bind<>.to(*engine1->get_sound_manager()),
             boost::di::bind<>.to(*engine1->get_music_manager()),
-            boost::di::bind<>.to(*engine1->get_window())
+            boost::di::bind<>.to(*engine1->get_window(),
+            boost::di::bind<>.to(*load_map_service))
         );
     };
 
@@ -67,7 +71,7 @@ int main(int argc, char *argv[]) {
      */
 
     // Start with show
-    auto *menu_controller = boost::di::make_injector(di_config()).create<gui::controllers::menu_controller*>();
+    gui::controllers::menu_controller* menu_controller = boost::di::make_injector(di_config()).create<gui::controllers::menu_controller*>();
     menu_controller->show();
 
     // Run the game
@@ -85,6 +89,7 @@ int main(int argc, char *argv[]) {
     delete menu_controller;
     delete json_config;
     delete engine1;
+    delete load_map_service;
 
     return 0;
 }

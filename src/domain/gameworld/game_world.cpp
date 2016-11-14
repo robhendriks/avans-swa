@@ -8,6 +8,9 @@ namespace domain {
             _current_lvl = 0;
         }
 
+        game_world::game_world() {
+
+        }
         game_world::~game_world() {
             for(map::base_map* map : this->_map)
                 delete map;
@@ -29,6 +32,8 @@ namespace domain {
         int game_world::get_current_lvl() {
             return this->_current_lvl;
         }
+
+
     }
 }
 #endif //CITY_DEFENCE_GAME_WORLD_CPP

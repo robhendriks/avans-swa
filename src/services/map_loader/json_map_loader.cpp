@@ -4,18 +4,19 @@
 
 #include <SDL_log.h>
 #include "json_map_loader.h"
-#include "../../config/json_config.h"
 
 namespace services {
     namespace map_loader {
 
-        void json_map_loader::load(const char *filename) {
-            std::ifstream file(filename);
+        domain::gameworld::game_world json_map_loader::load(std::string file_location) {
+
+            return domain::gameworld::game_world();
+            std::ifstream file(file_location);
             if (!file.is_open()) {
-                throw std::runtime_error(std::string("Unable to open file: ") + filename);
+                throw std::runtime_error(std::string("Unable to open file: ") + file_location);
             }
 
-            SDL_Log("Loading level: %s\n", filename);
+            SDL_Log("Loading level: %s\n", "");
             json root;
 
             try {
@@ -38,7 +39,7 @@ namespace services {
             // TODO:
         }
 
-        void json_map_loader::load_tiles(json &root, models::main_map_model &map_model) {
+        void json_map_loader::load_tiles(json &root) {
             if (root.find("tiles") == root.end()) {
                 return;
             }
@@ -67,7 +68,7 @@ namespace services {
             }
         }
 
-        void json_map_loader::load_objects(json &root, models::main_map_model &map_model) {
+        void json_map_loader::load_objects(json &root) {
             if (root.find("objects") == root.end()) {
                 return;
             }
