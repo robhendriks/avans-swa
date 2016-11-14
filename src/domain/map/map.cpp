@@ -30,6 +30,20 @@ namespace domain {
         std::vector<std::vector<domain::map::base_field *>> &map::get_fields() {
             return *m_fields;
         }
+
+        void map::draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest) {
+            /*
+            for(auto &v : *m_fields)
+                for(auto &f : v)
+                  f->draw(texture_manager, );
+            */
+        }
+
+        void map::unload(engine::graphics::texture_manager &texture_manager) {
+            for(auto &v : *m_fields)
+                for(auto &f : v)
+                    f->unload(texture_manager);
+        }
     }
 }
 #endif //CITY_DEFENCE_MAP_CPP

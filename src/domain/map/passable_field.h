@@ -12,6 +12,7 @@ namespace domain {
                            engine::math::vec2_t *image_start_position);
 
             void draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest);
+            void unload(engine::graphics::texture_manager &texture_manager);
             void place(buildings::base_placeable_object* placeable_object);
             buildings::base_placeable_object &get_placed_object();
         private:
