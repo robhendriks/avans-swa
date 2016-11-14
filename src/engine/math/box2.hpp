@@ -21,6 +21,9 @@ namespace engine {
             box2_t(const box2_t &b)
                 : min(vec2_t(b.min)), max(vec2_t(b.max)) {}
 
+            box2_t(const float x1, const float y1, const float x2, const float y2)
+                : min{x1, y1}, max{x2, y2} {}
+
             vec2_t size() const {
                 return max - min;
             }

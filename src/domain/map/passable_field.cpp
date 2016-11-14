@@ -39,6 +39,12 @@ namespace domain {
                 delete event;
             }
         }
+
+        void passable_field::unload(engine::graphics::texture_manager &texture_manager) {
+            base_field::unload(texture_manager);
+            if(m_placed_object != nullptr)
+                m_placed_object->unload(texture_manager);
+        }
     }
 }
 
