@@ -8,9 +8,10 @@ namespace gui {
     namespace controllers {
 
         menu_controller::menu_controller(views::main_menu &main_menu, engine::engine &engine,
-                                         controllers::main_map_controller &main_map_controller, game &game1)
+                                         controllers::main_map_controller &main_map_controller,
+                                         controllers::credits_controller &credits_controller, game &game1)
             : base_controller(game1), m_engine(engine), m_main_menu(main_menu),
-              m_main_map_controller(main_map_controller) {
+              m_main_map_controller(main_map_controller), m_credits_controller(credits_controller) {
 
             m_main_menu.set_controller(*this);
         }
@@ -30,5 +31,9 @@ namespace gui {
         void menu_controller::quit() {
             m_engine.stop();
         }
+
+        void menu_controller::credits() {
+            m_credits_controller.show();
+        };
     }
 }

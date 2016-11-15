@@ -22,6 +22,11 @@ int main(int argc, char *argv[]) {
     w_config.h = json_config->get_int("window.height", w_config.h);
 
     engine::engine_config e_config = { w_config };
+
+    // Create a font_manager with fonts
+    auto *font_manager = new engine::graphics::font_manager();
+    font_manager->add("fonts/Roboto-Regular.ttf", "test");
+
     /**
      * END OF CONFIG
      */
@@ -41,7 +46,8 @@ int main(int argc, char *argv[]) {
             boost::di::bind<>.to(*engine1->get_color_manager()),
             boost::di::bind<>.to(*engine1->get_sound_manager()),
             boost::di::bind<>.to(*engine1->get_music_manager()),
-            boost::di::bind<>.to(*engine1->get_window())
+            boost::di::bind<>.to(*engine1->get_window()),
+            boost::di::bind<>.to(*font_manager)
         );
     };
 
@@ -81,6 +87,7 @@ int main(int argc, char *argv[]) {
     engine1->cooldown();
 
     // More cleaning
+    delete font_manager;
     delete game1;
     delete menu_controller;
     delete json_config;

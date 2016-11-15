@@ -30,7 +30,7 @@ namespace gui {
 
             void before();
 
-            void draw();
+            void draw(float interpolation);
 
             void after();
 

@@ -34,6 +34,7 @@ namespace engine {
 
         math::box2_t get_display_box();
 
+        SDL_Surface *get_surface() const;
     private:
         void init_window();
 

@@ -41,7 +41,6 @@ namespace engine {
     }
 
     void window::clear() {
-
         SDL_SetRenderDrawColor(mRenderer, mConfig.background_color.r, mConfig.background_color.g, mConfig.background_color.b, mConfig.background_color.a);
         SDL_RenderClear(mRenderer);
     }
@@ -79,8 +78,11 @@ namespace engine {
     }
 
     math::box2_t window::get_display_box() {
-        auto surface = *SDL_GetWindowSurface(mWindow);
-
+        auto surface = *get_surface();
         return math::box2_t({{0, 0}, {(float)surface.w, (float)surface.h}});
+    }
+
+    SDL_Surface *window::get_surface() const {
+        return SDL_GetWindowSurface(mWindow);
     }
 }

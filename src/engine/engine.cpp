@@ -4,6 +4,7 @@
 
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+#include <SDL_ttf.h>
 #include "engine.h"
 #include "input/input_handler.h"
 #include "eventbus/eventbus.h"
@@ -151,6 +152,7 @@ namespace engine {
         }
 
         Mix_Quit();
+        TTF_Quit();
         IMG_Quit();
         SDL_Quit();
 
@@ -158,18 +160,24 @@ namespace engine {
     }
 
     /**
-     * Init SDL with IMG and AUDIO
+     * Init SDL with IMG, AUDIO and TTF
      */
     void engine::init_sdl() {
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
             std::string error = SDL_GetError();
             throw std::runtime_error("Failed to initialize SDL: " + error);
         } else {
-            //Initialize PNG loading
+            // Initialize PNG loading
             int imgFlags = IMG_INIT_PNG;
             if (!(IMG_Init(imgFlags) & imgFlags)) {
                 std::string error = IMG_GetError();
                 throw std::runtime_error("Failed to initialize SDL image: " + error);
+            }
+
+            // Initialize ttf
+            if(TTF_Init() == -1) {
+                std::string error = TTF_GetError();
+                throw std::runtime_error("Failed to initialize SDL ttf: " + error);
             }
 
             //Initialize SDL_mixer
@@ -212,6 +220,7 @@ namespace engine {
 
             // Set the color and texture manager
             m_color_manager = new graphics::color_manager(*m_window->get_renderer());
+
             m_texture_manager = new graphics::texture_manager(*m_window->get_renderer());
         }
     }

@@ -21,7 +21,7 @@ namespace gui {
             engine::eventbus::eventbus::get_instance().subscribe(this);
         }
 
-        void main_map::draw() {
+        void main_map::draw(float interpolation) {
             // Draw the map in the middle of the screen
             auto win_box = m_window.get_display_box();
             m_model.map->to_left(win_box);
