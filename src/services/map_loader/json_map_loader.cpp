@@ -124,7 +124,7 @@ namespace services {
                 // maak texture class aan.
 
                 engine::math::vec2_t *v = new engine::math::vec2_t{0, 0};
-                auto *field = new domain::map::passable_field("tile", "images/grass.png", v, 0, elem["x"], elem["y"]);
+                auto *field = new domain::map::passable_field("tile", "images/grass.png", v, elem["x"], elem["y"]);
 
                 tempTiles.push_back(field);
 
