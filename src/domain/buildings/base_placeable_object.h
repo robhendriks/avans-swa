@@ -12,7 +12,7 @@ namespace domain {
         class base_placeable_object : public domain::drawable::drawable_game_object {
         public:
             base_placeable_object(const std::string &id, const std::string &file_loc,
-                                  engine::math::vec2_t *image_start_position, int rotation);
+                                  engine::math::vec2_t *image_start_position, int rotation = 0);
             virtual ~base_placeable_object() = default;
         };
     }

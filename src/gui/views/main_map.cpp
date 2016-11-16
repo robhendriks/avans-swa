@@ -47,7 +47,7 @@ namespace gui {
                 int col = (int) (position->x - m_model.map_box->min.x) / m_model.world->get_current_map()->get_tile_width();
                 int row = (int) (position->y - m_model.map_box->min.y) / m_model.world->get_current_map()->get_tile_height();
 
-                for(domain::map::base_field* tile : m_model.world->get_current_map()->get_fields()){
+                for(std::shared_ptr<domain::map::base_field> tile : m_model.world->get_current_map()->get_fields()){
                     if(tile->get_y() == row && tile->get_x() == col){
                         m_controller->tile_click(*tile);
                         break;

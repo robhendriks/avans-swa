@@ -32,11 +32,16 @@ namespace services {
 
 
             // create tiles
-            std::vector<domain::map::base_field *> timeList = this->load_tiles(root, *map);
-            std::vector<domain::buildings::building *> objects = load_objects(root, *map);
+            std::vector<domain::map::base_field *> timeList = this->load_tiles(root);
+            std::vector<domain::buildings::building *> objects = load_objects(root);
+            timeList.at(0)->place(objects.at(0));
             //map.add_fields(timeList);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
+            auto b =  timeList.at(0)->get_placed_object();
+#pragma GCC diagnostic pop
 
-
+            map->add_fields(timeList);
             // create placeable_objects
 //            std::vector<domain::map::base_field*> m_fields;
 //            std::vector<domain::map::base_field*> _fields_with_object;
@@ -87,7 +92,7 @@ namespace services {
             return {32, 32};
         }
 
-        std::vector<domain::map::base_field *> json_map_loader::load_tiles(json &root, domain::map::map &map) {
+        std::vector<domain::map::base_field *> json_map_loader::load_tiles(json &root) {
             std::vector<domain::map::base_field *> tempTiles;
             if (root.find("tiles") == root.end()) {
                 return tempTiles;
@@ -129,7 +134,7 @@ namespace services {
             //map.add_fields(tempTiles);
         }
 
-        std::vector<domain::buildings::building *> json_map_loader::load_objects(json root, domain::map::map &map) {
+        std::vector<domain::buildings::building *> json_map_loader::load_objects(json root) {
             std::vector<domain::buildings::building *> tempGameObjs;
 
             if (root.find("objects") == root.end()) {
@@ -161,7 +166,7 @@ namespace services {
                 // map_model.level_objects.push_back();
                 engine::math::vec2_t *v = new engine::math::vec2_t{0, 0};
                 //auto *field = new domain::map::passable_field("tile", "images/grass.png", v, 0, elem["x"], elem["y"]);
-                auto field = new domain::buildings::building("object", "images/grass.png",v,rotation);
+                auto field = new domain::buildings::building("object", "images/building.png",v,rotation);
                 tempGameObjs.push_back(field);
             }
             return tempGameObjs;

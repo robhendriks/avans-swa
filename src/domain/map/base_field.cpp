@@ -6,7 +6,7 @@
 namespace domain {
     namespace map {
         base_field::base_field(const std::string &id, const std::string &file_loc,
-                               engine::math::vec2_t *image_start_position, int rotation, int x, int y) : drawable_game_object(id, file_loc,
+                               engine::math::vec2_t *image_start_position, int x, int y, int rotation) : drawable_game_object(id, file_loc,
                                                                                                   image_start_position, rotation) , _x(x), _y(y){}
 
         int base_field::get_x() {

@@ -28,8 +28,8 @@ namespace services {
             domain::gameworld::game_world load(std::string file_location);
             virtual ~json_map_loader();
         private:
-            std::vector<domain::map::base_field *> load_tiles(json &root, domain::map::map &map);
-            std::vector<domain::buildings::building *> load_objects(json root, domain::map::map &map);
+            std::vector<domain::map::base_field *> load_tiles(json &root);
+            std::vector<domain::buildings::building *> load_objects(json root);
             vec2_t get_length_and_width(json &root);
         };
     };

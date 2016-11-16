@@ -9,7 +9,7 @@
 namespace domain {
     namespace map {
         passable_field::passable_field(const std::string &id, const std::string &file_loc,
-                                       engine::math::vec2_t *image_start_position, int rotation, int x, int y) : base_field(id, file_loc, image_start_position, rotation, x, y) {
+                                       engine::math::vec2_t *image_start_position, int x, int y, int rotation) : base_field(id, file_loc, image_start_position, x, y, rotation) {
             m_placed_object = nullptr;
         }
 

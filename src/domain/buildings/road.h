@@ -11,7 +11,7 @@ namespace domain {
     namespace buildings{
         class road :  public base_placeable_object {
         public:
-            road(const std::string &id, const std::string &file_loc, engine::math::vec2_t *image_start_position, int rotation);
+            road(const std::string &id, const std::string &file_loc, engine::math::vec2_t *image_start_position, int rotation = 0);
 
         };
     }

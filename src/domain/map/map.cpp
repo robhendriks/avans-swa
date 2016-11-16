@@ -1,23 +1,15 @@
 #ifndef CITY_DEFENCE_MAP_CPP
 #define CITY_DEFENCE_MAP_CPP
 #include "map.h"
+#include <memory>
 namespace domain {
     namespace map {
-        map::map(int tile_width, int tile_height) : _tile_width(tile_width), _tile_height(tile_height) {
-            for (int r = 0; r < 10; r++) {
-                for (int c = 0; c < 90; c++) {
-                    engine::math::vec2_t *v = new engine::math::vec2_t(0, 0);
-                    this->add_field(new passable_field("grass_1", "images/grass.png", v, r, c, 0));
-                }
-            }
-        }
+        map::map(int tile_width, int tile_height) : _tile_width(tile_width), _tile_height(tile_height) {}
 
          map::~map() {
-            for (auto &f : m_fields)
-                delete f;
         }
 
-        std::vector<base_field*> map::get_fields(bool object_filter) {
+        std::vector<std::shared_ptr<base_field>> map::get_fields(bool object_filter) {
             if(!object_filter)
                 return m_fields;
             else
@@ -28,6 +20,10 @@ namespace domain {
         void map::draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest) {
             // The position for the next tile
             float base_y = dest.min.y;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
+            auto b = m_fields.at(0)->get_placed_object();
+#pragma GCC diagnostic pop
 
             for (size_t i = 0; i < m_fields.size(); i++) {
                 float x = dest.min.x + (m_fields[i]->get_x() * this->_tile_width);
@@ -42,7 +38,6 @@ namespace domain {
                 catch(std::exception e){
                     e.what();
                 }
-                x += this->_tile_width;
             }
         }
 
@@ -52,11 +47,11 @@ namespace domain {
         }
 
         void map::add_field(base_field* field) {
-            this->m_fields.push_back(field);
+            this->m_fields.push_back(std::shared_ptr<base_field>(field));
             field->add_observer(this);
 
             if(field->get_placed_object() != nullptr)
-                this->_fields_with_object.push_back(field);
+                this->_fields_with_object.push_back(std::shared_ptr<base_field>(field));
         }
 
         void map::add_fields(std::vector<base_field*> fields){
@@ -65,8 +60,12 @@ namespace domain {
         }
 
         void map::notify(base_field *p_observee) {
-            if(std::find(this->_fields_with_object.begin(), this->_fields_with_object.end(), p_observee) == this->_fields_with_object.end())
-                this->_fields_with_object.push_back(p_observee);
+           for(std::shared_ptr<base_field> p : this->_fields_with_object){
+               if(p.get() == p_observee){
+                   this->_fields_with_object.push_back(std::shared_ptr<base_field>(p_observee));
+                   break;
+               }
+           }
         }
 
         int map::get_tile_width() {
