@@ -77,6 +77,10 @@ void gui::views::credits::after() {
     }
 
     delete m_title_box;
+    m_title_box = nullptr;
+
+    delete m_moveable_box;
+    m_moveable_box = nullptr;
 }
 
 void gui::views::credits::draw(float interpolation) {
