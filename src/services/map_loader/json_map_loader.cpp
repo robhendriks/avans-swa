@@ -120,14 +120,14 @@ namespace services {
             map.add_fields(tempTiles);
         }
 
-        void json_map_loader::load_objects(json root, domain::map::map &map) {
+        std::vector<domain::buildings::base_placeable_object *> json_map_loader::load_objects(json root, domain::map::map &map) {
             if (root.find("objects") == root.end()) {
-                return;
+                return nullptr;
             }
 
             json level_objects = root["objects"];
             if (!level_objects.is_object()) {
-                return;
+                return nullptr;
             }
 
             size_t level_objects_count = level_objects["count"];
@@ -135,7 +135,7 @@ namespace services {
 
             json data = level_objects["data"];
             if (!data.is_array()) {
-                return;
+                return nullptr;
             }
             std::vector<domain::buildings::building *> tempGameObjs;
             for (json &elem : data) {
@@ -152,7 +152,7 @@ namespace services {
                 auto field = new domain::buildings::building("object", "images/grass.png",v,rotation);
                 tempGameObjs.push_back(field);
             }
-            map.add_fields(tempGameObjs);
+            //map.add_fields(tempGameObjs);
         }
 
         json_map_loader::~json_map_loader() {
