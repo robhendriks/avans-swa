@@ -15,6 +15,7 @@
 #include "../../config/json_config.h"
 #include "../../domain/map/map.h"
 #include "../../engine/math/vec2.hpp"
+#include "../../domain/buildings/building.h"
 
 using json = nlohmann::json;
 using namespace engine::math;
@@ -27,8 +28,8 @@ namespace services {
             domain::gameworld::game_world load(std::string file_location);
             virtual ~json_map_loader();
         private:
-            void load_tiles(json &root, domain::map::map &map);
-            std::vector<domain::buildings::base_placeable_object *> load_objects(json root, domain::map::map &map);
+            std::vector<domain::map::base_field *> load_tiles(json &root, domain::map::map &map);
+            std::vector<domain::buildings::building *> load_objects(json root, domain::map::map &map);
             vec2_t get_length_and_width(json &root);
         };
     };

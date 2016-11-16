@@ -36,10 +36,9 @@ namespace gui {
             show();
         }
 
-        void main_map_controller::set_game_world(domain::gameworld::game_world game_world) {
+        void main_map_controller::set_game_world(domain::gameworld::game_world& game_world) {
 
-           // this->m_model.world = &std::move(game_world);
-            main_map_controller::set_game_world(domain::gameworld::game_world&& game_world);
+              this->m_model.world = new domain::gameworld::game_world(game_world);
         }
     }
 }

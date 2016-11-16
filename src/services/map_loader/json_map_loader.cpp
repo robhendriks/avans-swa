@@ -5,7 +5,6 @@
 #include <SDL_log.h>
 #include "../../domain/gameworld/game_world.h"
 #include "json_map_loader.h"
-#include "../../domain/buildings/building.h"
 
 namespace services {
     namespace level_loader {
@@ -31,13 +30,17 @@ namespace services {
             vec2_t result = this->get_length_and_width(root);
             domain::map::map *map = new domain::map::map(result.x, result.y);
 
-            this->load_tiles(root, *map);
+
             // create tiles
+            std::vector<domain::map::base_field *> timeList = this->load_tiles(root, *map);
+            std::vector<domain::buildings::building *> objects = load_objects(root, *map);
+            //map.add_fields(timeList);
+
 
             // create placeable_objects
 //            std::vector<domain::map::base_field*> m_fields;
 //            std::vector<domain::map::base_field*> _fields_with_object;
-            this->load_objects(root, *map);
+
             // link placeable_object with the correct tile its placed on.
 
             // add tiles to map with add_fields() method.
@@ -45,8 +48,9 @@ namespace services {
             // add map to game world.
 
             // return game world
-
-            return domain::gameworld::game_world();
+            std::vector<domain::map::base_map*> mapVect;
+            mapVect.push_back(map);
+            return domain::gameworld::game_world(mapVect);
 //            std::ifstream file(file_location);
 //            if (!file.is_open()) {
 //                throw std::runtime_error(std::string("Unable to open file: ") + file_location);
@@ -79,14 +83,15 @@ namespace services {
             return {32, 32};
         }
 
-        void json_map_loader::load_tiles(json &root, domain::map::map &map) {
+        std::vector<domain::map::base_field *> json_map_loader::load_tiles(json &root, domain::map::map &map) {
+            std::vector<domain::map::base_field *> tempTiles;
             if (root.find("tiles") == root.end()) {
-                return;
+                return tempTiles;
             }
 
             json tiles = root["tiles"];
             if (!tiles.is_object()) {
-                return;
+                return tempTiles;
             }
 
             size_t tileCount = tiles["count"];
@@ -94,10 +99,9 @@ namespace services {
 
             json data = tiles["data"];
             if (!data.is_array()) {
-                return;
+                return tempTiles;
             }
 
-            std::vector<domain::map::base_field *> tempTiles;
             for (json &elem : data) {
                 int x = elem["x"];
                 int y = elem["y"];
@@ -115,19 +119,23 @@ namespace services {
 
                 tempTiles.push_back(field);
 
-//                map_model.tiles.push_back();
+//              map_model.tiles.push_back();
             }
-            map.add_fields(tempTiles);
+            return tempTiles;
+            //map.add_fields(tempTiles);
         }
 
-        std::vector<domain::buildings::base_placeable_object *> json_map_loader::load_objects(json root, domain::map::map &map) {
+        std::vector<domain::buildings::building *> json_map_loader::load_objects(json root, domain::map::map &map) {
+            std::vector<domain::buildings::building *> tempGameObjs;
+
             if (root.find("objects") == root.end()) {
-                return nullptr;
+                return tempGameObjs;
             }
 
             json level_objects = root["objects"];
             if (!level_objects.is_object()) {
-                return nullptr;
+                return tempGameObjs;
+
             }
 
             size_t level_objects_count = level_objects["count"];
@@ -135,9 +143,9 @@ namespace services {
 
             json data = level_objects["data"];
             if (!data.is_array()) {
-                return nullptr;
+                return tempGameObjs;
             }
-            std::vector<domain::buildings::building *> tempGameObjs;
+
             for (json &elem : data) {
                 int x = elem["x"];
                 int y = elem["y"];
@@ -152,6 +160,7 @@ namespace services {
                 auto field = new domain::buildings::building("object", "images/grass.png",v,rotation);
                 tempGameObjs.push_back(field);
             }
+            return tempGameObjs;
             //map.add_fields(tempGameObjs);
         }
 
