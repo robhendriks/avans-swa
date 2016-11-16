@@ -84,10 +84,10 @@ int main(int argc, char *argv[]) {
     delete cannot_placed_subscriber;
 
     // Stop/cooldown the engine
+    delete font_manager;
     engine1->cooldown();
 
     // More cleaning
-    delete font_manager;
     delete game1;
     delete menu_controller;
     delete json_config;
