@@ -13,8 +13,8 @@ namespace services {
         public:
             virtual domain::gameworld::game_world load(std::string file_location) = 0;
         };
-    }
-}
+    };
+};
 
 
 #endif //CITY_DEFENCE_BASE_MAP_LOADER_H

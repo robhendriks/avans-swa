@@ -3,8 +3,9 @@
 //
 
 #include <SDL_log.h>
+#include "../../domain/gameworld/game_world.h"
 #include "json_map_loader.h"
-#include "../../domain/map/map.h"
+#include "../../domain/buildings/building.h"
 
 namespace services {
     namespace level_loader {
@@ -26,13 +27,17 @@ namespace services {
             }
 
             // create map with tile length and width
-            std::tuple<int,int> result = this->get_length_and_width(root);
-            domain::map::map* map = new domain::map::map(std::get<0>(result), std::get<1>(result));
 
+            vec2_t result = this->get_length_and_width(root);
+            domain::map::map *map = new domain::map::map(result.x, result.y);
+
+            this->load_tiles(root, *map);
             // create tiles
 
             // create placeable_objects
-
+//            std::vector<domain::map::base_field*> m_fields;
+//            std::vector<domain::map::base_field*> _fields_with_object;
+            this->load_objects(root, *map);
             // link placeable_object with the correct tile its placed on.
 
             // add tiles to map with add_fields() method.
@@ -42,20 +47,20 @@ namespace services {
             // return game world
 
             return domain::gameworld::game_world();
-            std::ifstream file(file_location);
-            if (!file.is_open()) {
-                throw std::runtime_error(std::string("Unable to open file: ") + file_location);
-            }
-
-            SDL_Log("Loading level: %s\n", "");
-            json root;
-
-            try {
-                root << file;
-            } catch (std::exception &e) {
-                // TODO: proper error handling
-                throw;
-            }
+//            std::ifstream file(file_location);
+//            if (!file.is_open()) {
+//                throw std::runtime_error(std::string("Unable to open file: ") + file_location);
+//            }
+//
+//            SDL_Log("Loading level: %s\n", "");
+//            json root;
+//
+//            try {
+//                root << file;
+//            } catch (std::exception &e) {
+//                // TODO: proper error handling
+//                throw;
+        }
 /*
             size_t width = root["width"];
             size_t height = root["height"];
@@ -67,14 +72,14 @@ namespace services {
             load_tiles(root, map_model);
             load_objects(root, map_model);
 */
-            // TODO:
+        // TODO:
+
+
+        vec2_t json_map_loader::get_length_and_width(json &root) {
+            return {32, 32};
         }
 
-        std::tuple<int, int> json_map_loader::get_length_and_width(json &root){
-            return std::make_tuple(0,0);
-        }
-
-        void json_map_loader::load_tiles(json &root) {
+        void json_map_loader::load_tiles(json &root, domain::map::map &map) {
             if (root.find("tiles") == root.end()) {
                 return;
             }
@@ -92,18 +97,30 @@ namespace services {
                 return;
             }
 
+            std::vector<domain::map::base_field *> tempTiles;
             for (json &elem : data) {
                 int x = elem["x"];
                 int y = elem["y"];
                 int type = elem["type"];
 
                 SDL_Log("%d %d %d", x, y, type);
+
                 // TODO: moeten we tiles niet eerst aanmaken?
+                //base_field(const std::string &id, const std::string &file_loc, engine::math::vec2_t *image_start_position, int rotation, int x, int y);
+                //vec2_t x;
+                // maak texture class aan.
+
+                engine::math::vec2_t *v = new engine::math::vec2_t{0, 0};
+                auto *field = new domain::map::passable_field("tile", "images/grass.png", v, 0, elem["x"], elem["y"]);
+
+                tempTiles.push_back(field);
+
 //                map_model.tiles.push_back();
             }
+            map.add_fields(tempTiles);
         }
 
-        void json_map_loader::load_objects(json &root) {
+        void json_map_loader::load_objects(json root, domain::map::map &map) {
             if (root.find("objects") == root.end()) {
                 return;
             }
@@ -120,7 +137,7 @@ namespace services {
             if (!data.is_array()) {
                 return;
             }
-
+            std::vector<domain::buildings::building *> tempGameObjs;
             for (json &elem : data) {
                 int x = elem["x"];
                 int y = elem["y"];
@@ -130,8 +147,12 @@ namespace services {
                 // TODO: moeten we gebouw objects niet eerst aanmaken?
                 // new level_objects
                 // map_model.level_objects.push_back();
-
+                engine::math::vec2_t *v = new engine::math::vec2_t{0, 0};
+                //auto *field = new domain::map::passable_field("tile", "images/grass.png", v, 0, elem["x"], elem["y"]);
+                auto field = new domain::buildings::building("object", "images/grass.png",v,rotation);
+                tempGameObjs.push_back(field);
             }
+            map.add_fields(tempGameObjs);
         }
 
         json_map_loader::~json_map_loader() {

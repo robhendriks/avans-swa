@@ -28,6 +28,8 @@ namespace gui {
         void menu_controller::load() {
 //            TODO: load map (level1)
             _game_world = this->_map_loader.load("level1.json");
+
+            m_main_map_controller.set_game_world(_game_world);
             m_main_map_controller.show();
         }
 

@@ -16,7 +16,7 @@ namespace gui {
                 delete map_box;
             }
 
-            domain::gameworld::game_world* world;
+            domain::gameworld::game_world *world;
             engine::math::box2_t* map_box;
         };
     }

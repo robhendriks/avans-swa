@@ -9,6 +9,7 @@ namespace domain {
     namespace map {
         class base_field : public domain::drawable::drawable_game_object, public engine::observer::observee<base_field> {
         public:
+            //const std::string &file_loc, engine::math::vec2_t *image_start_position,  ?? dit moet in een sprite class
             base_field(const std::string &id, const std::string &file_loc, engine::math::vec2_t *image_start_position, int rotation, int x, int y);
             virtual void place(buildings::base_placeable_object* placeable_object) = 0;
             virtual ~base_field() = default;
