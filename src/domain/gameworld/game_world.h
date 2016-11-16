@@ -11,7 +11,7 @@ namespace domain {
         public:
             game_world();
 
-            game_world(std::vector<map::base_map*> map);
+            game_world(std::vector<map::base_map*>& map);
             void draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest);
             void unload(engine::graphics::texture_manager &texture_manager);
             map::base_map* get_current_map();

@@ -16,7 +16,8 @@ namespace domain {
             virtual void unload(engine::graphics::texture_manager &texture_manager);
             std::vector<base_field *> get_fields(bool object_filter = false);
             virtual void notify(base_field *p_observee);
-            void add_field(base_field* field);
+            void add_field(base_field* field);[
+            ]
             void add_fields(std::vector<base_field *> fields);
             int get_tile_width();
             int get_tile_height();

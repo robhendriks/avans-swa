@@ -50,7 +50,11 @@ namespace services {
             // return game world
             std::vector<domain::map::base_map*> mapVect;
             mapVect.push_back(map);
-            return domain::gameworld::game_world(mapVect);
+            domain::map::map* m = (domain::map::map*) mapVect.at(0);
+            auto r = m->get_fields();
+            r.size();
+            domain::gameworld::game_world res {mapVect};
+            return res;
 //            std::ifstream file(file_location);
 //            if (!file.is_open()) {
 //                throw std::runtime_error(std::string("Unable to open file: ") + file_location);
