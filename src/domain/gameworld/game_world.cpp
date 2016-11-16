@@ -2,17 +2,18 @@
 #define CITY_DEFENCE_GAME_WORLD_CPP
 #include "game_world.h"
 #include "../map/map.h"
+#include <memory>
 
 namespace domain {
     namespace gameworld{
-        game_world::game_world(std::vector<map::base_map*>& map) : _maps(map) {
+        game_world::game_world(std::vector<std::shared_ptr<map::base_map>>& maps) : _maps(maps) {
             _current_lvl = 0;
-            auto m = map;
-            domain::map::map* r = (domain::map::map*) m.at(0);
+            auto m = maps;
+            std::shared_ptr<map::base_map> r = (std::shared_ptr<map::base_map>) m.at(0);
             r->get_tile_height();
 
             auto s = _maps;
-            domain::map::map* d = (domain::map::map*) s.at(0);
+            std::shared_ptr<map::base_map> d = (std::shared_ptr<map::base_map>) s.at(0);
             d->get_tile_height();
         }
 
@@ -20,8 +21,6 @@ namespace domain {
 
         }
         game_world::~game_world() {
-            for(map::base_map* map : this->_maps)
-                delete map;
         }
 
         void game_world::draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest) {
@@ -34,12 +33,12 @@ namespace domain {
         }
 
         map::base_map* game_world::get_current_map() {
-            auto*  t = this->_maps.at(this->_current_lvl);
-            domain::map::map* m = (domain::map::map*) t;
+            std::shared_ptr<map::base_map>  t = this->_maps.at(this->_current_lvl);
+            domain::map::map* m = (domain::map::map*) t.get();
             auto r = m->get_fields();
             int s = r.size();
             s++;
-            return this->_maps.at((unsigned int) this->_current_lvl);
+            return this->_maps.at((unsigned int) this->_current_lvl).get();
         }
 
         int game_world::get_current_lvl() {

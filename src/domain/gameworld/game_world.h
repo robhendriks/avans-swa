@@ -11,7 +11,7 @@ namespace domain {
         public:
             game_world();
 
-            game_world(std::vector<map::base_map*>& maps);
+            game_world(std::vector<std::shared_ptr<map::base_map>>& maps);
             void draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest);
             void unload(engine::graphics::texture_manager &texture_manager);
             map::base_map* get_current_map();
@@ -22,7 +22,7 @@ namespace domain {
 
         private:
             int _current_lvl;
-            std::vector<map::base_map*> _maps;
+            std::vector<std::shared_ptr<map::base_map>> _maps;
         };
     }
 }

@@ -27,7 +27,7 @@ namespace gui {
             main_map_controller(views::main_map &view, models::main_map_model &model, game &game1);
             void show();
             void tile_click(domain::map::base_field &tile);
-            void set_game_world(domain::gameworld::game_world &game_world);
+            void set_game_world(std::unique_ptr<domain::gameworld::game_world>&& game_world);
         private:
             views::main_map &m_view;
             models::main_map_model &m_model;

@@ -7,6 +7,7 @@
 
 #include <vector>
 #include "../../domain/map/base_field.h"
+#include <memory>
 
 namespace gui {
     namespace models {
@@ -16,7 +17,7 @@ namespace gui {
                 delete map_box;
             }
 
-            domain::gameworld::game_world *world;
+            std::unique_ptr<domain::gameworld::game_world> world;
             engine::math::box2_t* map_box;
         };
     }

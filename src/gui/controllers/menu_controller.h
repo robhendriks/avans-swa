@@ -10,7 +10,7 @@
 #include "base_controller.h"
 #include "main_map_controller.h"
 #include "../../services/map_loader/base_map_loader.h"
-
+#include <memory>
 namespace gui {
     namespace views {
         class main_menu;
@@ -37,7 +37,7 @@ namespace gui {
             views::main_menu &m_main_menu;
             controllers::main_map_controller &m_main_map_controller;
             services::level_loader::base_map_loader &_map_loader;
-            domain::gameworld::game_world *_game_world;
+            std::unique_ptr<domain::gameworld::game_world> _game_world;
         };
     }
 }

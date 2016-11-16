@@ -9,7 +9,7 @@
 namespace services {
     namespace level_loader {
 
-        domain::gameworld::game_world *json_map_loader::load(std::string file_location) {
+        domain::gameworld::game_world json_map_loader::load(std::string file_location) {
             std::ifstream file(file_location);
             if (!file.is_open()) {
                 throw std::runtime_error(std::string("Unable to open file: ") + file_location);
@@ -48,12 +48,12 @@ namespace services {
             // add map to game world.
 
             // return game world
-            std::vector<domain::map::base_map*> mapVect;
-            mapVect.push_back(map);
-            domain::map::map* m = (domain::map::map*) mapVect.at(0);
+            std::vector<std::shared_ptr<domain::map::base_map>> mapVect;
+            mapVect.push_back(std::shared_ptr<domain::map::base_map>(map));
+            std::shared_ptr<domain::map::base_map> m = (std::shared_ptr<domain::map::base_map>) mapVect.at(0);
             auto r = m->get_fields();
             r.size();
-            domain::gameworld::game_world *res = new domain::gameworld::game_world(mapVect);
+            domain::gameworld::game_world res = domain::gameworld::game_world(mapVect);
             return res;
 //            std::ifstream file(file_location);
 //            if (!file.is_open()) {

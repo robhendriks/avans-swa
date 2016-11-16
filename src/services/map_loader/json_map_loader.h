@@ -25,7 +25,7 @@ namespace services {
         class json_map_loader : public base_map_loader {
         public:
             json_map_loader();
-            domain::gameworld::game_world *load(std::string file_location);
+            domain::gameworld::game_world load(std::string file_location);
             virtual ~json_map_loader();
         private:
             std::vector<domain::map::base_field *> load_tiles(json &root, domain::map::map &map);
