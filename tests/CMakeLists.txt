@@ -9,7 +9,7 @@ include_directories(../third_party/json/src
     ../third_party/type
     ${SDL2_INCLUDE_DIR}
     ${SDL2_IMAGE_INCLUDE_DIR}
-    ${SDL2_TTF_INCLUDE_DIRS}
+    ${SDL2_TTF_INCLUDE_DIR}
     ${SDL2_MIXER_INCLUDE_DIR})
 
 add_executable(runCityDefenceTests
@@ -26,7 +26,7 @@ target_link_libraries(runCityDefenceTests city_defence_sources)
 target_link_libraries(runCityDefenceTests
     ${SDL2_LIBRARY}
     ${SDL2_IMAGE_LIBRARY}
-    ${SDL2_TTF_LIBRARIES}
+    ${SDL2_TTF_LIBRARY}
     ${SDL2_MIXER_LIBRARY})
 
 add_custom_command(TARGET runCityDefenceTests PRE_BUILD
