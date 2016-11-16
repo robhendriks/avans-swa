@@ -14,11 +14,9 @@ namespace domain {
         }
 
         void passable_field::draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest) {
-            if (m_placed_object == nullptr) {
-                base_field::draw(texture_manager, dest);
-            } else {
+            base_field::draw(texture_manager, dest);
+            if (m_placed_object != nullptr)
                 m_placed_object->draw(texture_manager, dest);
-            }
         }
 
         void passable_field::place(buildings::base_placeable_object* placeable_object) {
