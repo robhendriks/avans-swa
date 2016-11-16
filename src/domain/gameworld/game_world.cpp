@@ -5,9 +5,9 @@
 
 namespace domain {
     namespace gameworld{
-        game_world::game_world(std::vector<map::base_map*> maps) :_maps(maps){
+        game_world::game_world(std::vector<map::base_map*>& map) : _maps(map) {
             _current_lvl = 0;
-            auto m = maps;
+            auto m = map;
             domain::map::map* r = (domain::map::map*) m.at(0);
             r->get_tile_height();
 
@@ -34,7 +34,7 @@ namespace domain {
         }
 
         map::base_map* game_world::get_current_map() {
-            auto*  t = this->_maps.at((unsigned int) this->_current_lvl);
+            auto*  t = this->_maps.at(this->_current_lvl);
             domain::map::map* m = (domain::map::map*) t;
             auto r = m->get_fields();
             int s = r.size();
@@ -55,13 +55,7 @@ namespace domain {
             return this->_current_lvl;
         }
 
-        game_world &game_world::operator=(game_world obj) {
-            this->_current_lvl = obj._current_lvl;
-            this->_maps = obj._maps;
-            domain::map::map* d = (domain::map::map*)this->_maps.at(0);
-            d->get_tile_height();
-            return *this;
-        }
+
     }
 }
 #endif //CITY_DEFENCE_GAME_WORLD_CPP

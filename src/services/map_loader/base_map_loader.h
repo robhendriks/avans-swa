@@ -11,7 +11,7 @@ namespace services {
     namespace level_loader {
         class base_map_loader {
         public:
-            virtual domain::gameworld::game_world load(std::string file_location) = 0;
+            virtual domain::gameworld::game_world *load(std::string file_location) = 0;
         };
     };
 };

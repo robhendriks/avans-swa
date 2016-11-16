@@ -11,14 +11,13 @@ namespace domain {
         public:
             game_world();
 
-            game_world(std::vector<map::base_map*> maps);
+            game_world(std::vector<map::base_map*>& maps);
             void draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest);
             void unload(engine::graphics::texture_manager &texture_manager);
             map::base_map* get_current_map();
             int get_current_lvl();
             int next_level();
             void reset_level();
-            game_world& operator=(game_world obj);
             ~game_world();
 
         private:
