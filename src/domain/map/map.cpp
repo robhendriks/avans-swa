@@ -47,11 +47,12 @@ namespace domain {
         }
 
         void map::add_field(base_field* field) {
-            this->m_fields.push_back(std::shared_ptr<base_field>(field));
+            std::shared_ptr<base_field> p = std::shared_ptr<base_field>(field);
+            this->m_fields.push_back(std::shared_ptr<base_field>(p));
             field->add_observer(this);
 
             if(field->get_placed_object() != nullptr)
-                this->_fields_with_object.push_back(std::shared_ptr<base_field>(field));
+                this->_fields_with_object.push_back(std::shared_ptr<base_field>(p));
         }
 
         void map::add_fields(std::vector<base_field*> fields){
