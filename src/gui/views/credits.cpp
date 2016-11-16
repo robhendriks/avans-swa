@@ -28,16 +28,14 @@ void gui::views::credits::before() {
     m_music_manager.play("credits_bg_music");
 
     // Load the title
-    m_texture_manager.load_text("CityDefence", {255, 193, 132}, *m_font_manager.get_font("test", 50), "c_title");
-    int title_width = m_texture_manager.get_width("c_title");
-    int title_height = m_texture_manager.get_height("c_title");
+    m_texture_manager.load_text("CityDefence", {255, 193, 132}, *m_font_manager.get_font("roboto", 50), "c_title");
 
     // Create the title box
-    m_title_box = new engine::math::box2_t({{0, 0}, {(float) title_width, (float) title_height}});
+    m_title_box = new engine::math::box2_t({{0, 0}, m_texture_manager.get_size("c_title")});
     m_title_box->to_center(m_header_box);
 
     // Load the names
-    auto *font = m_font_manager.get_font("test", 24);
+    auto *font = m_font_manager.get_font("roboto", 44);
     for (auto &name : m_names) {
         m_texture_manager.load_text(name, {255, 255, 255}, *font, "n_" + name);
     }
@@ -49,9 +47,7 @@ void gui::views::credits::before() {
     engine::math::vec2_t name_pos = {0, padding};
 
     for (auto &name : m_names) {
-        int text_width = m_texture_manager.get_width("n_" + name);
-        int text_height = m_texture_manager.get_height("n_" + name);
-        engine::math::box2_t text_box = {{0, 0}, {(float) text_width, (float) text_height}};
+        engine::math::box2_t text_box = {{0, 0}, m_texture_manager.get_size("n_" + name)};
 
         // Center
         text_box.to_center(m_credits_box);
@@ -62,7 +58,7 @@ void gui::views::credits::before() {
         move_boxes.push_back(text_box);
 
         // Increase the height for the next box
-        name_pos.y += text_height + padding;
+        name_pos.y += text_box.height() + padding;
     }
 
     // Create a box with move boxes
@@ -85,7 +81,7 @@ void gui::views::credits::after() {
 
 void gui::views::credits::draw(float interpolation) {
     // Draw names
-    m_moveable_box->move(m_engine.get_time_elapsed());
+    m_moveable_box->move(m_engine.get_time_elapsed(interpolation));
 
     int i = 0;
     for (auto &box : m_moveable_box->get_boxes()) {

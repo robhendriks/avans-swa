@@ -51,10 +51,12 @@ namespace engine {
                 // Move the boxes with the speed
                 for (size_t i = 0; i != m_move_boxes.size(); i++) {
                     auto &box = m_move_boxes[i];
+                    bool is_in_display = m_display_box.intersects(box);
+
                     box.add(move_vec);
 
-                    if ((*m_loops_map)[i] < m_loops || m_loops == -1) {
-                        // Check if the first box is still in the display box
+                    if (is_in_display && ((*m_loops_map)[i] < m_loops || m_loops == -1)) {
+                        // Check if the box is still in the display box
                         if (!m_display_box.intersects(box)) {
                             (*m_loops_map)[i]++;
                             if ((*m_loops_map)[i] < m_loops || m_loops == -1) {

@@ -1,5 +1,6 @@
 #ifndef CITY_DEFENCE_BUILDING_CPP
 #define CITY_DEFENCE_BUILDING_CPP
+
 #include "building.h"
 
 namespace domain {
@@ -10,4 +11,5 @@ namespace domain {
                                                                                                image_start_position) {}
     }
 }
+
 #endif //CITY_DEFENCE_BUILDING_CPP

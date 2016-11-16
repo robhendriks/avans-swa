@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
 
     // Create a font_manager with fonts
     auto *font_manager = new engine::graphics::font_manager();
-    font_manager->add("fonts/Roboto-Regular.ttf", "test");
+    font_manager->add("fonts/Roboto-Regular.ttf", "roboto");
 
     /**
      * END OF CONFIG

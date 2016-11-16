@@ -1,5 +1,6 @@
 #ifndef CITY_DEFENCE_BASE_MAP_H
 #define CITY_DEFENCE_BASE_MAP_H
+
 namespace domain {
     namespace map {
         class base_map {

@@ -99,22 +99,13 @@ namespace engine {
             }
         }
 
-        int texture_manager::get_width(std::string id) const {
+        math::vec2_t texture_manager::get_size(std::string id) const {
             if (_texture_map.find(id) != _texture_map.end()) {
                 auto tuple = _texture_map.at(id);
-                return std::get<1>(tuple)->w;
+                return {(float)std::get<1>(tuple)->w, (float)std::get<1>(tuple)->h};
             }
 
-            return -1;
-        }
-
-        int texture_manager::get_height(std::string id) const {
-            if (_texture_map.find(id) != _texture_map.end()) {
-                auto tuple = _texture_map.at(id);
-                return std::get<1>(tuple)->h;
-            }
-
-            return -1;
+            return {0, 0};
         }
     }
 }

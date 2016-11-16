@@ -37,9 +37,7 @@ namespace engine {
 
             bool load_text(std::string text, graphics::color4_t color, TTF_Font &font, std::string id);
 
-            int get_width(std::string id) const;
-
-            int get_height(std::string id) const;
+            math::vec2_t get_size(std::string id) const;
 
             void unload(std::string id);
 

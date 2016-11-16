@@ -258,11 +258,14 @@ namespace engine {
      * Note that the time_elapsed is independent of the number of times the window is refreshed and it is also independent
      * of SDL_GetTicks(). Because of this, time_elapsed will be the same on fast hardware as on slow hardware.
      *
+     * @param interpolation - calculate the time with the given interpolation, default = 1 (no extra time)
+     *
      * @return unsigned int - time in milliseconds
      */
-    unsigned int engine::get_time_elapsed() const {
+    unsigned int engine::get_time_elapsed(float interpolation) const {
         if (m_state == RUNNING || m_state == PAUSED) {
-            return (m_game_ticks - get_paused_ticks()) * m_config.get_skip_ticks();
+            float game_ticks = m_game_ticks - get_paused_ticks() + interpolation - 1;
+            return game_ticks * m_config.get_skip_ticks();
         }
 
         return 0;

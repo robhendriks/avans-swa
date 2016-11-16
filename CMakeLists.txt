@@ -97,7 +97,11 @@ set(SOURCES src/main.cpp
     src/gui/controllers/credits_controller.cpp
     src/gui/controllers/credits_controller.h
     src/gui/views/credits.cpp
-    src/gui/views/credits.h)
+    src/gui/views/credits.h
+    src/engine/graphics/font_manager.cpp
+    src/engine/graphics/font_manager.h
+    src/engine/graphics/moveable_box.cpp
+    src/engine/graphics/moveable_box.h)
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include
@@ -107,7 +111,7 @@ include_directories(third_party/json/src
         ${SDL2_TTF_INCLUDE_DIRS}
         ${SDL2_MIXER_INCLUDE_DIR})
 
-add_executable(city_defence ${SOURCES} src/engine/graphics/font_manager.cpp src/engine/graphics/font_manager.h src/engine/graphics/moveable_box.cpp src/engine/graphics/moveable_box.h)
+add_executable(city_defence ${SOURCES})
 add_library(city_defence_sources STATIC ${SOURCES})
 
 target_link_libraries(city_defence
