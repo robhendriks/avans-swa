@@ -4,6 +4,7 @@
 
 #include "main_map_controller.h"
 #include "../../domain/buildings/building.h"
+#include <memory>
 
 namespace gui {
     namespace controllers {
@@ -13,14 +14,16 @@ namespace gui {
 
             view.set_controller(*this);
 
-            // This code should be placed somewhere else
-            m_model.tile_height = 32;
-            m_model.tile_width = 32;
-            auto *domain_map = new domain::map::map(10, 10);
-            m_model.tiles = domain_map->get_fields();
-            engine::math::box2_t *map = new engine::math::box2_t({{0, 0}, {(float) (10 * m_model.tile_width), (float) (10 * m_model.tile_height)}});
-            m_model.map = map;
+            // This code should be placed somewhere else TODO
+            std::shared_ptr<domain::map::base_map> domain_map = std::shared_ptr<domain::map::base_map>(new domain::map::map(32, 32));
+            std::vector<std::shared_ptr<domain::map::base_map>> v = {};
+            v.push_back(domain_map);
+            m_model.world = std::unique_ptr<domain::gameworld::game_world>(new domain::gameworld::game_world(v));
+            engine::math::box2_t *map_box = new engine::math::box2_t({{0, 0}, {(float) (10 * domain_map->get_tile_width()), (float) (10 * domain_map->get_tile_height())}});
+            m_model.map_box = map_box;
         }
+
+
 
         void main_map_controller::show() {
             // Draw the view
@@ -29,10 +32,14 @@ namespace gui {
 
         void main_map_controller::tile_click(domain::map::base_field &tile) {
             engine::math::vec2_t* t = new engine::math::vec2_t(0,0);
-            domain::buildings::building* building =  new domain::buildings::building("building_1", "images/building.png", t);
+            domain::buildings::building* building =  new domain::buildings::building("building_1", "images/building.png", t, 0);
             tile.place(building);
-
             show();
+        }
+
+        void main_map_controller::set_game_world(std::unique_ptr<domain::gameworld::game_world>&& game_world) {
+
+              this->m_model.world = std::move(game_world);
         }
     }
 }

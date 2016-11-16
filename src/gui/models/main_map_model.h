@@ -7,19 +7,18 @@
 
 #include <vector>
 #include "../../domain/map/base_field.h"
+#include <memory>
 
 namespace gui {
     namespace models {
         struct main_map_model {
             main_map_model() {};
             ~main_map_model() {
-                delete map;
+                delete map_box;
             }
 
-            std::vector<std::vector<domain::map::base_field*>> tiles;
-            int tile_height;
-            int tile_width;
-            engine::math::box2_t *map;
+            std::unique_ptr<domain::gameworld::game_world> world;
+            engine::math::box2_t* map_box;
         };
     }
 }

@@ -3,17 +3,26 @@
 
 #include <vector>
 #include "../map/base_map.h"
+#include "../drawable/abstract_drawable_game_object.h"
 
 namespace domain {
     namespace gameworld {
-        class game_world {
+        class game_world : public domain::drawable::abstract_drawable_game_object{
         public:
             game_world();
 
+            game_world(std::vector<std::shared_ptr<map::base_map>>& maps);
+            void draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest);
+            void unload(engine::graphics::texture_manager &texture_manager);
+            map::base_map* get_current_map();
+            int get_current_lvl();
+            int next_level();
+            void reset_level();
             ~game_world();
 
         private:
-            std::vector<map::base_map> _map;
+            int _current_lvl;
+            std::vector<std::shared_ptr<map::base_map>> _maps;
         };
     }
 }

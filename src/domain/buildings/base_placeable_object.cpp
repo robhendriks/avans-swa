@@ -9,8 +9,8 @@
 namespace domain {
     namespace buildings {
         base_placeable_object::base_placeable_object(const std::string &id, const std::string &file_loc,
-                                                     engine::math::vec2_t *image_start_position) : drawable_game_object(
-                id, file_loc, image_start_position) {}
+                                                     engine::math::vec2_t *image_start_position, int rotation) : drawable_game_object(
+                id, file_loc, image_start_position, rotation) {}
     }
 }
 
