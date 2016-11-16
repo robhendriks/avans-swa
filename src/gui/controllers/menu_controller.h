@@ -37,7 +37,7 @@ namespace gui {
             views::main_menu &m_main_menu;
             controllers::main_map_controller &m_main_map_controller;
             services::level_loader::base_map_loader &_map_loader;
-            domain::gameworld::game_world _game_world;
+            domain::gameworld::game_world *_game_world;
         };
     }
 }
