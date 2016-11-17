@@ -148,8 +148,8 @@ namespace services {
         }
 
         std::vector<json_map_loader::game_object_with_pos*> json_map_loader::load_objects(json &root) {
-            std::vector<game_object_with_pos> temp_game_objs;
-            json_map_loader::game_object_with_pos game_object;
+            std::vector<game_object_with_pos*> temp_game_objs;
+            json_map_loader::game_object_with_pos* game_object = new json_map_loader::game_object_with_pos();
 
             if (root.find("objects") == root.end()) {
                 temp_game_objs.push_back(game_object);
@@ -183,9 +183,9 @@ namespace services {
                 //auto *field = new domain::map::passable_field("tile", "images/grass.png", v, 0, elem["x"], elem["y"]);
 
 
-                game_object.object = domain::buildings::building("object", "images/building.png",v,rotation);
-                game_object.X = x;
-                game_object.Y = y;
+                game_object->object = new domain::buildings::building("object", "images/building.png",v,rotation);
+                game_object->X = x;
+                game_object->Y = y;
                 temp_game_objs.push_back(game_object);
             }
             return temp_game_objs;
@@ -199,10 +199,5 @@ namespace services {
         json_map_loader::json_map_loader() {
 
         }
-
-        long json_map_loader::game_object_with_pos(int x, int y, domain::buildings::building obj) {
-            
-        }
-
     }
 }
