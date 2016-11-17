@@ -13,6 +13,8 @@ namespace domain {
             virtual ~base_map();
             virtual int get_tile_width() = 0;
             virtual int get_tile_height() = 0;
+            virtual int get_width() = 0;
+            virtual int get_height() = 0;
             virtual std::vector<std::shared_ptr<base_field>> get_fields(bool object_filter = false) = 0;
         };
     }

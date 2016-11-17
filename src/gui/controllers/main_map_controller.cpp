@@ -31,7 +31,9 @@ namespace gui {
 
         void main_map_controller::set_game_world(std::unique_ptr<domain::gameworld::game_world>&& game_world) {
             this->m_model.world = std::move(game_world);
-            engine::math::box2_t *map_box = new engine::math::box2_t({{0, 0}, {(float) (10 * this->m_model.world->get_current_level()->get_map()->get_tile_width()), (float) (10 * this->m_model.world->get_current_level()->get_map()->get_tile_height())}});
+            int width = this->m_model.world->get_current_level()->get_map()->get_width();
+            int height = this->m_model.world->get_current_level()->get_map()->get_height();
+            engine::math::box2_t *map_box = new engine::math::box2_t({{0, 0}, {(float) (width), (float) (height)}});
             m_model.map_box = map_box;
 
         }

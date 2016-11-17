@@ -4,7 +4,7 @@
 #include <memory>
 namespace domain {
     namespace map {
-        map::map(int tile_width, int tile_height) : _tile_width(tile_width), _tile_height(tile_height) {}
+        map::map(int tile_width, int tile_height) : m_tile_width(tile_width), m_tile_height(tile_height) {}
 
          map::~map() {
         }
@@ -13,23 +13,18 @@ namespace domain {
             if(!object_filter)
                 return m_fields;
             else
-                return _fields_with_object;
+                return m_fields_with_object;
         }
 
         // all tiles have same length and width
         void map::draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest) {
             // The position for the next tile
             float base_y = dest.min.y;
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-variable"
-            auto b = m_fields.at(0)->get_placed_object();
-#pragma GCC diagnostic pop
-
             for (size_t i = 0; i < m_fields.size(); i++) {
-                float x = dest.min.x + (m_fields[i]->get_x() * this->_tile_width);
-                float y = base_y + (this->_tile_height * m_fields[i]->get_y());
+                float x = dest.min.x + (m_fields[i]->get_x() * this->m_tile_width);
+                float y = base_y + (this->m_tile_height * m_fields[i]->get_y());
                 // Create tile box
-                engine::math::box2_t tile_box({x, y}, {x + this->_tile_width, y + this->_tile_height});
+                engine::math::box2_t tile_box({x, y}, {x + this->m_tile_width, y + this->m_tile_height});
 
                 // Let the tile draw
                 try{
@@ -52,7 +47,7 @@ namespace domain {
             field->add_observer(this);
 
             if(field->get_placed_object() != nullptr)
-                this->_fields_with_object.push_back(std::shared_ptr<base_field>(p));
+                this->m_fields_with_object.push_back(std::shared_ptr<base_field>(p));
         }
 
         void map::add_fields(std::vector<base_field*> fields){
@@ -61,20 +56,40 @@ namespace domain {
         }
 
         void map::notify(base_field *p_observee) {
-           for(std::shared_ptr<base_field> p : this->_fields_with_object){
+           for(std::shared_ptr<base_field> p : this->m_fields_with_object){
                if(p.get() == p_observee){
-                   this->_fields_with_object.push_back(std::shared_ptr<base_field>(p_observee));
+                   this->m_fields_with_object.push_back(std::shared_ptr<base_field>(p_observee));
                    break;
                }
            }
         }
 
         int map::get_tile_width() {
-            return this->_tile_width;
+            return this->m_tile_width;
         }
 
         int map::get_tile_height() {
-            return this->_tile_height;
+            return this->m_tile_height;
+        }
+
+        int map::get_height() {
+            int y = 0;
+
+            for(auto field : this->m_fields)
+                if(field->get_y()+ 1 > y)
+                    y = field->get_y() + 1;
+
+            return y * this->m_tile_height;
+        }
+
+        int map::get_width() {
+            int x = 0;
+
+            for(auto field : this->m_fields)
+                if(field->get_x()+ 1 > x)
+                    x = field->get_x()+1;
+
+            return x * this->m_tile_width;
         }
     }
 }

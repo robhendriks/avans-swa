@@ -20,7 +20,7 @@ namespace domain {
             ~game_world();
 
         private:
-            int _current_lvl;
+            int m_current_lvl;
             std::vector<std::shared_ptr<game_level::game_level>> m_levels;
         };
     }
