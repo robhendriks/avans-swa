@@ -2,8 +2,8 @@
 #define CITY_DEFENCE_GAME_WORLD_H
 
 #include <vector>
-#include "../map/base_map.h"
 #include "../drawable/abstract_drawable_game_object.h"
+#include "../game_level/game_level.h"
 
 namespace domain {
     namespace gameworld {
@@ -11,18 +11,17 @@ namespace domain {
         public:
             game_world();
 
-            game_world(std::vector<std::shared_ptr<map::base_map>>& maps);
+            game_world(std::vector<std::shared_ptr<game_level::game_level>>& game_levels);
             void draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest);
             void unload(engine::graphics::texture_manager &texture_manager);
-            map::base_map* get_current_map();
-            int get_current_lvl();
-            int next_level();
-            void reset_level();
+            std::shared_ptr<game_level::game_level> get_current_level();
+            std::shared_ptr<game_level::game_level> next_level();
+            std::shared_ptr<game_level::game_level> reset_level();
             ~game_world();
 
         private:
             int _current_lvl;
-            std::vector<std::shared_ptr<map::base_map>> _maps;
+            std::vector<std::shared_ptr<game_level::game_level>> m_levels;
         };
     }
 }

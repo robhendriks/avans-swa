@@ -105,7 +105,7 @@ set(SOURCES src/main.cpp
     src/engine/graphics/font_manager.cpp
     src/engine/graphics/font_manager.h
     src/engine/graphics/moveable_box.cpp
-    src/engine/graphics/moveable_box.h)
+    src/engine/graphics/moveable_box.h src/domain/game_level/game_level.cpp src/domain/game_level/game_level.h)
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include
