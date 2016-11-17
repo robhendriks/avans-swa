@@ -32,16 +32,29 @@ namespace services {
 
 
             // create tiles
-            std::vector<domain::map::base_field *> timeList = this->load_tiles(root);
-            std::vector<domain::buildings::building *> objects = load_objects(root);
-            timeList.at(0)->place(objects.at(0));
-            //map.add_fields(timeList);
+            std::vector<domain::map::base_field *> tile_list = this->load_tiles(root);
+            std::vector<game_object_with_pos *> game_object_list = load_objects(root);
+
+            for (auto &tile : tile_list) // access by reference to avoid copying
+            {
+                //Check if object is on the same place as tile.
+                if(tile->get_placed_object()){
+
+                }
+//                if (tile->place() == input)
+//                {
+//                    attack->makeDamage();
+//                }
+            }
+           // tile_list.at(0)->place(game_object_list.at(0));
+            //map.add_fields(tile_list);
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-variable"
-            auto b =  timeList.at(0)->get_placed_object();
+            auto b =  tile_list.at(0)->get_placed_object();
 #pragma GCC diagnostic pop
 
-            map->add_fields(timeList);
+            map->add_fields(tile_list);
+
             // create placeable_objects
 //            std::vector<domain::map::base_field*> m_fields;
 //            std::vector<domain::map::base_field*> _fields_with_object;
@@ -134,16 +147,18 @@ namespace services {
             //map.add_fields(tempTiles);
         }
 
-        std::vector<domain::buildings::building *> json_map_loader::load_objects(json root) {
-            std::vector<domain::buildings::building *> tempGameObjs;
+        std::vector<json_map_loader::game_object_with_pos*> json_map_loader::load_objects(json &root) {
+            std::vector<game_object_with_pos> temp_game_objs;
+            json_map_loader::game_object_with_pos game_object;
 
             if (root.find("objects") == root.end()) {
-                return tempGameObjs;
+                temp_game_objs.push_back(game_object);
+                //return temp_game_objs;
             }
 
             json level_objects = root["objects"];
             if (!level_objects.is_object()) {
-                return tempGameObjs;
+                //return nullptr;
 
             }
 
@@ -152,7 +167,7 @@ namespace services {
 
             json data = level_objects["data"];
             if (!data.is_array()) {
-                return tempGameObjs;
+                //return nullptr;
             }
 
             for (json &elem : data) {
@@ -166,11 +181,15 @@ namespace services {
                 // map_model.level_objects.push_back();
                 engine::math::vec2_t *v = new engine::math::vec2_t{0, 0};
                 //auto *field = new domain::map::passable_field("tile", "images/grass.png", v, 0, elem["x"], elem["y"]);
-                auto field = new domain::buildings::building("object", "images/building.png",v,rotation);
-                tempGameObjs.push_back(field);
+
+
+                game_object.object = domain::buildings::building("object", "images/building.png",v,rotation);
+                game_object.X = x;
+                game_object.Y = y;
+                temp_game_objs.push_back(game_object);
             }
-            return tempGameObjs;
-            //map.add_fields(tempGameObjs);
+            return temp_game_objs;
+            //map.add_fields(temp_game_objs);
         }
 
         json_map_loader::~json_map_loader() {
@@ -180,5 +199,10 @@ namespace services {
         json_map_loader::json_map_loader() {
 
         }
+
+        long json_map_loader::game_object_with_pos(int x, int y, domain::buildings::building obj) {
+            
+        }
+
     }
 }
