@@ -48,5 +48,15 @@ namespace domain {
             texture_manager.unload(this->m_id);
             this->m_texture = nullptr;
         }
+
+        engine::math::vec2_t drawable_game_object::get_texture_size() {
+            if(this->m_texture == nullptr)
+                return engine::math::vec2_t {-1, -1};
+
+            int w;
+            int h;
+            SDL_QueryTexture(this->m_texture, NULL, NULL, &w, &h);
+            return engine::math::vec2_t {w, h};
+        }
     }
 }

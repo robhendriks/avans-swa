@@ -38,6 +38,8 @@ namespace domain {
         private:
             // basic implementation is to draw the current object (needs to be overwritten for also drawing children)
             virtual void draw_object(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest);
+            // returns the size of a texture. in case no texture is loaded in. it will return -1, -1
+            engine::math::vec2_t get_texture_size();
         };
     }
 }
