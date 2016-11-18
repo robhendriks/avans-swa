@@ -6,13 +6,13 @@
 namespace domain {
     namespace drawable {
         drawable_game_object::drawable_game_object(std::string id, std::string file_loc,
-                                                   engine::math::vec2_t *image_start_position, int rotation) : id(id),
-                                                                                                               file_loc(
+                                                   engine::math::vec2_t *image_start_position, int rotation) : m_id(id),
+                                                                                                               m_file_loc(
                                                                                                                        file_loc),
-                                                                                                               rotation(
+                                                                                                               m_rotation(
                                                                                                                        rotation) {
-            this->image_start_position = std::unique_ptr<engine::math::vec2_t>(image_start_position);
-            this->texture = nullptr;
+            this->m_image_start_position = std::unique_ptr<engine::math::vec2_t>(image_start_position);
+            this->m_texture = nullptr;
         }
 
         void
@@ -23,16 +23,16 @@ namespace domain {
 
         void drawable_game_object::load_texture_if_not_loaded_yet(engine::graphics::texture_manager &texture_manager) {
             // in case texture hasn't been loaded in for this object.
-            if (this->texture == nullptr) {
+            if (this->m_texture == nullptr) {
                 // look if another object has loaded this specific texture in the texture manager.
-                this->texture = texture_manager.find(this->id);
-                if (this->texture == nullptr) {
+                this->m_texture = texture_manager.find(this->m_id);
+                if (this->m_texture == nullptr) {
                     // in case it didn't then we need to load it in ourselves.
-                    bool result = texture_manager.load(this->file_loc, this->id);
+                    bool result = texture_manager.load(this->m_file_loc, this->m_id);
 
                     // in case the texture is valid then find it again.
                     if (result)
-                        this->texture = texture_manager.find(this->id);
+                        this->m_texture = texture_manager.find(this->m_id);
                     else // in case its not loaded in then throw a exception that loading the texture in is impossible.
                         throw std::exception();
                 }
@@ -41,12 +41,12 @@ namespace domain {
 
         void drawable_game_object::draw_object(engine::graphics::texture_manager &texture_manager,
                                                engine::math::box2_t &dest) {
-            texture_manager.draw(this->id, *image_start_position, dest);
+            texture_manager.draw(this->m_id, *m_image_start_position, dest);
         }
 
         void drawable_game_object::unload(engine::graphics::texture_manager &texture_manager) {
-            texture_manager.unload(this->id);
-            this->texture = nullptr;
+            texture_manager.unload(this->m_id);
+            this->m_texture = nullptr;
         }
     }
 }

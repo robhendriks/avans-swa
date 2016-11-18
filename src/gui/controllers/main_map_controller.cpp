@@ -11,16 +11,8 @@ namespace gui {
 
         main_map_controller::main_map_controller(views::main_map &view, models::main_map_model &model, game &game1) :
             base_controller(game1), m_view(view), m_model(model) {
-
             view.set_controller(*this);
-
-            // This code should be placed somewhere else TODO
-            std::shared_ptr<domain::map::base_map> domain_map = std::shared_ptr<domain::map::base_map>(new domain::map::map(32, 32));
-            std::vector<std::shared_ptr<domain::map::base_map>> v = {};
-            v.push_back(domain_map);
-            m_model.world = std::unique_ptr<domain::gameworld::game_world>(new domain::gameworld::game_world(v));
-            engine::math::box2_t *map_box = new engine::math::box2_t({{0, 0}, {(float) (10 * domain_map->get_tile_width()), (float) (10 * domain_map->get_tile_height())}});
-            m_model.map_box = map_box;
+            m_model.map_box = {};
         }
 
 
@@ -38,8 +30,12 @@ namespace gui {
         }
 
         void main_map_controller::set_game_world(std::unique_ptr<domain::gameworld::game_world>&& game_world) {
+            this->m_model.world = std::move(game_world);
+            int width = this->m_model.world->get_current_level()->get_map()->get_width();
+            int height = this->m_model.world->get_current_level()->get_map()->get_height();
+            engine::math::box2_t *map_box = new engine::math::box2_t({{0, 0}, {(float) (width), (float) (height)}});
+            m_model.map_box = map_box;
 
-              this->m_model.world = std::move(game_world);
         }
     }
 }

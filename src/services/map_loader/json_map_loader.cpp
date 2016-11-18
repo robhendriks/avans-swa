@@ -28,18 +28,13 @@ namespace services {
             // create map with tile length and width
 
             vec2_t result = this->get_length_and_width(root);
-            domain::map::map *map = new domain::map::map(result.x, result.y);
+            domain::map::map* map = new domain::map::map(result.x, result.y);
 
 
             // create tiles
             std::vector<domain::map::base_field *> timeList = this->load_tiles(root);
             std::vector<domain::buildings::building *> objects = load_objects(root);
             timeList.at(0)->place(objects.at(0));
-            //map.add_fields(timeList);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-variable"
-            auto b =  timeList.at(0)->get_placed_object();
-#pragma GCC diagnostic pop
 
             map->add_fields(timeList);
             // create placeable_objects
@@ -50,16 +45,15 @@ namespace services {
 
             // add tiles to map with add_fields() method.
 
-            // add map to game world.
+            // add map to lvl
+            std::vector<std::shared_ptr<domain::game_level::game_level>> levelVect;
+            std::string name = "level 1";
+            std::shared_ptr<domain::game_level::game_level> p_game_level = std::shared_ptr<domain::game_level::game_level>(new domain::game_level::game_level(name, map));
+            levelVect.push_back(p_game_level);
 
             // return game world
-            std::vector<std::shared_ptr<domain::map::base_map>> mapVect;
-            mapVect.push_back(std::shared_ptr<domain::map::base_map>(map));
-            std::shared_ptr<domain::map::base_map> m = (std::shared_ptr<domain::map::base_map>) mapVect.at(0);
-            auto r = m->get_fields();
-            r.size();
-            domain::gameworld::game_world res = domain::gameworld::game_world(mapVect);
-            return res;
+            return domain::gameworld::game_world(levelVect);
+
 //            std::ifstream file(file_location);
 //            if (!file.is_open()) {
 //                throw std::runtime_error(std::string("Unable to open file: ") + file_location);

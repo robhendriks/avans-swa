@@ -113,7 +113,10 @@ set(SOURCES src/main.cpp
     src/engine/draganddrop/dropable.h
     src/engine/events/mouse_motion.cpp
     src/engine/events/mouse_motion.h
-    src/engine/draganddrop/drag_and_drop.cpp)
+    src/engine/draganddrop/drag_and_drop.cpp
+    src/domain/game_level/game_level.cpp
+    src/domain/game_level/game_level.h)
+
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include

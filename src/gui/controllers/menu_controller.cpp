@@ -25,10 +25,12 @@ namespace gui {
 
         void menu_controller::play() {
             //            TODO: load map (level1)
-            _game_world = std::unique_ptr<domain::gameworld::game_world>(
-                new domain::gameworld::game_world(this->_map_loader.load("level1.json")));
-            domain::map::map *test = (domain::map::map *) _game_world->get_current_map();
-            test->get_tile_height();
+            _game_world = std::unique_ptr<domain::gameworld::game_world>(new domain::gameworld::game_world(this->_map_loader.load("level1.json")));
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
+            auto g = _game_world->get_current_level()->get_map();
+#pragma GCC diagnostic pop
+
             m_main_map_controller.set_game_world(std::move(_game_world));
             m_main_map_controller.show();
         }
