@@ -7,11 +7,13 @@ namespace domain{
     namespace  game_level{
         game_level::game_level(std::string &name, domain::map::base_map* map, std::unique_ptr<game_stats>&& goal) : m_name(name), m_goal(std::move(goal)){
             this->m_map = std::shared_ptr<domain::map::base_map>(map);
+            this->m_map->add_observer(this);
             this->m_stats = std::unique_ptr<game_stats>(new game_stats());
         }
 
         game_level::game_level(std::string &name, std::shared_ptr<map::base_map> map, std::unique_ptr<game_stats>&& goal) : m_name(name), m_goal(std::move(goal)){
             this->m_map = map;
+            this->m_map->add_observer(this);
             this->m_stats = std::unique_ptr<game_stats>(new game_stats());
         }
 
@@ -42,17 +44,18 @@ namespace domain{
         void game_level::notify(domain::map::base_map * p_observee) {
             long building_count = 0;
             long road_count = 0;
-            for(std::shared_ptr<domain::map::base_field>& f : p_observee->get_fields(true)){
+            auto d = p_observee->get_fields(true);
+            for(std::shared_ptr<domain::map::base_field>& f : d){
                 domain::buildings::placeable_object_type type = f->get_placed_object()->get_type();
                 if(type == domain::buildings::BUILDING)
                     ++building_count;
                 else if(type == domain::buildings::ROAD)
                     ++road_count;
-
-                m_stats->set_built_building_count(building_count);
-                m_stats->set_built_roads_count(road_count);
-                m_stats->set_built_objects_count(road_count + building_count);
             }
+
+            m_stats->set_built_building_count(building_count);
+            m_stats->set_built_roads_count(road_count);
+            m_stats->set_built_objects_count(road_count + building_count);
         }
 
         bool game_level::is_goal_reached() {
