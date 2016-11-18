@@ -7,7 +7,7 @@
 
 namespace domain {
     namespace map {
-        class base_map : public domain::drawable::abstract_drawable_game_object {
+        class base_map : public domain::drawable::abstract_drawable_game_object, public engine::observer::observee<base_map>  {
         public:
             base_map();
             virtual ~base_map();

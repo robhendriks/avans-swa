@@ -5,13 +5,14 @@
 #include "game_level.h"
 namespace domain{
     namespace  game_level{
-
-        game_level::game_level(std::string &name, domain::map::base_map* map) : m_name(name){
+        game_level::game_level(std::string &name, domain::map::base_map* map, std::unique_ptr<game_stats>&& goal) : m_name(name), m_goal(std::move(goal)){
             this->m_map = std::shared_ptr<domain::map::base_map>(map);
+            this->m_stats = std::unique_ptr<game_stats>(new game_stats());
         }
 
-        game_level::game_level(std::string &name, std::shared_ptr<map::base_map> map) : m_name(name){
+        game_level::game_level(std::string &name, std::shared_ptr<map::base_map> map, std::unique_ptr<game_stats>&& goal) : m_name(name), m_goal(std::move(goal)){
             this->m_map = map;
+            this->m_stats = std::unique_ptr<game_stats>(new game_stats());
         }
 
         std::string game_level::get_name() {
@@ -29,7 +30,37 @@ namespace domain{
         void game_level::unload(engine::graphics::texture_manager &texture_manager) {
             this->m_map->unload(texture_manager);
         }
+        game_stats game_level::get_goal() {
+            return *m_goal;
+        }
 
+        game_stats game_level::get_stats() {
+            return *m_stats;
+        }
 
+        // update stats
+        void game_level::notify(domain::map::base_map * p_observee) {
+            long building_count = 0;
+            long road_count = 0;
+            for(std::shared_ptr<domain::map::base_field>& f : p_observee->get_fields(true)){
+                domain::buildings::placeable_object_type type = f->get_placed_object()->get_type();
+                if(type == domain::buildings::BUILDING)
+                    ++building_count;
+                else if(type == domain::buildings::ROAD)
+                    ++road_count;
+
+                m_stats->set_built_building_count(building_count);
+                m_stats->set_built_roads_count(road_count);
+                m_stats->set_built_objects_count(road_count + building_count);
+            }
+        }
+
+        bool game_level::is_goal_reached() {
+            return m_stats > m_goal;
+        }
+
+        bool game_level::is_game_over() {
+            return m_stats->get_duration() > m_goal->get_duration();
+        }
     }
 }

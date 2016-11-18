@@ -56,12 +56,8 @@ namespace domain {
         }
 
         void map::notify(base_field *p_observee) {
-           for(std::shared_ptr<base_field> p : this->m_fields_with_object){
-               if(p.get() == p_observee){
-                   this->m_fields_with_object.push_back(std::shared_ptr<base_field>(p_observee));
-                   break;
-               }
-           }
+            this->m_fields_with_object.push_back(std::shared_ptr<base_field>(p_observee));
+            this->notify_observers(this);
         }
 
         int map::get_tile_width() {

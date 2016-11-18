@@ -115,7 +115,7 @@ set(SOURCES src/main.cpp
     src/engine/events/mouse_motion.h
     src/engine/draganddrop/drag_and_drop.cpp
     src/domain/game_level/game_level.cpp
-    src/domain/game_level/game_level.h)
+    src/domain/game_level/game_level.h src/domain/game_level/game_stats.cpp src/domain/game_level/game_stats.h)
 
 
 include_directories(third_party/json/src

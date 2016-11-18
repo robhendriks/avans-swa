@@ -56,7 +56,7 @@ namespace domain {
             int w;
             int h;
             SDL_QueryTexture(this->m_texture, NULL, NULL, &w, &h);
-            return engine::math::vec2_t {w, h};
+            return engine::math::vec2_t {(float)w, (float)h};
         }
     }
 }
