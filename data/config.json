@@ -3,8 +3,6 @@
     "title": "City Defence"
   },
   "window": {
-    "width": 640,
-    "height": 480,
     "background_color": "0xFF6495ED"
   }
 }

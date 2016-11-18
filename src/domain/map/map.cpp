@@ -6,7 +6,7 @@ namespace domain {
     namespace map {
         map::map(int tile_width, int tile_height) : m_tile_width(tile_width), m_tile_height(tile_height) {}
 
-         map::~map() {
+        map::~map() {
         }
 
         std::vector<std::shared_ptr<base_field>> map::get_fields(bool object_filter) {
@@ -27,7 +27,7 @@ namespace domain {
                 engine::math::box2_t tile_box({x, y}, {x + this->m_tile_width, y + this->m_tile_height});
 
                 // Let the tile draw
-                try{
+                try {
                     m_fields[i]->draw(texture_manager, tile_box);
                 }
                 catch(std::exception e){
