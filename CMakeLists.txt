@@ -105,7 +105,15 @@ set(SOURCES src/main.cpp
     src/engine/graphics/font_manager.cpp
     src/engine/graphics/font_manager.h
     src/engine/graphics/moveable_box.cpp
-    src/engine/graphics/moveable_box.h)
+    src/engine/graphics/moveable_box.h
+    src/domain/buildings/road.cpp
+    src/domain/buildings/road.h
+    src/engine/draganddrop/drag_and_drop.h
+    src/engine/draganddrop/dragable.h
+    src/engine/draganddrop/dropable.h
+    src/engine/events/mouse_motion.cpp
+    src/engine/events/mouse_motion.h
+    src/engine/draganddrop/drag_and_drop.cpp)
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include
@@ -115,7 +123,7 @@ include_directories(third_party/json/src
         ${SDL2_TTF_INCLUDE_DIRS}
         ${SDL2_MIXER_INCLUDE_DIR})
 
-add_executable(city_defence ${SOURCES} src/domain/buildings/road.cpp src/domain/buildings/road.h)
+add_executable(city_defence ${SOURCES})
 add_library(city_defence_sources STATIC ${SOURCES})
 
 target_link_libraries(city_defence
