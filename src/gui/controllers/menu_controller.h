@@ -44,7 +44,6 @@ namespace gui {
             controllers::main_map_controller &m_main_map_controller;
             controllers::credits_controller &m_credits_controller;
             services::level_loader::base_map_loader &_map_loader;
-            std::unique_ptr<domain::gameworld::game_world> _game_world;
         };
     }
 }

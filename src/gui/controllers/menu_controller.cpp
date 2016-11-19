@@ -25,9 +25,7 @@ namespace gui {
         }
 
         void menu_controller::play() {
-            //            TODO: load map (level1)
-            _game_world = std::unique_ptr<domain::gameworld::game_world>(new domain::gameworld::game_world(this->_map_loader.load("level1.json")));
-            m_main_map_controller.set_game_world(std::move(_game_world));
+            m_main_map_controller.set_game_world(std::unique_ptr<domain::gameworld::game_world>(new domain::gameworld::game_world(this->_map_loader.load("level1.json"))));
             m_main_map_controller.show();
         }
 
