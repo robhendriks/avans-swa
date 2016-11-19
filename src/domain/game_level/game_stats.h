@@ -9,7 +9,7 @@ namespace domain {
     namespace game_level {
         class game_stats {
         public:
-            game_stats();
+            game_stats(long building_count = 0, long roads_count = 0, long duration = 0);
             void set_built_building_count(long count);
             long get_built_buildings_count();
             void set_built_roads_count(long count);
@@ -24,6 +24,7 @@ namespace domain {
             bool operator> (const game_stats& other);
             bool operator<=(const game_stats& other);
             bool operator>=(const game_stats& other);
+            game_stats operator+(const game_stats& other);
         private:
             long m_built_buildings_count;
             long m_built_roads_count;

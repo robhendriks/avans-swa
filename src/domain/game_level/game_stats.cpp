@@ -5,8 +5,8 @@
 #include "game_stats.h"
 namespace domain {
     namespace game_level {
-
-        game_stats::game_stats() : m_built_buildings_count(0), m_built_roads_count(0), m_built_objects_count(0), m_duration(0) {
+        game_stats::game_stats(long building_count, long roads_count, long duration)
+                : m_built_buildings_count(building_count), m_built_roads_count(roads_count), m_built_objects_count(m_built_buildings_count+m_built_roads_count), m_duration(duration) {
 
         }
 
@@ -46,8 +46,8 @@ namespace domain {
         }
 
         bool game_stats::operator<(const game_stats &other) {
-            return (m_built_roads_count < other.m_built_roads_count &&
-                    m_built_buildings_count < other.m_built_buildings_count &&
+            return (m_built_roads_count < other.m_built_roads_count ||
+                    m_built_buildings_count < other.m_built_buildings_count ||
                     m_built_objects_count < other.m_built_objects_count);
         }
 
@@ -65,6 +65,10 @@ namespace domain {
 
         void game_stats::set_built_objects_count(long count) {
             m_built_objects_count = count;
+        }
+
+        game_stats game_stats::operator+(const game_stats &other) {
+             return game_stats(m_built_buildings_count + other.m_built_buildings_count, m_built_roads_count + other.m_built_roads_count, m_duration + other.m_duration);
         }
     }
 }

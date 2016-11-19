@@ -1,8 +1,6 @@
 #ifndef CITY_DEFENCE_GAME_WORLD_CPP
 #define CITY_DEFENCE_GAME_WORLD_CPP
 #include "game_world.h"
-#include "../map/map.h"
-#include <memory>
 
 namespace domain {
     namespace gameworld{
@@ -37,6 +35,20 @@ namespace domain {
         std::shared_ptr<game_level::game_level> game_world::next_level() {
             this->m_current_lvl++;
             return this->get_current_level();
+        }
+
+        bool game_world::is_next_level() {
+            return this->m_levels.back() != this->get_current_level();
+        }
+
+        game_level::game_stats game_world::get_stats() {
+            game_level::game_stats stats;
+
+            for(std::shared_ptr<game_level::game_level> l : m_levels){
+                stats = stats + *l->get_stats();
+            }
+
+            return stats;
         }
     }
 }

@@ -15,6 +15,7 @@ namespace gui {
               m_main_map_controller(main_map_controller), m_credits_controller(credits_controller),
               _map_loader(map_loader) {
 
+            main_map_controller.set_menu_controller(std::shared_ptr<menu_controller>(this));
             m_main_menu.set_controller(*this);
         }
 
@@ -26,11 +27,6 @@ namespace gui {
         void menu_controller::play() {
             //            TODO: load map (level1)
             _game_world = std::unique_ptr<domain::gameworld::game_world>(new domain::gameworld::game_world(this->_map_loader.load("level1.json")));
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-variable"
-            auto g = _game_world->get_current_level()->get_map();
-#pragma GCC diagnostic pop
-
             m_main_map_controller.set_game_world(std::move(_game_world));
             m_main_map_controller.show();
         }

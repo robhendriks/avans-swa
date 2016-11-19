@@ -16,6 +16,8 @@ namespace domain {
             void unload(engine::graphics::texture_manager &texture_manager);
             std::shared_ptr<game_level::game_level> get_current_level();
             std::shared_ptr<game_level::game_level> next_level();
+            bool is_next_level();
+            game_level::game_stats get_stats();
             std::shared_ptr<game_level::game_level> reset_level();
             ~game_world();
 

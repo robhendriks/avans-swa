@@ -5,16 +5,16 @@
 #include "game_level.h"
 namespace domain{
     namespace  game_level{
-        game_level::game_level(std::string &name, domain::map::base_map* map, std::unique_ptr<game_stats>&& goal) : m_name(name), m_goal(std::move(goal)){
+        game_level::game_level(std::string &name, domain::map::base_map* map, std::shared_ptr<game_stats>& goal) : m_name(name), m_goal(goal){
             this->m_map = std::shared_ptr<domain::map::base_map>(map);
             this->m_map->add_observer(this);
-            this->m_stats = std::unique_ptr<game_stats>(new game_stats());
+            this->m_stats = std::shared_ptr<game_stats>(new game_stats());
         }
 
-        game_level::game_level(std::string &name, std::shared_ptr<map::base_map> map, std::unique_ptr<game_stats>&& goal) : m_name(name), m_goal(std::move(goal)){
+        game_level::game_level(std::string &name, std::shared_ptr<map::base_map> map, std::shared_ptr<game_stats>& goal) : m_name(name), m_goal(goal){
             this->m_map = map;
             this->m_map->add_observer(this);
-            this->m_stats = std::unique_ptr<game_stats>(new game_stats());
+            this->m_stats = std::shared_ptr<game_stats>(new game_stats());
         }
 
         std::string game_level::get_name() {
@@ -32,12 +32,12 @@ namespace domain{
         void game_level::unload(engine::graphics::texture_manager &texture_manager) {
             this->m_map->unload(texture_manager);
         }
-        game_stats game_level::get_goal() {
-            return *m_goal;
+        std::shared_ptr<game_stats> game_level::get_goal() {
+            return m_goal;
         }
 
-        game_stats game_level::get_stats() {
-            return *m_stats;
+        std::shared_ptr<game_stats> game_level::get_stats() {
+            return m_stats;
         }
 
         // update stats
@@ -59,7 +59,7 @@ namespace domain{
         }
 
         bool game_level::is_goal_reached() {
-            return m_stats > m_goal;
+            return *m_stats.get() >= *m_goal.get();
         }
 
         bool game_level::is_game_over() {
