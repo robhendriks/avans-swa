@@ -48,7 +48,7 @@ namespace services {
             // add map to lvl
             std::vector<std::shared_ptr<domain::game_level::game_level>> levelVect;
             std::string name = "level 1";
-            auto stat = std::shared_ptr<domain::game_level::game_stats>(new domain::game_level::game_stats(2));
+            auto stat = std::shared_ptr<domain::game_level::game_stats>(new domain::game_level::game_stats(3));
             stat->get_built_buildings_count();
             std::shared_ptr<domain::game_level::game_level> p_game_level = std::shared_ptr<domain::game_level::game_level>(
                 new domain::game_level::game_level(name, map, stat));

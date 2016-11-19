@@ -63,7 +63,7 @@ namespace engine {
 
         void input_handler::update(const SDL_Event &event) {
             if (update_states(event)) {
-                notify_observers(this);
+                notify_observers(this, "");
             }
         }
 

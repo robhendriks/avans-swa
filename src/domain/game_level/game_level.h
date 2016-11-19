@@ -19,12 +19,11 @@ namespace domain{
             std::shared_ptr<domain::map::base_map> get_map();
             virtual void draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest);
             virtual void unload(engine::graphics::texture_manager &texture_manager);
-            virtual void notify(domain::map::base_map *p_observee);
+            virtual void notify(domain::map::base_map *p_observee, std::string title);
             virtual bool is_goal_reached();
             virtual bool is_game_over();
             std::shared_ptr<game_stats> get_goal();
             std::shared_ptr<game_stats> get_stats();
-            void reset();
         private:
             std::string& m_name;
             std::shared_ptr<domain::map::base_map> m_map;

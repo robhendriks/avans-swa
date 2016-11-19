@@ -41,21 +41,23 @@ namespace domain{
         }
 
         // update stats
-        void game_level::notify(domain::map::base_map * p_observee) {
-            long building_count = 0;
-            long road_count = 0;
-            auto d = p_observee->get_fields(true);
-            for(std::shared_ptr<domain::map::base_field>& f : d){
-                domain::buildings::placeable_object_type type = f->get_placed_object()->get_type();
-                if(type == domain::buildings::BUILDING)
-                    ++building_count;
-                else if(type == domain::buildings::ROAD)
-                    ++road_count;
-            }
+        void game_level::notify(domain::map::base_map * p_observee, std::string title) {
+            if(title == "object-placed"){
+                long building_count = 0;
+                long road_count = 0;
+                auto d = p_observee->get_fields(true);
+                for(std::shared_ptr<domain::map::base_field>& f : d){
+                    domain::buildings::placeable_object_type type = f->get_placed_object()->get_type();
+                    if(type == domain::buildings::BUILDING)
+                        ++building_count;
+                    else if(type == domain::buildings::ROAD)
+                        ++road_count;
+                }
 
-            m_stats->set_built_building_count(building_count);
-            m_stats->set_built_roads_count(road_count);
-            m_stats->set_built_objects_count(road_count + building_count);
+                m_stats->set_built_building_count(building_count);
+                m_stats->set_built_roads_count(road_count);
+                m_stats->set_built_objects_count(road_count + building_count);
+            }
         }
 
         bool game_level::is_goal_reached() {

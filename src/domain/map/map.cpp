@@ -55,14 +55,16 @@ namespace domain {
                 add_field(f);
         }
 
-        void map::notify(base_field *p_observee) {
+        void map::notify(base_field *p_observee, std::string title) {
             // find shared pointer
+            if(title == "object-placed"){
             for(std::shared_ptr<base_field> f : m_fields)
                 if(f.get() == p_observee){
                     this->m_fields_with_object.push_back(f);
-                    this->notify_observers(this);
+                    this->notify_observers(this, title);
                     break;
                 }
+            }
         }
 
         int map::get_tile_width() {
