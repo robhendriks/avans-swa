@@ -74,5 +74,9 @@ namespace domain {
         void game_stats::set_duration(long duration) {
             m_duration = duration;
         }
+
+        void game_stats::set_start_duration(long duration) {
+            m_start_duration = duration;
+        }
     }
 }

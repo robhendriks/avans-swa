@@ -27,7 +27,7 @@ namespace gui {
 
         class main_map_controller : public base_controller {
         public:
-            main_map_controller(views::main_map &view, views::win_game_over& transition_view, models::main_map_model &model, models::transition_level_model& transition_model, game &game1);
+            main_map_controller(views::main_map &view, engine::engine &engine, views::win_game_over& transition_view, models::main_map_model &model, models::transition_level_model& transition_model, game &game1);
             void show();
             void tile_click(domain::map::base_field &tile);
             void set_game_world(std::unique_ptr<domain::gameworld::game_world>&& game_world);
@@ -39,7 +39,7 @@ namespace gui {
 
             views::main_map &m_view;
             views::win_game_over& m_trans_view;
-
+            engine::engine &m_engine;
             models::main_map_model &m_model;
             models::transition_level_model& m_trans_model;
         };

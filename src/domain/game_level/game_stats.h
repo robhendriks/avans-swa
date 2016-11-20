@@ -7,7 +7,7 @@
 
 namespace domain {
     namespace game_level {
-        class game_stats {
+        class game_stats{
         public:
             game_stats(long building_count = 0, long roads_count = 0, long duration = 0);
             void set_built_building_count(long count);
@@ -18,6 +18,7 @@ namespace domain {
             long get_built_objects_count();
             long get_duration();
             void set_duration(long duration);
+            void set_start_duration(long duration);
             // duration not used in those operators. (reason being that if you for example did > then if your in the time limit it will say false because thats not bigger)
             bool operator==(const game_stats& other);
             bool operator!=(const game_stats& other);
@@ -31,6 +32,7 @@ namespace domain {
             long m_built_roads_count;
             long m_built_objects_count;
             long m_duration;
+            long m_start_duration;
         };
     }
 }

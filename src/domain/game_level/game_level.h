@@ -10,7 +10,7 @@
 #include <memory>
 
 namespace domain{
-    namespace  game_level{
+    namespace  game_level {
         class game_level : public drawable::abstract_drawable_game_object, public engine::observer::observer<domain::map::base_map>{
         public:
             game_level(std::string &name, map::base_map *map, std::shared_ptr<game_stats>& goal);
