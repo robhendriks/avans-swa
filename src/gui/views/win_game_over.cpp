@@ -29,7 +29,7 @@ namespace gui {
             m_title_box = new engine::math::box2_t({{0, 0}, m_texture_manager.get_size("w_title")});
 
 
-            m_texture_manager.load_text("Press the left mouse button on any part of the screen to continue.", {255, 193, 132}, *m_font_manager.get_font("roboto", 10), "continue");
+            m_texture_manager.load_text("Press the left mouse button on any part of the screen to continue.", {255, 255, 255}, *m_font_manager.get_font("roboto", 30), "continue");
             m_continue_box = new engine::math::box2_t({{0, 0}, m_texture_manager.get_size("continue")});
         }
 
@@ -41,13 +41,16 @@ namespace gui {
         }
 
         void win_game_over::draw(float interpolation) {
-            m_header_box->to_top({0,0, m_window.get_display_box().max.x, m_window.get_display_box().max.y});
-            m_color_manager.draw({0, 0, 0},*m_header_box);
+            m_header_box->to_top({m_window.get_display_box()});
+            m_title_box->to_left(*m_header_box);
             m_title_box->to_center(*m_header_box);
+
+            m_color_manager.draw({0, 0, 0},*m_header_box);
             m_texture_manager.draw("w_title", {0, 0}, *m_title_box);
 
-            m_continue_box->to_bottom({0,0, m_window.get_display_box().max.x, m_window.get_display_box().max.y});
-            m_color_manager.draw({33, 33, 33}, *m_continue_box);
+            m_continue_box->to_left({m_window.get_display_box()});
+            m_continue_box->to_center({m_window.get_display_box()});
+            m_texture_manager.draw("continue", {0, 0}, *m_continue_box);
         }
 
         void win_game_over::set_controller(gui::controllers::main_map_controller* controller) {
