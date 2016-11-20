@@ -74,6 +74,7 @@ namespace domain {
         }
 
         int map::get_tile_height() {
+
             return this->_tile_height;
         }
     }

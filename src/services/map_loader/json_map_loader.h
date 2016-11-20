@@ -32,7 +32,12 @@ namespace services {
             virtual ~json_map_loader();
 
         private:
-            struct game_object_with_pos {
+            struct building_objects_with_pos {
+                int X;
+                int Y;
+                domain::buildings::base_placeable_object* object;
+            };
+            struct road_objects_with_pos {
                 int X;
                 int Y;
                 domain::buildings::base_placeable_object* object;
@@ -42,7 +47,8 @@ namespace services {
 
             vec2_t get_length_and_width(json &root);
 
-            std::vector<game_object_with_pos *> load_objects(json &root);
+            std::vector<building_objects_with_pos *> load_buildings(json &root);
+            std::vector<road_objects_with_pos *> load_roads(json &root);
         };
     };
 };
