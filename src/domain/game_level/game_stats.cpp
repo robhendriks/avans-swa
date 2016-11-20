@@ -5,9 +5,8 @@
 #include "game_stats.h"
 namespace domain {
     namespace game_level {
-        game_stats::game_stats(long building_count, long roads_count, long duration)
-                : m_built_buildings_count(building_count), m_built_roads_count(roads_count), m_built_objects_count(m_built_buildings_count+m_built_roads_count), m_duration(duration) {
-
+        game_stats::game_stats(long building_count, long roads_count, long max_duration)
+                : m_built_buildings_count(building_count), m_built_roads_count(roads_count), m_built_objects_count(m_built_buildings_count+m_built_roads_count), m_max_duration(max_duration){
         }
 
         long game_stats::get_built_buildings_count() {
@@ -22,8 +21,8 @@ namespace domain {
             return m_built_objects_count;
         }
 
-        long game_stats::get_duration() {
-            return m_duration;
+        long game_stats::get_max_duration() {
+            return m_max_duration;
         }
 
         bool game_stats::operator==(const game_stats &other) {
@@ -68,15 +67,11 @@ namespace domain {
         }
 
         game_stats game_stats::operator+(const game_stats &other) {
-             return game_stats(m_built_buildings_count + other.m_built_buildings_count, m_built_roads_count + other.m_built_roads_count, m_duration + other.m_duration);
+             return game_stats(m_built_buildings_count + other.m_built_buildings_count, m_built_roads_count + other.m_built_roads_count, m_max_duration + other.m_max_duration);
         }
 
-        void game_stats::set_duration(long duration) {
-            m_duration = duration;
-        }
-
-        void game_stats::set_start_duration(long duration) {
-            m_start_duration = duration;
+        void game_stats::set_max_duration(long duration) {
+            m_max_duration = duration;
         }
     }
 }

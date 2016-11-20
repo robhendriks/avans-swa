@@ -21,14 +21,17 @@ namespace domain{
             virtual void unload(engine::graphics::texture_manager &texture_manager);
             virtual void notify(domain::map::base_map *p_observee, std::string title);
             virtual bool is_goal_reached();
-            virtual bool is_game_over();
+            virtual bool is_game_over(long current_duration);
             std::shared_ptr<game_stats> get_goal();
             std::shared_ptr<game_stats> get_stats();
+            long get_start_time();
+            void set_start_time(long time);
         private:
             std::string& m_name;
             std::shared_ptr<domain::map::base_map> m_map;
             std::shared_ptr<game_stats> m_goal;
             std::shared_ptr<game_stats> m_stats;
+            long m_start_time;
         };
     }
 }

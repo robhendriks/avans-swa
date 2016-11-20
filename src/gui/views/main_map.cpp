@@ -8,9 +8,9 @@
 namespace gui {
     namespace views {
 
-        main_map::main_map(engine::graphics::texture_manager &texture_manager, engine::audio::music_manager &music_manager,
+        main_map::main_map(engine::engine &engine, engine::graphics::texture_manager &texture_manager, engine::audio::music_manager &music_manager,
                            engine::window &window, models::main_map_model &model)
-            : m_texture_manager(texture_manager), m_music_manager(music_manager), m_window(window), m_model(model) {
+            : m_engine(engine), m_texture_manager(texture_manager), m_music_manager(music_manager), m_window(window), m_model(model) {
         }
 
         void main_map::before() {
@@ -21,6 +21,10 @@ namespace gui {
         }
 
         void main_map::draw(float interpolation) {
+            if(m_model.world->get_current_level()->is_game_over((long) m_engine.get_time_elapsed()) || m_model.world->get_current_level()->is_goal_reached()){
+                m_controller->show();
+            }
+
             // Draw the map in the middle of the screen
             auto win_box = m_window.get_display_box();
             m_model.map_box->to_left(win_box);
@@ -28,8 +32,6 @@ namespace gui {
             m_model.map_box->to_center(win_box);
 
             m_model.world->draw(m_texture_manager, *m_model.map_box);
-
-            m_model.world->get_current_level()->get_stats()->set_duration(0);
         }
 
         void main_map::after() {

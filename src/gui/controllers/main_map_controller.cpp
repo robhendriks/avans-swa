@@ -8,7 +8,6 @@
 
 namespace gui {
     namespace controllers {
-
         main_map_controller::main_map_controller(views::main_map &view, engine::engine &engine, views::win_game_over& transition_view, models::main_map_model &model, models::transition_level_model& transition_model, game &game1) :
             base_controller(game1), m_view(view), m_trans_view(transition_view), m_engine(engine), m_model(model), m_trans_model(transition_model) {
             view.set_controller(*this);
@@ -16,14 +15,15 @@ namespace gui {
             m_model.map_box = {};
         }
 
-
-
         void main_map_controller::show() {
-            // if lvl is over draw the transition screen
-            bool game_over = m_model.world->get_current_level()->is_game_over();
-            bool goal_reached = m_model.world->get_current_level()->is_goal_reached();
+            std::shared_ptr<domain::game_level::game_level> lvl = m_model.world->get_current_level();
+            if(lvl->get_start_time() == 0)
+                lvl->set_start_time((long) m_engine.get_time_elapsed());
+
+            bool game_over = lvl->is_game_over((long) m_engine.get_time_elapsed());
+            bool goal_reached = lvl->is_goal_reached();
             if(game_over || goal_reached){
-                m_trans_model.stats_lvl = m_model.world->get_current_level()->get_stats();
+                m_trans_model.stats_lvl = lvl->get_stats();
                 m_trans_model.stats_game = std::shared_ptr<domain::game_level::game_stats>(new domain::game_level::game_stats(m_model.world->get_stats()));
                 m_trans_model.result = !game_over;
                 m_trans_model.next_lvl_exists = m_model.world->is_next_level();
@@ -55,7 +55,6 @@ namespace gui {
         void main_map_controller::next_lvl() {
            if(m_model.world->is_next_level()){
                m_model.world->next_level();
-               m_model.world->get_current_level()->get_stats()->set_start_duration(m_engine.)
                show();
            }
            else

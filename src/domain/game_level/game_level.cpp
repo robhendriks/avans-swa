@@ -5,13 +5,13 @@
 #include "game_level.h"
 namespace domain{
     namespace  game_level{
-        game_level::game_level(std::string &name, domain::map::base_map* map, std::shared_ptr<game_stats>& goal) : m_name(name), m_goal(goal){
+        game_level::game_level(std::string &name, domain::map::base_map* map, std::shared_ptr<game_stats>& goal) : m_name(name), m_goal(goal), m_start_time(0){
             this->m_map = std::shared_ptr<domain::map::base_map>(map);
             this->m_map->add_observer(this);
             this->m_stats = std::shared_ptr<game_stats>(new game_stats());
         }
 
-        game_level::game_level(std::string &name, std::shared_ptr<map::base_map> map, std::shared_ptr<game_stats>& goal) : m_name(name), m_goal(goal){
+        game_level::game_level(std::string &name, std::shared_ptr<map::base_map> map, std::shared_ptr<game_stats>& goal) : m_name(name), m_goal(goal), m_start_time(0){
             this->m_map = map;
             this->m_map->add_observer(this);
             this->m_stats = std::shared_ptr<game_stats>(new game_stats());
@@ -64,8 +64,16 @@ namespace domain{
             return *m_stats.get() >= *m_goal.get();
         }
 
-        bool game_level::is_game_over() {
-            return m_stats->get_duration() > m_goal->get_duration();
+        bool game_level::is_game_over(long current_duration) {
+            return m_goal->get_max_duration() != 0 ? m_goal->get_max_duration() - (current_duration - m_start_time) < 0 : false;
+        }
+
+        long game_level::get_start_time() {
+            return m_start_time;
+        }
+
+        void game_level::set_start_time(long time) {
+            m_start_time = time;
         }
     }
 }
