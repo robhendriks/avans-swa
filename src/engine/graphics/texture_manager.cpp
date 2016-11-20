@@ -19,39 +19,31 @@ namespace engine {
             }
         }
 
-        bool texture_manager::load(SDL_Surface *surface, std::string id) {
+        SDL_Texture* texture_manager::load(SDL_Surface *surface, std::string id) {
+            if(surface == nullptr)
+                return nullptr;
+
             // Create texture
             SDL_Texture* texture = SDL_CreateTextureFromSurface(&_renderer, surface);
 
             // Check if the texture is created
             if (texture == nullptr) {
-                return false;
+                return texture;
             }
 
             // Save the texture in the map
             _texture_map[id] = std::make_tuple(texture, surface);
 
-            return true;
+            return texture;
         }
 
-        bool texture_manager::load(std::string file_name, std::string id) {
+        SDL_Texture* texture_manager::load(std::string file_name, std::string id) {
             SDL_Surface* surface = IMG_Load(file_name.c_str());
-
-            // Check if the image is loaded
-            if (surface == nullptr) {
-                return false;
-            }
-
             return load(surface, id);
         }
 
-        bool texture_manager::load_text(std::string text, graphics::color4_t color, TTF_Font &font, std::string id) {
+        SDL_Texture* texture_manager::load_text(std::string text, graphics::color4_t color, TTF_Font &font, std::string id) {
             SDL_Surface* text_surface = TTF_RenderText_Blended(&font, text.c_str(), (SDL_Color) color);
-
-            if (text_surface == nullptr) {
-                return false;
-            }
-
             return load(text_surface, id);
         }
 

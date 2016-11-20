@@ -31,11 +31,11 @@ namespace engine {
 
             SDL_Texture *find(std::string id) const;
 
-            bool load(SDL_Surface *surface, std::string id);
+            SDL_Texture* load(SDL_Surface *surface, std::string id);
 
-            bool load(std::string file_name, std::string id);
+            SDL_Texture* load(std::string file_name, std::string id);
 
-            bool load_text(std::string text, graphics::color4_t color, TTF_Font &font, std::string id);
+            SDL_Texture* load_text(std::string text, graphics::color4_t color, TTF_Font &font, std::string id);
 
             math::vec2_t get_size(std::string id) const;
 

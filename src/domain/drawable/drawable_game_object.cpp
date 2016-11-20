@@ -28,11 +28,11 @@ namespace domain {
                 this->m_texture = texture_manager.find(this->m_id);
                 if (this->m_texture == nullptr) {
                     // in case it didn't then we need to load it in ourselves.
-                    bool result = texture_manager.load(this->m_file_loc, this->m_id);
+                    SDL_Texture* result = texture_manager.load(this->m_file_loc, this->m_id);
 
                     // in case the texture is valid then find it again.
-                    if (result)
-                        this->m_texture = texture_manager.find(this->m_id);
+                    if (result != nullptr)
+                        this->m_texture = result;
                     else // in case its not loaded in then throw a exception that loading the texture in is impossible.
                         throw std::exception();
                 }
