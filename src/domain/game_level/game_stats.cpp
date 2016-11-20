@@ -70,5 +70,9 @@ namespace domain {
         game_stats game_stats::operator+(const game_stats &other) {
              return game_stats(m_built_buildings_count + other.m_built_buildings_count, m_built_roads_count + other.m_built_roads_count, m_duration + other.m_duration);
         }
+
+        void game_stats::set_duration(long duration) {
+            m_duration = duration;
+        }
     }
 }

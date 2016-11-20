@@ -28,6 +28,8 @@ namespace gui {
             m_model.map_box->to_center(win_box);
 
             m_model.world->draw(m_texture_manager, *m_model.map_box);
+
+            m_model.world->get_current_level()->get_stats()->set_duration(0);
         }
 
         void main_map::after() {
