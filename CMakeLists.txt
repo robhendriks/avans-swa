@@ -74,8 +74,49 @@ set(SOURCES src/main.cpp
     src/gui/views/base_view.h
     src/gui/controllers/base_controller.cpp
     src/gui/controllers/base_controller.h
-    src/services/registry/registry.h src/game.cpp src/game.h src/engine/audio/sound_manager.cpp src/engine/audio/sound_manager.h src/engine/audio/music_manager.cpp src/engine/audio/music_manager.h src/events/object_placed_on_field.cpp src/events/object_placed_on_field.h src/events/object_cannot_be_placed_on_field.cpp src/events/object_cannot_be_placed_on_field.h src/listeners/play_sound_when_object_is_placed_on_field.cpp src/listeners/play_sound_when_object_is_placed_on_field.h src/listeners/play_sound_when_object_cannot_be_placed_on_field.cpp src/listeners/play_sound_when_object_cannot_be_placed_on_field.h src/engine/audio/state.h src/engine/audio/sound_callback_wrapper.cpp src/engine/audio/sound_callback_wrapper.h src/domain/drawable/drawable_game_object.cpp src/domain/drawable/drawable_game_object.h src/domain/drawable/abstract_drawable_game_object.h
-        src/services/map_loader/base_map_loader.h src/services/map_loader/json_map_loader.cpp src/services/map_loader/json_map_loader.h)
+    src/services/registry/registry.h
+    src/game.cpp
+    src/game.h
+    src/engine/audio/sound_manager.cpp
+    src/engine/audio/sound_manager.h
+    src/engine/audio/music_manager.cpp
+    src/engine/audio/music_manager.h
+    src/events/object_placed_on_field.cpp
+    src/events/object_placed_on_field.h
+    src/events/object_cannot_be_placed_on_field.cpp
+    src/events/object_cannot_be_placed_on_field.h
+    src/listeners/play_sound_when_object_is_placed_on_field.cpp
+    src/listeners/play_sound_when_object_is_placed_on_field.h
+    src/listeners/play_sound_when_object_cannot_be_placed_on_field.cpp
+    src/listeners/play_sound_when_object_cannot_be_placed_on_field.h
+    src/engine/audio/state.h
+    src/engine/audio/sound_callback_wrapper.cpp
+    src/engine/audio/sound_callback_wrapper.h
+    src/domain/drawable/drawable_game_object.cpp
+    src/domain/drawable/drawable_game_object.h
+    src/domain/drawable/abstract_drawable_game_object.h
+    src/services/map_loader/base_map_loader.h
+    src/services/map_loader/json_map_loader.cpp
+    src/services/map_loader/json_map_loader.h
+    src/gui/controllers/credits_controller.cpp
+    src/gui/controllers/credits_controller.h
+    src/gui/views/credits.cpp
+    src/gui/views/credits.h
+    src/engine/graphics/font_manager.cpp
+    src/engine/graphics/font_manager.h
+    src/engine/graphics/moveable_box.cpp
+    src/engine/graphics/moveable_box.h
+    src/domain/buildings/road.cpp
+    src/domain/buildings/road.h
+    src/engine/draganddrop/drag_and_drop.h
+    src/engine/draganddrop/dragable.h
+    src/engine/draganddrop/dropable.h
+    src/engine/events/mouse_motion.cpp
+    src/engine/events/mouse_motion.h
+    src/engine/draganddrop/drag_and_drop.cpp
+    src/domain/game_level/game_level.cpp
+    src/domain/game_level/game_level.h src/domain/game_level/game_stats.cpp src/domain/game_level/game_stats.h src/gui/views/win_game_over.cpp src/gui/views/win_game_over.h src/gui/models/transition_level_model.h)
+
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include
@@ -85,7 +126,7 @@ include_directories(third_party/json/src
         ${SDL2_TTF_INCLUDE_DIRS}
         ${SDL2_MIXER_INCLUDE_DIR})
 
-add_executable(city_defence ${SOURCES} src/domain/buildings/road.cpp src/domain/buildings/road.h)
+add_executable(city_defence ${SOURCES})
 add_library(city_defence_sources STATIC ${SOURCES})
 
 target_link_libraries(city_defence

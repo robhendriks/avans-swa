@@ -7,6 +7,7 @@
 #include "../events/mouse_button_down.h"
 #include "mouse_buttons.h"
 #include "../events/mouse_button_up.h"
+#include "../events/mouse_motion.h"
 
 namespace engine {
     namespace input {
@@ -62,7 +63,7 @@ namespace engine {
 
         void input_handler::update(const SDL_Event &event) {
             if (update_states(event)) {
-                notify_observers(this);
+                notify_observers(this, "");
             }
         }
 
@@ -99,9 +100,12 @@ namespace engine {
                         eventbus.fire(mouse_button_up_event);
                     }
                     break;
-                case SDL_MOUSEMOTION:
+                case SDL_MOUSEMOTION: {
                     m_mouse_position->x = (float)event.motion.x;
                     m_mouse_position->y = (float)event.motion.y;
+                    events::mouse_motion mouse_motion_event(*m_mouse_position);
+                    eventbus.fire(mouse_motion_event);
+                    }
                     break;
                 case SDL_KEYDOWN:
                 case SDL_KEYUP:

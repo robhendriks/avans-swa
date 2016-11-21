@@ -7,6 +7,7 @@
 
 #include <SDL.h>
 #include "graphics/color4.hpp"
+#include "window.h"
 
 namespace engine {
     struct window_config {
@@ -15,8 +16,11 @@ namespace engine {
         graphics::color4_t background_color;
         int x = SDL_WINDOWPOS_CENTERED;
         int y = SDL_WINDOWPOS_CENTERED;
-        int w = 1024;
-        int h = 768;
+
+        // Use -1 for full width/height
+        int w = -1;
+        int h = -1;
+
         Uint32 flags = SDL_WINDOW_SHOWN;
     };
 }

@@ -22,26 +22,31 @@ namespace gui {
     }
 }
 
+namespace engine{
+    class engine;
+}
+
 namespace gui {
     namespace views {
         class main_map
             : public base_view,
               engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>> {
         public:
-            main_map(engine::graphics::texture_manager &texture_manager, engine::audio::music_manager &music_manager,
+            main_map(engine::engine &engine, engine::graphics::texture_manager &texture_manager, engine::audio::music_manager &music_manager,
                      engine::window &window, models::main_map_model &model);
 
             void set_controller(controllers::main_map_controller &controller);
 
             void before();
 
-            void draw();
+            void draw(float interpolation);
 
             void after();
 
             void on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event);
 
         private:
+            engine::engine& m_engine;
             engine::graphics::texture_manager &m_texture_manager;
             engine::audio::music_manager &m_music_manager;
             engine::window &m_window;

@@ -25,12 +25,12 @@ namespace domain {
             virtual void unload(engine::graphics::texture_manager &texture_manager);
 
         protected:
-            SDL_Texture *texture;
+            SDL_Texture *m_texture;
 
-            std::string id;
-            std::string file_loc;
-            std::unique_ptr<engine::math::vec2_t> image_start_position;
-            int rotation;
+            std::string m_id;
+            std::string m_file_loc;
+            std::unique_ptr<engine::math::vec2_t> m_image_start_position;
+            int m_rotation;
 
             // load texture of current object in case its not loaded in yet. (this will fill texture field or give a exception
             void load_texture_if_not_loaded_yet(engine::graphics::texture_manager &texture_manager);
@@ -38,6 +38,8 @@ namespace domain {
         private:
             // basic implementation is to draw the current object (needs to be overwritten for also drawing children)
             virtual void draw_object(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest);
+            // returns the size of a texture. in case no texture is loaded in. it will return -1, -1
+            engine::math::vec2_t get_texture_size();
         };
     }
 }

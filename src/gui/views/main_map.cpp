@@ -8,9 +8,9 @@
 namespace gui {
     namespace views {
 
-        main_map::main_map(engine::graphics::texture_manager &texture_manager, engine::audio::music_manager &music_manager,
+        main_map::main_map(engine::engine &engine, engine::graphics::texture_manager &texture_manager, engine::audio::music_manager &music_manager,
                            engine::window &window, models::main_map_model &model)
-            : m_texture_manager(texture_manager), m_music_manager(music_manager), m_window(window), m_model(model) {
+            : m_engine(engine), m_texture_manager(texture_manager), m_music_manager(music_manager), m_window(window), m_model(model) {
         }
 
         void main_map::before() {
@@ -20,7 +20,11 @@ namespace gui {
             engine::eventbus::eventbus::get_instance().subscribe(this);
         }
 
-        void main_map::draw() {
+        void main_map::draw(float interpolation) {
+            if(m_model.world->get_current_level()->is_game_over((long) m_engine.get_time_elapsed()) || m_model.world->get_current_level()->is_goal_reached()){
+                m_controller->show();
+            }
+
             // Draw the map in the middle of the screen
             auto win_box = m_window.get_display_box();
             m_model.map_box->to_left(win_box);
@@ -44,10 +48,10 @@ namespace gui {
             // Check if the position is on the map
             if (m_model.map_box->contains(*position)) {
                 // Calculate which tile
-                int col = (int) (position->x - m_model.map_box->min.x) / m_model.world->get_current_map()->get_tile_width();
-                int row = (int) (position->y - m_model.map_box->min.y) / m_model.world->get_current_map()->get_tile_height();
+                int col = (int) (position->x - m_model.map_box->min.x) / m_model.world->get_current_level()->get_map()->get_tile_width();
+                int row = (int) (position->y - m_model.map_box->min.y) / m_model.world->get_current_level()->get_map()->get_tile_height();
 
-                for(std::shared_ptr<domain::map::base_field> tile : m_model.world->get_current_map()->get_fields()){
+                for(std::shared_ptr<domain::map::base_field> tile : m_model.world->get_current_level()->get_map()->get_fields()){
                     if(tile->get_y() == row && tile->get_x() == col){
                         m_controller->tile_click(*tile);
                         break;

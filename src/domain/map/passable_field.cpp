@@ -28,7 +28,7 @@ namespace domain {
                 delete event;
 
                 // notify local observers
-                this->notify_observers(this);
+                this->notify_observers(this, "object-placed");
             } else {
                 // Fire event
                 auto *event = new events::object_cannot_be_placed_on_field(*this, *placeable_object);

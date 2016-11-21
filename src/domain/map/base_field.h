@@ -17,8 +17,8 @@ namespace domain {
             int get_y();
             virtual buildings::base_placeable_object* get_placed_object() = 0;
         private:
-            int _x;
-            int _y;
+            int m_x;
+            int m_y;
         };
     }
 }

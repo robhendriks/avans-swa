@@ -12,7 +12,7 @@ namespace engine {
         public:
             virtual ~observer() = default;
 
-            virtual void notify(T *p_observee) = 0;
+            virtual void notify(T *p_observee, std::string type) = 0;
         };
     }
 }

@@ -24,6 +24,11 @@ int main(int argc, char *argv[]) {
     w_config.h = json_config->get_int("window.height", 768);
 
     engine::engine_config e_config = { w_config };
+
+    // Create a font_manager with fonts
+    auto *font_manager = new engine::graphics::font_manager();
+    font_manager->add("fonts/Roboto-Regular.ttf", "roboto");
+
     /**
      * END OF CONFIG
      */
@@ -46,6 +51,7 @@ int main(int argc, char *argv[]) {
             boost::di::bind<>.to(*engine1->get_sound_manager()),
             boost::di::bind<>.to(*engine1->get_music_manager()),
             boost::di::bind<>.to(*engine1->get_window()),
+            boost::di::bind<>.to(*font_manager),
             boost::di::bind<services::level_loader::base_map_loader>.to(*load_map_service)
         );
     };
@@ -83,6 +89,7 @@ int main(int argc, char *argv[]) {
     delete cannot_placed_subscriber;
 
     // Stop/cooldown the engine
+    delete font_manager;
     engine1->cooldown();
 
     // More cleaning

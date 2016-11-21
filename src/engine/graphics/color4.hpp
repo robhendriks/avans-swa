@@ -7,6 +7,7 @@
 
 #include <string>
 #include <sstream>
+#include <SDL_pixels.h>
 
 namespace engine {
     namespace graphics {
@@ -22,6 +23,10 @@ namespace engine {
                 r = ((hex >> 16) & 0x000000FF);
                 g = ((hex >> 8) & 0x000000FF);
                 b = (hex & 0x000000FF);
+            }
+
+            operator SDL_Color() {
+                return SDL_Color { (Uint8)r, (Uint8)g, (Uint8)b, (Uint8)a };
             }
 
             std::string to_string() {

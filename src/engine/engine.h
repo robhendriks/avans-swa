@@ -40,7 +40,7 @@ namespace engine {
 
         unsigned int get_paused_ticks() const;
 
-        unsigned int get_time_elapsed() const;
+        unsigned int get_time_elapsed(float interpolation = 1) const;
 
         state get_state() const;
 

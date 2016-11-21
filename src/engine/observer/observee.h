@@ -29,9 +29,9 @@ namespace engine {
                 m_observers.erase(remove(m_observers.begin(), m_observers.end(), p_observer));
             }
 
-            void notify_observers(T *obj) {
+            void notify_observers(T *obj, std::string type = "") {
                 for (auto observer : m_observers) {
-                    observer->notify(obj);
+                    observer->notify(obj, type);
                 }
             }
 

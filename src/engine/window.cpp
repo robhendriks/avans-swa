@@ -19,6 +19,17 @@ namespace engine {
             return;
         }
 
+        // When the width or height is smaller than 0, use the full width/height
+        if (mConfig.w < 0 || mConfig.h < 0) {
+            auto box = get_screen_box();
+            if (mConfig.w < 0) {
+                mConfig.w = (int)box.width();
+            }
+            if (mConfig.h < 0) {
+                mConfig.h = (int)box.height();
+            }
+        }
+
         mWindow = SDL_CreateWindow(mConfig.title.c_str(), mConfig.x, mConfig.y, mConfig.w, mConfig.h, mConfig.flags);
 
         if (!mWindow) {
@@ -41,7 +52,6 @@ namespace engine {
     }
 
     void window::clear() {
-
         SDL_SetRenderDrawColor(mRenderer, mConfig.background_color.r, mConfig.background_color.g, mConfig.background_color.b, mConfig.background_color.a);
         SDL_RenderClear(mRenderer);
     }
@@ -79,8 +89,11 @@ namespace engine {
     }
 
     math::box2_t window::get_display_box() {
-        auto surface = *SDL_GetWindowSurface(mWindow);
-
+        auto surface = *get_surface();
         return math::box2_t({{0, 0}, {(float)surface.w, (float)surface.h}});
+    }
+
+    SDL_Surface *window::get_surface() const {
+        return SDL_GetWindowSurface(mWindow);
     }
 }

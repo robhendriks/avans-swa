@@ -4,6 +4,7 @@
 
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+#include <SDL_ttf.h>
 #include "engine.h"
 #include "input/input_handler.h"
 #include "eventbus/eventbus.h"
@@ -151,6 +152,7 @@ namespace engine {
         }
 
         Mix_Quit();
+        TTF_Quit();
         IMG_Quit();
         SDL_Quit();
 
@@ -158,18 +160,24 @@ namespace engine {
     }
 
     /**
-     * Init SDL with IMG and AUDIO
+     * Init SDL with IMG, AUDIO and TTF
      */
     void engine::init_sdl() {
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
             std::string error = SDL_GetError();
             throw std::runtime_error("Failed to initialize SDL: " + error);
         } else {
-            //Initialize PNG loading
+            // Initialize PNG loading
             int imgFlags = IMG_INIT_PNG;
             if (!(IMG_Init(imgFlags) & imgFlags)) {
                 std::string error = IMG_GetError();
                 throw std::runtime_error("Failed to initialize SDL image: " + error);
+            }
+
+            // Initialize ttf
+            if(TTF_Init() == -1) {
+                std::string error = TTF_GetError();
+                throw std::runtime_error("Failed to initialize SDL ttf: " + error);
             }
 
             //Initialize SDL_mixer
@@ -212,6 +220,7 @@ namespace engine {
 
             // Set the color and texture manager
             m_color_manager = new graphics::color_manager(*m_window->get_renderer());
+
             m_texture_manager = new graphics::texture_manager(*m_window->get_renderer());
         }
     }
@@ -249,11 +258,14 @@ namespace engine {
      * Note that the time_elapsed is independent of the number of times the window is refreshed and it is also independent
      * of SDL_GetTicks(). Because of this, time_elapsed will be the same on fast hardware as on slow hardware.
      *
+     * @param interpolation - calculate the time with the given interpolation, default = 1 (no extra time)
+     *
      * @return unsigned int - time in milliseconds
      */
-    unsigned int engine::get_time_elapsed() const {
+    unsigned int engine::get_time_elapsed(float interpolation) const {
         if (m_state == RUNNING || m_state == PAUSED) {
-            return (m_game_ticks - get_paused_ticks()) * m_config.get_skip_ticks();
+            float game_ticks = m_game_ticks - get_paused_ticks() + interpolation - 1;
+            return game_ticks * m_config.get_skip_ticks();
         }
 
         return 0;

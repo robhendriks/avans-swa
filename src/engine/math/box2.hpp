@@ -21,6 +21,10 @@ namespace engine {
             box2_t(const box2_t &b)
                 : min(vec2_t(b.min)), max(vec2_t(b.max)) {}
 
+            box2_t(float width, float height, const vec2_t &center_point)
+                : min(vec2_t({center_point.x - (width / 2), center_point.y - (height / 2)})),
+                  max(vec2_t({center_point.x + (width / 2), center_point.y + (height / 2)})) {}
+
             box2_t(const float x1, const float y1, const float x2, const float y2)
                 : min{x1, y1}, max{x2, y2} {}
 
@@ -32,6 +36,14 @@ namespace engine {
                 return (min + max) *= 0.5f;
             }
 
+            float width() {
+                return max.x - min.x;
+            }
+
+            float height() {
+                return max.y - min.y;
+            }
+
             void move_to_start(vec2_t start) {
                 float x_diff = start.x - min.x;
                 float y_diff = start.y - min.y;
@@ -40,6 +52,11 @@ namespace engine {
                 max.y += y_diff;
 
                 min = start;
+            }
+
+            void add(const vec2_t &vec) {
+                min += vec;
+                max += vec;
             }
 
             void to_top(const box2_t &box) {

@@ -17,5 +17,5 @@ void game::use_view(gui::views::base_view &view) {
 }
 
 void game::on_event(engine::events::window_cleared &event) {
-    m_current_view->draw();
+    m_current_view->draw(event.get_interpolation());
 }

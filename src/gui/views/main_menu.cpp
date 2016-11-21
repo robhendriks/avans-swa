@@ -18,7 +18,7 @@ namespace gui {
                                                                                          {489, 366}}) {
         }
 
-        void main_menu::draw() {
+        void main_menu::draw(float interpolation) {
             m_texture_manager.draw("menu_item_1", {0, 0}, m_play_dest);
             m_texture_manager.draw("menu_item_1", {0, 122}, m_load_dest);
             m_texture_manager.draw("menu_item_1", {0, 244}, m_quit_dest);
@@ -33,6 +33,8 @@ namespace gui {
                 m_menu_controller->load();
             } else if (m_quit_dest.contains(*position)) {
                 m_menu_controller->quit();
+            } else {
+                m_menu_controller->credits();
             }
         }
 
