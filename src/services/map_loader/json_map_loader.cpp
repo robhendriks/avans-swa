@@ -161,7 +161,7 @@ namespace services {
                     // TODO: moeten we gebouw objects niet eerst aanmaken?
                     // new level_objects
                     // map_model.level_objects.push_back();
-                    engine::math::vec2_t *v = new engine::math::vec2_t{this->get_length_and_width(root).y, rotation != 0 ? this->get_length_and_width(root).x * rotation : this->get_length_and_width(root).x};
+                    engine::math::vec2_t *v = new engine::math::vec2_t{ this->get_length_and_width(root).y * rotation, 0};
                     //auto *field = new domain::map::passable_field("tile", "images/grass.png", v, 0, elem["x"], elem["y"]);
 
 
@@ -204,7 +204,7 @@ namespace services {
                     // TODO: moeten we gebouw objects niet eerst aanmaken?
                     // new level_objects
                     // map_model.level_objects.push_back();
-                    engine::math::vec2_t *v = new engine::math::vec2_t{this->get_length_and_width(root).y, rotation != 0 ? this->get_length_and_width(root).x * rotation : this->get_length_and_width(root).x};
+                    engine::math::vec2_t *v = new engine::math::vec2_t{ this->get_length_and_width(root).y * rotation, 0};
 
                     std::string image_url_for_road = "images/";
                     image_url_for_road += elem["id"];
