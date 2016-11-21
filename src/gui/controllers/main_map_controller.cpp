@@ -23,6 +23,11 @@ namespace gui {
             bool game_over = lvl->is_game_over((long) m_engine.get_time_elapsed());
             bool goal_reached = lvl->is_goal_reached();
             if(game_over || goal_reached){
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
+                auto s = lvl->get_stats().get();
+#pragma GCC diagnostic pop
                 m_trans_model.stats_lvl = lvl->get_stats();
                 m_trans_model.stats_game = std::shared_ptr<domain::game_level::game_stats>(new domain::game_level::game_stats(m_model.world->get_stats()));
                 m_trans_model.result = !game_over;

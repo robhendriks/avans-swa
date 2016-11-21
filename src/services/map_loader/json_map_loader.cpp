@@ -75,13 +75,13 @@ namespace services {
 #pragma GCC diagnostic pop
 
             map->add_fields(tile_list);
+            auto goal = std::shared_ptr<domain::game_level::game_stats>(new domain::game_level::game_stats(3));
+            std::string name = "name";
+            auto lvl = std::shared_ptr<domain::game_level::game_level>(new domain::game_level::game_level(name, map, goal));
+            std::vector<std::shared_ptr<domain::game_level::game_level>> lvls;
+            lvls.push_back(lvl);
 
-            std::vector<std::shared_ptr<domain::map::base_map>> mapVect;
-            mapVect.push_back(std::shared_ptr<domain::map::base_map>(map));
-            std::shared_ptr<domain::map::base_map> m = (std::shared_ptr<domain::map::base_map>) mapVect.at(0);
-            auto r = m->get_fields();
-            r.size();
-            domain::gameworld::game_world res = domain::gameworld::game_world(mapVect);
+            domain::gameworld::game_world res = domain::gameworld::game_world(lvls);
             return res;
         }
 
@@ -161,7 +161,7 @@ namespace services {
                     // TODO: moeten we gebouw objects niet eerst aanmaken?
                     // new level_objects
                     // map_model.level_objects.push_back();
-                    engine::math::vec2_t *v = new engine::math::vec2_t{0, 0};
+                    engine::math::vec2_t *v = new engine::math::vec2_t{this->get_length_and_width(root).y, rotation != 0 ? this->get_length_and_width(root).x * rotation : this->get_length_and_width(root).x};
                     //auto *field = new domain::map::passable_field("tile", "images/grass.png", v, 0, elem["x"], elem["y"]);
 
 
@@ -204,7 +204,7 @@ namespace services {
                     // TODO: moeten we gebouw objects niet eerst aanmaken?
                     // new level_objects
                     // map_model.level_objects.push_back();
-                    engine::math::vec2_t *v = new engine::math::vec2_t{0, static_cast<float>(rotation)};
+                    engine::math::vec2_t *v = new engine::math::vec2_t{this->get_length_and_width(root).y, rotation != 0 ? this->get_length_and_width(root).x * rotation : this->get_length_and_width(root).x};
 
                     std::string image_url_for_road = "images/";
                     image_url_for_road += elem["id"];
@@ -214,7 +214,7 @@ namespace services {
 //
                     game_object->X = elem["x"];
                     game_object->Y = elem["y"];
-                    game_object->object = new domain::buildings::building("roads", image_url_for_road, v, rotation);
+                    game_object->object = new domain::buildings::building(elem["id"], image_url_for_road, v, rotation);
                     temp_game_objs.push_back(game_object);
                 }
             }
