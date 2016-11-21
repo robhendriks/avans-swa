@@ -115,7 +115,7 @@ set(SOURCES src/main.cpp
     src/engine/events/mouse_motion.h
     src/engine/draganddrop/drag_and_drop.cpp
     src/domain/game_level/game_level.cpp
-    src/domain/game_level/game_level.h src/domain/game_level/game_stats.cpp src/domain/game_level/game_stats.h src/gui/views/win_game_over.cpp src/gui/views/win_game_over.h src/gui/models/transition_level_model.h)
+    src/domain/game_level/game_level.h src/domain/game_level/game_stats.cpp src/domain/game_level/game_stats.h src/gui/views/win_game_over.cpp src/gui/views/win_game_over.h src/gui/models/transition_level_model.h src/domain/nations/enemy.cpp src/domain/nations/enemy.h src/domain/nations/nation.cpp src/domain/nations/nation.h src/services/wavegenerator.cpp src/services/wavegenerator.h)
 
 
 include_directories(third_party/json/src

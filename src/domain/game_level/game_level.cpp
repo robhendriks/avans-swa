@@ -16,6 +16,13 @@ namespace domain{
             this->m_map->add_observer(this);
             this->m_stats = std::shared_ptr<game_stats>(new game_stats());
         }
+        game_level::game_level(std::string &name, std::shared_ptr<map::base_map> map, std::shared_ptr<game_stats>& goal,std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> _enemies) : m_name(name), m_goal(goal), m_start_time(0){
+            this->m_map = map;
+            this->m_map->add_observer(this);
+            this->m_stats = std::shared_ptr<game_stats>(new game_stats());
+            enemies = _enemies;
+        }
+
 
         std::string game_level::get_name() {
             return this->m_name;
@@ -75,5 +82,8 @@ namespace domain{
         void game_level::set_start_time(long time) {
             m_start_time = time;
         }
+        std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> game_level::getEnemies(){
+            return enemies;
+        };
     }
 }

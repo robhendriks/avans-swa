@@ -8,6 +8,7 @@
 #include "../map/base_map.h"
 #include "game_stats.h"
 #include <memory>
+#include "../nations/enemy.h"
 
 namespace domain{
     namespace  game_level {
@@ -15,6 +16,8 @@ namespace domain{
         public:
             game_level(std::string &name, map::base_map *map, std::shared_ptr<game_stats>& goal);
             game_level(std::string &name, std::shared_ptr<map::base_map> map, std::shared_ptr<game_stats>& goal);
+            game_level(std::string &name, std::shared_ptr<map::base_map> map, std::shared_ptr<game_stats>& goal, std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> _enemies);
+
             std::string get_name();
             std::shared_ptr<domain::map::base_map> get_map();
             virtual void draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest);
@@ -26,12 +29,15 @@ namespace domain{
             std::shared_ptr<game_stats> get_stats();
             long get_start_time();
             void set_start_time(long time);
+            std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> getEnemies();
+
         private:
             std::string& m_name;
             std::shared_ptr<domain::map::base_map> m_map;
             std::shared_ptr<game_stats> m_goal;
             std::shared_ptr<game_stats> m_stats;
             long m_start_time;
+            std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> enemies;
         };
     }
 }
