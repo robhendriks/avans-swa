@@ -5,6 +5,7 @@
 #include <SDL_log.h>
 #include "../../domain/gameworld/game_world.h"
 #include "json_map_loader.h"
+#include "../../domain/buildings/road.h"
 
 namespace services {
     namespace level_loader {
@@ -161,6 +162,8 @@ namespace services {
                     // TODO: moeten we gebouw objects niet eerst aanmaken?
                     // new level_objects
                     // map_model.level_objects.push_back();
+                   // engine::math::vec2_t *v = new engine::math::vec2_t{this->get_length_and_width(root).y, rotation != 0 ? this->get_length_and_width(root).x * rotation : this->get_length_and_width(root).x};
+//                    engine::math::vec2_t *v = new engine::math::vec2_t{0, rotation != 0 ? this->get_length_and_width(root).x * rotation : this->get_length_and_width(root).x};
                     engine::math::vec2_t *v = new engine::math::vec2_t{ this->get_length_and_width(root).y * rotation, 0};
                     //auto *field = new domain::map::passable_field("tile", "images/grass.png", v, 0, elem["x"], elem["y"]);
 
@@ -204,8 +207,8 @@ namespace services {
                     // TODO: moeten we gebouw objects niet eerst aanmaken?
                     // new level_objects
                     // map_model.level_objects.push_back();
+                    //engine::math::vec2_t *v = new engine::math::vec2_t{this->get_length_and_width(root).y, rotation != 0 ? this->get_length_and_width(root).x * rotation : this->get_length_and_width(root).x};
                     engine::math::vec2_t *v = new engine::math::vec2_t{ this->get_length_and_width(root).y * rotation, 0};
-
                     std::string image_url_for_road = "images/";
                     image_url_for_road += elem["id"];
                     image_url_for_road += ".png";
@@ -214,7 +217,7 @@ namespace services {
 //
                     game_object->X = elem["x"];
                     game_object->Y = elem["y"];
-                    game_object->object = new domain::buildings::building(elem["id"], image_url_for_road, v, rotation);
+                    game_object->object = new domain::buildings::road(elem["id"], image_url_for_road, v, rotation);
                     temp_game_objs.push_back(game_object);
                 }
             }
