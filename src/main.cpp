@@ -20,6 +20,7 @@ int main(int argc, char *argv[]) {
     };
 
     w_config.w = json_config->get_int("window.width", 1024);
+
     w_config.h = json_config->get_int("window.height", 768);
 
     engine::engine_config e_config = { w_config };
