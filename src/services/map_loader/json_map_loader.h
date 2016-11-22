@@ -23,14 +23,32 @@ using namespace engine::math;
 namespace services {
     namespace level_loader {
         class json_map_loader : public base_map_loader {
+
         public:
             json_map_loader();
+
             domain::gameworld::game_world load(std::string file_location);
+
             virtual ~json_map_loader();
+
         private:
+            struct building_objects_with_pos {
+                int X;
+                int Y;
+                domain::buildings::base_placeable_object* object;
+            };
+            struct road_objects_with_pos {
+                int X;
+                int Y;
+                domain::buildings::base_placeable_object* object;
+            };
+
             std::vector<domain::map::base_field *> load_tiles(json &root);
-            std::vector<domain::buildings::building *> load_objects(json root);
+
             vec2_t get_length_and_width(json &root);
+
+            std::vector<building_objects_with_pos *> load_buildings(json &root);
+            std::vector<road_objects_with_pos *> load_roads(json &root);
         };
     };
 };

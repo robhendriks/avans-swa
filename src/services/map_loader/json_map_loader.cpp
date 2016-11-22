@@ -5,6 +5,7 @@
 #include <SDL_log.h>
 #include "../../domain/gameworld/game_world.h"
 #include "json_map_loader.h"
+#include "../../domain/buildings/road.h"
 
 namespace services {
     namespace level_loader {
@@ -28,62 +29,53 @@ namespace services {
             // create map with tile length and width
 
             vec2_t result = this->get_length_and_width(root);
-            domain::map::map* map = new domain::map::map(result.x, result.y);
+            domain::map::map *map = new domain::map::map(result.x, result.y);
 
 
             // create tiles
-            std::vector<domain::map::base_field *> timeList = this->load_tiles(root);
-            std::vector<domain::buildings::building *> objects = load_objects(root);
-            timeList.at(0)->place(objects.at(0));
+            std::vector<domain::map::base_field *> tile_list = this->load_tiles(root);
+            std::vector<building_objects_with_pos *> game_object_list = load_buildings(root);
+            std::vector<road_objects_with_pos *> road_objects_list = load_roads(root);
+            int game_obj_counter = 0;
+            int road_object_counter = 0;
+            int tile_count = 0;
+            for (auto &tile : tile_list) // access by reference to avoid copying
+            {
+                tile_count++;
+                //Check if object is on the same place as tile.
+                while ((int) game_object_list.size() != game_obj_counter) {
 
-            map->add_fields(timeList);
-            // create placeable_objects
-//            std::vector<domain::map::base_field*> m_fields;
-//            std::vector<domain::map::base_field*> _fields_with_object;
+                    if (tile->get_x() == game_object_list.at(game_obj_counter)->X &&
+                        tile->get_y() == game_object_list.at(game_obj_counter)->Y) {
+                        tile->place(game_object_list.at(game_obj_counter)->object);
+                        game_obj_counter++;
+                    } else {
+                        game_obj_counter++;
+                    }
+                }
+                while ((int) road_objects_list.size() != road_object_counter) {
+                    if (tile->get_x() == road_objects_list.at(road_object_counter)->X &&
+                        tile->get_y() == road_objects_list.at(road_object_counter)->Y) {
+                        tile->place(road_objects_list.at(road_object_counter)->object);
+                        road_object_counter++;
+                    } else {
+                        road_object_counter++;
+                    }
+                }
+                road_object_counter = 0;
+                game_obj_counter = 0;
+            }
 
-            // link placeable_object with the correct tile its placed on.
+            map->add_fields(tile_list);
+            auto goal = std::shared_ptr<domain::game_level::game_stats>(new domain::game_level::game_stats(3));
+            std::string name = "name";
+            auto lvl = std::shared_ptr<domain::game_level::game_level>(new domain::game_level::game_level(name, map, goal));
+            std::vector<std::shared_ptr<domain::game_level::game_level>> lvls;
+            lvls.push_back(lvl);
 
-            // add tiles to map with add_fields() method.
-
-            // add map to lvl
-            std::vector<std::shared_ptr<domain::game_level::game_level>> levelVect;
-            std::string name = "level 1";
-            auto stat = std::shared_ptr<domain::game_level::game_stats>(new domain::game_level::game_stats(3, 0, 10000));
-            stat->get_built_buildings_count();
-            std::shared_ptr<domain::game_level::game_level> p_game_level = std::shared_ptr<domain::game_level::game_level>(
-                new domain::game_level::game_level(name, map, stat));
-            levelVect.push_back(p_game_level);
-
-            // return game world
-            return domain::gameworld::game_world(levelVect);
-
-//            std::ifstream file(file_location);
-//            if (!file.is_open()) {
-//                throw std::runtime_error(std::string("Unable to open file: ") + file_location);
-//            }
-//
-//            SDL_Log("Loading level: %s\n", "");
-//            json root;
-//
-//            try {
-//                root << file;
-//            } catch (std::exception &e) {
-//                // TODO: proper error handling
-//                throw;
+            domain::gameworld::game_world res = domain::gameworld::game_world(lvls);
+            return res;
         }
-/*
-            size_t width = root["width"];
-            size_t height = root["height"];
-
-            // Create map model
-            models::main_map_model map_model;
-            map_model.map_box = new engine::math::box2_t{0, 0, (float)(width * map_model.tile_width), (float)(height * map_model.tile_height)};
-
-            load_tiles(root, map_model);
-            load_objects(root, map_model);
-*/
-        // TODO:
-
 
         vec2_t json_map_loader::get_length_and_width(json &root) {
             return {32, 32};
@@ -115,32 +107,25 @@ namespace services {
 
                 SDL_Log("%d %d %d", x, y, type);
 
-                // TODO: moeten we tiles niet eerst aanmaken?
-                //base_field(const std::string &id, const std::string &file_loc, engine::math::vec2_t *image_start_position, int rotation, int x, int y);
-                //vec2_t x;
-                // maak texture class aan.
-
                 engine::math::vec2_t *v = new engine::math::vec2_t{0, 0};
                 auto *field = new domain::map::passable_field("tile", "images/grass.png", v, elem["x"], elem["y"]);
 
                 tempTiles.push_back(field);
-
-//              map_model.tiles.push_back();
             }
             return tempTiles;
-            //map.add_fields(tempTiles);
         }
 
-        std::vector<domain::buildings::building *> json_map_loader::load_objects(json root) {
-            std::vector<domain::buildings::building *> tempGameObjs;
+        std::vector<json_map_loader::building_objects_with_pos *> json_map_loader::load_buildings(json &root) {
+            std::vector<building_objects_with_pos *> temp_game_objs;
+            json_map_loader::building_objects_with_pos *game_object = new json_map_loader::building_objects_with_pos();
 
             if (root.find("objects") == root.end()) {
-                return tempGameObjs;
+                temp_game_objs.push_back(game_object);
             }
 
             json level_objects = root["objects"];
             if (!level_objects.is_object()) {
-                return tempGameObjs;
+                //return nullptr;
 
             }
 
@@ -149,25 +134,81 @@ namespace services {
 
             json data = level_objects["data"];
             if (!data.is_array()) {
-                return tempGameObjs;
+                //return nullptr;
             }
-
+            std::string item_name = "building";
             for (json &elem : data) {
+                std::string id = elem["id"];
                 int x = elem["x"];
                 int y = elem["y"];
                 int rotation = elem["rotation"];
 
-                SDL_Log("%d %d %d", x, y, rotation);
-                // TODO: moeten we gebouw objects niet eerst aanmaken?
-                // new level_objects
-                // map_model.level_objects.push_back();
-                engine::math::vec2_t *v = new engine::math::vec2_t{0, 0};
-                //auto *field = new domain::map::passable_field("tile", "images/grass.png", v, 0, elem["x"], elem["y"]);
-                auto field = new domain::buildings::building("object", "images/building.png",v,rotation);
-                tempGameObjs.push_back(field);
+                auto res = std::mismatch(item_name.begin(), item_name.end(), id.begin());
+                if (res.first == item_name.end()) {
+
+                    SDL_Log("%d %d %d", x, y, rotation);
+                    float y_for_vec2_t = 0;
+
+                    engine::math::vec2_t *v = new engine::math::vec2_t{ 0,y_for_vec2_t };
+
+                    game_object->object = new domain::buildings::building("building", "images/building.png", v, rotation);
+                    game_object->X = x;
+                    game_object->Y = y;
+                    temp_game_objs.push_back(game_object);
+                }
             }
-            return tempGameObjs;
-            //map.add_fields(tempGameObjs);
+            return temp_game_objs;
+        }
+
+        std::vector<json_map_loader::road_objects_with_pos *> json_map_loader::load_roads(json &root) {
+            std::vector<road_objects_with_pos *> temp_game_objs;
+
+            if (root.find("objects") == root.end()) {
+                //return temp_game_objs;
+            }
+
+            json level_objects = root["objects"];
+            if (!level_objects.is_object()) {
+                //return nullptr;
+            }
+
+            size_t level_objects_count = level_objects["count"];
+            SDL_Log("Loading %d level objects(s)...\n", level_objects_count);
+
+            json data = level_objects["data"];
+            if (!data.is_array()) {
+                //return nullptr;
+            }
+            std::string item_name = "road";
+            for (json &elem : data) {
+                std::string id = elem["id"];
+                int rotation = elem["rotation"];
+                auto res = std::mismatch(item_name.begin(), item_name.end(), id.begin());
+                if (res.first == item_name.end()) {
+
+                    // Voor het eerste plaatje is dit y = i * 32 (waar i = 0) uitkomst: 0
+                    // Voor het tweede plaatje is dit y = i * 32 (waar i = 1) uitkomst: 32
+                    // Voor het derde plaatje is dit y = i * 32 (waar i = 2) uitkomst: 64
+                    // Voor het vierde plaatje is dot y = i * 32 (waar i = 3) uitkomst: 96
+                    float y_for_vec2_t = 0;
+                    if(rotation != 0 ){
+                        y_for_vec2_t =  this->get_length_and_width(root).x * rotation;
+                    }
+                    engine::math::vec2_t *v = new engine::math::vec2_t{ 0,y_for_vec2_t };
+                    std::string image_url_for_road = "images/";
+                    image_url_for_road += elem["id"];
+                    image_url_for_road += ".png";
+                    json_map_loader::road_objects_with_pos *game_object = new json_map_loader::road_objects_with_pos();
+
+//
+                    game_object->X = elem["x"];
+                    game_object->Y = elem["y"];
+                    game_object->object = new domain::buildings::road(elem["id"], image_url_for_road, v, rotation);
+                    temp_game_objs.push_back(game_object);
+                }
+            }
+            return temp_game_objs;
+            //map.add_fields(temp_game_objs);
         }
 
         json_map_loader::~json_map_loader() {

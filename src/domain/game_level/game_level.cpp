@@ -3,6 +3,8 @@
 //
 
 #include "game_level.h"
+#include "../buildings/road.h"
+
 namespace domain{
     namespace  game_level{
         game_level::game_level(std::string &name, domain::map::base_map* map, std::shared_ptr<game_stats>& goal) : m_name(name), m_goal(goal), m_start_time(0){
