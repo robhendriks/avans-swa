@@ -19,9 +19,9 @@ int main(int argc, char *argv[]) {
         engine::graphics::color4_t(utils::string_utils::hex_to_long(json_config->get_string("window.background_color")))
     };
 
-    w_config.w = json_config->get_int("window.width", 1024);
+    w_config.w = json_config->get_int("window.width", w_config.w);
+    w_config.h = json_config->get_int("window.height", w_config.h);
 
-    w_config.h = json_config->get_int("window.height", 768);
 
     engine::engine_config e_config = { w_config };
 
