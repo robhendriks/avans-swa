@@ -44,10 +44,7 @@ namespace services {
                 tile_count++;
                 //Check if object is on the same place as tile.
                 while ((int) game_object_list.size() != game_obj_counter) {
-                    int tilePosx = tile->get_x();
-                    if(tilePosx == 7){
-                        std::cout<<"hoi";
-                    }
+
                     if (tile->get_x() == game_object_list.at(game_obj_counter)->X &&
                         tile->get_y() == game_object_list.at(game_obj_counter)->Y) {
                         tile->place(game_object_list.at(game_obj_counter)->object);
@@ -68,12 +65,6 @@ namespace services {
                 road_object_counter = 0;
                 game_obj_counter = 0;
             }
-            //map.add_fields(tile_list);
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-variable"
-             auto b = tile_list.at(21)->get_placed_object();
-            //21 / 22/ 23 /24
-#pragma GCC diagnostic pop
 
             map->add_fields(tile_list);
             auto goal = std::shared_ptr<domain::game_level::game_stats>(new domain::game_level::game_stats(3));
@@ -122,7 +113,6 @@ namespace services {
                 tempTiles.push_back(field);
             }
             return tempTiles;
-            //map.add_fields(tempTiles);
         }
 
         std::vector<json_map_loader::building_objects_with_pos *> json_map_loader::load_buildings(json &root) {
@@ -131,7 +121,6 @@ namespace services {
 
             if (root.find("objects") == root.end()) {
                 temp_game_objs.push_back(game_object);
-                //return temp_game_objs;
             }
 
             json level_objects = root["objects"];
@@ -154,19 +143,13 @@ namespace services {
                 int y = elem["y"];
                 int rotation = elem["rotation"];
 
-                //std::size_t found = id.find_first_of(item_name);
                 auto res = std::mismatch(item_name.begin(), item_name.end(), id.begin());
                 if (res.first == item_name.end()) {
 
                     SDL_Log("%d %d %d", x, y, rotation);
-                    // TODO: moeten we gebouw objects niet eerst aanmaken?
-                    // new level_objects
-                    // map_model.level_objects.push_back();
-                   // engine::math::vec2_t *v = new engine::math::vec2_t{this->get_length_and_width(root).y, rotation != 0 ? this->get_length_and_width(root).x * rotation : this->get_length_and_width(root).x};
-//                    engine::math::vec2_t *v = new engine::math::vec2_t{0, rotation != 0 ? this->get_length_and_width(root).x * rotation : this->get_length_and_width(root).x};
-                    engine::math::vec2_t *v = new engine::math::vec2_t{ this->get_length_and_width(root).y * rotation, 0};
-                    //auto *field = new domain::map::passable_field("tile", "images/grass.png", v, 0, elem["x"], elem["y"]);
+                    float y_for_vec2_t = 0;
 
+                    engine::math::vec2_t *v = new engine::math::vec2_t{ 0,y_for_vec2_t };
 
                     game_object->object = new domain::buildings::building("building", "images/building.png", v, rotation);
                     game_object->X = x;
@@ -175,7 +158,6 @@ namespace services {
                 }
             }
             return temp_game_objs;
-            //map.add_fields(temp_game_objs);
         }
 
         std::vector<json_map_loader::road_objects_with_pos *> json_map_loader::load_roads(json &root) {
@@ -203,12 +185,16 @@ namespace services {
                 int rotation = elem["rotation"];
                 auto res = std::mismatch(item_name.begin(), item_name.end(), id.begin());
                 if (res.first == item_name.end()) {
-                    //SDL_Log("%d %d %d", x, y, rotation);
-                    // TODO: moeten we gebouw objects niet eerst aanmaken?
-                    // new level_objects
-                    // map_model.level_objects.push_back();
-                    //engine::math::vec2_t *v = new engine::math::vec2_t{this->get_length_and_width(root).y, rotation != 0 ? this->get_length_and_width(root).x * rotation : this->get_length_and_width(root).x};
-                    engine::math::vec2_t *v = new engine::math::vec2_t{ this->get_length_and_width(root).y * rotation, 0};
+
+                    // Voor het eerste plaatje is dit y = i * 32 (waar i = 0) uitkomst: 0
+                    // Voor het tweede plaatje is dit y = i * 32 (waar i = 1) uitkomst: 32
+                    // Voor het derde plaatje is dit y = i * 32 (waar i = 2) uitkomst: 64
+                    // Voor het vierde plaatje is dot y = i * 32 (waar i = 3) uitkomst: 96
+                    float y_for_vec2_t = 0;
+                    if(rotation != 0 ){
+                        y_for_vec2_t =  this->get_length_and_width(root).x * rotation;
+                    }
+                    engine::math::vec2_t *v = new engine::math::vec2_t{ 0,y_for_vec2_t };
                     std::string image_url_for_road = "images/";
                     image_url_for_road += elem["id"];
                     image_url_for_road += ".png";
