@@ -67,7 +67,7 @@ namespace services {
             }
 
             map->add_fields(tile_list);
-            auto goal = std::shared_ptr<domain::game_level::game_stats>(new domain::game_level::game_stats(3));
+            auto goal = std::shared_ptr<domain::game_level::game_stats>(new domain::game_level::game_stats(3, 0, 10000));
             std::string name = "name";
             auto lvl = std::shared_ptr<domain::game_level::game_level>(new domain::game_level::game_level(name, map, goal));
             std::vector<std::shared_ptr<domain::game_level::game_level>> lvls;
