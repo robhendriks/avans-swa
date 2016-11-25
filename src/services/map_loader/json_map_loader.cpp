@@ -69,7 +69,8 @@ namespace services {
             map->add_fields(tile_list);
             auto goal = std::shared_ptr<domain::game_level::game_stats>(new domain::game_level::game_stats(3));
             std::string name = "name";
-            auto lvl = std::shared_ptr<domain::game_level::game_level>(new domain::game_level::game_level(name, map, goal));
+            auto lvl = std::shared_ptr<domain::game_level::game_level>(
+                new domain::game_level::game_level(name, map, goal));
             std::vector<std::shared_ptr<domain::game_level::game_level>> lvls;
             lvls.push_back(lvl);
 
@@ -139,21 +140,21 @@ namespace services {
             std::string item_name = "building";
             for (json &elem : data) {
                 std::string id = elem["id"];
-                int x = elem["x"];
-                int y = elem["y"];
                 int rotation = elem["rotation"];
-
                 auto res = std::mismatch(item_name.begin(), item_name.end(), id.begin());
                 if (res.first == item_name.end()) {
 
-                    SDL_Log("%d %d %d", x, y, rotation);
-                    float y_for_vec2_t = 0;
 
-                    engine::math::vec2_t *v = new engine::math::vec2_t{ 0,y_for_vec2_t };
+                    std::string image_url_for_road = "images/";
+                    image_url_for_road += "building";
+                    image_url_for_road += ".png";
+                    json_map_loader::building_objects_with_pos *game_object = new json_map_loader::building_objects_with_pos();
+                    engine::math::vec2_t *v = new engine::math::vec2_t{0, 0};
 
-                    game_object->object = new domain::buildings::building("building", "images/building.png", v, rotation);
-                    game_object->X = x;
-                    game_object->Y = y;
+
+                    game_object->X = elem["x"];
+                    game_object->Y = elem["y"];
+                    game_object->object = new domain::buildings::road(elem["id"], image_url_for_road, v, rotation);
                     temp_game_objs.push_back(game_object);
                 }
             }
@@ -191,10 +192,10 @@ namespace services {
                     // Voor het derde plaatje is dit y = i * 32 (waar i = 2) uitkomst: 64
                     // Voor het vierde plaatje is dot y = i * 32 (waar i = 3) uitkomst: 96
                     float y_for_vec2_t = 0;
-                    if(rotation != 0 ){
-                        y_for_vec2_t =  this->get_length_and_width(root).x * rotation;
+                    if (rotation != 0) {
+                        y_for_vec2_t = this->get_length_and_width(root).x * rotation;
                     }
-                    engine::math::vec2_t *v = new engine::math::vec2_t{ 0,y_for_vec2_t };
+                    engine::math::vec2_t *v = new engine::math::vec2_t{0, y_for_vec2_t};
                     std::string image_url_for_road = "images/";
                     image_url_for_road += elem["id"];
                     image_url_for_road += ".png";
