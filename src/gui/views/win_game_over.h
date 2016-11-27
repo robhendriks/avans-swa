@@ -15,8 +15,6 @@
 #include "../models/transition_level_model.h"
 #include <memory>
 
-// ik snap niet hoe main_map_controller dit kan include en dit weer main_map_controller. snap ook het niet van deze forward decl als ik de .h toch al heb geinclude hier
-// in visual studio werkt dit niet namelijk :(
 namespace gui{
     namespace controllers{
         class main_map_controller;
@@ -32,9 +30,9 @@ namespace gui {
             engine::audio::music_manager &music_manager, models::transition_level_model &model);
             void before();
             void after();
-            void draw(float interpolation);
+            void draw(unsigned int time_elapsed);
             void on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event);
-            void set_controller(gui::controllers::main_map_controller* controller);
+            void set_controller(gui::controllers::main_map_controller &controller);
             ~win_game_over();
         private:
             engine::graphics::texture_manager &m_texture_manager;

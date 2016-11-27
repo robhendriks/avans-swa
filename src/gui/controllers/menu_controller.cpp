@@ -10,10 +10,10 @@ namespace gui {
         menu_controller::menu_controller(views::main_menu &main_menu, engine::engine &engine,
                                          controllers::main_map_controller &main_map_controller,
                                          controllers::credits_controller &credits_controller, game &game1,
-                                         services::level_loader::base_map_loader &map_loader)
+                                         services::level_loader::base_level_loader &level_loader)
             : base_controller(game1), m_engine(engine), m_main_menu(main_menu),
               m_main_map_controller(main_map_controller), m_credits_controller(credits_controller),
-              _map_loader(map_loader) {
+              m_level_loader(level_loader) {
 
             main_map_controller.set_menu_controller(std::shared_ptr<menu_controller>(this));
             m_main_menu.set_controller(*this);
@@ -21,11 +21,13 @@ namespace gui {
 
         void menu_controller::show() {
             view(m_main_menu);
-            m_main_menu.set_controller(*this);
         }
 
         void menu_controller::play() {
-            m_main_map_controller.set_game_world(std::unique_ptr<domain::gameworld::game_world>(new domain::gameworld::game_world(this->_map_loader.load("level1.json"))));
+            auto game_levels = new std::vector<std::unique_ptr<domain::game_level::game_level>>();
+            game_levels->push_back(m_level_loader.load());
+
+            m_main_map_controller.set_game_world(std::unique_ptr<domain::gameworld::game_world>(new domain::gameworld::game_world(*game_levels)));
             m_main_map_controller.show();
         }
 

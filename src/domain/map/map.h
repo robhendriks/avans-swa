@@ -1,33 +1,62 @@
 #ifndef CITY_DEFENCE_MAP_H
 #define CITY_DEFENCE_MAP_H
 
-#include "base_map.h"
-#include "base_field.h"
-#include "passable_field.h"
+#include "field.h"
+#include "../../engine/events/display_changed.h"
+#include "../drawable/abstract_drawable_game_object.h"
 #include <vector>
 #include <memory>
 
 namespace domain {
     namespace map {
-        class map : public base_map, public engine::observer::observer<base_field>{
+        class field;
+    }
+}
+
+namespace domain {
+    namespace map {
+        class map : public drawable::abstract_drawable_game_object, public engine::observer::observee<map>,
+                    public engine::observer::observer<field>, engine::eventbus::subscriber<engine::events::display_changed> {
         public:
-            map(int tile_width, int tile_height);
+            map(engine::math::vec2_t size, engine::math::vec2_t tile_size);
+
             ~map();
-            virtual void draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest);
-            virtual void unload(engine::graphics::texture_manager &texture_manager);
-            std::vector<std::shared_ptr<base_field>> get_fields(bool object_filter = false);
-            virtual void notify(base_field *p_observee, std::string title);
-            void add_field(base_field* field);
-            void add_fields(std::vector<base_field *> fields);
-            int get_tile_width();
-            int get_tile_height();
-            int get_height();
-            int get_width();
+
+            void notify(field *p_observee, std::string title);
+
+            std::shared_ptr<field> get_field(unsigned int index) const;
+
+            std::shared_ptr<field> get_field(engine::math::vec2_t position) const;
+
+            std::vector<std::shared_ptr<field>> get_fields_with_objects() const;
+
+            std::vector<std::shared_ptr<field>> get_empty_fields() const;
+
+            void add_field(std::shared_ptr<field> field1);
+
+            std::vector<std::shared_ptr<field>> get_neighbors(engine::math::vec2_t position) const;
+
+            unsigned int number_of_fields() const;
+
+            engine::math::vec2_t get_tile_size() const;
+
+            engine::math::vec2_t get_size() const;
+
+            void draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed);
+
+            void unload(engine::graphics::texture_manager &texture_manager);
+
+            void on_event(engine::events::display_changed &event);
+
         private:
-            std::vector<std::shared_ptr<domain::map::base_field>> m_fields;
-            std::vector<std::shared_ptr<domain::map::base_field>> m_fields_with_object;
-            int m_tile_width;
-            int m_tile_height;
+            engine::math::vec2_t index_to_position(unsigned int index) const;
+
+            unsigned int position_to_index(engine::math::vec2_t pos) const;
+
+            engine::math::vec2_t m_size;
+            engine::math::vec2_t m_tile_size;
+            std::vector<std::shared_ptr<domain::map::field>> m_fields;
+            engine::math::box2_t m_dest;
         };
     }
 }

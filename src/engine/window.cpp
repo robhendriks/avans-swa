@@ -3,6 +3,8 @@
 //
 
 #include "window.h"
+#include "events/display_changed.h"
+#include "eventbus/eventbus.h"
 
 namespace engine {
     window::window(window_config &config) : mConfig(config), mWindow(NULL), mRenderer(NULL) {}
@@ -88,12 +90,18 @@ namespace engine {
         return math::box2_t({{0, 0}, {(float)dm.w, (float)dm.h}});
     }
 
-    math::box2_t window::get_display_box() {
+    math::box2_t window::get_display_box() const {
         auto surface = *get_surface();
         return math::box2_t({{0, 0}, {(float)surface.w, (float)surface.h}});
     }
 
     SDL_Surface *window::get_surface() const {
         return SDL_GetWindowSurface(mWindow);
+    }
+
+    void window::trigger_display_change() const {
+        auto *display_event = new events::display_changed(get_display_box());
+        eventbus::eventbus::get_instance().fire(display_event);
+        delete display_event;
     }
 }

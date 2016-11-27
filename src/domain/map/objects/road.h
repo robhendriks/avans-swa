@@ -1,0 +1,38 @@
+//
+// Created by te on 14-Nov-16.
+//
+
+#ifndef CITY_DEFENCE_ROAD_H
+#define CITY_DEFENCE_ROAD_H
+
+#include <string>
+#include "../../../engine/draganddrop/dragable.h"
+#include "object.h"
+
+namespace domain {
+    namespace map {
+        namespace objects {
+            enum type {
+                STRAIGHT, JUNCTION, CORNER, CAP, T_JUNCTION
+            };
+
+            class road : public object {
+            public:
+
+                road(engine::math::box2_t box, type type1);
+
+                road(domain::map::field *field1, type type1);
+
+                void on_drop(engine::draganddrop::dropable *dropable1);
+
+                type get_type() const;
+
+            private:
+                type m_type;
+            };
+        }
+    }
+}
+
+
+#endif //CITY_DEFENCE_ROAD_H

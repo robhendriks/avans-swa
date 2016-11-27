@@ -86,10 +86,12 @@ namespace engine {
                 math::vec2_t *position = input::input_handler::get_instance()->get_mouse_position();
                 // Check if the mouse position is on a dropable object
                 for (auto &dropable : m_dropables) {
-                    if (dropable->get_box().contains(*position)) {
+                    // This is needed because the dropable can be deleted by one of the call functions
+                    auto *save_drop = dropable;
+                    if (save_drop->get_box().contains(*position)) {
                         // Try to drop the dragging objects
-                        if (dropable->drop(*m_dragging)) {
-                            m_dragging->on_drop(*dropable);
+                        if (save_drop->drop(m_dragging)) {
+                            m_dragging->on_drop(save_drop);
                             m_dragging = nullptr;
                             delete m_mouse_position_on_select;
                             m_mouse_position_on_select = nullptr;

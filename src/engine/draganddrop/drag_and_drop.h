@@ -30,7 +30,7 @@ namespace engine {
 
 namespace engine {
     namespace draganddrop {
-        class drag_and_drop : public eventbus::subscriber<events::mouse_button_down<input::mouse_buttons::LEFT>>,
+        class drag_and_drop : eventbus::subscriber<events::mouse_button_down<input::mouse_buttons::LEFT>>,
                               eventbus::subscriber<events::mouse_button_up<input::mouse_buttons::LEFT>>,
                               eventbus::subscriber<events::mouse_motion> {
         public:

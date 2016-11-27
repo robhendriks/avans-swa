@@ -30,14 +30,14 @@ namespace engine {
             }
 
             void notify_observers(T *obj, std::string type = "") {
-                for (auto observer : m_observers) {
-                    observer->notify(obj, type);
+                for (auto &observer : m_observers) {
+                    if (observer)
+                        observer->notify(obj, type);
                 }
             }
 
         private:
-            std::vector<observer < T>*>
-            m_observers;
+            std::vector<observer < T>*> m_observers;
         };
     }
 }

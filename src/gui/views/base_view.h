@@ -14,7 +14,7 @@ namespace gui {
         public:
             virtual void before() = 0;
             virtual void after() = 0;
-            virtual void draw(float interpolation) = 0;
+            virtual void draw(unsigned int time_elapsed) = 0;
         };
     }
 }

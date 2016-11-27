@@ -3,9 +3,7 @@
 #include "boost/di.hpp"
 #include "config/json_config.h"
 #include "utils/string_utils.h"
-#include "listeners/play_sound_when_object_is_placed_on_field.h"
-#include "listeners/play_sound_when_object_cannot_be_placed_on_field.h"
-#include "services/map_loader/json_map_loader.h"
+#include "services/level_loader/json_level_loader.h"
 
 int main(int argc, char *argv[]) {
     /**
@@ -37,9 +35,22 @@ int main(int argc, char *argv[]) {
     engine1->warmup();
 
     // Create the ioc container
-    auto *game1 = new game();
+    auto *game1 = new game(*engine1->get_window());
 
-    services::level_loader::json_map_loader *load_map_service = new services::level_loader::json_map_loader();
+    std::ifstream file("level1.json");
+    if (!file.is_open()) {
+        throw std::runtime_error(std::string("Unable to open file: ") + "level1.json");
+    }
+
+    json root;
+    try {
+        root << file;
+    } catch (std::exception &e) {
+        // TODO: proper error handling
+        throw;
+    }
+
+    services::level_loader::json_level_loader *load_map_service = new services::level_loader::json_level_loader(root);
 
     auto di_config = [&]() {
         return boost::di::make_injector(
@@ -51,7 +62,7 @@ int main(int argc, char *argv[]) {
             boost::di::bind<>.to(*engine1->get_music_manager()),
             boost::di::bind<>.to(*engine1->get_window()),
             boost::di::bind<>.to(*font_manager),
-            boost::di::bind<services::level_loader::base_map_loader>.to(*load_map_service)
+            boost::di::bind<services::level_loader::base_level_loader>.to(*load_map_service)
         );
     };
 
@@ -62,16 +73,6 @@ int main(int argc, char *argv[]) {
 
     // Subscribe the game to the window cleared event
     eventbus.subscribe(game1);
-
-    // Subscribe sound to object placed event
-    auto placed_injector = boost::di::make_injector(boost::di::bind<std::string>.to("sounds/pop.wav"), di_config());
-    auto *placed_subscriber = placed_injector.create<listeners::play_sound_when_object_is_placed_on_field*>();
-    eventbus.subscribe(placed_subscriber);
-
-    // Subscribe sound to object cannot be placed event
-    auto cannot_placed_injector = boost::di::make_injector(boost::di::bind<std::string>.to("sounds/error.wav"), di_config());
-    auto *cannot_placed_subscriber = cannot_placed_injector.create<listeners::play_sound_when_object_cannot_be_placed_on_field*>();
-    eventbus.subscribe(cannot_placed_subscriber);
     /**
      * END OF SUBSCRIBERS REGISTRY
      */
@@ -82,10 +83,6 @@ int main(int argc, char *argv[]) {
 
     // Run the game
     engine1->run();
-
-    // Clean
-    delete placed_subscriber;
-    delete cannot_placed_subscriber;
 
     // Stop/cooldown the engine
     delete font_manager;

@@ -9,6 +9,8 @@
 #include "input/input_handler.h"
 #include "eventbus/eventbus.h"
 #include "events/window_cleared.h"
+#include "events/display_changed.h"
+#include "events/game_tick.h"
 
 namespace engine {
     engine::engine(engine_config &config) : m_window(nullptr), m_sound_manager(nullptr), m_music_manager(nullptr),
@@ -93,7 +95,7 @@ namespace engine {
                 float(SDL_GetTicks() + m_config.get_skip_ticks() - next_game_tick) / float(m_config.get_skip_ticks());
 
             // Fire event clear event
-            auto *clear_event = new events::window_cleared(interpolation);
+            auto *clear_event = new events::window_cleared(get_time_elapsed(interpolation), m_game_ticks, interpolation);
             eventbus::eventbus::get_instance().fire(*clear_event);
             delete clear_event;
 
@@ -105,12 +107,21 @@ namespace engine {
      * Update the game states (handle the input)
      */
     void engine::update() {
+        auto &eventbus = eventbus::eventbus::get_instance();
+
+        // Fire the game tick event
+        auto *game_tick_event = new events::game_tick(m_game_ticks, get_time_elapsed());
+        eventbus.fire(game_tick_event);
+        delete game_tick_event;
+
         // Handle the SDL events
         SDL_Event event;
         while (SDL_PollEvent(&event) != 0) {
             // Check for the QUIT event
             if (event.type == SDL_QUIT) {
                 stop();
+            } else if (event.type == SDL_WINDOWEVENT) {
+                m_window->trigger_display_change();
             }
 
             // Update the input handler

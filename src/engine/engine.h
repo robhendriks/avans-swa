@@ -8,11 +8,11 @@
 #include <string>
 #include <exception>
 #include "window.h"
-#include "graphics/texture_manager.h"
 #include "engine_config.h"
-#include "graphics/color_manager.h"
 #include "audio/sound_manager.h"
 #include "audio/music_manager.h"
+#include "graphics/texture_manager.h"
+#include "graphics/color_manager.h"
 
 namespace engine {
 
