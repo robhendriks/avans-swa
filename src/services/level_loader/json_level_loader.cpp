@@ -35,7 +35,7 @@ namespace services {
             // Add placeable objects
             engine::math::box2_t building_box {{10, 10}, {42, 42}};
             auto *building = new domain::map::objects::building(building_box);
-            building->set_draw_settings("images/building.png");
+            building->set_draw_settings("images/building-a.png");
             game_level->add_placeable_object(*building);
 
             // Done with building the level
@@ -103,10 +103,15 @@ namespace services {
                     domain::map::objects::object *object = nullptr;
 
                     std::string image_location;
-                    if (id == "building-a") {
+
+                    std::string building_str = "building";
+                    if (std::mismatch(building_str.begin(), building_str.end(), id.begin()).first == building_str.end()) {
                         object = new domain::map::objects::building(field.get());
-                        image_location = "images/building.png";
-                    } else if (id == "road-straight") {
+
+                        image_location = "images/";
+                        image_location += id;
+                        image_location += ".png";
+                    } else {
                         domain::map::objects::type type1;
                         if (id == "road-straight") {
                             type1 = domain::map::objects::type::STRAIGHT;
@@ -117,7 +122,7 @@ namespace services {
                         } else if (id == "road-corner") {
                             type1 = domain::map::objects::type::CORNER;
                             image_location = "images/road-corner.png";
-                        } else if (id == "road-t_junction") {
+                        } else if (id == "road-t-junction") {
                             type1 = domain::map::objects::type::T_JUNCTION;
                             image_location = "images/road-t-junction.png";
                         } else {
@@ -130,12 +135,13 @@ namespace services {
                         object = new domain::map::objects::road(field.get(), type1);
                     }
 
-                    // Place the (created) object on the field
-                    if (object) {
-                        object->set_draw_settings(image_location, {0, 0}, rotation);
+                    // Calculate the image start position
+                    float image_start_y = map1.get_tile_size().y * rotation;
 
-                        field->place_object(*object);
-                    }
+                    // Place the (created) object on the field
+                    object->set_draw_settings(image_location, {0, image_start_y}, rotation);
+
+                    field->place_object(*object);
                 }
 
                 SDL_Log("%d %d %d", x, y, rotation);
