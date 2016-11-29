@@ -140,6 +140,7 @@ namespace services {
 
                     // Place the (created) object on the field
                     object->set_draw_settings(image_location, {0, image_start_y});
+                    object->set_rotation(rotation);
 
                     field->place_object(*object);
                 }
