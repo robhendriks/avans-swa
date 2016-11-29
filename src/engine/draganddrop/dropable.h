@@ -27,9 +27,15 @@ namespace engine {
         class dropable {
         public:
             virtual math::box2_t get_box() const = 0;
-            virtual bool drop(dragable &dragable1) = 0;
-            virtual void set_drag_and_drop(drag_and_drop *drag_and_drop1) = 0;
+
+            virtual bool drop(dragable *dragable1) = 0;
+
+            void set_drag_and_drop(drag_and_drop *drag_and_drop1);
+
             virtual ~dropable() = default;
+
+        protected:
+            drag_and_drop *m_drag_and_drop;
         };
     }
 }

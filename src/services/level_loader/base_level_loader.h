@@ -9,9 +9,10 @@
 
 namespace services {
     namespace level_loader {
-        class base_map_loader {
+        class base_level_loader {
         public:
-            virtual domain::gameworld::game_world load(std::string file_location) = 0;
+            virtual std::unique_ptr<domain::game_level::game_level> load() = 0;
+            virtual ~base_level_loader() = default;
         };
     };
 };

@@ -7,12 +7,15 @@
 
 
 #include "gui/views/base_view.h"
+#include "engine/window.h"
 
 class game : public engine::eventbus::subscriber<engine::events::window_cleared> {
 public:
+    game(engine::window &window);
     void on_event(engine::events::window_cleared &event);
     void use_view(gui::views::base_view &view);
 private:
+    engine::window &m_window;
     gui::views::base_view *m_current_view;
 };
 

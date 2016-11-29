@@ -26,11 +26,19 @@ namespace engine {
         class dragable {
         public:
             virtual math::box2_t get_box() const = 0;
+
             virtual void on_drag(math::vec2_t position) = 0;
-            virtual void on_drop(dropable &dropable1) = 0;
+
+            virtual void on_drop(dropable *dropable1) = 0;
+
             virtual void not_dropped() = 0;
-            virtual void set_drag_and_drop(drag_and_drop *drag_and_drop1) = 0;
+
+            void set_drag_and_drop(drag_and_drop *drag_and_drop1);
+
             virtual ~dragable() = default;
+
+        protected:
+            drag_and_drop *m_drag_and_drop;
         };
     }
 }

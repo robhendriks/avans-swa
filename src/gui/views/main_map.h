@@ -14,6 +14,7 @@
 #include "base_view.h"
 #include "../controllers/main_map_controller.h"
 #include "../../engine/audio/music_manager.h"
+#include "../../engine/audio/sound_manager.h"
 
 
 namespace gui {
@@ -22,35 +23,28 @@ namespace gui {
     }
 }
 
-namespace engine{
-    class engine;
-}
-
 namespace gui {
     namespace views {
-        class main_map
-            : public base_view,
-              engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>> {
+        class main_map : public base_view {
         public:
-            main_map(engine::engine &engine, engine::graphics::texture_manager &texture_manager, engine::audio::music_manager &music_manager,
-                     engine::window &window, models::main_map_model &model);
+
+            main_map(engine::graphics::texture_manager &texture_manager, engine::audio::music_manager &music_manager,
+                     engine::window &window, models::main_map_model &model, engine::audio::sound_manager &sound_manager);
 
             void set_controller(controllers::main_map_controller &controller);
 
             void before();
 
-            void draw(float interpolation);
+            void draw(unsigned int time_elapsed);
 
             void after();
 
-            void on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event);
-
         private:
-            engine::engine& m_engine;
             engine::graphics::texture_manager &m_texture_manager;
             engine::audio::music_manager &m_music_manager;
             engine::window &m_window;
             models::main_map_model &m_model;
+            engine::audio::sound_manager &m_sound_manager;
             controllers::main_map_controller *m_controller;
         };
     }

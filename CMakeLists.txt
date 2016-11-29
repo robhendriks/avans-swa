@@ -30,22 +30,12 @@ set(SOURCES src/main.cpp
     src/engine/observer/observer.h
     src/engine/input/input_handler.cpp
     src/engine/input/input_handler.h
-    src/domain/map/base_field.h
-    src/domain/map/base_field.cpp
-    src/domain/map/base_map.h
-    src/domain/map/base_map.cpp
-    src/domain/buildings/building.h
-    src/domain/buildings/building.cpp
     src/domain/gameworld/game_world.h
     src/domain/gameworld/game_world.cpp
     src/domain/map/map.h
     src/domain/map/map.cpp
-    src/domain/map/passable_field.h
-    src/domain/map/passable_field.cpp
     src/domain/resources/resource.h
     src/domain/resources/resource.cpp
-    src/domain/buildings/base_placeable_object.cpp
-    src/domain/buildings/base_placeable_object.h
     src/gui/views/main_menu.cpp
     src/gui/views/main_menu.h
     src/engine/graphics/texture_manager.cpp
@@ -85,19 +75,15 @@ set(SOURCES src/main.cpp
     src/events/object_placed_on_field.h
     src/events/object_cannot_be_placed_on_field.cpp
     src/events/object_cannot_be_placed_on_field.h
-    src/listeners/play_sound_when_object_is_placed_on_field.cpp
-    src/listeners/play_sound_when_object_is_placed_on_field.h
-    src/listeners/play_sound_when_object_cannot_be_placed_on_field.cpp
-    src/listeners/play_sound_when_object_cannot_be_placed_on_field.h
     src/engine/audio/state.h
     src/engine/audio/sound_callback_wrapper.cpp
     src/engine/audio/sound_callback_wrapper.h
     src/domain/drawable/drawable_game_object.cpp
     src/domain/drawable/drawable_game_object.h
     src/domain/drawable/abstract_drawable_game_object.h
-    src/services/map_loader/base_map_loader.h
-    src/services/map_loader/json_map_loader.cpp
-    src/services/map_loader/json_map_loader.h
+        src/services/level_loader/base_level_loader.h
+        src/services/level_loader/json_level_loader.cpp
+        src/services/level_loader/json_level_loader.h
     src/gui/controllers/credits_controller.cpp
     src/gui/controllers/credits_controller.h
     src/gui/views/credits.cpp
@@ -106,17 +92,42 @@ set(SOURCES src/main.cpp
     src/engine/graphics/font_manager.h
     src/engine/graphics/moveable_box.cpp
     src/engine/graphics/moveable_box.h
-    src/domain/buildings/road.cpp
-    src/domain/buildings/road.h
     src/engine/draganddrop/drag_and_drop.h
     src/engine/draganddrop/dragable.h
     src/engine/draganddrop/dropable.h
+    src/engine/draganddrop/dragable.cpp
+    src/engine/draganddrop/dropable.cpp
     src/engine/events/mouse_motion.cpp
     src/engine/events/mouse_motion.h
     src/engine/draganddrop/drag_and_drop.cpp
     src/domain/game_level/game_level.cpp
-    src/domain/game_level/game_level.h src/domain/game_level/game_stats.cpp src/domain/game_level/game_stats.h src/gui/views/win_game_over.cpp src/gui/views/win_game_over.h src/gui/models/transition_level_model.h src/domain/nations/enemy.cpp src/domain/nations/enemy.h src/domain/nations/nation.cpp src/domain/nations/nation.h src/services/wavegenerator.cpp src/services/wavegenerator.h)
-
+    src/domain/game_level/game_level.h
+    src/domain/game_level/game_stats.cpp
+    src/domain/game_level/game_stats.h
+    src/gui/views/win_game_over.cpp
+    src/gui/views/win_game_over.h
+    src/gui/models/transition_level_model.h
+    src/domain/nations/enemy.cpp
+    src/domain/nations/enemy.h
+    src/domain/nations/nation.cpp
+    src/domain/nations/nation.h
+    src/services/wavegenerator.cpp
+    src/services/wavegenerator.h
+    src/domain/game_level/game_level.h
+        src/domain/map/objects/building.h
+        src/domain/map/objects/object.h
+        src/domain/map/objects/road.h
+        src/domain/map/objects/building.cpp
+        src/domain/map/objects/object.cpp
+        src/domain/map/objects/road.cpp
+        src/domain/map/field.h
+        src/domain/map/field.cpp
+        src/domain/map/objects/field_object.h
+        src/engine/events/display_changed.cpp
+    src/engine/events/display_changed.h
+    src/engine/events/game_tick.cpp
+    src/engine/events/game_tick.h
+    )
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include

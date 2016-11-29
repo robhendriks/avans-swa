@@ -9,7 +9,6 @@
 #include <exception>
 #include <SDL.h>
 #include "window_config.h"
-#include "graphics/color4.hpp"
 #include "math/box2.hpp"
 #include <stdio.h>
 
@@ -32,9 +31,11 @@ namespace engine {
 
         static math::box2_t get_screen_box();
 
-        math::box2_t get_display_box();
+        math::box2_t get_display_box() const;
 
         SDL_Surface *get_surface() const;
+
+        void trigger_display_change() const;
     private:
         void init_window();
 

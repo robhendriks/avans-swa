@@ -40,7 +40,7 @@ namespace gui {
             m_texture_manager.unload("continue");
         }
 
-        void win_game_over::draw(float interpolation) {
+        void win_game_over::draw(unsigned int time_elapsed) {
             m_header_box->to_top({m_window.get_display_box()});
             m_title_box->to_left(*m_header_box);
             m_title_box->to_center(*m_header_box);
@@ -53,8 +53,8 @@ namespace gui {
             m_texture_manager.draw("continue", {0, 0}, *m_continue_box);
         }
 
-        void win_game_over::set_controller(gui::controllers::main_map_controller* controller) {
-            m_controller = controller;
+        void win_game_over::set_controller(gui::controllers::main_map_controller &controller) {
+            m_controller = &controller;
         }
 
         win_game_over::~win_game_over() {

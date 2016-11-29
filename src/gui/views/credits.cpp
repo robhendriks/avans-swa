@@ -7,9 +7,9 @@
 gui::views::credits::credits(engine::graphics::texture_manager &texture_manager,
                              engine::graphics::font_manager &font_manager,
                              engine::graphics::color_manager &color_manager, engine::window &window,
-                             engine::engine &engine1, engine::audio::music_manager &music_manager) :
+                             engine::audio::music_manager &music_manager) :
     m_texture_manager(texture_manager), m_font_manager(font_manager), m_color_manager(color_manager),
-    m_music_manager(music_manager), m_window(window), m_engine(engine1),
+    m_music_manager(music_manager), m_window(window),
     m_header_box({{0, 0}, {m_window.get_display_box().max.x, 100}}),
     m_credits_box({{0, m_header_box.max.y + 1}, {m_header_box.max.x, m_window.get_display_box().max.y}}),
     m_title_box(nullptr), m_moveable_box(nullptr) {
@@ -83,9 +83,9 @@ void gui::views::credits::after() {
     m_moveable_box = nullptr;
 }
 
-void gui::views::credits::draw(float interpolation) {
+void gui::views::credits::draw(unsigned int time_elapsed) {
     // Draw names
-    m_moveable_box->move(m_engine.get_time_elapsed(interpolation));
+    m_moveable_box->move(time_elapsed);
 
     int i = 0;
     for (auto &box : m_moveable_box->get_boxes()) {

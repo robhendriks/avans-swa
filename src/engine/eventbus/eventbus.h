@@ -35,8 +35,10 @@ namespace engine {
              */
             template<class T>
             void fire(T *event) {
-                // This is needed because a pointer to an event has a different typeid than a reference to an event
-                fire(*event);
+                if (event) {
+                    // This is needed because a pointer to an event has a different typeid than a reference to an event
+                    fire(*event);
+                }
             }
 
             /**
@@ -49,8 +51,22 @@ namespace engine {
                 std::string type_name = typeid(T).name();
 
                 // Loop for "normal" m_subscribers
-                for (auto &sub : m_subscribers[type_name]) {
-                    sub.as<subscriber<T>*>()->on_event(event);
+                m_unsubscribe_count = 0;
+                std::vector<subscriber<T>*> notified;
+                for (size_t i = 0; i < m_subscribers[type_name].size(); i++) {
+                    auto &sub = m_subscribers[type_name][i];
+                    auto *p_subscriber = sub.as<subscriber<T>*>();
+                    // Only notify when not already notified
+                    if (std::find(notified.begin(), notified.end(), p_subscriber) == notified.end()) {
+                        p_subscriber->on_event(event);
+                        notified.push_back(p_subscriber);
+                        // When the subscriber, unsubscribes himself start over again
+                        if (m_unsubscribe_count != 0) {
+                            // Start over again with the loop
+                            i = 0;
+                            m_unsubscribe_count = 0;
+                        }
+                    }
                 }
 
                 // Loop for callbacks
@@ -110,6 +126,7 @@ namespace engine {
                 for (size_t i = 0; i < subscribers_array.size(); i++) {
                     if (subscribers_array[i].as<subscriber<T>*>() == subscriber1) {
                         subscribers_array.erase(subscribers_array.begin() + i);
+                        m_unsubscribe_count++;
                         return;
                     }
                 }
@@ -134,6 +151,9 @@ namespace engine {
         private:
             std::map<std::string, std::string> m_callbacks;
             std::map<std::string, std::vector<type::any>> m_subscribers;
+
+            // This is needed to track changes of the m_subscribers map when an event is fired
+            int m_unsubscribe_count;
 
             eventbus() {}
         };

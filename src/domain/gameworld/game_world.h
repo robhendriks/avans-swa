@@ -7,23 +7,29 @@
 
 namespace domain {
     namespace gameworld {
-        class game_world : public domain::drawable::abstract_drawable_game_object{
+        class game_world : public domain::drawable::abstract_drawable_game_object {
         public:
-            game_world();
+            game_world(std::vector<std::unique_ptr<game_level::game_level>> &game_levels);
 
-            game_world(std::vector<std::shared_ptr<game_level::game_level>>& game_levels);
-            void draw(engine::graphics::texture_manager &texture_manager, engine::math::box2_t &dest);
+            void draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed);
+
             void unload(engine::graphics::texture_manager &texture_manager);
-            std::shared_ptr<game_level::game_level> get_current_level();
-            std::shared_ptr<game_level::game_level> next_level();
-            bool is_next_level();
+
+            game_level::game_level &get_current_level();
+
+            game_level::game_level &next_level();
+
+            bool has_next_level();
+
             game_level::game_stats get_stats();
-            std::shared_ptr<game_level::game_level> reset_level();
+
+            game_level::game_level &reset_level();
+
             ~game_world();
 
         private:
-            int m_current_lvl;
-            std::vector<std::shared_ptr<game_level::game_level>> m_levels;
+            unsigned int m_current_lvl;
+            std::vector<std::unique_ptr<game_level::game_level>> &m_levels;
         };
     }
 }

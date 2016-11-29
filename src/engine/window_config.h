@@ -6,8 +6,8 @@
 #define CITY_DEFENCE_WINDOW_CONFIG_H
 
 #include <SDL.h>
-#include "graphics/color4.hpp"
 #include "window.h"
+#include "graphics/color4.hpp"
 
 namespace engine {
     struct window_config {
