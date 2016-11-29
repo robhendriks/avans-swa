@@ -25,13 +25,10 @@ namespace domain {
          * @param texture_manager
          */
         void field::draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed) {
-            if (m_object) {
-                // Let the object draw
+            drawable::drawable_game_object::draw(texture_manager, time_elapsed);
+
+            if (m_object)
                 m_object->draw(texture_manager, time_elapsed);
-            } else {
-                // Draw self
-                drawable::drawable_game_object::draw(texture_manager, time_elapsed);
-            }
         }
 
         /**
