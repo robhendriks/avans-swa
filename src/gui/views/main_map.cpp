@@ -28,13 +28,13 @@ namespace gui {
             m_sound_manager.load("sounds/error.wav", "error");
             auto &eventbus = engine::eventbus::eventbus::get_instance();
 
-            // Play the pop sound when an dragable_field_object is placed
+            // Play the pop sound when an object is placed
             std::function<void(events::object_placed_on_field &)> on_place = [&](events::object_placed_on_field &event) {
                 m_sound_manager.play("pop");
             };
             eventbus.subscribe("sound_on_place", on_place);
 
-            // Play the error sound when an dragable_field_object cannot be placed
+            // Play the error sound when an object cannot be placed
             std::function<void(events::object_cannot_be_placed_on_field &)> error_place = [&](events::object_cannot_be_placed_on_field &event) {
                 m_sound_manager.play("error");
             };

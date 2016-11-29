@@ -20,9 +20,9 @@ namespace domain {
         }
 
         void drawable_game_object::load_texture_if_not_loaded_yet(engine::graphics::texture_manager &texture_manager) {
-            // in case texture hasn't been loaded in for this dragable_field_object.
+            // in case texture hasn't been loaded in for this object.
             if (m_texture == nullptr) {
-                // look if another dragable_field_object has loaded this specific texture in the texture manager.
+                // look if another object has loaded this specific texture in the texture manager.
                 m_texture = texture_manager.find(m_file_loc);
                 if (m_texture == nullptr) {
                     // in case it didn't then we need to load it in ourselves.

@@ -100,7 +100,7 @@ namespace services {
 
                 auto field = map1.get_field({(float)x, (float)y});
                 if (field) {
-                    domain::map::objects::dragable_field_object *object = nullptr;
+                    domain::map::objects::field_object *object = nullptr;
 
                     std::string image_location;
 
@@ -131,14 +131,14 @@ namespace services {
                             image_location = "images/road-cap.png";
                         }
 
-                        // Create the dragable_field_object
+                        // Create the object
                         object = new domain::map::objects::road(field, type1);
                     }
 
                     // Calculate the image start position
                     float image_start_y = map1.get_tile_size().y * rotation;
 
-                    // Place the (created) dragable_field_object on the field
+                    // Place the (created) object on the field
                     object->set_draw_settings(image_location, {0, image_start_y});
 
                     field->place_object(*object);

@@ -46,7 +46,7 @@ namespace engine {
                     m_dragging->not_dropped();
                 }
 
-                // Set the new dragging dragable_field_object
+                // Set the new dragging object
                 m_dragging = &dragable1;
 
                 return true;
@@ -74,17 +74,17 @@ namespace engine {
 
         void drag_and_drop::on_event(events::mouse_motion &event) {
             if (m_dragging != nullptr) {
-                // Notify the dragging dragable_field_object we are dragging
+                // Notify the dragging object we are dragging
                 m_dragging->on_drag(event.get_mouse_position());
             }
         }
 
         void drag_and_drop::on_event(events::mouse_button_up<input::mouse_buttons::LEFT> &event) {
-            // Check if there is a dragging dragable_field_object
+            // Check if there is a dragging object
             if (m_dragging != nullptr) {
                 // Get the mouse position
                 math::vec2_t *position = input::input_handler::get_instance()->get_mouse_position();
-                // Check if the mouse position is on a dropable dragable_field_object
+                // Check if the mouse position is on a dropable object
                 for (auto &dropable : m_dropables) {
                     // This is needed because the dropable can be deleted by one of the call functions
                     auto *save_drop = dropable;
@@ -101,7 +101,7 @@ namespace engine {
                     }
                 }
 
-                // We then is reach, the dragging dragable_field_object is not dropped on a dropable
+                // We then is reach, the dragging object is not dropped on a dropable
                 if (m_select_and_drop && *m_mouse_position_on_select == *position) {
                     // When select and drop is on and the mouse position is still the same
                     // just ignore this mouse button up
