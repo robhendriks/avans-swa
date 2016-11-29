@@ -4,6 +4,7 @@
 #include "field.h"
 #include "../../events/object_placed_on_field.h"
 #include "../../events/object_cannot_be_placed_on_field.h"
+#include "objects/dragable_field_object.h"
 
 
 namespace domain {
@@ -20,15 +21,17 @@ namespace domain {
         }
 
         /**
-         * Draw a field or the object that is placed
+         * Draw a field and the object that is placed
          *
          * @param texture_manager
          */
         void field::draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed) {
             drawable::drawable_game_object::draw(texture_manager, time_elapsed);
 
-            if (m_object)
+            if (m_object) {
+                // Let the object draw
                 m_object->draw(texture_manager, time_elapsed);
+            }
         }
 
         /**
@@ -47,7 +50,7 @@ namespace domain {
          * @return bool - whether it is successfully placed or not
          */
         bool field::drop(engine::draganddrop::dragable *dragable1) {
-            auto *object = dynamic_cast<objects::object*>(dragable1);
+            auto *object = dynamic_cast<objects::dragable_field_object*>(dragable1);
             if (object && object->can_place_on(*this)) {
                 // Remove this as dropable
                 m_drag_and_drop->remove_dropable(this);
@@ -81,6 +84,8 @@ namespace domain {
         void field::place_object(objects::field_object &object) {
             if (!has_object()) {
                 m_object = &object;
+                m_object->set_field(std::shared_ptr<field>(this));
+
                 // Fire event
                 auto *event = new events::object_placed_on_field(*this, object);
                 engine::eventbus::eventbus::get_instance().fire(*event);

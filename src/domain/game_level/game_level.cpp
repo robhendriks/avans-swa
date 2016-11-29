@@ -88,7 +88,7 @@ namespace domain {
             return enemies;
         }
 
-        void game_level::add_placeable_object(map::objects::object &obj) {
+        void game_level::add_placeable_object(map::objects::dragable_field_object &obj) {
             m_drag_and_drop.add_dragable(obj);
             m_placeable_objects.push_back(&obj);
         };

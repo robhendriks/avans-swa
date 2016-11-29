@@ -8,9 +8,9 @@ namespace domain {
     namespace map {
         namespace objects {
 
-            building::building(engine::math::box2_t box) : object(box) {}
+            building::building(engine::math::box2_t box) : dragable_field_object(box) {}
 
-            building::building(domain::map::field *field1) : object(field1) {}
+            building::building(std::shared_ptr<field> field1) : dragable_field_object(field1) {}
 
             /**
              * Called when the building is successfully dropped/placed on a field
@@ -19,10 +19,11 @@ namespace domain {
              */
             void building::on_drop(engine::draganddrop::dropable *dropable1) {
                 m_drag_and_drop->remove_dragable(this);
-                auto *field1 = dynamic_cast<field*>(dropable1);
-                if (field1) {
-                    set_field(field1);
-                }
+//                auto *field1 = dynamic_cast<field*>(dropable1);
+//                if (field1) {
+//                    set_field(field1);
+//                }
+
             }
 
             /**

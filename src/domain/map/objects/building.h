@@ -3,18 +3,18 @@
 
 #include <string>
 #include "../../../engine/draganddrop/dragable.h"
-#include "object.h"
+#include "dragable_field_object.h"
 #include "../field.h"
 
 namespace domain {
     namespace map {
         namespace objects {
-            class building : public object {
+            class building : public dragable_field_object {
             public:
 
                 building(engine::math::box2_t box);
 
-                building(domain::map::field *field1);
+                building(std::shared_ptr<field> field1);
 
                 bool can_place_on(field &field1) const;
 

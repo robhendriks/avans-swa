@@ -27,7 +27,7 @@ namespace data {
                     // Parse the string
                     nlohmann::json j = nlohmann::json::parse(json_string);
 
-                    // Loop through each json object, and add it to the vector
+                    // Loop through each json dragable_field_object, and add it to the vector
                     for (nlohmann::json::iterator it = j.begin(); it != j.end(); ++it) {
                         V* obj = create_from_json(it.value().dump());
                         if (obj != nullptr) {

@@ -7,7 +7,7 @@
 
 #include <string>
 #include "../../../engine/draganddrop/dragable.h"
-#include "object.h"
+#include "dragable_field_object.h"
 
 namespace domain {
     namespace map {
@@ -16,12 +16,12 @@ namespace domain {
                 STRAIGHT, JUNCTION, CORNER, CAP, T_JUNCTION
             };
 
-            class road : public object {
+            class road : public dragable_field_object {
             public:
 
                 road(engine::math::box2_t box, type type1);
 
-                road(domain::map::field *field1, type type1);
+                road(std::shared_ptr<field> field1, type type1);
 
                 void on_drop(engine::draganddrop::dropable *dropable1);
 

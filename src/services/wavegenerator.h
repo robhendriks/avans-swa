@@ -28,7 +28,7 @@ namespace services {
         //RETURNS
         //Pair values
         //First is time mililseconds the enemy should be spawned relative to last one
-        //Second is a pointer to the enemy domain object
+        //Second is a pointer to the enemy domain dragable_field_object
 
 
         ~wavegenerator();

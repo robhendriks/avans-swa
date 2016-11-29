@@ -5,29 +5,21 @@
 #ifndef CITY_DEFENCE_OBJECT_H
 #define CITY_DEFENCE_OBJECT_H
 
-
+#include <memory>
 #include "../../../engine/draganddrop/dragable.h"
-#include "../field.h"
 #include "field_object.h"
 
-namespace domain {
-    namespace map {
-        class field;
-    }
-}
 
 namespace domain {
     namespace map {
         namespace objects {
-            class object : public field_object, public engine::draganddrop::dragable {
+            class dragable_field_object : public field_object, public engine::draganddrop::dragable {
             public:
-                object(engine::math::box2_t box);
+                dragable_field_object(engine::math::box2_t box);
 
-                object(field *field1);
+                dragable_field_object(std::shared_ptr<field> field1);
 
-                virtual ~object();
-
-                void set_field(field *field1);
+                virtual ~dragable_field_object();
 
                 virtual engine::math::box2_t get_box() const;
 
@@ -40,7 +32,6 @@ namespace domain {
             protected:
                 engine::math::box2_t *m_start_box;
                 engine::math::box2_t *m_draw_box;
-                field *m_field;
             };
         }
     }

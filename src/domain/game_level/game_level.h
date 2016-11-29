@@ -12,6 +12,7 @@
 #include "../map/map.h"
 #include "../../engine/events/game_tick.h"
 #include "../nations/enemy.h"
+#include "../map/objects/dragable_field_object.h"
 
 
 namespace domain {
@@ -47,7 +48,7 @@ namespace domain {
 
             std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> getEnemies();
 
-            void add_placeable_object(map::objects::object &obj);
+            void add_placeable_object(map::objects::dragable_field_object &obj);
 
         private:
             std::string m_name;

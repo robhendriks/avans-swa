@@ -8,9 +8,8 @@ namespace domain {
         drawable_game_object::drawable_game_object() : m_image_start_position(nullptr) {}
 
         void drawable_game_object::set_draw_settings(std::string file_loc,
-                                                   engine::math::vec2_t image_start_position, int rotation) {
+                                                   engine::math::vec2_t image_start_position) {
             m_file_loc = file_loc;
-            m_rotation = rotation;
             m_image_start_position.reset(new engine::math::vec2_t(image_start_position));
             m_texture = nullptr;
         }
@@ -21,9 +20,9 @@ namespace domain {
         }
 
         void drawable_game_object::load_texture_if_not_loaded_yet(engine::graphics::texture_manager &texture_manager) {
-            // in case texture hasn't been loaded in for this object.
+            // in case texture hasn't been loaded in for this dragable_field_object.
             if (m_texture == nullptr) {
-                // look if another object has loaded this specific texture in the texture manager.
+                // look if another dragable_field_object has loaded this specific texture in the texture manager.
                 m_texture = texture_manager.find(m_file_loc);
                 if (m_texture == nullptr) {
                     // in case it didn't then we need to load it in ourselves.

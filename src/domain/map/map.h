@@ -2,6 +2,7 @@
 #define CITY_DEFENCE_MAP_H
 
 #include "field.h"
+#include "../../engine/eventbus/eventbus.h"
 #include "../../engine/events/display_changed.h"
 #include "../drawable/abstract_drawable_game_object.h"
 #include <vector>

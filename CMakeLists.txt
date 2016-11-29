@@ -115,10 +115,10 @@ set(SOURCES src/main.cpp
     src/services/wavegenerator.h
     src/domain/game_level/game_level.h
         src/domain/map/objects/building.h
-        src/domain/map/objects/object.h
+    src/domain/map/objects/dragable_field_object.h
         src/domain/map/objects/road.h
         src/domain/map/objects/building.cpp
-        src/domain/map/objects/object.cpp
+    src/domain/map/objects/dragable_field_object.cpp
         src/domain/map/objects/road.cpp
         src/domain/map/field.h
         src/domain/map/field.cpp
@@ -127,7 +127,7 @@ set(SOURCES src/main.cpp
     src/engine/events/display_changed.h
     src/engine/events/game_tick.cpp
     src/engine/events/game_tick.h
-    )
+    src/domain/map/objects/field_object.cpp)
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include

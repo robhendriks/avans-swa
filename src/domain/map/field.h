@@ -3,15 +3,15 @@
 
 #include "../../engine/graphics/texture_manager.h"
 #include "../../engine/observer/observee.h"
-#include "objects/object.h"
 #include "map.h"
 #include "objects/field_object.h"
 #include "../drawable/drawable_game_object.h"
+#include "../../engine/draganddrop/dropable.h"
 
 namespace domain {
     namespace map {
         namespace objects {
-            class object;
+            class field_object;
         }
     }
 }
