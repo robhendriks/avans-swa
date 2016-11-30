@@ -9,7 +9,7 @@
 namespace domain {
     namespace game_level {
         game_level::game_level(std::string name, std::shared_ptr<domain::map::map> map, std::shared_ptr<game_stats> goal,
-                               std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> _enemies,
+                               std::shared_ptr<domain::nations::nation> _enemies,
             engine::draganddrop::drag_and_drop &drag_and_drop) : m_name(name), m_map(map), m_goal(goal), m_start_time(0), m_drag_and_drop(drag_and_drop) {
 
             // Add all empty fields as dropable
@@ -19,7 +19,7 @@ namespace domain {
 
             m_map->add_observer(this);
             m_stats = std::shared_ptr<game_stats>(new game_stats());
-            enemies = _enemies;
+            m_enemy = _enemies;
         }
 
         std::string game_level::get_name() {
@@ -87,10 +87,6 @@ namespace domain {
             m_start_time = time;
         }
 
-        std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> game_level::getEnemies(){
-            return enemies;
-        }
-
         void game_level::add_placeable_object(map::objects::dragable_field_object &obj) {
             // Observe the placeable field
             obj.add_observer(this);
@@ -107,6 +103,14 @@ namespace domain {
             // Erase from vector
             m_placeable_objects.erase(std::remove(m_placeable_objects.begin(), m_placeable_objects.end(), &obj), m_placeable_objects.end());
         };
+
+        std::vector<std::shared_ptr<domain::nations::enemy>> game_level::get_enemies_in_lvl() {
+            return m_enemies_in_lvl;
+        }
+
+        void game_level::set_enemies_in_lvl(std::vector<std::shared_ptr<domain::nations::enemy>> enemies) {
+            m_enemies_in_lvl = enemies;
+        }
 
         /**
          * Notified when a dragable_field_object is dropped
@@ -126,6 +130,62 @@ namespace domain {
                 // Immediately start with dragging
                 m_drag_and_drop.set_dragging(*copy);
             }
+        }
+
+        void game_level::set_peace_period(long ms_period) {
+            m_peace_period = ms_period;
+        }
+
+        long game_level::get_peace_period() {
+            return m_peace_period;
+        }
+
+        void game_level::set_waves_interval(long ms_interval) {
+            m_waves_interval = ms_interval;
+        }
+
+        long game_level::get_waves_interval() {
+            return m_waves_interval;
+        }
+
+        void game_level::set_base_wave_opportunity(double base_opportunity) {
+            m_base_wave_opportunity = base_opportunity;
+        }
+
+        double game_level::get_base_wave_base_opportunity() {
+            return m_base_wave_opportunity;
+        }
+
+        void game_level::set_wave_opportunity_increase(double increase) {
+            m_wave_opportunity_increase = increase;
+        }
+
+        double game_level::get_wave_opportunity_increase() {
+            return m_wave_opportunity_increase;
+        }
+
+        void game_level::set_wave_spawn_time_range(long ms_range) {
+            m_wave_spawn_time_range = ms_range;
+        }
+
+        long game_level::get_wave_spawn_time_range() {
+            return m_wave_spawn_time_range;
+        }
+
+        void game_level::set_enemy_nation(std::shared_ptr<domain::nations::nation> enemy) {
+            m_enemy = enemy;
+        }
+
+        std::shared_ptr<domain::nations::nation> game_level::get_enemy_nation() {
+            return m_enemy;
+        }
+
+        void game_level::set_spawn_bosses(bool bosses) {
+            m_spawn_bosses = bosses;
+        }
+
+        bool game_level::get_spawn_bosses() {
+            return m_spawn_bosses;
         }
     }
 }

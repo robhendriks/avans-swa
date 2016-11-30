@@ -27,9 +27,14 @@ namespace services {
 
             // Create the level
             auto *d_a_d = new engine::draganddrop::drag_and_drop();
-            auto goal = std::shared_ptr<domain::game_level::game_stats>(new domain::game_level::game_stats(3, 0, 10000));
+            auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats(3, 0, 10000));
+            auto nation = std::make_shared<domain::nations::nation>(domain::nations::nation("name", "name_pre"));
+            std::vector<std::shared_ptr<domain::nations::enemy>> enemies = {};
+            enemies.push_back(std::make_shared<domain::nations::enemy>(domain::nations::enemy("name", 1)));
+            nation->setavailableenemies(enemies);
+
             auto game_level = std::unique_ptr<domain::game_level::game_level>(
-                new domain::game_level::game_level("level", map1, goal, std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>>(), *d_a_d));
+                new domain::game_level::game_level("level", map1, goal, nation , *d_a_d));
 
             // TODO: HARDCODED ATM
             // Add placeable objects

@@ -45,8 +45,11 @@ namespace gui {
             if(m_model.world->get_current_level().is_game_over(time_elapsed)|| m_model.world->get_current_level().is_goal_reached()){
                 m_controller->show();
             }
-
-            m_model.world->draw(m_texture_manager, time_elapsed);
+            else{
+                // this needs to be done with update event bus
+                m_controller->update();
+                m_model.world->draw(m_texture_manager, time_elapsed);
+            }
         }
 
         void main_map::after() {
