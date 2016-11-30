@@ -7,6 +7,17 @@ namespace domain {
     namespace drawable {
         drawable_game_object::drawable_game_object() : m_image_start_position(nullptr) {}
 
+        /**
+         * Copy constructor
+         *
+         * @param obj
+         */
+        drawable_game_object::drawable_game_object(const drawable_game_object &obj) {
+            m_file_loc = obj.m_file_loc;
+            m_texture = obj.m_texture;
+            m_image_start_position = std::unique_ptr<engine::math::vec2_t>(new engine::math::vec2_t(*obj.m_image_start_position));
+        }
+
         void drawable_game_object::set_draw_settings(std::string file_loc,
                                                    engine::math::vec2_t image_start_position) {
             m_file_loc = file_loc;

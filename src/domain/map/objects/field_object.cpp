@@ -8,8 +8,16 @@ namespace domain {
     namespace map {
         namespace objects {
 
-            field_object::field_object() : m_rotation(0), m_field(nullptr) {
+            field_object::field_object() : m_rotation(0), m_field(nullptr) {}
 
+            /**
+             * Copy constructor
+             *
+             * @param obj
+             */
+            field_object::field_object(const field_object &obj) : drawable_game_object(obj) {
+                m_rotation = obj.get_rotation();
+                m_field = nullptr;
             }
 
             void field_object::set_rotation(int rotation) {

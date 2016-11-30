@@ -16,6 +16,8 @@ namespace domain {
         public:
             drawable_game_object();
 
+            drawable_game_object(const drawable_game_object &obj);
+
             virtual void set_draw_settings(std::string file_loc, engine::math::vec2_t image_start_position = {0, 0});
 
             // can be overwritten in case you don't want to load the textures of the current object because there is a chance

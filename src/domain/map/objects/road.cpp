@@ -12,8 +12,19 @@ namespace domain {
 
             road::road(std::shared_ptr<field> field1, type type1) : dragable_field_object(field1), m_type(type1) {}
 
+            /**
+             * Copy constructor
+             */
+            road::road(const road &obj) : dragable_field_object(obj) {
+                m_type = obj.get_type();
+            }
+
             type road::get_type() const {
                 return m_type;
+            }
+
+            dragable_field_object *road::clone() const {
+                return new road(*this);
             }
         }
     }

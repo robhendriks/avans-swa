@@ -23,6 +23,10 @@ namespace domain {
 
                 road(std::shared_ptr<field> field1, type type1);
 
+                road(const road &obj);
+
+                dragable_field_object *clone() const;
+
                 type get_type() const;
 
             private:

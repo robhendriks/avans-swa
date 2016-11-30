@@ -22,6 +22,8 @@ namespace domain {
             public:
                 field_object();
 
+                field_object(const field_object &obj);
+
                 void set_rotation(int rotation);
 
                 int get_rotation() const;

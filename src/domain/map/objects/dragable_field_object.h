@@ -13,23 +13,28 @@
 namespace domain {
     namespace map {
         namespace objects {
-            class dragable_field_object : public field_object, public engine::draganddrop::dragable {
+            class dragable_field_object : public field_object, public engine::draganddrop::dragable,
+                                          public engine::observer::observee<dragable_field_object> {
             public:
                 dragable_field_object(engine::math::box2_t box);
 
                 dragable_field_object(std::shared_ptr<field> field1);
 
+                dragable_field_object(const dragable_field_object &obj);
+
                 virtual ~dragable_field_object();
 
                 virtual engine::math::box2_t get_box() const;
 
-                virtual void on_drop(engine::draganddrop::dropable *dropable1);
-
                 virtual void on_drag(engine::math::vec2_t position);
+
+                virtual void on_drop(engine::draganddrop::dropable *dropable1);
 
                 virtual void not_dropped();
 
                 virtual bool can_place_on(field &field1) const;
+
+                virtual dragable_field_object *clone() const = 0;
 
             protected:
                 engine::math::box2_t *m_start_box;

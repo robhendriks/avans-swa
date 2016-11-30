@@ -17,6 +17,16 @@ namespace domain {
                 set_field(field1);
             }
 
+            /**
+             * Copy constructor
+             *
+             * @param obj
+             */
+            dragable_field_object::dragable_field_object(const dragable_field_object &obj) : field_object(obj) {
+                m_start_box = new engine::math::box2_t(*obj.m_start_box);
+                m_draw_box = new engine::math::box2_t(*obj.m_draw_box);
+            }
+
             engine::math::box2_t dragable_field_object::get_box() const {
                 if (m_field) {
                     return m_field->get_box();
@@ -34,11 +44,16 @@ namespace domain {
                 // Draw on the mouse position
                 auto temp_box = engine::math::box2_t(*m_draw_box);
                 delete m_draw_box;
+
                 m_draw_box = new engine::math::box2_t(temp_box.width(), temp_box.height(), position);
             }
 
             void dragable_field_object::on_drop(engine::draganddrop::dropable *dropable1) {
+                // Remove this as dragable
                 m_drag_and_drop->remove_dragable(this);
+
+                // Notify
+                notify_observers(this, "object-dropped");
             }
 
             void dragable_field_object::not_dropped() {

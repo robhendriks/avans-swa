@@ -18,7 +18,8 @@
 namespace domain {
     namespace game_level {
         class game_level
-            : public drawable::abstract_drawable_game_object, public engine::observer::observer<domain::map::map> {
+            : public drawable::abstract_drawable_game_object, public engine::observer::observer<domain::map::map>,
+            public engine::observer::observer<domain::map::objects::dragable_field_object> {
         public:
             game_level(std::string name, std::shared_ptr<map::map> map, std::shared_ptr<game_stats> goal,
                        std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> _enemies,
@@ -33,6 +34,8 @@ namespace domain {
             virtual void unload(engine::graphics::texture_manager &texture_manager);
 
             virtual void notify(domain::map::map *p_observee, std::string title);
+
+            virtual void notify(domain::map::objects::dragable_field_object *p_observee, std::string title);
 
             virtual bool is_goal_reached();
 
@@ -50,6 +53,7 @@ namespace domain {
 
             void add_placeable_object(map::objects::dragable_field_object &obj);
 
+            void remove_placeable_object(map::objects::dragable_field_object &obj);
         private:
             std::string m_name;
             std::shared_ptr<domain::map::map> m_map;

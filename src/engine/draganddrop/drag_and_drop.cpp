@@ -91,18 +91,24 @@ namespace engine {
                     if (save_drop->get_box().contains(*position)) {
                         // Try to drop the dragging objects
                         if (save_drop->drop(m_dragging)) {
-                            m_dragging->on_drop(save_drop);
+                            // Stop dragging
+                            auto *temp = m_dragging;
                             m_dragging = nullptr;
+
                             delete m_mouse_position_on_select;
                             m_mouse_position_on_select = nullptr;
+
+                            // Let the object know it's dropped
+                            temp->on_drop(save_drop);
+
                             // Stop loop
                             return;
                         }
                     }
                 }
 
-                // We then is reach, the dragging object is not dropped on a dropable
-                if (m_select_and_drop && *m_mouse_position_on_select == *position) {
+                // When this is reached, the dragging object is not dropped on a dropable
+                if (m_select_and_drop && m_mouse_position_on_select && *m_mouse_position_on_select == *position) {
                     // When select and drop is on and the mouse position is still the same
                     // just ignore this mouse button up
                 } else {

@@ -16,6 +16,10 @@ namespace domain {
 
                 building(std::shared_ptr<field> field1);
 
+                building(const building &obj);
+
+                dragable_field_object *clone() const;
+
                 bool can_place_on(field &field1) const;
             };
         }

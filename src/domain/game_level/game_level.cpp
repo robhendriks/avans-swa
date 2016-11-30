@@ -90,8 +90,40 @@ namespace domain {
         }
 
         void game_level::add_placeable_object(map::objects::dragable_field_object &obj) {
+            // Observe the placeable field
+            obj.add_observer(this);
+            // Add as dragable
             m_drag_and_drop.add_dragable(obj);
+
             m_placeable_objects.push_back(&obj);
+        }
+
+        void game_level::remove_placeable_object(map::objects::dragable_field_object &obj) {
+            // Stop observing
+            obj.remove_observer(this);
+
+            // Erase from vector
+            m_placeable_objects.erase(std::remove(m_placeable_objects.begin(), m_placeable_objects.end(), &obj), m_placeable_objects.end());
         };
+
+        /**
+         * Notified when a dragable_field_object is dropped
+         *
+         * @param p_observee
+         * @param title
+         */
+        void game_level::notify(domain::map::objects::dragable_field_object *p_observee, std::string title) {
+            if (title == "object-dropped") {
+                // Remove from placeable_objects
+                remove_placeable_object(*p_observee);
+
+                // Create a copy of the placed field
+                auto *copy = p_observee->clone();
+                add_placeable_object(*copy);
+
+                // Immediately start with dragging
+                m_drag_and_drop.set_dragging(*copy);
+            }
+        }
     }
 }
