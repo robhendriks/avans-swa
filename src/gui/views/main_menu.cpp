@@ -18,7 +18,7 @@ namespace gui {
                                                                                          {489, 366}}) {
         }
 
-        void main_menu::draw(unsigned int time_elapsed) {
+        void main_menu::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
             m_texture_manager.draw("menu_item_1", {0, 0}, m_play_dest);
             m_texture_manager.draw("menu_item_1", {0, 122}, m_load_dest);
             m_texture_manager.draw("menu_item_1", {0, 244}, m_quit_dest);

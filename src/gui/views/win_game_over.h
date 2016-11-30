@@ -15,25 +15,36 @@
 #include "../models/transition_level_model.h"
 #include <memory>
 
-namespace gui{
-    namespace controllers{
+namespace gui {
+    namespace controllers {
         class main_map_controller;
     }
 }
 
 namespace gui {
     namespace views {
-        class win_game_over : public base_view, engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>{
+        class win_game_over
+            : public base_view,
+              engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>> {
         public:
-            win_game_over(engine::graphics::texture_manager &texture_manager, engine::graphics::font_manager &font_manager,
-                    engine::graphics::color_manager &color_manager, engine::window &window, engine::engine &engine1,
-            engine::audio::music_manager &music_manager, models::transition_level_model &model);
+            win_game_over(engine::graphics::texture_manager &texture_manager,
+                          engine::graphics::font_manager &font_manager,
+                          engine::graphics::color_manager &color_manager, engine::window &window,
+                          engine::engine &engine1,
+                          engine::audio::music_manager &music_manager, models::transition_level_model &model);
+
             void before();
+
             void after();
-            void draw(unsigned int time_elapsed);
+
+            void draw(unsigned int time_elapsed, engine::math::box2_t display_box);
+
             void on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event);
+
             void set_controller(gui::controllers::main_map_controller &controller);
+
             ~win_game_over();
+
         private:
             engine::graphics::texture_manager &m_texture_manager;
             engine::graphics::font_manager &m_font_manager;
@@ -41,12 +52,12 @@ namespace gui {
             engine::audio::music_manager &m_music_manager;
             engine::window &m_window;
             engine::engine &m_engine;
-            gui::controllers::main_map_controller* m_controller;
-            models::transition_level_model& m_model;
-            engine::math::box2_t* m_title_box;
-            engine::math::box2_t* m_header_box;
-            engine::math::box2_t* m_statistics_box;
-            engine::math::box2_t* m_continue_box;
+            gui::controllers::main_map_controller *m_controller;
+            models::transition_level_model &m_model;
+            engine::math::box2_t *m_title_box;
+            engine::math::box2_t *m_header_box;
+            engine::math::box2_t *m_statistics_box;
+            engine::math::box2_t *m_continue_box;
         };
     }
 }

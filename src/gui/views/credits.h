@@ -18,11 +18,14 @@ namespace gui {
         class credits : public base_view {
         public:
             credits(engine::graphics::texture_manager &texture_manager, engine::graphics::font_manager &font_manager,
-                engine::graphics::color_manager &color_manager, engine::window &window,
-                engine::audio::music_manager &music_manager);
+                    engine::graphics::color_manager &color_manager, engine::window &window,
+                    engine::audio::music_manager &music_manager);
+
             void before();
+
             void after();
-            void draw(unsigned int time_elapsed);
+
+            void draw(unsigned int time_elapsed, engine::math::box2_t display_box);
 
         private:
             engine::graphics::texture_manager &m_texture_manager;

@@ -106,10 +106,10 @@ namespace domain {
          * @param event
          */
         void map::on_event(engine::events::display_changed &event) {
-            auto display_box = event.get_display_box();
-            m_dest.to_left(display_box);
-            m_dest.to_top(display_box);
-            m_dest.to_center(display_box);
+            //auto display_box = event.get_display_box();
+//            m_dest.to_left(display_box);
+//            m_dest.to_top(display_box);
+//            m_dest.to_center(display_box);
         }
 
         /**

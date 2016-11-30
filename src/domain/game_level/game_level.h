@@ -17,9 +17,8 @@
 
 namespace domain {
     namespace game_level {
-        class game_level
-            : public drawable::abstract_drawable_game_object, public engine::observer::observer<domain::map::map>,
-            public engine::observer::observer<domain::map::objects::dragable_field_object> {
+        class game_level : public engine::observer::observer<domain::map::map>,
+              public engine::observer::observer<domain::map::objects::dragable_field_object> {
         public:
             game_level(std::string name, std::shared_ptr<map::map> map, std::shared_ptr<game_stats> goal,
                        std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> _enemies,
@@ -28,8 +27,6 @@ namespace domain {
             std::string get_name();
 
             std::shared_ptr<domain::map::map> get_map();
-
-            virtual void draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed);
 
             virtual void unload(engine::graphics::texture_manager &texture_manager);
 
@@ -54,6 +51,9 @@ namespace domain {
             void add_placeable_object(map::objects::dragable_field_object &obj);
 
             void remove_placeable_object(map::objects::dragable_field_object &obj);
+
+            std::vector<map::objects::dragable_field_object *> get_placeable_objects() const;
+
         private:
             std::string m_name;
             std::shared_ptr<domain::map::map> m_map;
@@ -61,7 +61,7 @@ namespace domain {
             std::shared_ptr<game_stats> m_stats;
             unsigned int m_start_time;
             std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> enemies;
-            std::vector<map::objects::field_object *> m_placeable_objects;
+            std::vector<map::objects::dragable_field_object *> m_placeable_objects;
             engine::draganddrop::drag_and_drop &m_drag_and_drop;
         };
     }

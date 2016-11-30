@@ -3,6 +3,7 @@
 //
 
 #include "credits.h"
+#include "../../engine/graphics/box_builder.h"
 
 gui::views::credits::credits(engine::graphics::texture_manager &texture_manager,
                              engine::graphics::font_manager &font_manager,
@@ -31,8 +32,9 @@ void gui::views::credits::before() {
     m_texture_manager.load_text("CityDefence", {255, 193, 132}, *m_font_manager.get_font("roboto", 50), "c_title");
 
     // Create the title box
-    m_title_box = new engine::math::box2_t({{0, 0}, m_texture_manager.get_size("c_title")});
-    m_title_box->to_center(m_header_box);
+    engine::graphics::box_builder builder1(m_texture_manager.get_size("c_title"));
+    builder1.to_center(m_header_box);
+    m_title_box = new engine::math::box2_t(builder1.build());
 
     // Load the names
     auto *font = m_font_manager.get_font("roboto", 44);
@@ -47,11 +49,12 @@ void gui::views::credits::before() {
     engine::math::vec2_t name_pos = {0, padding};
 
     for (auto &name : m_names) {
+
         engine::math::box2_t text_box = {{0, 0}, m_texture_manager.get_size("n_" + name)};
 
         // Center
-        text_box.to_center(m_credits_box);
-        text_box.to_top(m_credits_box);
+//        text_box.to_center(m_credits_box);
+//        text_box.to_top(m_credits_box);
         text_box.add(name_pos);
 
         // Add to the move_boxes
@@ -83,7 +86,7 @@ void gui::views::credits::after() {
     m_moveable_box = nullptr;
 }
 
-void gui::views::credits::draw(unsigned int time_elapsed) {
+void gui::views::credits::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
     // Draw names
     m_moveable_box->move(time_elapsed);
 

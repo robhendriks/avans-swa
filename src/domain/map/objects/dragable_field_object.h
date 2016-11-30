@@ -22,7 +22,9 @@ namespace domain {
 
                 dragable_field_object(const dragable_field_object &obj);
 
-                virtual ~dragable_field_object();
+                virtual ~dragable_field_object() = default;
+
+                virtual void set_box(engine::math::box2_t box);
 
                 virtual engine::math::box2_t get_box() const;
 
@@ -37,8 +39,8 @@ namespace domain {
                 virtual dragable_field_object *clone() const = 0;
 
             protected:
-                engine::math::box2_t *m_start_box;
-                engine::math::box2_t *m_draw_box;
+                std::unique_ptr<engine::math::box2_t> m_start_box;
+                std::unique_ptr<engine::math::box2_t> m_draw_box;
             };
         }
     }

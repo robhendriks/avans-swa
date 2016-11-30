@@ -40,16 +40,16 @@ namespace gui {
             m_texture_manager.unload("continue");
         }
 
-        void win_game_over::draw(unsigned int time_elapsed) {
-            m_header_box->to_top({m_window.get_display_box()});
-            m_title_box->to_left(*m_header_box);
-            m_title_box->to_center(*m_header_box);
+        void win_game_over::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
+            //m_header_box->to_top({m_window.get_display_box()});
+            //m_title_box->to_left(*m_header_box);
+            //m_title_box->to_center(*m_header_box);
 
             m_color_manager.draw({0, 0, 0},*m_header_box);
             m_texture_manager.draw("w_title", {0, 0}, *m_title_box);
 
-            m_continue_box->to_left({m_window.get_display_box()});
-            m_continue_box->to_center({m_window.get_display_box()});
+            //m_continue_box->to_left({m_window.get_display_box()});
+            //m_continue_box->to_center({m_window.get_display_box()});
             m_texture_manager.draw("continue", {0, 0}, *m_continue_box);
         }
 

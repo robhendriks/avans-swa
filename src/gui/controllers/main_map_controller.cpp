@@ -6,7 +6,7 @@
 
 namespace gui {
     namespace controllers {
-        main_map_controller::main_map_controller(views::main_map &view, engine::engine &engine, views::win_game_over& transition_view, models::main_map_model &model, models::transition_level_model& transition_model, game &game1) :
+        main_map_controller::main_map_controller(views::level &view, engine::engine &engine, views::win_game_over& transition_view, models::main_map_model &model, models::transition_level_model& transition_model, game &game1) :
             base_controller(game1), m_view(view), m_trans_view(transition_view), m_engine(engine), m_model(model), m_trans_model(transition_model) {
             m_view.set_controller(*this);
             m_trans_view.set_controller(*this);

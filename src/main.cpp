@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
         throw;
     }
 
-    services::level_loader::json_level_loader *load_map_service = new services::level_loader::json_level_loader(root);
+    services::level_loader::json_level_loader *level_loader = new services::level_loader::json_level_loader(root);
 
     auto di_config = [&]() {
         return boost::di::make_injector(
@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
             boost::di::bind<>.to(*engine1->get_music_manager()),
             boost::di::bind<>.to(*engine1->get_window()),
             boost::di::bind<>.to(*font_manager),
-            boost::di::bind<services::level_loader::base_level_loader>.to(*load_map_service)
+            boost::di::bind<services::level_loader::base_level_loader>.to(*level_loader)
         );
     };
 
@@ -72,8 +72,10 @@ int main(int argc, char *argv[]) {
      */
     auto &eventbus = engine::eventbus::eventbus::get_instance();
 
-    // Subscribe the game to the window cleared event
-    eventbus.subscribe(game1);
+    // Subscribe the game to the window cleared event and display changed events
+    eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::window_cleared>*>(game1));
+    eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::display_changed>*>(game1));
+
     /**
      * END OF SUBSCRIBERS REGISTRY
      */
@@ -94,7 +96,7 @@ int main(int argc, char *argv[]) {
     delete menu_controller;
     delete json_config;
     delete engine1;
-    delete load_map_service;
+    delete level_loader;
 
     return 0;
 }

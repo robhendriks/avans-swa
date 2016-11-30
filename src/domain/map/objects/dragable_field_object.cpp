@@ -23,8 +23,13 @@ namespace domain {
              * @param obj
              */
             dragable_field_object::dragable_field_object(const dragable_field_object &obj) : field_object(obj) {
-                m_start_box = new engine::math::box2_t(*obj.m_start_box);
-                m_draw_box = new engine::math::box2_t(*obj.m_draw_box);
+                m_start_box.reset(new engine::math::box2_t(*obj.m_start_box));
+                m_draw_box.reset(new engine::math::box2_t(*obj.m_draw_box));
+            }
+
+            void dragable_field_object::set_box(engine::math::box2_t box) {
+                m_start_box.reset(new engine::math::box2_t(box));
+                m_draw_box.reset(new engine::math::box2_t(box));
             }
 
             engine::math::box2_t dragable_field_object::get_box() const {
@@ -42,10 +47,7 @@ namespace domain {
              */
             void dragable_field_object::on_drag(engine::math::vec2_t position) {
                 // Draw on the mouse position
-                auto temp_box = engine::math::box2_t(*m_draw_box);
-                delete m_draw_box;
-
-                m_draw_box = new engine::math::box2_t(temp_box.width(), temp_box.height(), position);
+                m_draw_box.reset(new engine::math::box2_t(m_draw_box->width(), m_draw_box->height(), position));
             }
 
             void dragable_field_object::on_drop(engine::draganddrop::dropable *dropable1) {
@@ -58,22 +60,11 @@ namespace domain {
 
             void dragable_field_object::not_dropped() {
                 // Return to start position
-                delete m_draw_box;
-                m_draw_box = new engine::math::box2_t(*m_start_box);
+                m_draw_box.reset(new engine::math::box2_t(*m_start_box));
             }
 
             bool dragable_field_object::can_place_on(field &field1) const {
                 return true;
-            }
-
-            dragable_field_object::~dragable_field_object() {
-                if (m_start_box) {
-                    delete m_start_box;
-                }
-
-                if (m_draw_box) {
-                    delete m_draw_box;
-                }
             }
         }
     }

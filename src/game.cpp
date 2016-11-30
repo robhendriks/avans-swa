@@ -24,5 +24,13 @@ void game::use_view(gui::views::base_view &view) {
 }
 
 void game::on_event(engine::events::window_cleared &event) {
-    m_current_view->draw(event.get_time_elapsed());
+    if (m_current_view) {
+        m_current_view->draw(event.get_time_elapsed(), m_window.get_display_box());
+    }
+}
+
+void game::on_event(engine::events::display_changed &event) {
+    if (m_current_view) {
+        m_current_view->on_display_change(event.get_display_box());
+    }
 }

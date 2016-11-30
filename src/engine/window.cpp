@@ -34,6 +34,11 @@ namespace engine {
 
         mWindow = SDL_CreateWindow(mConfig.title.c_str(), mConfig.x, mConfig.y, mConfig.w, mConfig.h, mConfig.flags);
 
+        if (mConfig.w < 0 && mConfig.h < 0) {
+            // Set fullscreen mode
+            SDL_SetWindowFullscreen(mWindow, SDL_WINDOW_FULLSCREEN);
+        }
+
         if (!mWindow) {
             std::string error = SDL_GetError();
             throw std::runtime_error("Failed to create window: " + error);

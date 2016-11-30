@@ -28,15 +28,6 @@ namespace domain {
             return m_map;
         }
 
-        void game_level::draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed) {
-            m_map->draw(texture_manager, time_elapsed);
-
-            for (auto &obj : m_placeable_objects) {
-                //obj->set_box();
-                obj->draw(texture_manager, time_elapsed);
-            }
-        }
-
         void game_level::unload(engine::graphics::texture_manager &texture_manager) {
             m_map->unload(texture_manager);
         }
@@ -105,6 +96,10 @@ namespace domain {
             // Erase from vector
             m_placeable_objects.erase(std::remove(m_placeable_objects.begin(), m_placeable_objects.end(), &obj), m_placeable_objects.end());
         };
+
+        std::vector<map::objects::dragable_field_object *> game_level::get_placeable_objects() const {
+            return m_placeable_objects;
+        }
 
         /**
          * Notified when a dragable_field_object is dropped
