@@ -23,8 +23,6 @@ namespace domain {
 
                 road(std::shared_ptr<field> field1, type type1);
 
-                void on_drop(engine::draganddrop::dropable *dropable1);
-
                 type get_type() const;
 
             private:

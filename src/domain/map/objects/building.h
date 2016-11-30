@@ -17,8 +17,6 @@ namespace domain {
                 building(std::shared_ptr<field> field1);
 
                 bool can_place_on(field &field1) const;
-
-                void on_drop(engine::draganddrop::dropable *dropable1);
             };
         }
     }

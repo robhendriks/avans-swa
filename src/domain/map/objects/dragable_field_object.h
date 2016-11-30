@@ -23,6 +23,8 @@ namespace domain {
 
                 virtual engine::math::box2_t get_box() const;
 
+                virtual void on_drop(engine::draganddrop::dropable *dropable1);
+
                 virtual void on_drag(engine::math::vec2_t position);
 
                 virtual void not_dropped();

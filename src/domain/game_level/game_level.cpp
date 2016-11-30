@@ -32,6 +32,7 @@ namespace domain {
             m_map->draw(texture_manager, time_elapsed);
 
             for (auto &obj : m_placeable_objects) {
+                //obj->set_box();
                 obj->draw(texture_manager, time_elapsed);
             }
         }

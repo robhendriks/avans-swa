@@ -37,6 +37,10 @@ namespace domain {
                 m_draw_box = new engine::math::box2_t(temp_box.width(), temp_box.height(), position);
             }
 
+            void dragable_field_object::on_drop(engine::draganddrop::dropable *dropable1) {
+                m_drag_and_drop->remove_dragable(this);
+            }
+
             void dragable_field_object::not_dropped() {
                 // Return to start position
                 delete m_draw_box;
