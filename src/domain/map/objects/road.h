@@ -22,8 +22,6 @@ namespace domain {
                 road(const road &obj);
 
                 dragable_field_object *clone() const;
-
-                virtual field_object_type get_type() const;
             };
         }
     }

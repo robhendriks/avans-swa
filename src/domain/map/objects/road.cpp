@@ -21,10 +21,6 @@ namespace domain {
             dragable_field_object *road::clone() const {
                 return new road(*this);
             }
-
-            field_object_type road::get_type() const {
-                return ROAD;
-            }
         }
     }
 }

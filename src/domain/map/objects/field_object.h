@@ -18,12 +18,6 @@ namespace domain {
 namespace domain {
     namespace map {
         namespace objects {
-            enum field_object_type {
-                ROAD,
-                BUILDING
-            };
-
-
             class field_object : public drawable::drawable_game_object {
             public:
                 field_object();
@@ -37,8 +31,6 @@ namespace domain {
                 void set_field(std::shared_ptr<field> field1);
 
                 std::shared_ptr<field> get_field() const;
-
-                virtual field_object_type get_type() const = 0;
 
                 virtual ~field_object() = default;
 

@@ -20,8 +20,6 @@ namespace domain {
 
                 dragable_field_object *clone() const;
 
-                virtual field_object_type get_type() const;
-
                 bool can_place_on(field &field1) const;
             };
         }

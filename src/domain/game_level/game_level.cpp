@@ -3,6 +3,8 @@
 //
 
 #include "game_level.h"
+#include "../map/objects/building.h"
+#include "../map/objects/road.h"
 
 namespace domain {
     namespace game_level {
@@ -56,10 +58,9 @@ namespace domain {
                 long road_count = 0;
                 auto d = p_observee->get_fields_with_objects();
                 for(std::shared_ptr<domain::map::field>& f : d){
-                    domain::map::objects::field_object_type type = f->get_object()->get_type();
-                    if(type == domain::map::objects::field_object_type::BUILDING)
+                    if(dynamic_cast<domain::map::objects::building*>(f->get_object()))
                         ++building_count;
-                    else if(type == domain::map::objects::field_object_type::ROAD)
+                    else if(dynamic_cast<domain::map::objects::road*>(f->get_object()))
                         ++road_count;
                }
 
