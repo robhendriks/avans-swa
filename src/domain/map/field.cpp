@@ -33,7 +33,6 @@ namespace domain {
                 m_object->draw(texture_manager, time_elapsed);
             }
         }
-
         /**
          * Get the box where the field is placed on the screen
          *

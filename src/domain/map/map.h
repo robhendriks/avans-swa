@@ -42,7 +42,6 @@ namespace domain {
             engine::math::vec2_t get_tile_size() const;
 
             engine::math::vec2_t get_size() const;
-
             void draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed);
 
             void unload(engine::graphics::texture_manager &texture_manager);

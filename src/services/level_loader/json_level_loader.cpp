@@ -112,27 +112,20 @@ namespace services {
                         image_location += id;
                         image_location += ".png";
                     } else {
-                        domain::map::objects::type type1;
                         if (id == "road-straight") {
-                            type1 = domain::map::objects::type::STRAIGHT;
                             image_location = "images/road-straight.png";
                         } else if (id == "road-junction") {
-                            type1 = domain::map::objects::type::JUNCTION;
                             image_location = "images/road-junction.png";
                         } else if (id == "road-corner") {
-                            type1 = domain::map::objects::type::CORNER;
                             image_location = "images/road-corner.png";
                         } else if (id == "road-t-junction") {
-                            type1 = domain::map::objects::type::T_JUNCTION;
                             image_location = "images/road-t-junction.png";
                         } else {
-                            // Road CAP
-                            type1 = domain::map::objects::type::CAP;
                             image_location = "images/road-cap.png";
                         }
 
                         // Create the object
-                        object = new domain::map::objects::road(field, type1);
+                        object = new domain::map::objects::road(field);
                     }
 
                     // Calculate the image start position

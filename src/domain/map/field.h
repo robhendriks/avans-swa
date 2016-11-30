@@ -34,6 +34,7 @@ namespace domain {
 
             void draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed);
 
+
             engine::math::box2_t get_box() const;
 
             bool drop(engine::draganddrop::dragable *dragable1);

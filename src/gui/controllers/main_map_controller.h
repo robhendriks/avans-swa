@@ -33,12 +33,11 @@ namespace gui {
             main_map_controller(views::main_map &view, engine::engine &engine, views::win_game_over& transition_view, models::main_map_model &model, models::transition_level_model& transition_model, game &game1);
             void show();
             void set_game_world(std::unique_ptr<domain::gameworld::game_world>&& game_world);
-            void set_menu_controller(std::shared_ptr<menu_controller> menu_controller);
+            void set_menu_controller(std::shared_ptr<gui::controllers::menu_controller> menu_controller);
             domain::gameworld::game_world get_game_world();
             void next_lvl();
         private:
             std::shared_ptr<gui::controllers::menu_controller> m_menu_controller;
-
             views::main_map &m_view;
             views::win_game_over& m_trans_view;
             engine::engine &m_engine;

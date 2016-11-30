@@ -3,6 +3,7 @@
 //
 
 #include "main_map_controller.h"
+#include "../controllers/menu_controller.h"
 
 namespace gui {
     namespace controllers {
@@ -14,6 +15,9 @@ namespace gui {
 
         void main_map_controller::show() {
             auto &lvl = m_model.world->get_current_level();
+
+            if(lvl.get_start_time() == 0)
+                lvl.set_start_time(m_engine.get_time_elapsed());
 
             bool game_over = lvl.is_game_over(m_engine.get_time_elapsed());
             bool goal_reached = lvl.is_goal_reached();
@@ -27,7 +31,6 @@ namespace gui {
                 view(m_trans_view);
             }
             else {
-                lvl.set_start_time(m_engine.get_time_elapsed());
                 view(m_view);
             }
         }
@@ -50,7 +53,7 @@ namespace gui {
            }
         }
 
-        void main_map_controller::set_menu_controller(std::shared_ptr<menu_controller> menu_controller) {
+        void main_map_controller::set_menu_controller(std::shared_ptr<gui::controllers::menu_controller> menu_controller) {
             m_menu_controller = menu_controller;
         }
     }

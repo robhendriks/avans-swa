@@ -42,7 +42,7 @@ namespace gui {
         }
 
         void main_map::draw(unsigned int time_elapsed) {
-            if(m_model.world->get_current_level().is_game_over(time_elapsed) || m_model.world->get_current_level().is_goal_reached()){
+            if(m_model.world->get_current_level().is_game_over(time_elapsed)|| m_model.world->get_current_level().is_goal_reached()){
                 m_controller->show();
             }
 

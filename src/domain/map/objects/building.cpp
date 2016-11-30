@@ -35,6 +35,10 @@ namespace domain {
             dragable_field_object *building::clone() const {
                 return new building(*this);
             }
+
+            field_object_type building::get_type() const {
+                return BUILDING;
+            }
         }
     }
 }

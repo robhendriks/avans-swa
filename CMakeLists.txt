@@ -111,8 +111,6 @@ set(SOURCES src/main.cpp
     src/domain/nations/enemy.h
     src/domain/nations/nation.cpp
     src/domain/nations/nation.h
-    src/services/wavegenerator.cpp
-    src/services/wavegenerator.h
     src/domain/game_level/game_level.h
         src/domain/map/objects/building.h
     src/domain/map/objects/dragable_field_object.h
@@ -127,7 +125,12 @@ set(SOURCES src/main.cpp
     src/engine/events/display_changed.h
     src/engine/events/game_tick.cpp
     src/engine/events/game_tick.h
-    src/domain/map/objects/field_object.cpp)
+    src/domain/map/objects/field_object.cpp
+        src/services/wave/wavegenerator.cpp
+        src/services/wave/wavegenerator.h
+        src/services/wave/wave_management.cpp
+        src/services/wave/wave_management.h
+        )
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include

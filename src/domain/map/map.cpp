@@ -91,7 +91,7 @@ namespace domain {
                 }
             }
         }
-
+        
         void map::unload(engine::graphics::texture_manager &texture_manager) {
             for (size_t i = 0; i < number_of_fields(); i++) {
                 if (m_fields[i]) {

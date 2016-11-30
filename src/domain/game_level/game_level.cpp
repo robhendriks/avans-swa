@@ -74,7 +74,8 @@ namespace domain {
         }
 
         bool game_level::is_game_over(unsigned int current_duration) {
-            return m_goal->get_max_duration() != 0 ? m_goal->get_max_duration() - (current_duration - m_start_time) < 0 : false;
+            int playing_time = current_duration - m_start_time;
+            return  m_goal->get_max_duration() - playing_time < 0;
         }
 
         unsigned int game_level::get_start_time() {
