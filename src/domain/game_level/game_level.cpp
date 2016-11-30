@@ -54,14 +54,14 @@ namespace domain {
             if(title == "object-placed") {
                 long building_count = 0;
                 long road_count = 0;
-//                auto d = p_observee->get_fields(true);
-//                for(std::shared_ptr<domain::map::field>& f : d){
-//                    domain::buildings::placeable_object_type type = f->get_object()->get_type();
-//                    if(type == domain::buildings::BUILDING)
-//                        ++building_count;
-//                    else if(type == domain::buildings::ROAD)
-//                        ++road_count;
-//                }
+                auto d = p_observee->get_fields_with_objects();
+                for(std::shared_ptr<domain::map::field>& f : d){
+                    domain::map::objects::field_object_type type = f->get_object()->get_type();
+                    if(type == domain::map::objects::field_object_type::BUILDING)
+                        ++building_count;
+                    else if(type == domain::map::objects::field_object_type::ROAD)
+                        ++road_count;
+               }
 
                 m_stats->set_built_building_count(building_count);
                 m_stats->set_built_roads_count(road_count);
