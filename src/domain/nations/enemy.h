@@ -39,7 +39,7 @@ namespace domain {
             //Returns the amount of XP.
             int lowerHitpoints(int points);
             ~enemy();
-
+            virtual engine::math::box2_t get_box() const;
 
 
         private:
@@ -66,8 +66,6 @@ namespace domain {
 
             //So we directly know which Nations this Unit belongs to.
             std::shared_ptr<nation> Nation;
-
-            virtual engine::math::box2_t get_box();
 
         };
 
