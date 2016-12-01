@@ -7,11 +7,9 @@
 
 namespace domain {
     namespace gameworld {
-        class game_world : public domain::drawable::abstract_drawable_game_object {
+        class game_world {
         public:
             game_world(std::vector<std::unique_ptr<game_level::game_level>> &game_levels);
-
-            void draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed);
 
             void unload(engine::graphics::texture_manager &texture_manager);
 

@@ -40,7 +40,7 @@ namespace services {
 
                 // now remove them from the list of the enemies that haven't been given back yet.
                 auto new_end = std::remove_if(m_current_list.begin(), m_current_list.end(),
-                                              [time, return_list](std::shared_ptr<std::pair<int, std::shared_ptr<domain::nations::enemy>>>& pair)
+                                              [time](const std::shared_ptr<std::pair<int, std::shared_ptr<domain::nations::enemy>>>& pair)
                                               { return pair->first > static_cast<int>(time);});
 
                 m_current_list.erase(new_end, m_current_list.end());
@@ -66,15 +66,16 @@ namespace services {
             if(m_last_spawned_wave_time == -1 || static_cast<int>(time) -  m_last_spawned_wave_time  >= m_waves_interval){
                 m_last_spawned_wave_time = time;
 
+                /*
                 // generate wave
-               // auto new_enemies = m_wave_gen->generateEnemies(m_wave_spawn_time_range, static_cast<int>(m_wave_opportunity), *m_spawnable_nation.get(), false ,0, m_spawn_bosses);
+                auto new_enemies = m_wave_gen->generateEnemies(m_wave_spawn_time_range, static_cast<int>(m_wave_opportunity), *m_spawnable_nation.get(), false ,0, m_spawn_bosses);
 
-               // for(auto& pair : new_enemies){
-               //     // update the time so current time gets attached
-               //     pair.first += time;
-               //     m_current_list.push_back(std::make_shared<std::pair<int, std::shared_ptr<domain::nations::enemy>>>(pair));
-               // }
-
+                for(auto& pair : new_enemies){
+                    // update the time so current time gets attached
+                   pair.first += time;
+                   m_current_list.push_back(std::make_shared<std::pair<int, std::shared_ptr<domain::nations::enemy>>>(pair));
+               }
+                */
                 // increasing opportunity logic for next wave.
                 m_wave_opportunity += m_wave_opportunity_increase;
             }

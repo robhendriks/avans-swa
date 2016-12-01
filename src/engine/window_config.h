@@ -22,6 +22,8 @@ namespace engine {
         int h = -1;
 
         Uint32 flags = SDL_WINDOW_SHOWN;
+
+        bool debug = false;
     };
 }
 

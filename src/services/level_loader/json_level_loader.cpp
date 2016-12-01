@@ -38,7 +38,7 @@ namespace services {
 
             // TODO: HARDCODED ATM
             // Add placeable objects
-            engine::math::box2_t building_box {{10, 10}, {42, 42}};
+            engine::math::box2_t building_box {{0, 0}, {0, 0}}; // This box will be overwritten by the view
             auto *building = new domain::map::objects::building(building_box);
             building->set_draw_settings("images/building-a.png");
             game_level->add_placeable_object(*building);

@@ -15,7 +15,12 @@ namespace domain {
         drawable_game_object::drawable_game_object(const drawable_game_object &obj) {
             m_file_loc = obj.m_file_loc;
             m_texture = obj.m_texture;
-            m_image_start_position = std::unique_ptr<engine::math::vec2_t>(new engine::math::vec2_t(*obj.m_image_start_position));
+
+            if (obj.m_image_start_position == nullptr) {
+                m_image_start_position = nullptr;
+            } else {
+                m_image_start_position = std::unique_ptr<engine::math::vec2_t>(new engine::math::vec2_t(*obj.m_image_start_position));
+            }
         }
 
         void drawable_game_object::set_draw_settings(std::string file_loc,

@@ -30,6 +30,8 @@ namespace config {
 
         long get_long(std::string key, long default_value = -1);
 
+        bool get_bool(std::string key, bool default_value = false);
+
         json get(std::string key);
     private:
         const char *mFileName;

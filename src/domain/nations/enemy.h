@@ -8,11 +8,11 @@
 #include <string>
 #include <memory>
 #include "nation.h"
+#include "../drawable/drawable_game_object.h"
 
 namespace domain {
     namespace nations {
-
-        class enemy {
+        class enemy : public domain::drawable::drawable_game_object {
         public:
             enemy(std::string _name, int _mindamage, int _maxdamage, double _attackspersecond, int _hitpoints, int _grantedXP, int _range, int _movement, bool _boss, std::shared_ptr<nation> _nation, int _oppertunitycosts)
             ;
@@ -40,7 +40,7 @@ namespace domain {
             int lowerHitpoints(int points);
             ~enemy();
 
-
+            virtual engine::math::box2_t get_box() const;
 
         private:
             std::string name;
@@ -66,7 +66,6 @@ namespace domain {
 
             //So we directly know which Nations this Unit belongs to.
             std::shared_ptr<nation> Nation;
-
         };
 
         bool operator<(const enemy &s1, const enemy &s2);

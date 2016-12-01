@@ -2,20 +2,13 @@
 #define CITY_DEFENCE_MAP_CPP
 
 #include "map.h"
+#include "../../engine/graphics/box_builder.h"
 
 namespace domain {
     namespace map {
         map::map(engine::math::vec2_t size, engine::math::vec2_t tile_size) :
             m_size(size), m_tile_size(tile_size), m_fields(std::vector<std::shared_ptr<field>>(number_of_fields())),
-            m_dest({{0, 0}, {size.x * m_tile_size.x, size.y * m_tile_size.y}}) {
-
-            // Subscribe self to event
-            engine::eventbus::eventbus::get_instance().subscribe((engine::eventbus::subscriber<engine::events::display_changed>*) this);
-        }
-
-        map::~map() {
-            // Unsubscribe self to event
-            engine::eventbus::eventbus::get_instance().unsubscribe((engine::eventbus::subscriber<engine::events::display_changed>*) this);
+            m_dest(nullptr) {
         }
 
         /**
@@ -84,32 +77,32 @@ namespace domain {
                 auto field = m_fields[i];
                 if (field) {
                     auto pos = index_to_position(i);
-                    float x = m_dest.min.x + (tile_width * pos.x);
-                    float y = m_dest.min.y + (tile_height * pos.y);
+                    float x = m_dest->min.x + (tile_width * pos.x);
+                    float y = m_dest->min.y + (tile_height * pos.y);
                     field->set_box({{x, y}, {x + tile_width, y + tile_height}});
                     field->draw(texture_manager, time_elapsed);
                 }
             }
         }
-        
+
+        /**
+         * Should be atleast called once before the draw method is called
+         *
+         * @param display_box
+         */
+        void map::set_display_box(engine::math::box2_t display_box) {
+            engine::graphics::box_builder builder({m_size.x * m_tile_size.x, m_size.y * m_tile_size.y});
+            builder.to_center(display_box);
+
+            m_dest.reset(new engine::math::box2_t(builder.build()));
+        }
+
         void map::unload(engine::graphics::texture_manager &texture_manager) {
             for (size_t i = 0; i < number_of_fields(); i++) {
                 if (m_fields[i]) {
                     m_fields[i]->unload(texture_manager);
                 }
             }
-        }
-
-        /**
-         * Called whenever the display size changes, also called on the start of the view
-         *
-         * @param event
-         */
-        void map::on_event(engine::events::display_changed &event) {
-            auto display_box = event.get_display_box();
-            m_dest.to_left(display_box);
-            m_dest.to_top(display_box);
-            m_dest.to_center(display_box);
         }
 
         /**

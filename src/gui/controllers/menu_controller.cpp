@@ -16,7 +16,7 @@ namespace gui {
               m_level_loader(level_loader) {
 
             main_map_controller.set_menu_controller(std::shared_ptr<menu_controller>(this));
-            m_main_menu.set_controller(*this);
+            m_main_menu.set_controller(std::shared_ptr<menu_controller>(this));
         }
 
         void menu_controller::show() {

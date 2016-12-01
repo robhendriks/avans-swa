@@ -78,6 +78,11 @@ namespace domain {
         enemy::~enemy() {
 
         }
+
+        engine::math::box2_t enemy::get_box() const {
+            return engine::math::box2_t(engine::math::vec2_t(1,1), engine::math::vec2_t(1,1));
+        }
+
         bool operator<(const enemy &s1, const enemy &s2){
             return s1.getOppertunity() < s2.getOppertunity();
         }

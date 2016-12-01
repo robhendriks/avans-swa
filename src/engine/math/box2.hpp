@@ -32,7 +32,7 @@ namespace engine {
                 return max - min;
             }
 
-            vec2_t center() {
+            vec2_t center() const {
                 return (min + max) *= 0.5f;
             }
 
@@ -44,75 +44,25 @@ namespace engine {
                 return max.y - min.y;
             }
 
-            void move_to_start(vec2_t start) {
-                float x_diff = start.x - min.x;
-                float y_diff = start.y - min.y;
+            vec2_t right_top() {
+                return vec2_t(max.x, min.y);
+            }
 
-                max.x += x_diff;
-                max.y += y_diff;
+            vec2_t right_bottom() {
+                return max;
+            }
 
-                min = start;
+            vec2_t left_top() {
+                return min;
+            }
+
+            vec2_t left_bottom() {
+                return vec2_t(min.x, max.y);
             }
 
             void add(const vec2_t &vec) {
                 min += vec;
                 max += vec;
-            }
-
-            void to_top(const box2_t &box) {
-                if (min.y < box.min.y) {
-                    min.y = box.min.y;
-                } else {
-                    float y_diff = min.y - box.min.y;
-
-                    max.y -= y_diff;
-                    min.y -= y_diff;
-                }
-            }
-
-            void to_bottom(const box2_t &box) {
-                if (max.y > box.max.y) {
-                    max.y = box.max.y;
-                } else {
-                    float y_diff = box.max.y - max.y;
-
-                    max.y += y_diff;
-                    min.y += y_diff;
-                }
-            }
-
-            void to_left(const box2_t &box) {
-                if (min.x < box.min.x) {
-                    min.x = box.min.x;
-                } else {
-                    float x_diff = min.x - box.min.x;
-
-                    max.x -= x_diff;
-                    min.x -= x_diff;
-                }
-            }
-
-            void to_right(const box2_t &box) {
-                if (max.x > box.max.x) {
-                    max.x = box.max.x;
-                } else {
-                    float x_diff = box.max.x - max.x;
-
-                    max.x += x_diff;
-                    min.x += x_diff;
-                }
-            }
-
-            void to_center(const box2_t &box) {
-                if (size().x >= box.size().x || size().y >= box.size().y) {
-                    max = box.max;
-                    min = box.min;
-                } else {
-                    float x_start = (box.max.x - max.x) / 2;
-                    float y_start = (box.max.y - max.y) / 2;
-
-                    move_to_start({x_start, y_start});
-                }
             }
 
             bool contains(const vec2_t &vec) const {

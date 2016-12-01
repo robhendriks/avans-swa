@@ -22,7 +22,11 @@ namespace engine {
         }
 
         // When the width or height is smaller than 0, use the full width/height
+        bool set_fullscreen = false;
         if (mConfig.w < 0 || mConfig.h < 0) {
+            if (mConfig.w < 0 && mConfig.h < 0) {
+                set_fullscreen = true;
+            }
             auto box = get_screen_box();
             if (mConfig.w < 0) {
                 mConfig.w = (int)box.width();
@@ -33,6 +37,11 @@ namespace engine {
         }
 
         mWindow = SDL_CreateWindow(mConfig.title.c_str(), mConfig.x, mConfig.y, mConfig.w, mConfig.h, mConfig.flags);
+
+        if (set_fullscreen && !mConfig.debug) {
+            // Set fullscreen mode
+            SDL_SetWindowFullscreen(mWindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
+        }
 
         if (!mWindow) {
             std::string error = SDL_GetError();

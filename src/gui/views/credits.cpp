@@ -3,6 +3,7 @@
 //
 
 #include "credits.h"
+#include "../../engine/graphics/box_builder.h"
 
 gui::views::credits::credits(engine::graphics::texture_manager &texture_manager,
                              engine::graphics::font_manager &font_manager,
@@ -10,9 +11,7 @@ gui::views::credits::credits(engine::graphics::texture_manager &texture_manager,
                              engine::audio::music_manager &music_manager) :
     m_texture_manager(texture_manager), m_font_manager(font_manager), m_color_manager(color_manager),
     m_music_manager(music_manager), m_window(window),
-    m_header_box({{0, 0}, {m_window.get_display_box().max.x, 100}}),
-    m_credits_box({{0, m_header_box.max.y + 1}, {m_header_box.max.x, m_window.get_display_box().max.y}}),
-    m_title_box(nullptr), m_moveable_box(nullptr) {
+    m_header_box(nullptr), m_credits_box(nullptr), m_title_box(nullptr), m_moveable_box(nullptr) {
 
     m_names.push_back("Robbie op de Weegh");
     m_names.push_back("Leendert Mechielsen");
@@ -30,39 +29,49 @@ void gui::views::credits::before() {
     // Load the title
     m_texture_manager.load_text("CityDefence", {255, 193, 132}, *m_font_manager.get_font("roboto", 50), "c_title");
 
-    // Create the title box
-    m_title_box = new engine::math::box2_t({{0, 0}, m_texture_manager.get_size("c_title")});
-    m_title_box->to_center(m_header_box);
-
     // Load the names
     auto *font = m_font_manager.get_font("roboto", 44);
     for (auto &name : m_names) {
         m_texture_manager.load_text(name, {255, 255, 255}, *font, "n_" + name);
     }
+}
+
+void gui::views::credits::on_display_change(engine::math::box2_t display_box) {
+    // Create the header box
+    engine::graphics::box_builder builder1({display_box.width(), 100});
+    builder1.as_left_top(display_box.left_top());
+    m_header_box.reset(new engine::math::box2_t(builder1.build()));
+
+    // Create the title box
+    engine::graphics::box_builder builder2(m_texture_manager.get_size("c_title"));
+    builder2.to_center(*m_header_box);
+    m_title_box.reset(new engine::math::box2_t(builder2.build()));
+
+    // Create the credits box
+    engine::graphics::box_builder builder3({display_box.width(), display_box.height() - m_header_box->height()});
+    builder3.start_on_y(m_header_box->max.y);
+    m_credits_box.reset(new engine::math::box2_t(builder3.build()));
 
     // Create the boxes for the names
     std::vector<engine::math::box2_t> move_boxes;
 
-    float padding = 20;
-    engine::math::vec2_t name_pos = {0, padding};
-
     for (auto &name : m_names) {
-        engine::math::box2_t text_box = {{0, 0}, m_texture_manager.get_size("n_" + name)};
+        engine::graphics::box_builder builder4(m_texture_manager.get_size("n_" + name));
 
-        // Center
-        text_box.to_center(m_credits_box);
-        text_box.to_top(m_credits_box);
-        text_box.add(name_pos);
+        if (move_boxes.size() > 0) {
+            builder4.as_left_top(move_boxes.back().left_bottom());
+        } else {
+            builder4.start_on_y(m_credits_box->min.y);
+        }
+
+        builder4.center_horizontal(m_credits_box->min.x, m_credits_box->max.x).add_margin({0, 20});
 
         // Add to the move_boxes
-        move_boxes.push_back(text_box);
-
-        // Increase the height for the next box
-        name_pos.y += text_box.height() + padding;
+        move_boxes.push_back(builder4.build());
     }
 
     // Create a box with move boxes
-    m_moveable_box = new engine::graphics::moveable_box(m_credits_box, move_boxes, {0, -0.1}, -1);
+    m_moveable_box.reset(new engine::graphics::moveable_box(*m_credits_box, move_boxes, {0, -0.1}, -1));
 }
 
 void gui::views::credits::after() {
@@ -75,15 +84,9 @@ void gui::views::credits::after() {
     for (auto &name : m_names) {
         m_texture_manager.unload("n_" + name);
     }
-
-    delete m_title_box;
-    m_title_box = nullptr;
-
-    delete m_moveable_box;
-    m_moveable_box = nullptr;
 }
 
-void gui::views::credits::draw(unsigned int time_elapsed) {
+void gui::views::credits::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
     // Draw names
     m_moveable_box->move(time_elapsed);
 
@@ -93,6 +96,6 @@ void gui::views::credits::draw(unsigned int time_elapsed) {
     }
 
     // Draw header
-    m_color_manager.draw({0, 0, 0}, m_header_box);
+    m_color_manager.draw({0, 0, 0}, *m_header_box);
     m_texture_manager.draw("c_title", {0, 0}, *m_title_box);
 }

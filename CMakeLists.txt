@@ -56,8 +56,8 @@ set(SOURCES src/main.cpp
     src/utils/string_utils.h
     src/engine/graphics/color_manager.cpp
     src/engine/graphics/color_manager.h
-    src/gui/views/main_map.cpp
-    src/gui/views/main_map.h
+    src/gui/views/level.cpp
+    src/gui/views/level.h
     src/gui/controllers/main_map_controller.cpp
     src/gui/controllers/main_map_controller.h
     src/gui/models/main_map_model.h
@@ -126,11 +126,15 @@ set(SOURCES src/main.cpp
     src/engine/events/game_tick.cpp
     src/engine/events/game_tick.h
     src/domain/map/objects/field_object.cpp
-        src/services/wave/wavegenerator.cpp
-        src/services/wave/wavegenerator.h
-        src/services/wave/wave_management.cpp
-        src/services/wave/wave_management.h
-        )
+    src/engine/graphics/box_builder.cpp
+    src/engine/graphics/box_builder.h
+    src/gui/views/top_bar.cpp
+    src/gui/views/top_bar.h
+    src/services/wave/wavegenerator.cpp
+    src/services/wave/wavegenerator.h
+    src/services/wave/wave_management.cpp
+    src/services/wave/wave_management.h
+    )
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include
