@@ -40,7 +40,7 @@ namespace domain {
             int lowerHitpoints(int points);
             ~enemy();
 
-            engine::math::box2_t get_box() const;
+            virtual engine::math::box2_t get_box() const;
 
         private:
             std::string name;
