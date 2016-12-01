@@ -68,7 +68,7 @@ namespace domain {
             std::shared_ptr<nation> Nation;
         };
 
-        bool operator<(const enemy &s1, const enemy &s2);
+        bool operator<(const std::shared_ptr<enemy> &s1, const std::shared_ptr<enemy>  &s2);
     }
 }
 

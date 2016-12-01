@@ -20,49 +20,48 @@ namespace services {
                                                                                                             bool _spread,
                                                                                                             int capoppertunity,
                                                                                                             bool _noboss) {
+            //Start by clearing boss/to strong enemies based on the parameters
+            auto list = _nation.getavailableenemies();
+            auto olist = _nation.getavailableenemies();
+            auto q = remove_if(list.begin(), list.end(),
+                               [_noboss](std::shared_ptr<domain::nations::enemy> element) {
+                                   return element->getBoss() == true&&_noboss==true;
+                               });
+            list.erase(q, list.end());
 
+            if(capoppertunity!=0){
+                auto r = remove_if(list.begin(), list.end(),
+                                   [capoppertunity](std::shared_ptr<domain::nations::enemy> element) {
+                                       return element->getOppertunity() >capoppertunity;
+                                   });
+                list.erase(r, list.end());
+            }
+
+
+
+            //Checks if enemies can be spawned based on the given _oppertunity
+            std::sort(list.begin(), list.end());
+            _nation.setavailableenemies(list);
 
             if (_nation.getavailableenemies().size() == 0 ||
                 _nation.getavailableenemies()[0]->getOppertunity() > _oppertunity) {
-                //Returns empty list
+                //Returns empty list in case no enemy is cheap enough
                 return std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>>(0);
             }
-            auto list = _nation.getavailableenemies();
-            //std::sort(_nation.getavailableenemies().begin(), _nation.getavailableenemies().end());
-            //Optionally cuts away enemies above the capoppertunity and/or bosses.
-            auto q = remove_if(list.begin(), list.end(),
-                               [_noboss](std::shared_ptr<domain::nations::enemy> element) {
-                                   return element->getBoss() == true;
-                               });
 
 
-            list.erase(q, list.end());
-            _nation.setavailableenemies(list);
 
-
-            int y = _nation.getavailableenemies().size();
-
-
-            /* for(auto i;i!=_nation.getavailableenemies().end();++i){
-                 if(_nation.getavailableenemies()[i]->getBoss()==true &&_noboss==true){
-                     auto q = remove_if(_nation.getavailableenemies().begin(),_nation.getavailableenemies().end(),is_even);
-                 }else if(_nation.getavailableenemies()[i]->getOppertunity() >capoppertunity && capoppertunity !=0){
-                     auto q = remove_if(_nation.getavailableenemies().begin(),_nation.getavailableenemies().end(),i);
-                 }
-             }
- */
-
-            //Createas a list of the enemies
-            int temp_oppertunity = _oppertunity;
-            _oppertunity = _oppertunity + (double) _oppertunity * (1 / (double) _nation.getavailableenemies().size());
+            //Createas the actual list of the enemies
+            double temp_oppertunity = _oppertunity;
+            temp_oppertunity = _oppertunity + static_cast<double>(_oppertunity) * (1 / static_cast<double>(_nation.getavailableenemies().size()));
             std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> enemies;
             for (unsigned int i = 0; i < _nation.getavailableenemies().size(); i++) {
                 temp_oppertunity = temp_oppertunity / 2;
-                int amount = temp_oppertunity / _nation.getavailableenemies()[i]->getOppertunity();
+                int amount = temp_oppertunity /(_nation.getavailableenemies()[i]->getOppertunity());
                 for (int j = 0; j < amount; j++) {
                     enemies.push_back(
                             std::pair<int, std::shared_ptr<domain::nations::enemy>>{0,
-                                                                                    _nation.getavailableenemies()[j]});
+                                                                                    _nation.getavailableenemies()[i]});
 
                 }
             }
@@ -72,11 +71,14 @@ namespace services {
             //Create a templist with numbers
             int spreadedTime = _time * 1000 / enemies.size();
             std::vector<int> templist(enemies.size());
-            for (unsigned int i = 0 + y; i < templist.size(); i++) {
+            for (unsigned int i = 0; i < templist.size(); i++) {
                 if (_spread == false) {
                     enemies[i].first = i * spreadedTime;
                 } else {
                     // TODO: uneven spread
+                    if(olist.size()<(unsigned int)100){
+
+                    }
                 }
 
             }
