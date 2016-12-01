@@ -21,7 +21,7 @@ namespace domain {
                            public engine::observer::observer<domain::map::objects::dragable_field_object> {
         public:
             game_level(std::string name, std::shared_ptr<map::map> map, std::shared_ptr<game_stats> goal,
-                       std::shared_ptr<domain::nations::nation> _enemies,
+                       std::vector<std::pair<int, std::shared_ptr<domain::nations::nation>>> _nations,
                        engine::draganddrop::drag_and_drop &drag_and_drop);
 
             std::string get_name();
@@ -93,23 +93,6 @@ namespace domain {
             std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> enemies;
             std::vector<map::objects::dragable_field_object *> m_placeable_objects;
             engine::draganddrop::drag_and_drop &m_drag_and_drop;
-
-            std::vector<std::shared_ptr<domain::nations::enemy>> m_enemies_in_lvl;
-
-            //(initial periode where no waves spawn in ms)
-            long m_peace_period = 0;
-            // interval between waves
-            long m_waves_interval = 5000;
-            //(base size of the wave)
-            double m_base_wave_opportunity = 10;
-            //(size increase from wave to wave)
-            double m_wave_opportunity_increase = 0;
-            // the time range in ms where all units of a single wave spawns. 1000 = all units of a wave spawn in a range of 1 sec
-            long m_wave_spawn_time_range = 3000;
-            // nation where enemies get spawned from
-            std::shared_ptr<domain::nations::nation> m_enemy;
-            // spawn boss units
-            bool m_spawn_bosses = true;
         };
     }
 }
