@@ -7,23 +7,16 @@
 #include "enemy.h"
 namespace domain {
     namespace nations {
-        enemy::enemy(std::string _name, int _oppertunitycosts, bool _boss) {
-            name = _name;
-            oppertunitycosts =_oppertunitycosts;
-            boss = _boss;
-        }
+        enemy::enemy(const std::string &name, int mindamage, int maxdamage, int oppertunitycosts,
+                     double attackspersecond, int hitpoints, int grantedXP, int range, int movement, bool boss,
+                     const std::shared_ptr<nation> &Nation) : name(name), mindamage(mindamage), maxdamage(maxdamage),
+                                                              oppertunitycosts(oppertunitycosts),
+                                                              attackspersecond(attackspersecond), hitpoints(hitpoints),
+                                                              grantedXP(grantedXP), range(range), movement(movement),
+                                                              boss(boss), Nation(Nation) {}
 
-        enemy::enemy(std::string _name, int _mindamage, int _maxdamage, double _attackspersecond, int _hitpoints, int _grantedXP, int _range, int _movement, bool _boss, std::shared_ptr<nation> _nation, int _oppertunitycosts) {
+        enemy::enemy(std::string _name, int _oppertunitycosts) {
             name = _name;
-            mindamage = _mindamage;
-            maxdamage = _maxdamage;
-            attackspersecond = _attackspersecond;
-            hitpoints = _hitpoints;
-            grantedXP = _grantedXP;
-            range = _range;
-            movement = _movement;
-            boss = _boss;
-            Nation = _nation;
             oppertunitycosts =_oppertunitycosts;
         }
 
@@ -75,25 +68,13 @@ namespace domain {
             return 0;
         }
 
-        enemy::enemy(const std::string &name, int mindamage, int maxdamage, int oppertunitycosts,
-                     double attackspersecond, int hitpoints, int grantedXP, int range, int movement, bool boss,
-                     const std::shared_ptr<nation> &Nation) : name(name), mindamage(mindamage), maxdamage(maxdamage),
-                                                              oppertunitycosts(oppertunitycosts),
-                                                              attackspersecond(attackspersecond), hitpoints(hitpoints),
-                                                              grantedXP(grantedXP), range(range), movement(movement),
-                                                              boss(boss), Nation(Nation) {}
+
 
         enemy::~enemy() {
 
         }
-
-        engine::math::box2_t enemy::get_box() const {
-            return engine::math::box2_t(engine::math::vec2_t(1,1), engine::math::vec2_t(1,1));
-        }
-
-        bool operator<(const std::shared_ptr<enemy>&  s1, const std::shared_ptr<enemy>&  s2){
-
-            return s1->getOppertunity() < s2->getOppertunity();
+        bool operator<(const enemy &s1, const enemy &s2){
+            return s1.getOppertunity() < s2.getOppertunity();
         }
 
     }
