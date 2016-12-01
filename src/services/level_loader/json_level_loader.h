@@ -24,7 +24,10 @@ namespace services {
             json_level_loader(json root);
 
             std::unique_ptr<domain::game_level::game_level> load();
+
         private:
+            std::shared_ptr<domain::map::map> load_all_levels(std::string url);
+
             void load_fields(json &root, domain::map::map &map1);
 
             void load_objects(json &root, domain::map::map &map1);
@@ -32,7 +35,6 @@ namespace services {
             std::vector<std::shared_ptr<domain::nations::nation>> load_nations(std::string nation_url);
 
             json m_root;
-
 
 
         };
