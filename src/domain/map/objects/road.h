@@ -12,25 +12,16 @@
 namespace domain {
     namespace map {
         namespace objects {
-            enum type {
-                STRAIGHT, JUNCTION, CORNER, CAP, T_JUNCTION
-            };
-
             class road : public dragable_field_object {
             public:
 
-                road(engine::math::box2_t box, type type1);
+                road(engine::math::box2_t box);
 
-                road(std::shared_ptr<field> field1, type type1);
+                road(std::shared_ptr<field> field1);
 
                 road(const road &obj);
 
                 dragable_field_object *clone() const;
-
-                type get_type() const;
-
-            private:
-                type m_type;
             };
         }
     }

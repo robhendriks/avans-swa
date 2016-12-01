@@ -31,7 +31,7 @@ namespace domain {
         }
 
         bool game_world::has_next_level() {
-            return m_current_lvl < m_levels.size();
+            return m_current_lvl + 1 < m_levels.size();
         }
 
         game_level::game_stats game_world::get_stats() {

@@ -27,9 +27,14 @@ namespace services {
 
             // Create the level
             auto *d_a_d = new engine::draganddrop::drag_and_drop();
-            auto goal = std::shared_ptr<domain::game_level::game_stats>(new domain::game_level::game_stats(3, 0, 10000));
+            auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats(3, 0, 10000));
+            auto nation = std::make_shared<domain::nations::nation>(domain::nations::nation("name", "name_pre"));
+            std::vector<std::shared_ptr<domain::nations::enemy>> enemies = {};
+            enemies.push_back(std::make_shared<domain::nations::enemy>(domain::nations::enemy("name", 1)));
+            nation->setavailableenemies(enemies);
+
             auto game_level = std::unique_ptr<domain::game_level::game_level>(
-                new domain::game_level::game_level("level", map1, goal, std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>>(), *d_a_d));
+                new domain::game_level::game_level("level", map1, goal, nation , *d_a_d));
 
             // TODO: HARDCODED ATM
             // Add placeable objects
@@ -112,27 +117,20 @@ namespace services {
                         image_location += id;
                         image_location += ".png";
                     } else {
-                        domain::map::objects::type type1;
                         if (id == "road-straight") {
-                            type1 = domain::map::objects::type::STRAIGHT;
                             image_location = "images/road-straight.png";
                         } else if (id == "road-junction") {
-                            type1 = domain::map::objects::type::JUNCTION;
                             image_location = "images/road-junction.png";
                         } else if (id == "road-corner") {
-                            type1 = domain::map::objects::type::CORNER;
                             image_location = "images/road-corner.png";
                         } else if (id == "road-t-junction") {
-                            type1 = domain::map::objects::type::T_JUNCTION;
                             image_location = "images/road-t-junction.png";
                         } else {
-                            // Road CAP
-                            type1 = domain::map::objects::type::CAP;
                             image_location = "images/road-cap.png";
                         }
 
                         // Create the object
-                        object = new domain::map::objects::road(field, type1);
+                        object = new domain::map::objects::road(field);
                     }
 
                     // Calculate the image start position

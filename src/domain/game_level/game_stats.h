@@ -18,7 +18,7 @@ namespace domain {
             long get_built_objects_count();
             long get_max_duration();
             void set_max_duration(long duration);
-            // duration not used in those operators. (reason being that if you for example did > then if your in the time limit it will say false because thats not bigger)
+            // max duration not used in those operators. (reason being that if you for example did > then if your in the time limit it will say false because thats not bigger)
             bool operator==(const game_stats& other);
             bool operator!=(const game_stats& other);
             bool operator< (const game_stats& other);
