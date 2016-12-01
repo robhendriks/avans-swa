@@ -127,6 +127,8 @@ namespace gui {
         }
 
         void level::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
+            m_controller->update();
+
             m_top_bar.draw(time_elapsed, display_box);
 
             if (m_model.world->get_current_level().is_game_over(time_elapsed) ||
