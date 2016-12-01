@@ -134,6 +134,10 @@ namespace gui {
                 m_controller->show();
             }
 
+            // draw enemies
+            for(auto enemy : m_model.world->get_current_level().get_enemies_in_lvl())
+                enemy->draw(m_top_bar.m_texture_manager , time_elapsed);
+
             // Draw the map
             m_model.world->get_current_level().get_map()->draw(m_top_bar.m_texture_manager, time_elapsed);
 
