@@ -25,6 +25,14 @@ namespace domain {
 
             enemy(std::string _name, int _oppertunitycosts);
 
+            enemy(std::string _name, double _movement, int _min_damge, int _max_damage, int _hitpoints,
+                  std::string type, std::shared_ptr<nation> _nation,
+                  int _oppertunitycosts);
+
+            enemy(const std::string &name, int mindamage, int maxdamage, int oppertunitycosts, double attackspersecond,
+                  int hitpoints, int grantedXP, int range, int movement, bool boss,
+                  const std::shared_ptr<nation> &Nation);
+
             //Returns nationname + unitname
             std::string getName();
 

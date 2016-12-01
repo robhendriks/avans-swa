@@ -9,7 +9,7 @@
 namespace domain {
     namespace game_level {
         game_level::game_level(std::string name, std::shared_ptr<domain::map::map> map, std::shared_ptr<game_stats> goal,
-                               std::shared_ptr<domain::nations::nation> _enemies,
+                               std::vector<std::pair<int, std::shared_ptr<domain::nations::nation>>> _enemies,
             engine::draganddrop::drag_and_drop &drag_and_drop) : m_name(name), m_map(map), m_goal(goal), m_start_time(0), m_drag_and_drop(drag_and_drop) {
 
             // Add all empty fields as dropable
@@ -19,7 +19,7 @@ namespace domain {
 
             m_map->add_observer(this);
             m_stats = std::shared_ptr<game_stats>(new game_stats());
-            m_enemy = _enemies;
+            enemies = _enemies;
         }
 
         std::string game_level::get_name() {
@@ -85,6 +85,10 @@ namespace domain {
 
         void game_level::set_start_time(unsigned int time) {
             m_start_time = time;
+        }
+
+        std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> game_level::getEnemies(){
+            return enemies;
         }
 
         void game_level::add_placeable_object(map::objects::dragable_field_object &obj) {

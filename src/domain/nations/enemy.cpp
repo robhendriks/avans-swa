@@ -27,6 +27,7 @@ namespace domain {
             oppertunitycosts =_oppertunitycosts;
         }
 
+
         std::string enemy::getName() {
             return Nation.get()->getprefixname()+" - "+name;
 

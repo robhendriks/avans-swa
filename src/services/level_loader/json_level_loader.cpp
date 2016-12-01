@@ -14,6 +14,7 @@ namespace services {
 
         }
 
+
         std::unique_ptr<domain::game_level::game_level> json_level_loader::load() {
             // load nations-url
 
@@ -47,6 +48,7 @@ namespace services {
             auto goal = std::shared_ptr<domain::game_level::game_stats>(new domain::game_level::game_stats(3, 0, 10000));
             std::shared_ptr<domain::nations::nation> first_nation = avaiable_nations[0];
             auto game_level = std::unique_ptr<domain::game_level::game_level>(
+                new domain::game_level::game_level("level", map1, goal, std::vector<std::pair<int, std::shared_ptr<domain::nations::nation>>>(), *d_a_d));
                 new domain::game_level::game_level("level", map1, goal, nation , *d_a_d));
                 new domain::game_level::game_level("level", map1, goal, std::vector<std::pair<int, std::shared_ptr<domain::nations::nation>>>(), *d_a_d));
 
@@ -150,11 +152,11 @@ namespace services {
             SDL_Log("Loading %d tile(s)...\n", tileCount);
 
             json data = tiles["data"];
-            if (!data.is_array()) {
-                return;
-            }
+                if (!data.is_array()) {
+                    return;
+                }
 
-            for (json &elem : data) {
+                for (json &elem : data) {
                 int x = elem["x"];
                 int y = elem["y"];
                 int type = elem["type"];
@@ -235,5 +237,7 @@ namespace services {
                 SDL_Log("%d %d %d", x, y, rotation);
             }
         }
+
+
     }
 }
