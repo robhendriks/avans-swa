@@ -19,7 +19,7 @@ namespace domain {
             nation(std::string _name, std::string _prefixname);
 
 
-            void setavailableenemies(std::vector<std::shared_ptr<enemy>> _enemies);
+            void set_available_enemies(std::vector<std::shared_ptr<enemy>> _enemies);
 
 
             std::string getName();
