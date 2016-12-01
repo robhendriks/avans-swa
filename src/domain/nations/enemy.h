@@ -8,22 +8,18 @@
 #include <string>
 #include <memory>
 #include "nation.h"
-#include "../drawable/drawable_game_object.h"
 
 namespace domain {
     namespace nations {
-        class enemy : public domain::drawable::drawable_game_object {
-        public:
 
-            enemy(std::string _name, double _movement, int _min_damge, int _max_damage, int _hitpoints,
-                  std::string type, std::shared_ptr<nation> _nation,
-                  int _oppertunitycosts);
+        class enemy {
+        public:
 
             enemy(const std::string &name, int mindamage, int maxdamage, int oppertunitycosts, double attackspersecond,
                   int hitpoints, int grantedXP, int range, int movement, bool boss,
                   const std::shared_ptr<nation> &Nation);
 
-            enemy(std::string _name, int _oppertunitycosts, bool _boss);
+            enemy(std::string _name, int _oppertunitycosts);
 
             //Returns nationname + unitname
             std::string getName();
@@ -48,8 +44,6 @@ namespace domain {
             int lowerHitpoints(int points);
 
             ~enemy();
-
-            virtual engine::math::box2_t get_box() const;
 
 
         private:
@@ -76,9 +70,10 @@ namespace domain {
 
             //So we directly know which Nations this Unit belongs to.
             std::shared_ptr<nation> Nation;
+
         };
 
-        bool operator<(const std::shared_ptr<enemy> &s1, const std::shared_ptr<enemy>  &s2);
+        bool operator<(const enemy &s1, const enemy &s2);
     }
 }
 
