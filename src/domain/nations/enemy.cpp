@@ -7,6 +7,7 @@
 #include "enemy.h"
 namespace domain {
     namespace nations {
+
         enemy::enemy(std::string _name, int _oppertunitycosts) {
             name = _name;
             oppertunitycosts =_oppertunitycosts;
@@ -73,6 +74,14 @@ namespace domain {
             }
             return 0;
         }
+
+        enemy::enemy(const std::string &name, int mindamage, int maxdamage, int oppertunitycosts,
+                     double attackspersecond, int hitpoints, int grantedXP, int range, int movement, bool boss,
+                     const std::shared_ptr<nation> &Nation) : name(name), mindamage(mindamage), maxdamage(maxdamage),
+                                                              oppertunitycosts(oppertunitycosts),
+                                                              attackspersecond(attackspersecond), hitpoints(hitpoints),
+                                                              grantedXP(grantedXP), range(range), movement(movement),
+                                                              boss(boss), Nation(Nation) {}
 
         enemy::~enemy() {
 
