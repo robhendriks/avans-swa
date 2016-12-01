@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
 
     w_config.w = json_config->get_int("window.width", w_config.w);
     w_config.h = json_config->get_int("window.height", w_config.h);
-
+    w_config.debug = json_config->get_bool("window.debug", w_config.debug);
 
     engine::engine_config e_config = { w_config };
 

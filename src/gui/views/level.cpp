@@ -2,6 +2,7 @@
 // Created by te on 01-Nov-16.
 //
 
+#include <math.h>
 #include "level.h"
 #include "../../events/object_placed_on_field.h"
 #include "../../events/object_cannot_be_placed_on_field.h"
@@ -13,7 +14,7 @@ namespace gui {
         level::level(top_bar &top_bar1, engine::audio::music_manager &music_manager,
                      engine::window &window, models::main_map_model &model, engine::audio::sound_manager &sound_manager)
             : m_top_bar(top_bar1), m_music_manager(music_manager), m_window(window), m_model(model),
-              m_sound_manager(sound_manager) {
+              m_sound_manager(sound_manager), m_current_page(1) {
         }
 
         void level::before() {
@@ -46,6 +47,9 @@ namespace gui {
                 m_sound_manager.play("error");
             };
             eventbus.subscribe("sound_when_not_placed", error_place);
+
+            // Event click subscribe
+            eventbus.subscribe(this);
         }
 
         void level::on_display_change(engine::math::box2_t display_box) {
@@ -71,14 +75,18 @@ namespace gui {
                 .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
             m_arrow_right_box.reset(new engine::math::box2_t(builder3.build()));
 
-            // Set the boxes for the placeable objects
-            engine::graphics::box_builder builder4(m_model.world->get_current_level().get_map()->get_tile_size());
-            builder4.as_left_top(m_arrow_left_box->right_top())
-                .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
-            for (auto &obj : m_model.world->get_current_level().get_placeable_objects()) {
-                builder4.add_margin({50, 0});
-                obj->set_box(builder4.build());
+            // Calculate the pages
+            float x_per_object = m_model.world->get_current_level().get_map()->get_tile_size().x + 50;
+            float x_space = m_placeable_objects_box->width() - m_arrow_left_box->width() - m_arrow_right_box->width();
+            m_objects_per_page = static_cast<int>(floor(x_space / x_per_object));
+            int total_objects = m_model.world->get_current_level().get_placeable_objects().size();
+            m_pages = static_cast<int>(floor(total_objects / m_objects_per_page));
+            if (m_current_page < m_pages) {
+                m_current_page = m_pages;
             }
+
+            // Set the draw boxes for the placeable objects
+            update_placeable_objects_page();
 
             // Create the box for the map
             engine::graphics::box_builder builder5({display_box.width(),
@@ -86,6 +94,36 @@ namespace gui {
                                                     m_placeable_objects_box->height()});
             builder5.as_left_top(m_top_bar.m_bar_box->left_top());
             m_model.world->get_current_level().get_map()->set_display_box(builder5.build());
+        }
+
+        void level::update_placeable_objects_page() {
+            engine::math::box2_t box_for_hidden_object({-1, -1}, {-1, -1});
+
+            // Set the boxes for the placeable objects
+            engine::graphics::box_builder builder4(m_model.world->get_current_level().get_map()->get_tile_size());
+            builder4.as_left_top(m_arrow_left_box->right_top())
+                .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
+
+            int object_counter = 0;
+            int page_counter = 1;
+            for (auto &obj : m_model.world->get_current_level().get_placeable_objects()) {
+                // Page check
+                if (object_counter == m_objects_per_page) {
+                    object_counter = 0;
+                    page_counter++;
+                }
+
+                // Set the object box
+                if (page_counter == m_current_page) {
+                    builder4.add_margin({50, 0});
+                    obj->set_box(builder4.build());
+                } else {
+                    obj->set_box(box_for_hidden_object);
+                }
+
+                // Count the objects (for the page)
+                object_counter++;
+            }
         }
 
         void level::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
@@ -106,6 +144,22 @@ namespace gui {
             // Draw the placeable objects
             for (auto &obj : m_model.world->get_current_level().get_placeable_objects()) {
                 obj->draw(m_top_bar.m_texture_manager, time_elapsed);
+            }
+        }
+
+        void level::on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event) {
+            engine::math::vec2_t *position = engine::input::input_handler::get_instance()->get_mouse_position();
+
+            if (m_arrow_left_box->contains(*position)) {
+                if (m_current_page > 1) {
+                    m_current_page--;
+                    update_placeable_objects_page();
+                }
+            } else if (m_arrow_right_box->contains(*position)) {
+                if (m_current_page < m_pages) {
+                    m_current_page++;
+                    update_placeable_objects_page();
+                }
             }
         }
 
@@ -130,6 +184,9 @@ namespace gui {
             // Unload sounds
             m_sound_manager.unload("pop");
             m_sound_manager.unload("error");
+
+            // Event click unsubscribe
+            eventbus.unsubscribe(this);
         }
 
         void level::set_controller(controllers::main_map_controller &controller) {

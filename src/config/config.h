@@ -11,9 +11,15 @@ namespace config {
     class config {
     public:
         virtual std::string get_string(std::string key, std::string default_value = "") = 0;
+
         virtual int get_int(std::string key, int default_value = -1) = 0;
+
         virtual long get_long(std::string key, long default_value = -1) = 0;
+
         virtual float get_float(std::string key, float default_value = -1) = 0;
+
+        virtual bool get_bool(std::string key, bool default_value = false) = 0;
+
         virtual ~config() = default;
     };
 }

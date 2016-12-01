@@ -23,7 +23,8 @@ namespace gui {
 
 namespace gui {
     namespace views {
-        class main_menu : public base_view, engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>> {
+        class main_menu : public base_view,
+                          engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>> {
         public:
             main_menu(top_bar &top_bar1, engine::audio::music_manager &music_manager);
 

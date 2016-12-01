@@ -38,9 +38,9 @@ namespace engine {
 
         mWindow = SDL_CreateWindow(mConfig.title.c_str(), mConfig.x, mConfig.y, mConfig.w, mConfig.h, mConfig.flags);
 
-        if (set_fullscreen) {
+        if (set_fullscreen && !mConfig.debug) {
             // Set fullscreen mode
-            SDL_SetWindowFullscreen(mWindow, SDL_WINDOW_FULLSCREEN);
+            SDL_SetWindowFullscreen(mWindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
         }
 
         if (!mWindow) {

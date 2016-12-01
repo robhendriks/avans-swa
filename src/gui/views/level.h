@@ -31,7 +31,8 @@ namespace gui {
 
 namespace gui {
     namespace views {
-        class level : public base_view {
+        class level : public base_view,
+                      engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>> {
         public:
 
             level(top_bar &top_bar1, engine::audio::music_manager &music_manager,
@@ -47,7 +48,11 @@ namespace gui {
 
             void after();
 
+            void on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event);
+
         private:
+            void update_placeable_objects_page();
+
             top_bar &m_top_bar;
             engine::audio::music_manager &m_music_manager;
             engine::window &m_window;
@@ -57,6 +62,9 @@ namespace gui {
             std::unique_ptr<engine::math::box2_t> m_arrow_left_box;
             std::unique_ptr<engine::math::box2_t> m_arrow_right_box;
             controllers::main_map_controller *m_controller;
+            int m_pages;
+            int m_current_page;
+            int m_objects_per_page;
         };
     }
 }

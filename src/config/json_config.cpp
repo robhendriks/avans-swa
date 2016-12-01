@@ -45,6 +45,15 @@ namespace config {
         return default_value;
     }
 
+    bool json_config::get_bool(std::string key, bool default_value) {
+        json root = get(key);
+        if (!root.is_null() && root.is_boolean()) {
+            return root;
+        }
+
+        return default_value;
+    }
+
     long json_config::get_long(std::string key, long default_value) {
         std::string string_value = get_string(key);
         if (string_value != "") {
