@@ -28,8 +28,8 @@ namespace services {
 
             //below needs a new function
             // Create the map
-            float width = 900;//m_root["width"];
-            float height = 900; //m_root["height"];
+            float width = 16;//m_root["width"];
+            float height = 16; //m_root["height"];
             auto map1 = std::shared_ptr<domain::map::map>(new domain::map::map({width - 1, height - 1}, {32, 32}));
 
             // Load the fields
