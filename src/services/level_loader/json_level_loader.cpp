@@ -27,7 +27,7 @@ namespace services {
 
             // Create the level
             auto *d_a_d = new engine::draganddrop::drag_and_drop();
-            auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats(3, 0, 10000));
+            auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats(3, 0, 100000000));
             auto nation = std::make_shared<domain::nations::nation>(domain::nations::nation("name", "name_pre"));
             std::vector<std::shared_ptr<domain::nations::enemy>> enemies = {};
             enemies.push_back(std::make_shared<domain::nations::enemy>(domain::nations::enemy("name", 1)));
@@ -42,6 +42,10 @@ namespace services {
             auto *building = new domain::map::objects::building(building_box);
             building->set_draw_settings("images/building-a.png");
             game_level->add_placeable_object(*building);
+
+            for (int i = 0; i < 30; i++) {
+                game_level->add_placeable_object(*building->clone());
+            }
 
             // Done with building the level
             return game_level;

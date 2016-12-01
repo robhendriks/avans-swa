@@ -15,6 +15,8 @@
 #include "../controllers/main_map_controller.h"
 #include "../../engine/audio/music_manager.h"
 #include "../../engine/audio/sound_manager.h"
+#include "../../engine/input/keycodes.h"
+#include "../../engine/events/key_down.h"
 
 
 namespace gui {
@@ -32,11 +34,12 @@ namespace gui {
 namespace gui {
     namespace views {
         class level : public base_view,
-                      engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>> {
+                      engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>,
+                      engine::eventbus::subscriber<engine::events::key_down> {
         public:
 
             level(top_bar &top_bar1, engine::audio::music_manager &music_manager,
-                     engine::window &window, models::main_map_model &model, engine::audio::sound_manager &sound_manager);
+                  engine::window &window, models::main_map_model &model, engine::audio::sound_manager &sound_manager);
 
             void set_controller(controllers::main_map_controller &controller);
 
@@ -50,8 +53,14 @@ namespace gui {
 
             void on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event);
 
+            void on_event(engine::events::key_down &event);
+
         private:
             void update_placeable_objects_page();
+
+            void navigate_left();
+
+            void navigate_right();
 
             top_bar &m_top_bar;
             engine::audio::music_manager &m_music_manager;

@@ -134,7 +134,7 @@ set(SOURCES src/main.cpp
     src/services/wave/wavegenerator.h
     src/services/wave/wave_management.cpp
     src/services/wave/wave_management.h
-    )
+    src/engine/events/key_down.cpp)
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include

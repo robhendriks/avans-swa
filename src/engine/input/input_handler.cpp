@@ -8,6 +8,8 @@
 #include "mouse_buttons.h"
 #include "../events/mouse_button_up.h"
 #include "../events/mouse_motion.h"
+#include "../events/key_down.h"
+#include "keycodes.h"
 
 namespace engine {
     namespace input {
@@ -107,7 +109,12 @@ namespace engine {
                     eventbus.fire(mouse_motion_event);
                     }
                     break;
-                case SDL_KEYDOWN:
+                case SDL_KEYDOWN: {
+                    events::key_down key_down_event(keycodes::sdl_scancode_to_keycode(event.key.keysym.scancode));
+                    eventbus.fire(key_down_event);
+                    m_key_states = SDL_GetKeyboardState(0);
+                    }
+                    break;
                 case SDL_KEYUP:
                     m_key_states = SDL_GetKeyboardState(0);
                     break;

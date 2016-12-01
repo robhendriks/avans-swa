@@ -21,8 +21,7 @@ namespace gui {
             m_top_bar.before();
 
             // Load arrow textures
-            m_top_bar.m_texture_manager.load("images/arrow-left.png", "arrow-left");
-            m_top_bar.m_texture_manager.load("images/arrow-right.png", "arrow-right");
+            m_top_bar.m_texture_manager.load("images/arrows.png", "arrows");
 
             // Load music
             m_music_manager.load("sounds/game.mp3", "game_bg_music");
@@ -49,7 +48,8 @@ namespace gui {
             eventbus.subscribe("sound_when_not_placed", error_place);
 
             // Event click subscribe
-            eventbus.subscribe(this);
+            eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>*>(this));
+            eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::key_down>*>(this));
         }
 
         void level::on_display_change(engine::math::box2_t display_box) {
@@ -61,27 +61,27 @@ namespace gui {
             builder1.as_left_bottom(display_box.left_bottom());
             m_placeable_objects_box.reset(new engine::math::box2_t(builder1.build()));
 
+            auto arrow_image_size = engine::math::vec2_t(128, 128);
             // Create the arrow left image box
-            auto arrow_left_image_size = m_top_bar.m_texture_manager.get_size("arrow-left");
-            engine::graphics::box_builder builder2(arrow_left_image_size);
+            engine::graphics::box_builder builder2(arrow_image_size);
             builder2.as_left_top(m_placeable_objects_box->left_top()).add_margin({50, 0})
                 .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
             m_arrow_left_box.reset(new engine::math::box2_t(builder2.build()));
 
             // Create the arrow right image box
-            auto arrow_right_image_size = m_top_bar.m_texture_manager.get_size("arrow-right");
-            engine::graphics::box_builder builder3(arrow_right_image_size);
+            engine::graphics::box_builder builder3(arrow_image_size);
             builder3.as_right_top(m_placeable_objects_box->right_top()).add_margin({-50, 0})
                 .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
             m_arrow_right_box.reset(new engine::math::box2_t(builder3.build()));
 
             // Calculate the pages
             float x_per_object = m_model.world->get_current_level().get_map()->get_tile_size().x + 50;
-            float x_space = m_placeable_objects_box->width() - m_arrow_left_box->width() - m_arrow_right_box->width();
+            float x_space = m_placeable_objects_box->width() - m_arrow_left_box->max.x -
+                (m_placeable_objects_box->max.x - m_arrow_right_box->min.x) - 50;
             m_objects_per_page = static_cast<int>(floor(x_space / x_per_object));
             int total_objects = m_model.world->get_current_level().get_placeable_objects().size();
-            m_pages = static_cast<int>(floor(total_objects / m_objects_per_page));
-            if (m_current_page < m_pages) {
+            m_pages = static_cast<int>(ceil(static_cast<float>(total_objects) / m_objects_per_page));
+            if (m_current_page > m_pages) {
                 m_current_page = m_pages;
             }
 
@@ -117,6 +117,7 @@ namespace gui {
                 if (page_counter == m_current_page) {
                     builder4.add_margin({50, 0});
                     obj->set_box(builder4.build());
+                    builder4.add_margin({m_model.world->get_current_level().get_map()->get_tile_size().x, 0});
                 } else {
                     obj->set_box(box_for_hidden_object);
                 }
@@ -143,8 +144,10 @@ namespace gui {
             m_model.world->get_current_level().get_map()->draw(m_top_bar.m_texture_manager, time_elapsed);
 
             // Draw the arrows
-            m_top_bar.m_texture_manager.draw("arrow-left", {0, 0}, *m_arrow_left_box);
-            m_top_bar.m_texture_manager.draw("arrow-right", {0, 0}, *m_arrow_right_box);
+            float left_arrow_y = (m_current_page == 1 ? 128 : 0);
+            m_top_bar.m_texture_manager.draw("arrows", {0, left_arrow_y}, *m_arrow_left_box);
+            float right_arrow_y = (m_current_page == m_pages ? 128 : 0);
+            m_top_bar.m_texture_manager.draw("arrows", {128, right_arrow_y}, *m_arrow_right_box);
 
             // Draw the placeable objects
             for (auto &obj : m_model.world->get_current_level().get_placeable_objects()) {
@@ -156,15 +159,31 @@ namespace gui {
             engine::math::vec2_t *position = engine::input::input_handler::get_instance()->get_mouse_position();
 
             if (m_arrow_left_box->contains(*position)) {
-                if (m_current_page > 1) {
-                    m_current_page--;
-                    update_placeable_objects_page();
-                }
+                navigate_left();
             } else if (m_arrow_right_box->contains(*position)) {
-                if (m_current_page < m_pages) {
-                    m_current_page++;
-                    update_placeable_objects_page();
-                }
+                navigate_right();
+            }
+        }
+
+        void level::on_event(engine::events::key_down &event) {
+            if (event.get_keycode() == engine::input::keycodes::keycode::LEFT) {
+                navigate_left();
+            } else if (event.get_keycode() == engine::input::keycodes::keycode::RIGHT) {
+                navigate_right();
+            }
+        }
+
+        void level::navigate_left() {
+            if (m_current_page > 1) {
+                m_current_page--;
+                update_placeable_objects_page();
+            }
+        }
+
+        void level::navigate_right() {
+            if (m_current_page < m_pages) {
+                m_current_page++;
+                update_placeable_objects_page();
             }
         }
 
@@ -172,8 +191,7 @@ namespace gui {
             m_top_bar.after();
 
             // Unload arrow textures
-            m_top_bar.m_texture_manager.unload("arrow-left");
-            m_top_bar.m_texture_manager.unload("arrow-right");
+            m_top_bar.m_texture_manager.unload("arrows");
 
             // can be done by the objects as well
             m_model.world->unload(m_top_bar.m_texture_manager);
@@ -191,7 +209,8 @@ namespace gui {
             m_sound_manager.unload("error");
 
             // Event click unsubscribe
-            eventbus.unsubscribe(this);
+            eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>*>(this));
+            eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::key_down>*>(this));
         }
 
         void level::set_controller(controllers::main_map_controller &controller) {
