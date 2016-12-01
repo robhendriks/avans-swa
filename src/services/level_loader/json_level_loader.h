@@ -29,7 +29,12 @@ namespace services {
 
             void load_objects(json &root, domain::map::map &map1);
 
+            std::vector<std::shared_ptr<domain::nations::nation>> load_nations(std::string nation_url);
+
             json m_root;
+
+
+
         };
     };
 };
