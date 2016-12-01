@@ -6,8 +6,6 @@
 #include "json_level_loader.h"
 #include "../../domain/map/objects/building.h"
 #include "../../domain/map/objects/road.h"
-#include "../../domain/map/objects/economic_building.h"
-#include "../../domain/resources/resource.h"
 
 namespace services {
     namespace level_loader {
@@ -16,10 +14,22 @@ namespace services {
 
         }
 
+
         std::unique_ptr<domain::game_level::game_level> json_level_loader::load() {
+            // load nations-url
+
+            std::vector< std::shared_ptr<domain::nations::nation>> avaiable_nations = load_nations(m_root["nations-url"]);
+
+            // load building-url
+            std::string building_url = m_root["building-url"];
+            std::cout << building_url << std::endl;
+
+            //load levels
+
+            //below needs a new function
             // Create the map
-            float width = m_root["width"];
-            float height = m_root["height"];
+            float width = 900;//m_root["width"];
+            float height = 900; //m_root["height"];
             auto map1 = std::shared_ptr<domain::map::map>(new domain::map::map({width - 1, height - 1}, {32, 32}));
 
             // Load the fields
@@ -29,36 +39,102 @@ namespace services {
 
             // Create the level
             auto *d_a_d = new engine::draganddrop::drag_and_drop();
+            auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats(3, 0, 10000));
 
-            // Create the level goal
-            auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats());
-            goal->set_counter("buildings", 5);
-
+            // this piece is for now placeholder till load_nations work
             auto nation = std::make_shared<domain::nations::nation>(domain::nations::nation("name", "name_pre"));
             std::vector<std::shared_ptr<domain::nations::enemy>> enemies = {};
-            enemies.push_back(std::make_shared<domain::nations::enemy>(domain::nations::enemy("name", 3,false)));
-            enemies.push_back(std::make_shared<domain::nations::enemy>(domain::nations::enemy("Jermey", 4,true)));
-            enemies.push_back(std::make_shared<domain::nations::enemy>(domain::nations::enemy("Leendert", 2,false)));
-            nation->setavailableenemies(enemies);
+            enemies.push_back(std::make_shared<domain::nations::enemy>(domain::nations::enemy("name", 1)));
+            nation->set_available_enemies(enemies);
+
+            //std::shared_ptr<domain::nations::nation> first_nation = avaiable_nations[0];
 
             auto game_level = std::unique_ptr<domain::game_level::game_level>(
-                new domain::game_level::game_level("level", map1, goal, nation , *d_a_d, 125000));
+                new domain::game_level::game_level("level", map1, goal, nation, *d_a_d));
 
             // TODO: HARDCODED ATM
             // Add placeable objects
-            engine::math::box2_t building_box {{0, 0}, {0, 0}}; // This box will be overwritten by the view
-            //Temperatay hardcoded resource
-            domain::resources::resource res = *new domain::resources::resource();
-            res.set_count(2);
-            res.set_resource_type("wood");
-
-            auto *building = new domain::map::objects::economic_building(building_box, std::make_shared<domain::resources::resource>(res));
-
+            engine::math::box2_t building_box {{10, 10}, {42, 42}};
+            auto *building = new domain::map::objects::building(building_box);
             building->set_draw_settings("images/building-a.png");
             game_level->add_placeable_object(*building);
 
             // Done with building the level
             return game_level;
+        }
+      std::vector<std::shared_ptr<domain::nations::nation>> json_level_loader::load_nations(std::string nation_url) {
+
+            //domain nations lijst van enemys
+            //domain::nations::enemy
+            std::vector<std::shared_ptr<domain::nations::nation>> pre_nation_list;
+
+            std::ifstream file(nation_url);
+            if (!file.is_open()) {
+                throw std::runtime_error(std::string("Unable to open file: ") + nation_url);
+            }
+
+            json nation_root;
+            try {
+                nation_root << file;
+
+                for (json &elem : nation_root) {
+
+                    //nation.nation(elem["id"],elem["name"]);
+                    //TODO: nation maken
+
+                    //<domain::nations::nation::nation> nation = new domain::nations::nation::nation(elem["id"]);
+                    pre_nation_list.push_back(std::make_shared<domain::nations::nation>(domain::nations::nation(elem["id"], "_")));
+                        //reset(new domain::nations::nation::nation(elem["id"],elem["name"]));
+                  // std::shared_ptr<domain::nations::nation> pre_nation= new domain::nations::nation::nation(elem["id"],elem["name"]);
+                   // &nation(pre_nation);
+//                    std::string id = elem["id"];
+//                    std::string name = elem["name"];
+                    json data = elem["units"];
+                    if (!data.is_array()) {
+                        return pre_nation_list;
+                    }
+//                    std::shared_ptr<domain::nations::enemy>>
+                   // std::vector<std::shared_ptr<domain::nations::enemy>> pre_nation;
+                    for (json &enemy : data){
+
+//                name": "Fallen Warrior",
+//                    "movement-speed": 1,
+//                    "min-damage": 3,
+//                    "max-damage": 7,
+//                    "hitpoints": 120,
+//                    "type": "normal",
+//                    "oppertunity-cost": 1
+                        //current_nation->set_available_enemies()
+                        std::string enemy_name = enemy["name"];
+                        double enemey_movement_speed = static_cast<double>(enemy["movement-speed"]);
+                        int enemey_min_damage = static_cast<int>(enemy["min-damage"]);
+                        int enemey_max_damage = static_cast<int>(enemy["max-damage"]);
+                        int enemey_hitpoints = static_cast<int>(enemy["hitpoints"]);
+                        std::string enemy_type = enemy["type"];
+                        int enemey_oppertunity_cost = static_cast<int>(enemy["oppertunity-cost"]);
+
+                        // TODO: create enemy obj en push to list of Nations!
+
+//                        "name": "Fisher",
+//                            "movement-speed": 1.6,
+//                            "min-damage": 12,
+//                            "max-damage": 15,
+//                            "hitpoints": 140,
+//                            "type": "normal",
+//                            "oppertunity-cost": 1
+                      //  pre_nation.pushback(new domain::nations::enemy(enemy["name"], enemy["min-damage"],enemy["max-damage"],));
+
+                        std::cout << enemy_name << enemey_min_damage << enemey_max_damage << enemey_hitpoints << enemy_type << enemey_oppertunity_cost << enemey_movement_speed;
+                    }
+                   // std::cout << id << name;
+                }
+            } catch (std::exception &e) {
+                // TODO: proper error handling
+                auto d = e.what();
+                std::cout << d ;
+                throw;
+            }
+          return pre_nation_list;
         }
 
         void json_level_loader::load_fields(json &root, domain::map::map &map1) {
@@ -75,11 +151,11 @@ namespace services {
             SDL_Log("Loading %d tile(s)...\n", tileCount);
 
             json data = tiles["data"];
-            if (!data.is_array()) {
-                return;
-            }
+                if (!data.is_array()) {
+                    return;
+                }
 
-            for (json &elem : data) {
+                for (json &elem : data) {
                 int x = elem["x"];
                 int y = elem["y"];
                 int type = elem["type"];
@@ -110,7 +186,6 @@ namespace services {
                 return ;
             }
 
-            int column = 0;
             // Loop through all objects
             for (json &elem : data) {
                 std::string id = elem["id"];
@@ -131,7 +206,6 @@ namespace services {
                         image_location = "images/";
                         image_location += id;
                         image_location += ".png";
-                        object->set_max_column(2);
                     } else {
                         if (id == "road-straight") {
                             image_location = "images/road-straight.png";
@@ -147,7 +221,6 @@ namespace services {
 
                         // Create the object
                         object = new domain::map::objects::road(field);
-                        object->set_max_column(1);
                     }
 
                     // Calculate the image start position
@@ -157,13 +230,13 @@ namespace services {
                     object->set_draw_settings(image_location, {0, image_start_y});
                     object->set_rotation(rotation);
 
-                    object->set_current_column(column);
                     field->place_object(*object);
-                    column = column + 1 <= object->get_max_column()? column + 1 : 1;
                 }
 
                 SDL_Log("%d %d %d", x, y, rotation);
             }
         }
+
+
     }
 }

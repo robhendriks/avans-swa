@@ -5,59 +5,21 @@
 #include "game_level.h"
 #include "../map/objects/building.h"
 #include "../map/objects/road.h"
-#include "../../events/goal_reached.h"
 
 namespace domain {
     namespace game_level {
         game_level::game_level(std::string name, std::shared_ptr<domain::map::map> map, std::shared_ptr<game_stats> goal,
                                std::shared_ptr<domain::nations::nation> _enemies,
-                               engine::draganddrop::drag_and_drop &drag_and_drop, long duration) :
-            m_name(name), m_max_duration(duration), m_map(map), m_goal(goal), m_start_time(0),
-            m_drag_and_drop(drag_and_drop) {
+            engine::draganddrop::drag_and_drop &drag_and_drop) : m_name(name), m_map(map), m_goal(goal), m_start_time(0), m_drag_and_drop(drag_and_drop) {
 
             // Add all empty fields as dropable
             for (auto field : m_map->get_empty_fields()) {
                 m_drag_and_drop.add_dropable(*field);
             }
 
+            m_map->add_observer(this);
             m_stats = std::shared_ptr<game_stats>(new game_stats());
-
-            // Set all goals as not reached
-            for (auto &g : m_goal->get()) {
-                m_not_reached_goals.push_back(g.first);
-            }
-
-            // Update the stats with the placed objects on the map
-            for(auto field : m_map->get_fields_with_objects()){
-                field->get_object()->update_game_stats(*m_stats);
-            }
-
-            // Check if there are already some goals reached
-            check_goals_reached();
-
             m_enemy = _enemies;
-
-//Create resource objects and sets them to 0.
-            auto templist = std::vector<std::shared_ptr<domain::resources::resource>>(5);
-            templist[0] = std::make_shared<domain::resources::resource>(*new domain::resources::resource());
-            templist[1] =  std::make_shared<domain::resources::resource>(*new domain::resources::resource());
-            templist[2] =  std::make_shared<domain::resources::resource>(*new domain::resources::resource());
-            templist[3] =  std::make_shared<domain::resources::resource>(*new domain::resources::resource());
-            templist[4] =  std::make_shared<domain::resources::resource>(*new domain::resources::resource());
-
-            templist[0]->set_count(100);
-            templist[0]->set_resource_type("wood");
-            templist[1]->set_count(25);
-            templist[1]->set_resource_type("ore");
-            templist[2]->set_count(100);
-            templist[2]->set_resource_type("gold");
-            templist[3]->set_count(0);
-            templist[3]->set_resource_type("silicium");
-            templist[4]->set_count(0);
-            templist[4]->set_resource_type("uranium");
-            m_resources = templist;
-
-
         }
 
         std::string game_level::get_name() {
@@ -66,6 +28,15 @@ namespace domain {
 
         std::shared_ptr<domain::map::map> game_level::get_map() {
             return m_map;
+        }
+
+        void game_level::draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed) {
+            m_map->draw(texture_manager, time_elapsed);
+
+            for (auto &obj : m_placeable_objects) {
+                //obj->set_box();
+                obj->draw(texture_manager, time_elapsed);
+            }
         }
 
         void game_level::unload(engine::graphics::texture_manager &texture_manager) {
@@ -80,18 +51,32 @@ namespace domain {
             return m_stats;
         }
 
+        // update stats
+        void game_level::notify(domain::map::map * p_observee, std::string title) {
+            if(title == "object-placed") {
+                long building_count = 0;
+                long road_count = 0;
+                auto d = p_observee->get_fields_with_objects();
+                for(std::shared_ptr<domain::map::field>& f : d){
+                    if(dynamic_cast<domain::map::objects::building*>(f->get_object()))
+                        ++building_count;
+                    else if(dynamic_cast<domain::map::objects::road*>(f->get_object()))
+                        ++road_count;
+               }
+
+                m_stats->set_built_building_count(building_count);
+                m_stats->set_built_roads_count(road_count);
+                m_stats->set_built_objects_count(road_count + building_count);
+            }
+        }
+
         bool game_level::is_goal_reached() {
             return *m_stats.get() >= *m_goal.get();
         }
 
         bool game_level::is_game_over(unsigned int current_duration) {
-            if(m_max_duration >= 0) {
-                int playing_time = current_duration - m_start_time;
-                return  m_max_duration - playing_time < 0;
-            }
-            else {
-                return false;
-            }
+            int playing_time = current_duration - m_start_time;
+            return  m_goal->get_max_duration() - playing_time < 0;
         }
 
         unsigned int game_level::get_start_time() {
@@ -119,11 +104,6 @@ namespace domain {
             m_placeable_objects.erase(std::remove(m_placeable_objects.begin(), m_placeable_objects.end(), &obj), m_placeable_objects.end());
         };
 
-
-        std::vector<map::objects::dragable_field_object *> game_level::get_placeable_objects() const {
-            return m_placeable_objects;
-        }
-
         std::vector<std::shared_ptr<domain::nations::enemy>> game_level::get_enemies_in_lvl() {
             return m_enemies_in_lvl;
         }
@@ -149,29 +129,6 @@ namespace domain {
 
                 // Immediately start with dragging
                 m_drag_and_drop.set_dragging(*copy);
-
-                // Update the stats
-                p_observee->update_game_stats(*m_stats);
-
-                check_goals_reached();
-            }
-        }
-
-        void game_level::check_goals_reached() {
-            for (auto it = m_not_reached_goals.begin(); it != m_not_reached_goals.end();) {
-
-                // Check if the goal is now reached
-                if (m_stats->get_count(*it) >= m_goal->get_count(*it)) {
-                    // Reached remove from arrow and fire the event
-                    auto *event = new events::goal_reached(*it);
-                    engine::eventbus::eventbus::get_instance().fire(event);
-                    delete event;
-
-                    // Erase from vector
-                    it = m_not_reached_goals.erase(it);
-                } else {
-                    ++it;
-                }
             }
         }
 
@@ -230,24 +187,5 @@ namespace domain {
         bool game_level::get_spawn_bosses() {
             return m_spawn_bosses;
         }
-
-        std::vector<std::shared_ptr<domain::resources::resource>> game_level::get_resources(){
-            return m_resources;
-        }
-
-        void game_level::set_resources(std::vector<std::shared_ptr<domain::resources::resource>> resources){
-            m_resources = resources;
-        }
-        void game_level::update(){
-            m_map->update_objects(this);
-        }
-
-
-
-
-        long game_level::get_max_duration() const {
-            return m_max_duration;
-        }
-
     }
 }
