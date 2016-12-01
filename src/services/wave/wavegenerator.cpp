@@ -59,9 +59,11 @@ namespace services {
                 temp_oppertunity = temp_oppertunity / 2;
                 int amount = temp_oppertunity /(_nation.getavailableenemies()[i]->getOppertunity());
                 for (int j = 0; j < amount; j++) {
+                    std::shared_ptr<domain::nations::enemy> e = std::make_shared<domain::nations::enemy>(*_nation.getavailableenemies()[i]);
                     enemies.push_back(
+
                             std::pair<int, std::shared_ptr<domain::nations::enemy>>{0,
-                                                                                    _nation.getavailableenemies()[i]});
+                                                                                    e});
 
                 }
             }
@@ -69,7 +71,7 @@ namespace services {
 
             //Creates timestamps for spawning
             //Create a templist with numbers
-            int spreadedTime = _time * 1000 / enemies.size();
+            int spreadedTime = _time/ enemies.size();
             std::vector<int> templist(enemies.size());
             for (unsigned int i = 0; i < templist.size(); i++) {
                 if (_spread == false) {
