@@ -27,9 +27,13 @@ namespace engine {
 
             box_builder &as_right_bottom(const math::vec2_t &vec);
 
-            box_builder &center_vertical_in(float height);
+            box_builder &center_vertical(float y1, float y2);
 
-            box_builder &center_horizontal_in(float height);
+            box_builder &center_horizontal(float x1, float x2);
+
+            box_builder &start_on_y(float y);
+
+            box_builder &start_on_x(float x);
 
             math::box2_t build();
 

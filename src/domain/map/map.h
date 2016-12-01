@@ -17,11 +17,9 @@ namespace domain {
 namespace domain {
     namespace map {
         class map : public drawable::abstract_drawable_game_object, public engine::observer::observee<map>,
-                    public engine::observer::observer<field>, engine::eventbus::subscriber<engine::events::display_changed> {
+                    public engine::observer::observer<field> {
         public:
             map(engine::math::vec2_t size, engine::math::vec2_t tile_size);
-
-            ~map();
 
             void notify(field *p_observee, std::string title);
 
@@ -45,9 +43,9 @@ namespace domain {
 
             void draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed);
 
-            void unload(engine::graphics::texture_manager &texture_manager);
+            void set_display_box(engine::math::box2_t display_box);
 
-            void on_event(engine::events::display_changed &event);
+            void unload(engine::graphics::texture_manager &texture_manager);
 
         private:
             engine::math::vec2_t index_to_position(unsigned int index) const;
@@ -57,7 +55,7 @@ namespace domain {
             engine::math::vec2_t m_size;
             engine::math::vec2_t m_tile_size;
             std::vector<std::shared_ptr<domain::map::field>> m_fields;
-            engine::math::box2_t m_dest;
+            std::unique_ptr<engine::math::box2_t> m_dest;
         };
     }
 }

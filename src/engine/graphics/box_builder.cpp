@@ -51,18 +51,44 @@ namespace engine {
             return *this;
         }
 
-        box_builder &box_builder::center_vertical_in(float height) {
-            if (height > m_box.height()) {
-                add_margin({0, (height - m_box.height()) / 2});
+        box_builder &box_builder::center_vertical(float y1, float y2) {
+            if (y1 > y2) {
+                std::swap(y1, y2);
             }
+
+            auto center = m_box.center();
+            center.y = y1 + ((y2 - y1) / 2);
+
+            m_box = engine::math::box2_t(m_box.width(), m_box.height(), center);
 
             return *this;
         }
 
-        box_builder &box_builder::center_horizontal_in(float width) {
-            if (width > m_box.width()) {
-                add_margin({(width - m_box.width()) / 2, 0});
+        box_builder &box_builder::center_horizontal(float x1, float x2) {
+            if (x1 > x2) {
+                std::swap(x1, x2);
             }
+
+            auto center = m_box.center();
+            center.x = x1 + ((x2 - x1) / 2);
+
+            m_box = engine::math::box2_t(m_box.width(), m_box.height(), center);
+
+            return *this;
+        }
+
+        box_builder &box_builder::start_on_y(float y) {
+            float h = m_box.height();
+            m_box.min.y = y;
+            m_box.max.y = y + h;
+
+            return *this;
+        }
+
+        box_builder &box_builder::start_on_x(float x) {
+            float w = m_box.width();
+            m_box.min.x = x;
+            m_box.max.x = x + w;
 
             return *this;
         }

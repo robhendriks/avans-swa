@@ -35,6 +35,8 @@ namespace gui {
 
             void before();
 
+            void on_display_change(engine::math::box2_t display_box);
+
             void after();
 
             void draw(unsigned int time_elapsed, engine::math::box2_t display_box);
@@ -42,8 +44,6 @@ namespace gui {
             void on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event);
 
             void set_controller(gui::controllers::main_map_controller &controller);
-
-            ~win_game_over();
 
         private:
             engine::graphics::texture_manager &m_texture_manager;
@@ -54,10 +54,10 @@ namespace gui {
             engine::engine &m_engine;
             gui::controllers::main_map_controller *m_controller;
             models::transition_level_model &m_model;
-            engine::math::box2_t *m_title_box;
-            engine::math::box2_t *m_header_box;
-            engine::math::box2_t *m_statistics_box;
-            engine::math::box2_t *m_continue_box;
+            std::unique_ptr<engine::math::box2_t> m_title_box;
+            std::unique_ptr<engine::math::box2_t> m_header_box;
+            std::unique_ptr<engine::math::box2_t> m_statistics_box;
+            std::unique_ptr<engine::math::box2_t> m_continue_box;
         };
     }
 }

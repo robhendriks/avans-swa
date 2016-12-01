@@ -127,7 +127,7 @@ set(SOURCES src/main.cpp
     src/engine/events/display_changed.h
     src/engine/events/game_tick.cpp
     src/engine/events/game_tick.h
-    src/domain/map/objects/field_object.cpp src/engine/graphics/box_builder.cpp src/engine/graphics/box_builder.h)
+    src/domain/map/objects/field_object.cpp src/engine/graphics/box_builder.cpp src/engine/graphics/box_builder.h src/gui/views/top_bar.cpp src/gui/views/top_bar.h)
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include

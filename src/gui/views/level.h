@@ -25,10 +25,16 @@ namespace gui {
 
 namespace gui {
     namespace views {
+        class top_bar;
+    }
+}
+
+namespace gui {
+    namespace views {
         class level : public base_view {
         public:
 
-            level(engine::graphics::texture_manager &texture_manager, engine::audio::music_manager &music_manager,
+            level(top_bar &top_bar1, engine::audio::music_manager &music_manager,
                      engine::window &window, models::main_map_model &model, engine::audio::sound_manager &sound_manager);
 
             void set_controller(controllers::main_map_controller &controller);
@@ -42,7 +48,7 @@ namespace gui {
             void after();
 
         private:
-            engine::graphics::texture_manager &m_texture_manager;
+            top_bar &m_top_bar;
             engine::audio::music_manager &m_music_manager;
             engine::window &m_window;
             models::main_map_model &m_model;
