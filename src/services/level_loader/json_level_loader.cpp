@@ -28,8 +28,8 @@ namespace services {
 
             //below needs a new function
             // Create the map
-            float width = m_root["width"];
-            float height = m_root["height"];
+            float width = 900;//m_root["width"];
+            float height = 900; //m_root["height"];
             auto map1 = std::shared_ptr<domain::map::map>(new domain::map::map({width - 1, height - 1}, {32, 32}));
 
             // Load the fields
@@ -40,17 +40,17 @@ namespace services {
             // Create the level
             auto *d_a_d = new engine::draganddrop::drag_and_drop();
             auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats(3, 0, 10000));
+
+            // this piece is for now placeholder till load_nations work
             auto nation = std::make_shared<domain::nations::nation>(domain::nations::nation("name", "name_pre"));
             std::vector<std::shared_ptr<domain::nations::enemy>> enemies = {};
             enemies.push_back(std::make_shared<domain::nations::enemy>(domain::nations::enemy("name", 1)));
-            nation->setavailableenemies(enemies);
+            nation->set_available_enemies(enemies);
 
-            auto goal = std::shared_ptr<domain::game_level::game_stats>(new domain::game_level::game_stats(3, 0, 10000));
-            std::shared_ptr<domain::nations::nation> first_nation = avaiable_nations[0];
+            //std::shared_ptr<domain::nations::nation> first_nation = avaiable_nations[0];
+
             auto game_level = std::unique_ptr<domain::game_level::game_level>(
-                new domain::game_level::game_level("level", map1, goal, std::vector<std::pair<int, std::shared_ptr<domain::nations::nation>>>(), *d_a_d));
-                new domain::game_level::game_level("level", map1, goal, nation , *d_a_d));
-                new domain::game_level::game_level("level", map1, goal, std::vector<std::pair<int, std::shared_ptr<domain::nations::nation>>>(), *d_a_d));
+                new domain::game_level::game_level("level", map1, goal, nation, *d_a_d));
 
             // TODO: HARDCODED ATM
             // Add placeable objects
@@ -83,8 +83,7 @@ namespace services {
                     //TODO: nation maken
 
                     //<domain::nations::nation::nation> nation = new domain::nations::nation::nation(elem["id"]);
-                    pre_nation_list.push_back(std::make_shared<domain::nations::nation>(new domain::nations::nation::nation(elem["id"])));
-                   std::shared_ptr<domain::nations::nation> current_nation = pre_nation_list.back();
+                    pre_nation_list.push_back(std::make_shared<domain::nations::nation>(domain::nations::nation(elem["id"], "_")));
                         //reset(new domain::nations::nation::nation(elem["id"],elem["name"]));
                   // std::shared_ptr<domain::nations::nation> pre_nation= new domain::nations::nation::nation(elem["id"],elem["name"]);
                    // &nation(pre_nation);
@@ -92,7 +91,7 @@ namespace services {
 //                    std::string name = elem["name"];
                     json data = elem["units"];
                     if (!data.is_array()) {
-                        return nullptr;
+                        return pre_nation_list;
                     }
 //                    std::shared_ptr<domain::nations::enemy>>
                    // std::vector<std::shared_ptr<domain::nations::enemy>> pre_nation;
