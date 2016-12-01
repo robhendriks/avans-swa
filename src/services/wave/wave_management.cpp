@@ -32,7 +32,7 @@ namespace services {
 
                 // make subset
                 for(auto pair : m_current_list){
-                    bool result = pair->first < static_cast<int>(time);
+                    bool result = pair->first <= static_cast<int>(time);
                     if(result){
                         return_list.push_back(pair->second);
                     };
@@ -44,7 +44,6 @@ namespace services {
                                               { return pair->first > static_cast<int>(time);});
 
                 m_current_list.erase(new_end, m_current_list.end());
-
                 return return_list;
             }
         }
