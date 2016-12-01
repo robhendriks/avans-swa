@@ -22,7 +22,7 @@ namespace domain {
             public engine::observer::observer<domain::map::objects::dragable_field_object> {
         public:
             game_level(std::string name, std::shared_ptr<map::map> map, std::shared_ptr<game_stats> goal,
-                       std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> _enemies,
+                       std::vector<std::pair<int, std::shared_ptr<domain::nations::nation>>> _nations,
                        engine::draganddrop::drag_and_drop &drag_and_drop);
 
             std::string get_name();
