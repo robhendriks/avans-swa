@@ -11,10 +11,6 @@ namespace domain {
         game_world::~game_world() {
         }
 
-        void game_world::draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed) {
-            this->m_levels.at(m_current_lvl)->draw(texture_manager, time_elapsed);
-        }
-
         void game_world::unload(engine::graphics::texture_manager &texture_manager) {
             for(auto &m : m_levels)
                 m->unload(texture_manager);

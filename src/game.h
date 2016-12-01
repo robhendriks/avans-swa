@@ -8,12 +8,19 @@
 
 #include "gui/views/base_view.h"
 #include "engine/window.h"
+#include "engine/events/display_changed.h"
 
-class game : public engine::eventbus::subscriber<engine::events::window_cleared> {
+class game : public engine::eventbus::subscriber<engine::events::window_cleared>,
+             public engine::eventbus::subscriber<engine::events::display_changed> {
 public:
     game(engine::window &window);
+
     void on_event(engine::events::window_cleared &event);
+
+    void on_event(engine::events::display_changed &event);
+
     void use_view(gui::views::base_view &view);
+
 private:
     engine::window &m_window;
     gui::views::base_view *m_current_view;

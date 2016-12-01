@@ -4,6 +4,7 @@
 
 #include <SDL_image.h>
 #include "texture_manager.h"
+#include "box_builder.h"
 
 namespace engine {
     namespace graphics {
@@ -66,10 +67,10 @@ namespace engine {
         }
 
         void texture_manager::draw(SDL_Texture* texture, math::vec2_t image_start_position, math::box2_t dest) const {
-            math::box2_t src_box(dest);
-            src_box.move_to_start(image_start_position);
+            box_builder builder(dest.size());
+            builder.as_left_top(image_start_position);
 
-            SDL_Rect sdl_src = (SDL_Rect) src_box;
+            SDL_Rect sdl_src = (SDL_Rect) builder.build();
             SDL_Rect sdl_dest =(SDL_Rect) dest;
 
             SDL_RenderCopy(&_renderer, texture, &sdl_src, &sdl_dest);
