@@ -40,7 +40,7 @@ namespace domain {
             int lowerHitpoints(int points);
             ~enemy();
 
-
+            engine::math::box2_t get_box() const;
 
         private:
             std::string name;
@@ -66,9 +66,6 @@ namespace domain {
 
             //So we directly know which Nations this Unit belongs to.
             std::shared_ptr<nation> Nation;
-
-            virtual engine::math::box2_t get_box();
-
         };
 
         bool operator<(const enemy &s1, const enemy &s2);

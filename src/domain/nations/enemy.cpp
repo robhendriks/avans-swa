@@ -78,7 +78,7 @@ namespace domain {
 
         }
 
-        engine::math::box2_t enemy::get_box() {
+        engine::math::box2_t enemy::get_box() const {
             return engine::math::box2_t(engine::math::vec2_t(1,1), engine::math::vec2_t(1,1));
         }
 
