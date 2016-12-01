@@ -15,6 +15,8 @@ namespace gui {
 
         void main_map_controller::show() {
             auto &lvl = m_model.world->get_current_level();
+            if(lvl.get_start_time() == 0)
+                lvl.set_start_time(m_engine.get_time_elapsed());
 
             if(is_lvl_done()) {
                 m_trans_model.stats_lvl = lvl.get_stats();
@@ -40,7 +42,6 @@ namespace gui {
 
         // this needs to be handled by eventbus
         void main_map_controller::update(){
-
             auto current_enemies = m_model.world->get_current_level().get_enemies_in_lvl();
             for(auto enemy : m_wave_management_service.get_enemies(m_engine.get_time_elapsed())){
                 current_enemies.push_back(enemy);

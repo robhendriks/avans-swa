@@ -67,13 +67,13 @@ namespace services {
                 m_last_spawned_wave_time = time;
 
                 // generate wave
-                auto new_enemies = m_wave_gen->generateEnemies(m_wave_spawn_time_range, static_cast<int>(m_wave_opportunity), *m_spawnable_nation.get(), false ,0, m_spawn_bosses);
+               // auto new_enemies = m_wave_gen->generateEnemies(m_wave_spawn_time_range, static_cast<int>(m_wave_opportunity), *m_spawnable_nation.get(), false ,0, m_spawn_bosses);
 
-                for(auto& pair : new_enemies){
-                    // update the time so current time gets attached
-                    pair.first += time;
-                    m_current_list.push_back(std::make_shared<std::pair<int, std::shared_ptr<domain::nations::enemy>>>(pair));
-                }
+               // for(auto& pair : new_enemies){
+               //     // update the time so current time gets attached
+               //     pair.first += time;
+               //     m_current_list.push_back(std::make_shared<std::pair<int, std::shared_ptr<domain::nations::enemy>>>(pair));
+               // }
 
                 // increasing opportunity logic for next wave.
                 m_wave_opportunity += m_wave_opportunity_increase;
