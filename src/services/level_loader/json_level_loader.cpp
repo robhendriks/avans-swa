@@ -147,7 +147,7 @@ namespace services {
 
                     object->set_current_column(column);
                     field->place_object(*object);
-                    column = column + 1 <= object->get_max_column()? column + 1 : 0;
+                    column = column + 1 <= object->get_max_column()? column + 1 : 1;
                 }
 
                 SDL_Log("%d %d %d", x, y, rotation);
