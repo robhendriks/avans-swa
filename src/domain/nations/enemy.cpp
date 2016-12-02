@@ -7,9 +7,10 @@
 #include "enemy.h"
 namespace domain {
     namespace nations {
-        enemy::enemy(std::string _name, int _oppertunitycosts) {
+        enemy::enemy(std::string _name, int _oppertunitycosts, bool _boss) {
             name = _name;
             oppertunitycosts =_oppertunitycosts;
+            boss = _boss;
         }
 
         enemy::enemy(std::string _name, int _mindamage, int _maxdamage, double _attackspersecond, int _hitpoints, int _grantedXP, int _range, int _movement, bool _boss, std::shared_ptr<nation> _nation, int _oppertunitycosts) {
@@ -82,8 +83,9 @@ namespace domain {
             return engine::math::box2_t(engine::math::vec2_t(1,1), engine::math::vec2_t(1,1));
         }
 
-        bool operator<(const enemy &s1, const enemy &s2){
-            return s1.getOppertunity() < s2.getOppertunity();
+        bool operator<(const std::shared_ptr<enemy>&  s1, const std::shared_ptr<enemy>&  s2){
+
+            return s1->getOppertunity() < s2->getOppertunity();
         }
 
     }

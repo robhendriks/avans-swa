@@ -128,6 +128,8 @@ namespace gui {
         }
 
         void level::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
+            m_controller->update();
+
             m_top_bar.draw(time_elapsed, display_box);
 
             if (m_model.world->get_current_level().is_game_over(time_elapsed) ||
@@ -136,9 +138,9 @@ namespace gui {
             }
 
             // draw enemies
-            for(auto &enemy : m_model.world->get_current_level().get_enemies_in_lvl()) {
-                enemy->draw(m_top_bar.m_texture_manager, time_elapsed);
-            }
+//            for(auto &enemy : m_model.world->get_current_level().get_enemies_in_lvl()) {
+                //enemy->draw(m_top_bar.m_texture_manager, time_elapsed);
+  //          }
 
             // Draw the map
             m_model.world->get_current_level().get_map()->draw(m_top_bar.m_texture_manager, time_elapsed);

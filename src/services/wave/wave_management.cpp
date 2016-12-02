@@ -32,7 +32,7 @@ namespace services {
 
                 // make subset
                 for(auto pair : m_current_list){
-                    bool result = pair->first < static_cast<int>(time);
+                    bool result = pair->first <= static_cast<int>(time);
                     if(result){
                         return_list.push_back(pair->second);
                     };
@@ -44,7 +44,6 @@ namespace services {
                                               { return pair->first > static_cast<int>(time);});
 
                 m_current_list.erase(new_end, m_current_list.end());
-
                 return return_list;
             }
         }
@@ -66,7 +65,7 @@ namespace services {
             if(m_last_spawned_wave_time == -1 || static_cast<int>(time) -  m_last_spawned_wave_time  >= m_waves_interval){
                 m_last_spawned_wave_time = time;
 
-                /*
+
                 // generate wave
                 auto new_enemies = m_wave_gen->generateEnemies(m_wave_spawn_time_range, static_cast<int>(m_wave_opportunity), *m_spawnable_nation.get(), false ,0, m_spawn_bosses);
 
@@ -75,7 +74,7 @@ namespace services {
                    pair.first += time;
                    m_current_list.push_back(std::make_shared<std::pair<int, std::shared_ptr<domain::nations::enemy>>>(pair));
                }
-                */
+
                 // increasing opportunity logic for next wave.
                 m_wave_opportunity += m_wave_opportunity_increase;
             }

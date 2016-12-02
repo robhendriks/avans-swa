@@ -30,7 +30,9 @@ namespace services {
             auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats(3, 0, 10000));
             auto nation = std::make_shared<domain::nations::nation>(domain::nations::nation("name", "name_pre"));
             std::vector<std::shared_ptr<domain::nations::enemy>> enemies = {};
-            enemies.push_back(std::make_shared<domain::nations::enemy>(domain::nations::enemy("name", 1)));
+            enemies.push_back(std::make_shared<domain::nations::enemy>(domain::nations::enemy("name", 3,false)));
+            enemies.push_back(std::make_shared<domain::nations::enemy>(domain::nations::enemy("Jermey", 4,true)));
+            enemies.push_back(std::make_shared<domain::nations::enemy>(domain::nations::enemy("Leendert", 2,false)));
             nation->setavailableenemies(enemies);
 
             auto game_level = std::unique_ptr<domain::game_level::game_level>(
