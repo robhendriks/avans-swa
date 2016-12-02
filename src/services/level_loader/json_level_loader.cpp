@@ -27,7 +27,7 @@ namespace services {
 
             // Create the level
             auto *d_a_d = new engine::draganddrop::drag_and_drop();
-            auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats(6, 0, 10000000));
+            auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats(3));
             auto nation = std::make_shared<domain::nations::nation>(domain::nations::nation("name", "name_pre"));
             std::vector<std::shared_ptr<domain::nations::enemy>> enemies = {};
             enemies.push_back(std::make_shared<domain::nations::enemy>(domain::nations::enemy("name", 3,false)));
