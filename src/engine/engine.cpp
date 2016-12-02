@@ -232,7 +232,7 @@ namespace engine {
             // Set the color and texture manager
             m_color_manager = new graphics::color_manager(*m_window->get_renderer());
 
-            m_texture_manager = new graphics::texture_manager(*m_window->get_renderer());
+            m_texture_manager = new graphics::texture_manager(*m_window->get_renderer(), *m_window->get_surface());
         }
     }
 

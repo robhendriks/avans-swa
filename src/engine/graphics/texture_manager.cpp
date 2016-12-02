@@ -9,7 +9,8 @@
 namespace engine {
     namespace graphics {
 
-        texture_manager::texture_manager(SDL_Renderer &r) : _renderer(r) {
+        texture_manager::texture_manager(SDL_Renderer &r, SDL_Surface &screen_surface) : _renderer(r),
+            m_screen_surface(screen_surface) {
         }
 
         texture_manager::~texture_manager() {
@@ -20,12 +21,9 @@ namespace engine {
             }
         }
 
-        SDL_Texture* texture_manager::load(SDL_Surface *surface, std::string id) {
-            if(surface == nullptr)
-                return nullptr;
-
+        SDL_Texture* texture_manager::load(SDL_Surface &surface, std::string id) {
             // Create texture
-            SDL_Texture* texture = SDL_CreateTextureFromSurface(&_renderer, surface);
+            SDL_Texture* texture = SDL_CreateTextureFromSurface(&_renderer, &surface);
 
             // Check if the texture is created
             if (texture == nullptr) {
@@ -33,19 +31,19 @@ namespace engine {
             }
 
             // Save the texture in the map
-            _texture_map[id] = std::make_tuple(texture, surface);
+            _texture_map[id] = std::make_tuple(texture, &surface);
 
             return texture;
         }
 
         SDL_Texture* texture_manager::load(std::string file_name, std::string id) {
             SDL_Surface* surface = IMG_Load(file_name.c_str());
-            return load(surface, id);
+            return load(*surface, id);
         }
 
         SDL_Texture* texture_manager::load_text(std::string text, graphics::color4_t color, TTF_Font &font, std::string id) {
             SDL_Surface* text_surface = TTF_RenderText_Blended(&font, text.c_str(), (SDL_Color) color);
-            return load(text_surface, id);
+            return load(*text_surface, id);
         }
 
         void texture_manager::unload(std::string id) {
@@ -66,14 +64,37 @@ namespace engine {
             return nullptr;
         }
 
+        void texture_manager::draw(std::string id, math::box2_t dest) const {
+            auto *texture = find(id);
+            if (texture != nullptr) {
+                draw(texture, dest);
+            }
+        }
+
+        void texture_manager::draw(SDL_Texture *texture, math::box2_t dest) const {
+            SDL_Rect sdl_dest =(SDL_Rect) dest;
+            SDL_RenderCopy(&_renderer, texture, NULL, &sdl_dest);
+        }
+
+        void texture_manager::draw(std::string id, math::box2_t src, math::box2_t dest) const {
+            auto *texture = find(id);
+            if (texture != nullptr) {
+                draw(texture, src, dest);
+            }
+        }
+
+        void texture_manager::draw(SDL_Texture* texture, math::box2_t src, math::box2_t dest) const {
+            SDL_Rect sdl_src = (SDL_Rect) src;
+            SDL_Rect sdl_dest =(SDL_Rect) dest;
+
+            SDL_RenderCopy(&_renderer, texture, &sdl_src, &sdl_dest);
+        }
+
         void texture_manager::draw(SDL_Texture* texture, math::vec2_t image_start_position, math::box2_t dest) const {
             box_builder builder(dest.size());
             builder.as_left_top(image_start_position);
 
-            SDL_Rect sdl_src = (SDL_Rect) builder.build();
-            SDL_Rect sdl_dest =(SDL_Rect) dest;
-
-            SDL_RenderCopy(&_renderer, texture, &sdl_src, &sdl_dest);
+            draw(texture, builder.build(), dest);
         }
 
         void texture_manager::draw(std::string id, math::vec2_t image_start_position, math::box2_t dest) const {

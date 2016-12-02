@@ -9,9 +9,14 @@
 
 namespace engine {
     namespace events {
-        template <engine::input::keycode K>
         class key_down {
+        public:
+            key_down(input::keycodes::keycode key);
 
+            input::keycodes::keycode get_keycode() const;
+
+        private:
+            input::keycodes::keycode m_key;
         };
     }
 }

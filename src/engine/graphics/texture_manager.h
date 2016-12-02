@@ -19,9 +19,17 @@ namespace engine {
     namespace graphics {
         class texture_manager {
         public:
-            texture_manager(SDL_Renderer &r);
+            texture_manager(SDL_Renderer &r, SDL_Surface &screen_surface);
 
             ~texture_manager();
+
+            void draw(std::string id, math::box2_t dest) const;
+
+            void draw(SDL_Texture* texture, math::box2_t dest) const;
+
+            void draw(std::string id, math::box2_t src, math::box2_t dest) const;
+
+            void draw(SDL_Texture* texture, math::box2_t src, math::box2_t dest) const;
 
             void draw(std::string id, math::vec2_t image_start_position, math::box2_t dest) const;
 
@@ -31,7 +39,7 @@ namespace engine {
 
             SDL_Texture *find(std::string id) const;
 
-            SDL_Texture* load(SDL_Surface *surface, std::string id);
+            SDL_Texture* load(SDL_Surface &surface, std::string id);
 
             SDL_Texture* load(std::string file_name, std::string id);
 
@@ -44,6 +52,7 @@ namespace engine {
         private:
             std::map<std::string, std::tuple<SDL_Texture *, SDL_Surface*>> _texture_map;
             SDL_Renderer &_renderer;
+            SDL_Surface &m_screen_surface;
         };
     }
 }

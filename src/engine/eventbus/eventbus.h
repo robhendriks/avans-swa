@@ -53,7 +53,8 @@ namespace engine {
                 // Loop for "normal" m_subscribers
                 m_unsubscribe_count = 0;
                 std::vector<subscriber<T>*> notified;
-                for (size_t i = 0; i < m_subscribers[type_name].size(); i++) {
+                size_t original_size = m_subscribers[type_name].size();
+                for (size_t i = 0; i < original_size; i++) {
                     auto &sub = m_subscribers[type_name][i];
                     auto *p_subscriber = sub.as<subscriber<T>*>();
                     // Only notify when not already notified
@@ -65,6 +66,8 @@ namespace engine {
                             // Start over again with the loop
                             i = 0;
                             m_unsubscribe_count = 0;
+                            // Decrease original_size, so new subscribers won't be notified
+                            original_size--;
                         }
                     }
                 }
