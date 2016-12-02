@@ -120,11 +120,11 @@ namespace gui {
         }
 
         void main_menu::menu_btn_click(engine::math::vec2_t mouse_pos) {
-            if (m_play_text_box->contains(mouse_pos)) {
+            if (m_play_btn_box->contains(mouse_pos)) {
                 m_top_bar.m_menu_controller->play();
             } else if (m_load_btn_box->contains(mouse_pos)) {
                 m_top_bar.m_menu_controller->load();
-            } else if (m_credits_text_box->contains(mouse_pos)) {
+            } else if (m_credits_btn_box->contains(mouse_pos)) {
                 m_top_bar.m_menu_controller->credits();
             }
         }

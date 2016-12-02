@@ -99,7 +99,7 @@ namespace domain {
             //(initial periode where no waves spawn in ms)
             long m_peace_period = 0;
             // interval between waves
-            long m_waves_interval = 5000;
+            long m_waves_interval = 30000;
             //(base size of the wave)
             double m_base_wave_opportunity = 10;
             //(size increase from wave to wave)

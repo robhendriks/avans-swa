@@ -2,6 +2,7 @@
 // Created by te on 10-Nov-16.
 //
 
+#include <iostream>
 #include "drawable_game_object.h"
 namespace domain {
     namespace drawable {
@@ -32,6 +33,7 @@ namespace domain {
 
         void drawable_game_object::draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed) {
             load_texture_if_not_loaded_yet(texture_manager);
+            animation(texture_manager, time_elapsed);
             draw_object(texture_manager);
         }
 
@@ -57,9 +59,59 @@ namespace domain {
             texture_manager.draw(m_file_loc, *m_image_start_position, get_box());
         }
 
+        void drawable_game_object::animation(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed) {
+            if(m_max_column != 1)
+            {
+                if(static_cast<int>(time_elapsed) - static_cast<int>(m_last_transition_time) > m_transition) {
+                    m_current_column++;
+                    m_last_transition_time = time_elapsed;
+                    //- 1 because you want to start at pixel 0 instead of imagesize*1(= 32)
+                    if(m_current_column > m_max_column - 1){
+                        m_current_column = 0;
+                    }
+                }
+                auto z = m_image_start_position->x;
+                auto image_size = texture_manager.get_size(m_file_loc);
+                //Set value of startposition
+                //- 1 because you want to start at pixel 0 instead of imagesize*1(= 32)
+                m_image_start_position->x = (image_size.x / m_max_column) * m_current_column;
+                m_image_start_position->y = image_size.y * (m_row - 1);
+                auto x = m_image_start_position->x;
+                std::cout << z<<x;
+            }
+        }
+
         void drawable_game_object::unload(engine::graphics::texture_manager &texture_manager) {
             texture_manager.unload(m_file_loc);
             this->m_texture = nullptr;
+        }
+
+        float drawable_game_object::get_row() const {
+            return m_row;
+        }
+
+        void drawable_game_object::set_row(float row) {
+            m_row = row;
+        }
+
+        float drawable_game_object::get_max_column() const {
+            return m_max_column;
+        }
+
+        void drawable_game_object::set_max_column(float max_column) {
+            m_max_column = max_column;
+        }
+
+        float drawable_game_object::get_transition() const {
+            return m_transition;
+        }
+
+        void drawable_game_object::set_transition(long transition_time) {
+            m_transition = transition_time;
+        }
+
+        void drawable_game_object::set_current_column(float column) {
+            m_current_column = column - 1;
         }
     }
 }

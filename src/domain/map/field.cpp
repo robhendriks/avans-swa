@@ -54,6 +54,7 @@ namespace domain {
                 // Remove this as dropable
                 m_drag_and_drop->remove_dropable(this);
 
+                object->set_max_column(2);
                 place_object(*object);
 
                 return true;
