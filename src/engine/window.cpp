@@ -54,8 +54,7 @@ namespace engine {
             return;
         }
 
-        mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
-
+        mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
         if (!mRenderer) {
             std::string error = SDL_GetError();
             throw std::runtime_error("Failed to create renderer: " + error);
