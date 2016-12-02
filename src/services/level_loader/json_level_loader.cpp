@@ -27,7 +27,7 @@ namespace services {
 
             // Create the level
             auto *d_a_d = new engine::draganddrop::drag_and_drop();
-            auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats(3, 0, 10000));
+            auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats(6, 0, 10000000));
             auto nation = std::make_shared<domain::nations::nation>(domain::nations::nation("name", "name_pre"));
             std::vector<std::shared_ptr<domain::nations::enemy>> enemies = {};
             enemies.push_back(std::make_shared<domain::nations::enemy>(domain::nations::enemy("name", 3,false)));
@@ -98,6 +98,7 @@ namespace services {
                 return ;
             }
 
+            int column = 0;
             // Loop through all objects
             for (json &elem : data) {
                 std::string id = elem["id"];
@@ -118,6 +119,7 @@ namespace services {
                         image_location = "images/";
                         image_location += id;
                         image_location += ".png";
+                        object->set_max_column(2);
                     } else {
                         if (id == "road-straight") {
                             image_location = "images/road-straight.png";
@@ -133,6 +135,7 @@ namespace services {
 
                         // Create the object
                         object = new domain::map::objects::road(field);
+                        object->set_max_column(1);
                     }
 
                     // Calculate the image start position
@@ -142,7 +145,9 @@ namespace services {
                     object->set_draw_settings(image_location, {0, image_start_y});
                     object->set_rotation(rotation);
 
+                    object->set_current_column(column);
                     field->place_object(*object);
+                    column = column + 1 <= object->get_max_column()? column + 1 : 0;
                 }
 
                 SDL_Log("%d %d %d", x, y, rotation);
