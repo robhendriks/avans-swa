@@ -11,7 +11,7 @@ namespace gui {
         }
 
         void base_controller::view(gui::views::base_view &view) {
-            m_game.use_view(view);
+            m_game.set_view(view);
         }
     }
 }

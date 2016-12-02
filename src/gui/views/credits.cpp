@@ -36,7 +36,7 @@ void gui::views::credits::before() {
     }
 }
 
-void gui::views::credits::on_display_change(engine::math::box2_t display_box) {
+void gui::views::credits::layout(engine::math::box2_t display_box) {
     // Create the header box
     engine::graphics::box_builder builder1({display_box.width(), 100});
     builder1.as_left_top(display_box.left_top());

@@ -7,6 +7,7 @@
 
 #include "observer.h"
 #include <vector>
+#include <string>
 
 namespace engine {
     namespace observer {

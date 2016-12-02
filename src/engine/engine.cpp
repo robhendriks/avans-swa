@@ -13,7 +13,7 @@
 #include "events/game_tick.h"
 
 namespace engine {
-    engine::engine(engine_config &config) : m_window(nullptr), m_sound_manager(nullptr), m_music_manager(nullptr),
+    engine::engine(engine_config &config) : m_game{nullptr}, m_window(nullptr), m_sound_manager(nullptr), m_music_manager(nullptr),
                                             m_texture_manager(nullptr), m_color_manager(nullptr), m_config(config),
                                             m_state(CREATED), m_ticks_when_paused(0), m_paused_ticks(0),
                                             m_game_ticks(0) {
@@ -76,30 +76,16 @@ namespace engine {
     void engine::loop() {
         printf("[DEBUG] Starting gameloop...\n");
 
-        auto next_game_tick = SDL_GetTicks();
-        int loops;
-        float interpolation;
         while (m_state == RUNNING || m_state == PAUSED) {
-            loops = 0;
-            while (SDL_GetTicks() > next_game_tick && loops < m_config.max_frameskip) {
-                update();
-
-                next_game_tick += m_config.get_skip_ticks();
-                loops++;
-                m_game_ticks++;
-            }
-
+            update();
             m_window->clear();
 
-            interpolation =
-                float(SDL_GetTicks() + m_config.get_skip_ticks() - next_game_tick) / float(m_config.get_skip_ticks());
-
-            // Fire event clear event
-            auto *clear_event = new events::window_cleared(get_time_elapsed(interpolation), m_game_ticks, interpolation);
-            eventbus::eventbus::get_instance().fire(*clear_event);
-            delete clear_event;
+            if (m_game) {
+                m_game->draw();
+            }
 
             m_window->present();
+            SDL_Delay(1000 / 60); // Fixed timestep just because
         }
     }
 
@@ -117,11 +103,13 @@ namespace engine {
         // Handle the SDL events
         SDL_Event event;
         while (SDL_PollEvent(&event) != 0) {
-            // Check for the QUIT event
-            if (event.type == SDL_QUIT) {
+            switch (event.type) {
+            case SDL_QUIT:
                 stop();
-            } else if (event.type == SDL_WINDOWEVENT) {
-                m_window->trigger_display_change();
+                break;
+            case SDL_WINDOWEVENT:
+                m_window->handle_event(event.window.event);
+                break;
             }
 
             // Update the input handler
@@ -316,5 +304,13 @@ namespace engine {
         }
 
         return m_paused_ticks;
+    }
+
+    void engine::set_game(const game_ptr &game) {
+        m_game = game;
+    }
+
+    game_ptr engine::get_game() const {
+        return m_game;
     }
 }

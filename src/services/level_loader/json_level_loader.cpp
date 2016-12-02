@@ -60,7 +60,7 @@ namespace services {
             }
 
             size_t tileCount = tiles["count"];
-            SDL_Log("Loading %d tile(s)...\n", tileCount);
+            SDL_Log("Loading %zu tile(s)...\n", tileCount);
 
             json data = tiles["data"];
             if (!data.is_array()) {
@@ -91,7 +91,7 @@ namespace services {
             }
 
             size_t level_objects_count = level_objects["count"];
-            SDL_Log("Loading %d level objects(s)...\n", level_objects_count);
+            SDL_Log("Loading %zu level objects(s)...\n", level_objects_count);
 
             json data = level_objects["data"];
             if (!data.is_array()) {

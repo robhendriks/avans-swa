@@ -5,7 +5,7 @@
 #ifndef CITY_DEFENCE_MAIN_MAP_CONTROLLER_H
 #define CITY_DEFENCE_MAIN_MAP_CONTROLLER_H
 
-
+#include <string>
 #include "base_controller.h"
 #include "../../engine/engine.h"
 #include "../models/main_map_model.h"

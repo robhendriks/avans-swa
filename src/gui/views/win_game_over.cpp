@@ -29,7 +29,7 @@ namespace gui {
             m_texture_manager.load_text("Press the left mouse button on any part of the screen to continue.", {255, 255, 255}, *m_font_manager.get_font("roboto", 30), "continue");
         }
 
-        void win_game_over::on_display_change(engine::math::box2_t display_box) {
+        void win_game_over::layout(engine::math::box2_t display_box) {
             // Create header box
             engine::graphics::box_builder builder1({display_box.width(), 100});
             builder1.as_left_top(display_box.left_top());

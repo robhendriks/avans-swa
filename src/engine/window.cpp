@@ -3,11 +3,9 @@
 //
 
 #include "window.h"
-#include "events/display_changed.h"
-#include "eventbus/eventbus.h"
 
 namespace engine {
-    window::window(window_config &config) : mConfig(config), mWindow(NULL), mRenderer(NULL) {}
+    window::window(window_config &config) : mConfig(config), mWindow(nullptr), mRenderer(nullptr) {}
 
     void window::create() {
         printf("[DEBUG] Creating window...\n");
@@ -54,7 +52,7 @@ namespace engine {
             return;
         }
 
-        mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
+        mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
         if (!mRenderer) {
             std::string error = SDL_GetError();
@@ -82,6 +80,18 @@ namespace engine {
         }
     }
 
+    void window::handle_event(Uint8 event) {
+        switch (event) {
+        case SDL_WINDOWEVENT_RESIZED:
+            resize();
+            break;
+        }
+    }
+
+    void window::resize() {
+        SDL_Log("WOIII");
+    }
+
     SDL_Window *window::get_window() const {
         return mWindow;
     }
@@ -91,26 +101,17 @@ namespace engine {
     }
 
     math::box2_t window::get_screen_box() {
-        SDL_DisplayMode dm;
-        if (SDL_GetDesktopDisplayMode(0, &dm) != 0) {
-            SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
-        }
-
-        return math::box2_t({{0, 0}, {(float)dm.w, (float)dm.h}});
+        return {{0, 0}, {1280, 720}};
     }
 
     math::box2_t window::get_display_box() const {
-        auto surface = *get_surface();
-        return math::box2_t({{0, 0}, {(float)surface.w, (float)surface.h}});
+        float w = 800;
+        float h = 600;
+
+        return math::box2_t({{0, 0}, {w, h}});
     }
 
     SDL_Surface *window::get_surface() const {
         return SDL_GetWindowSurface(mWindow);
-    }
-
-    void window::trigger_display_change() const {
-        auto *display_event = new events::display_changed(get_display_box());
-        eventbus::eventbus::get_instance().fire(display_event);
-        delete display_event;
     }
 }

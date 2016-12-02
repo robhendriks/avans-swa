@@ -13,6 +13,7 @@
 #include "audio/music_manager.h"
 #include "graphics/texture_manager.h"
 #include "graphics/color_manager.h"
+#include "../game.h"
 
 namespace engine {
 
@@ -35,6 +36,10 @@ namespace engine {
         void stop();
 
         void cooldown();
+
+        game_ptr get_game() const;
+
+        void set_game(const game_ptr &game);
 
         unsigned int get_game_ticks() const;
 
@@ -63,6 +68,7 @@ namespace engine {
         void create_window();
 
     private:
+        game_ptr m_game;
         window* m_window;
         audio::sound_manager *m_sound_manager;
         audio::music_manager *m_music_manager;

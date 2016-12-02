@@ -5,71 +5,75 @@
 #ifndef CITY_DEFENCE_ENEMY_H
 #define CITY_DEFENCE_ENEMY_H
 
-#include <string>
 #include <memory>
-#include "nation.h"
+#include <string>
 #include "../drawable/drawable_game_object.h"
+#include "nation.h"
 
 namespace domain {
-    namespace nations {
-        class enemy : public domain::drawable::drawable_game_object {
-        public:
-            enemy(std::string _name, int _mindamage, int _maxdamage, double _attackspersecond, int _hitpoints, int _grantedXP, int _range, int _movement, bool _boss, std::shared_ptr<nation> _nation, int _oppertunitycosts)
-            ;
+namespace nations {
+class enemy : public domain::drawable::drawable_game_object {
+ public:
+  enemy(std::string _name, int _mindamage, int _maxdamage,
+        double _attackspersecond, int _hitpoints, int _grantedXP, int _range,
+        int _movement, bool _boss, std::shared_ptr<nation> _nation,
+        int _oppertunitycosts);
 
-            enemy(std::string _name, int _oppertunitycosts, bool _boss);
+  enemy(std::string _name, int _oppertunitycosts, bool _boss);
 
-            //Returns nationname + unitname
-            std::string getName();
+  // Returns nationname + unitname
+  std::string getName();
 
-            //Returns a random number within the range of min & max damage
-            int getDamage();
+  // Returns a random number within the range of min & max damage
+  int getDamage();
 
-            double getattackspersecond();
+  double getattackspersecond();
 
-            int getHitpoints();
+  int getHitpoints();
 
-            int getRange();
-            int getMovement();
-            int getOppertunity()const;
+  int getRange();
+  int getMovement();
+  int getOppertunity() const;
 
-            bool getBoss();
+  bool getBoss();
 
-            //Lowers hitpoints with the amount within the parameter; if 0 calls the delete method.
-            //Returns the amount of XP.
-            int lowerHitpoints(int points);
-            ~enemy();
+  // Lowers hitpoints with the amount within the parameter; if 0 calls the
+  // delete method.
+  // Returns the amount of XP.
+  int lowerHitpoints(int points);
+  ~enemy();
 
-            virtual engine::math::box2_t get_box() const;
+  virtual engine::math::box2_t get_box() const;
 
-        private:
-            std::string name;
-            int mindamage;
-            int maxdamage;
+ private:
+  std::string name;
+  int mindamage;
+  int maxdamage;
 
-            //Cost for using this enemy; to generate proper waves.
-            int oppertunitycosts;
+  // Cost for using this enemy; to generate proper waves.
+  int oppertunitycosts;
 
-            //Attacks per second
-            double attackspersecond;
-            int hitpoints;
+  // Attacks per second
+  double attackspersecond;
+  int hitpoints;
 
-            int grantedXP;
+  int grantedXP;
 
-            //Range in tiles
-            int range;
+  // Range in tiles
+  int range;
 
-            //Tiles/second
-            int movement;
+  // Tiles/second
+  int movement;
 
-            bool boss;
+  bool boss;
 
-            //So we directly know which Nations this Unit belongs to.
-            std::shared_ptr<nation> Nation;
-        };
+  // So we directly know which Nations this Unit belongs to.
+  std::shared_ptr<nation> Nation;
+};
 
-        bool operator<(const std::shared_ptr<enemy> &s1, const std::shared_ptr<enemy>  &s2);
-    }
+bool operator<(const std::shared_ptr<enemy> &s1,
+               const std::shared_ptr<enemy> &s2);
+}
 }
 
-#endif //CITY_DEFENCE_ENEMY_H
+#endif  // CITY_DEFENCE_ENEMY_H

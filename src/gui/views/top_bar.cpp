@@ -24,7 +24,7 @@ namespace gui {
             engine::eventbus::eventbus::get_instance().subscribe(this);
         }
 
-        void top_bar::on_display_change(engine::math::box2_t display_box) {
+        void top_bar::layout(engine::math::box2_t display_box) {
             // Create the bar box
             engine::graphics::box_builder builder1({display_box.width(), 32});
             m_bar_box.reset(new engine::math::box2_t(builder1.build()));

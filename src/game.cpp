@@ -8,7 +8,7 @@ game::game(engine::window &window) : m_window(window), m_current_view(nullptr) {
 
 }
 
-void game::use_view(gui::views::base_view &view) {
+void game::set_view(gui::views::base_view &view) {
     // Only set the view when it is different
     if (m_current_view != &view) {
         if (m_current_view != nullptr) {
@@ -18,19 +18,23 @@ void game::use_view(gui::views::base_view &view) {
         m_current_view = &view;
         m_current_view->before();
 
-        // Let possible objects know about the display screen
-        m_window.trigger_display_change();
+        m_current_view->layout({0, 0, 1280, 720});
     }
 }
 
-void game::on_event(engine::events::window_cleared &event) {
-    if (m_current_view) {
-        m_current_view->draw(event.get_time_elapsed(), m_window.get_display_box());
+void game::update() {
+    if (!m_current_view) {
+        return;
     }
+
+    // TODO: more stuff
 }
 
-void game::on_event(engine::events::display_changed &event) {
-    if (m_current_view) {
-        m_current_view->on_display_change(event.get_display_box());
+void game::draw() {
+    if (!m_current_view) {
+        return;
     }
+    m_current_view->draw(0, {0, 0, 1280, 720});
+
+    // TODO: more stuff
 }

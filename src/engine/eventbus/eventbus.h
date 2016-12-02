@@ -6,6 +6,7 @@
 #define CITY_DEFENCE_EVENTBUS_H
 
 #include <vector>
+#include <string>
 #include <algorithm>
 #include <map>
 #include <typeinfo>

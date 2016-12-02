@@ -21,7 +21,7 @@ namespace engine {
         int w = -1;
         int h = -1;
 
-        Uint32 flags = SDL_WINDOW_SHOWN;
+        Uint32 flags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE;
 
         bool debug = false;
     };

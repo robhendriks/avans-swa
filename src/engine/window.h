@@ -25,6 +25,10 @@ namespace engine {
 
         void destroy();
 
+        void handle_event(Uint8 event);
+
+        void resize();
+
         SDL_Window *get_window() const;
 
         SDL_Renderer *get_renderer() const;
@@ -35,7 +39,6 @@ namespace engine {
 
         SDL_Surface *get_surface() const;
 
-        void trigger_display_change() const;
     private:
         void init_window();
 

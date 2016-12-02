@@ -16,8 +16,8 @@ namespace gui {
                                                                                          {489, 366}}) {
         }
 
-        void main_menu::on_display_change(engine::math::box2_t display_box) {
-            m_top_bar.on_display_change(display_box);
+        void main_menu::layout(engine::math::box2_t display_box) {
+            m_top_bar.layout(display_box);
         }
 
         void main_menu::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {

@@ -31,12 +31,11 @@ int main(int argc, char *argv[]) {
      * END OF CONFIG
      */
 
-    // Get the engine
-    engine::engine *engine1 = new engine::engine(e_config);
-    engine1->warmup();
+    std::unique_ptr<engine::engine> engine_ptr{new engine::engine{e_config}};
+    engine_ptr->warmup();
 
-    // Create the ioc container
-    auto *game1 = new game(*engine1->get_window());
+    std::shared_ptr<game> game_ptr{new game{*engine_ptr->get_window()}};
+    engine_ptr->set_game(game_ptr);
 
     std::ifstream file("level1.json");
     if (!file.is_open()) {
@@ -55,47 +54,33 @@ int main(int argc, char *argv[]) {
 
     auto di_config = [&]() {
         return boost::di::make_injector(
-            boost::di::bind<>.to(*game1),
-            boost::di::bind<>.to(*engine1),
-            boost::di::bind<>.to(*engine1->get_texture_manager()),
-            boost::di::bind<>.to(*engine1->get_color_manager()),
-            boost::di::bind<>.to(*engine1->get_sound_manager()),
-            boost::di::bind<>.to(*engine1->get_music_manager()),
-            boost::di::bind<>.to(*engine1->get_window()),
+            boost::di::bind<>.to(*game_ptr),
+            boost::di::bind<>.to(*engine_ptr),
+            boost::di::bind<>.to(*engine_ptr->get_texture_manager()),
+            boost::di::bind<>.to(*engine_ptr->get_color_manager()),
+            boost::di::bind<>.to(*engine_ptr->get_sound_manager()),
+            boost::di::bind<>.to(*engine_ptr->get_music_manager()),
+            boost::di::bind<>.to(*engine_ptr->get_window()),
             boost::di::bind<>.to(*font_manager),
             boost::di::bind<services::level_loader::base_level_loader>.to(*level_loader)
         );
     };
 
-    /**
-     *  ADD SUBSCRIBERS
-     */
-    auto &eventbus = engine::eventbus::eventbus::get_instance();
-
-    // Subscribe the game to the window cleared event and display changed events
-    eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::window_cleared>*>(game1));
-    eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::display_changed>*>(game1));
-
-    /**
-     * END OF SUBSCRIBERS REGISTRY
-     */
-
     // Start with show
-    gui::controllers::menu_controller* menu_controller = boost::di::make_injector(di_config()).create<gui::controllers::menu_controller*>();
-    menu_controller->show();
+    std::shared_ptr<gui::controllers::menu_controller> menu_controller_ptr{
+         boost::di::make_injector(di_config()).create<gui::controllers::menu_controller*>()};
+
+    menu_controller_ptr->show();
 
     // Run the game
-    engine1->run();
+    engine_ptr->run();
 
     // Stop/cooldown the engine
     delete font_manager;
-    engine1->cooldown();
+    engine_ptr->cooldown();
 
     // More cleaning
-    delete game1;
-    delete menu_controller;
     delete json_config;
-    delete engine1;
     delete level_loader;
 
     return 0;

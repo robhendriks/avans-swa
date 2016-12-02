@@ -38,7 +38,7 @@ namespace gui {
              *
              * @param display_box
              */
-            virtual void on_display_change(engine::math::box2_t display_box) {};
+            virtual void layout(engine::math::box2_t display_box) {};
         };
     }
 }

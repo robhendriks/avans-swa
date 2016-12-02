@@ -30,7 +30,7 @@ namespace gui {
 
             void before();
 
-            void on_display_change(engine::math::box2_t display_box);
+            void layout(engine::math::box2_t display_box);
 
             void draw(unsigned int time_elapsed, engine::math::box2_t display_box);
 
