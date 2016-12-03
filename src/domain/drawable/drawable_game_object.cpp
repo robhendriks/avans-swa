@@ -70,14 +70,10 @@ namespace domain {
                         m_current_column = 0;
                     }
                 }
-                auto z = m_image_start_position->x;
                 auto image_size = texture_manager.get_size(m_file_loc);
                 //Set value of startposition
-                //- 1 because you want to start at pixel 0 instead of imagesize*1(= 32)
                 m_image_start_position->x = (image_size.x / m_max_column) * m_current_column;
-                m_image_start_position->y = image_size.y * (m_row - 1);
-                auto x = m_image_start_position->x;
-                std::cout << z<<x;
+                m_image_start_position->y = (image_size.y / m_max_row) * m_current_row;
             }
         }
 
@@ -86,12 +82,12 @@ namespace domain {
             this->m_texture = nullptr;
         }
 
-        float drawable_game_object::get_row() const {
-            return m_row;
+        float drawable_game_object::get_max_row() const {
+            return m_max_row;
         }
 
-        void drawable_game_object::set_row(float row) {
-            m_row = row;
+        void drawable_game_object::set_max_row(float row) {
+            m_max_row = row;
         }
 
         float drawable_game_object::get_max_column() const {
@@ -112,6 +108,10 @@ namespace domain {
 
         void drawable_game_object::set_current_column(float column) {
             m_current_column = column - 1;
+        }
+
+        void drawable_game_object::set_current_row(float row) {
+            m_current_row = row;
         }
     }
 }
