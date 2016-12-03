@@ -5,7 +5,9 @@
 
 namespace domain {
     namespace resources {
-        resource::resource() {
+        resource::resource(resource_type type, int count) {
+            _type = type;
+            _count = count;
         }
 
         int resource::get_count() {

@@ -13,7 +13,7 @@ namespace domain {
 
         class resource {
         public:
-            resource();
+            resource(resource_type type, int count);
 
             void set_resource_type(resource_type);
 
