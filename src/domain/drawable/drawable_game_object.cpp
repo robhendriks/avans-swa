@@ -112,6 +112,8 @@ namespace domain {
 
         void drawable_game_object::set_current_row(float row) {
             m_current_row = row;
+            // reset animation for new row
+            m_current_column = 0;
         }
     }
 }
