@@ -1,6 +1,17 @@
 {
   "width": 16,
   "height": 16,
+  "available_buildings": [
+    "skyscraper",
+    "wood-cutter-camp"
+  ],
+  "peace_period": 20000,
+  "waves_interval": 30000,
+  "base_wave_opportunity": 100,
+  "wave_opportunity_increase": 5.5,
+  "wave_spawn_time_range": 5000,
+  "spawn_bosses": false,
+  "enemy": "the-fallen",
   "tiles": {
     "count": 68,
     "data": [
@@ -554,13 +565,13 @@
         "rotation": 1
       },
       {
-        "id": "building-a",
+        "id": "skyscraper",
         "x": 8,
         "y": 6,
         "rotation": 0
       },
       {
-        "id": "building-a",
+        "id": "wood-cutter-camp",
         "x": 2,
         "y": 7,
         "rotation": 0
