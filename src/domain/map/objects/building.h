@@ -5,6 +5,7 @@
 #include "../../../engine/draganddrop/dragable.h"
 #include "dragable_field_object.h"
 #include "../field.h"
+#include "../../game_level/game_stats_modifier.h"
 
 namespace domain {
     namespace map {
@@ -21,6 +22,8 @@ namespace domain {
                 dragable_field_object *clone() const;
 
                 bool can_place_on(field &field1) const;
+
+                void update_game_stats(domain::game_level::game_stats &game_stats1);
             };
         }
     }

@@ -22,6 +22,8 @@ namespace domain {
                 road(const road &obj);
 
                 dragable_field_object *clone() const;
+
+                void update_game_stats(domain::game_level::game_stats &game_stats1);
             };
         }
     }

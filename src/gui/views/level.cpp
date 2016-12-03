@@ -11,14 +11,15 @@
 namespace gui {
     namespace views {
 
-        level::level(top_bar &top_bar1, engine::audio::music_manager &music_manager,
+        level::level(top_bar &top_bar1, level_goals &goals_view, engine::audio::music_manager &music_manager,
                      engine::window &window, models::main_map_model &model, engine::audio::sound_manager &sound_manager)
-            : m_top_bar(top_bar1), m_music_manager(music_manager), m_window(window), m_model(model),
-              m_sound_manager(sound_manager), m_current_page(1) {
+            : m_top_bar(top_bar1), m_goals_view(goals_view), m_music_manager(music_manager), m_window(window),
+              m_model(model), m_sound_manager(sound_manager), m_current_page(1) {
         }
 
         void level::before() {
             m_top_bar.before();
+            m_goals_view.before();
 
             // Load arrow textures
             m_top_bar.m_texture_manager.load("images/arrows.png", "arrows");
@@ -54,6 +55,7 @@ namespace gui {
 
         void level::on_display_change(engine::math::box2_t display_box) {
             m_top_bar.on_display_change(display_box);
+            m_goals_view.on_display_change(display_box);
 
             // Create the box for the placeable objects
             float height = 128;
@@ -94,6 +96,11 @@ namespace gui {
                                                     m_placeable_objects_box->height()});
             builder5.as_left_top(m_top_bar.m_bar_box->left_top());
             m_model.world->get_current_level().get_map()->set_display_box(builder5.build());
+
+            // Reposition the goals box
+            engine::graphics::box_builder builder6(m_goals_view.m_stats_box->size());
+            builder6.as_left_top(m_top_bar.m_bar_box->left_bottom()).add_margin({20, 40});
+            m_goals_view.m_stats_box.reset(new engine::math::box2_t(builder6.build()));
         }
 
         void level::update_placeable_objects_page() {
@@ -130,12 +137,13 @@ namespace gui {
         void level::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
             m_controller->update();
 
-            m_top_bar.draw(time_elapsed, display_box);
-
             if (m_model.world->get_current_level().is_game_over(time_elapsed) ||
                 m_model.world->get_current_level().is_goal_reached()) {
                 m_controller->show();
             }
+
+            m_top_bar.draw(time_elapsed, display_box);
+            m_goals_view.draw(time_elapsed, display_box);
 
             // draw enemies
 //            for(auto &enemy : m_model.world->get_current_level().get_enemies_in_lvl()) {
@@ -191,6 +199,7 @@ namespace gui {
 
         void level::after() {
             m_top_bar.after();
+            m_goals_view.after();
 
             // Unload arrow textures
             m_top_bar.m_texture_manager.unload("arrows");

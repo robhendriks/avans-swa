@@ -17,7 +17,6 @@ namespace domain {
                 m_drag_and_drop.add_dropable(*field);
             }
 
-            m_map->add_observer(this);
             m_stats = std::shared_ptr<game_stats>(new game_stats());
             m_enemy = _enemies;
         }
@@ -42,35 +41,16 @@ namespace domain {
             return m_stats;
         }
 
-        // update stats
-        void game_level::notify(domain::map::map * p_observee, std::string title) {
-            if(title == "object-placed") {
-                long building_count = 0;
-                long road_count = 0;
-                auto d = p_observee->get_fields_with_objects();
-                for(std::shared_ptr<domain::map::field>& f : d){
-                    if(dynamic_cast<domain::map::objects::building*>(f->get_object()))
-                        ++building_count;
-                    else if(dynamic_cast<domain::map::objects::road*>(f->get_object()))
-                        ++road_count;
-               }
-
-                m_stats->set_built_building_count(building_count);
-                m_stats->set_built_roads_count(road_count);
-                m_stats->set_built_objects_count(road_count + building_count);
-            }
-        }
-
         bool game_level::is_goal_reached() {
             return *m_stats.get() >= *m_goal.get();
         }
 
         bool game_level::is_game_over(unsigned int current_duration) {
-            if(m_goal->get_max_duration() != 0){
+            if(m_goal->get_max_duration() != 0) {
                 int playing_time = current_duration - m_start_time;
                 return  m_goal->get_max_duration() - playing_time < 0;
             }
-            else{
+            else {
                 return false;
             }
         }
@@ -130,6 +110,9 @@ namespace domain {
 
                 // Immediately start with dragging
                 m_drag_and_drop.set_dragging(*copy);
+
+                // Update the stats
+                p_observee->update_game_stats(*m_stats);
             }
         }
 

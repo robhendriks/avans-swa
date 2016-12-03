@@ -8,12 +8,14 @@
 #include <memory>
 #include "../../../engine/draganddrop/dragable.h"
 #include "field_object.h"
+#include "../../game_level/game_stats_modifier.h"
 
 
 namespace domain {
     namespace map {
         namespace objects {
             class dragable_field_object : public field_object, public engine::draganddrop::dragable,
+                                          public domain::game_level::game_stats_modifier,
                                           public engine::observer::observee<dragable_field_object> {
             public:
                 dragable_field_object(engine::math::box2_t box);
@@ -37,6 +39,8 @@ namespace domain {
                 virtual bool can_place_on(field &field1) const;
 
                 virtual dragable_field_object *clone() const = 0;
+
+                virtual void update_game_stats(domain::game_level::game_stats &game_stats1) = 0;
 
             protected:
                 std::unique_ptr<engine::math::box2_t> m_start_box;

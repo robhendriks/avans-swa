@@ -43,6 +43,8 @@ namespace engine {
 
             SDL_Texture* load(std::string file_name, std::string id);
 
+            SDL_Texture* load_from_svg(std::string file_name, math::box2_t src, float scale, std::string id);
+
             SDL_Texture* load_text(std::string text, graphics::color4_t color, TTF_Font &font, std::string id);
 
             math::vec2_t get_size(std::string id) const;

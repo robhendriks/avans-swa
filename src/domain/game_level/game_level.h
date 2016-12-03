@@ -17,8 +17,7 @@
 
 namespace domain {
     namespace game_level {
-        class game_level : public engine::observer::observer<domain::map::map>,
-                           public engine::observer::observer<domain::map::objects::dragable_field_object> {
+        class game_level : public engine::observer::observer<domain::map::objects::dragable_field_object> {
         public:
             game_level(std::string name, std::shared_ptr<map::map> map, std::shared_ptr<game_stats> goal,
                        std::shared_ptr<domain::nations::nation> _enemies,
@@ -29,8 +28,6 @@ namespace domain {
             std::shared_ptr<domain::map::map> get_map();
 
             virtual void unload(engine::graphics::texture_manager &texture_manager);
-
-            virtual void notify(domain::map::map *p_observee, std::string title);
 
             virtual void notify(domain::map::objects::dragable_field_object *p_observee, std::string title);
 

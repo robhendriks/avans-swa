@@ -12,9 +12,7 @@ namespace domain {
 
             building::building(std::shared_ptr<field> field1) : dragable_field_object(field1) {}
 
-            building::building(const building &obj) : dragable_field_object(obj) {
-
-            }
+            building::building(const building &obj) : dragable_field_object(obj) {}
 
             /**
              * Make sure a building can only be placed next to a road object
@@ -34,6 +32,10 @@ namespace domain {
 
             dragable_field_object *building::clone() const {
                 return new building(*this);
+            }
+
+            void building::update_game_stats(domain::game_level::game_stats &game_stats1) {
+                game_stats1.increase("building");
             }
         }
     }

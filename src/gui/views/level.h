@@ -17,6 +17,7 @@
 #include "../../engine/audio/sound_manager.h"
 #include "../../engine/input/keycodes.h"
 #include "../../engine/events/key_down.h"
+#include "level_goals.h"
 
 
 namespace gui {
@@ -38,7 +39,7 @@ namespace gui {
                       engine::eventbus::subscriber<engine::events::key_down> {
         public:
 
-            level(top_bar &top_bar1, engine::audio::music_manager &music_manager,
+            level(top_bar &top_bar1, level_goals &goals_view, engine::audio::music_manager &music_manager,
                   engine::window &window, models::main_map_model &model, engine::audio::sound_manager &sound_manager);
 
             void set_controller(controllers::main_map_controller &controller);
@@ -63,6 +64,7 @@ namespace gui {
             void navigate_right();
 
             top_bar &m_top_bar;
+            level_goals &m_goals_view;
             engine::audio::music_manager &m_music_manager;
             engine::window &m_window;
             models::main_map_model &m_model;

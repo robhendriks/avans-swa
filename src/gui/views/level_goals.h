@@ -13,6 +13,7 @@
 namespace gui {
     namespace views {
         class level_goals : public base_view {
+            friend class level;
         public:
             level_goals(models::level_goals_model &model, engine::graphics::texture_manager &texture_manager,
                         engine::graphics::font_manager &font_manager);
@@ -29,6 +30,7 @@ namespace gui {
             models::level_goals_model &m_model;
             engine::graphics::texture_manager &m_texture_manager;
             engine::graphics::font_manager &m_font_manager;
+            std::unique_ptr<engine::math::box2_t> m_stats_box;
         };
     }
 }
