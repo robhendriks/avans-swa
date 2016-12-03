@@ -26,7 +26,7 @@ namespace gui {
 
             // Load music
             m_music_manager.load("sounds/game.mp3", "game_bg_music");
-           m_music_manager.play("game_bg_music");
+            m_music_manager.play("game_bg_music");
 
             // Add sounds effects
             // First load the sounds

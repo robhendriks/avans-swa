@@ -18,7 +18,7 @@ namespace gui {
 
         void level_goals::before() {
             // Load textures
-            m_texture_manager.load_from_svg("images/ui-pack.svg", {{1255, 244}, {1454, 290}}, 1.5, "g_header");
+            m_texture_manager.load_from_svg("images/ui-pack.svg", {{1255, 244}, {1454, 289}}, 1.5, "g_header");
             m_texture_manager.load_from_svg("images/ui-pack.svg", {{1255, 4}, {1454, 49}}, 1.5, "g_box");
             m_texture_manager.load_from_svg("images/ui-pack.svg", {{1255, 124}, {1454, 169}}, 1.5, "g_green_box");
             m_texture_manager.load_from_svg("images/ui-pack.svg", {{98, 544}, {136, 580}}, 1, "g_check");
