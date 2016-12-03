@@ -116,7 +116,7 @@ namespace services {
                                 domain::nations::enemy(enemy_name, enemey_min_damage, enemey_max_damage, 2,
                                                        enemey_hitpoints, 100, 2, enemey_movement_speed, boss,
                                                        current_nation, enemey_oppertunity_cost));
-                        curren_enemy->set_draw_settings("building-a.png", {0, 0});
+                        curren_enemy->set_draw_settings("building-a.png", {50, 50});
                         pre_vec_enemies.push_back(curren_enemy);
 
 
@@ -222,6 +222,7 @@ namespace services {
                     }
 
                     // Calculate the image start position
+                    //TODO: rotation with row
                     float image_start_y = map1.get_tile_size().y * rotation;
 
                     // Place the (created) object on the field
@@ -266,17 +267,20 @@ namespace services {
                 engine::math::box2_t building_box{{10, 10},
                                                   {42, 42}};
 
-                int min_dmg;
+                int min_dmg =0;
                 if(building_root["type"] == 2){
 
                 }
-                int max_dmg;
-                int range;
+                int max_dmg=0;
+                int range = 0;
+
+                std::cout << min_dmg << max_dmg << range;
                 //vect
                 auto costs = std::vector<std::shared_ptr<domain::resources::resource>>();
-                building = domain::map::objects::building(building_box, building_root["id"], building_root["hitpoints"],
-                                                          building_root["health-ragen"], building_root['name'],
-                                                          building_root["type"],costs,);
+                auto output = std::vector<std::shared_ptr<domain::resources::resource>>();
+                auto building = domain::map::objects::building(building_box, building_root["id"], building_root["hitpoints"],
+                                                          building_root["health-ragen"], building_root["name"],
+                                                          building_root["type"],costs,0,0,0,output);
 
 
             } catch (std::exception &e) {
@@ -285,7 +289,7 @@ namespace services {
                 std::cout << d;
                 throw;
             }
-            return map;
+            return building;
         }
 
         std::shared_ptr<domain::map::map> json_level_loader::load_all_levels(std::string url) {
