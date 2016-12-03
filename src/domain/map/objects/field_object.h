@@ -7,6 +7,7 @@
 
 #include "../../drawable/drawable_game_object.h"
 #include "../field.h"
+#include "../../game_level/game_stats.h"
 #include <memory>
 
 namespace domain {
@@ -18,7 +19,8 @@ namespace domain {
 namespace domain {
     namespace map {
         namespace objects {
-            class field_object : public drawable::drawable_game_object {
+            class field_object : public drawable::drawable_game_object,
+                                 public domain::game_level::game_stats_modifier{
             public:
                 field_object();
 
@@ -31,6 +33,8 @@ namespace domain {
                 void set_field(std::shared_ptr<field> field1);
 
                 std::shared_ptr<field> get_field() const;
+
+                virtual void update_game_stats(domain::game_level::game_stats &game_stats1) = 0;
 
                 virtual ~field_object() = default;
 

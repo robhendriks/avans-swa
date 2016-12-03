@@ -27,6 +27,8 @@ namespace domain {
 
             std::shared_ptr<field> get_field(engine::math::vec2_t position) const;
 
+            std::shared_ptr<field> get_last_added_field() const;
+
             std::vector<std::shared_ptr<field>> get_fields_with_objects() const;
 
             std::vector<std::shared_ptr<field>> get_empty_fields() const;
@@ -55,6 +57,7 @@ namespace domain {
             engine::math::vec2_t m_tile_size;
             std::vector<std::shared_ptr<domain::map::field>> m_fields;
             std::unique_ptr<engine::math::box2_t> m_dest;
+            int m_last_added_field_index = -1;
         };
     }
 }

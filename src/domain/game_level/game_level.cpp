@@ -18,6 +18,10 @@ namespace domain {
             }
 
             m_stats = std::shared_ptr<game_stats>(new game_stats());
+
+            for(auto field : m_map->get_fields_with_objects()){
+                field->get_object()->update_game_stats(*m_stats);
+            }
             m_enemy = _enemies;
         }
 
@@ -113,6 +117,11 @@ namespace domain {
 
                 // Update the stats
                 p_observee->update_game_stats(*m_stats);
+            }
+            else if(title == "field-added"){
+                auto object = m_map->get_last_added_field()->get_object();
+                if(object != nullptr)
+                    object->update_game_stats(*m_stats);
             }
         }
 

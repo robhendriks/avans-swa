@@ -36,8 +36,10 @@ namespace domain {
          * @param field1
          */
         void map::add_field(std::shared_ptr<field> field1) {
-            m_fields[position_to_index(field1->get_position())] = field1;
+            m_last_added_field_index = position_to_index(field1->get_position());
+            m_fields[m_last_added_field_index] = field1;
             field1->add_observer(this);
+            this->notify_observers(this, "field-added");
         }
 
         /**
@@ -211,6 +213,15 @@ namespace domain {
             }
 
             return fields;
+        }
+
+        std::shared_ptr<field> map::get_last_added_field() const {
+            if(m_last_added_field_index == -1) {
+                return nullptr;
+            }
+            else{
+                return m_fields[m_last_added_field_index];
+            }
         }
     }
 }
