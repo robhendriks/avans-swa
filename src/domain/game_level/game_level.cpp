@@ -10,7 +10,9 @@ namespace domain {
     namespace game_level {
         game_level::game_level(std::string name, std::shared_ptr<domain::map::map> map, std::shared_ptr<game_stats> goal,
                                std::shared_ptr<domain::nations::nation> _enemies,
-            engine::draganddrop::drag_and_drop &drag_and_drop) : m_name(name), m_map(map), m_goal(goal), m_start_time(0), m_drag_and_drop(drag_and_drop) {
+                               engine::draganddrop::drag_and_drop &drag_and_drop, long duration) :
+            m_name(name), m_max_duration(duration), m_map(map), m_goal(goal), m_start_time(0),
+            m_drag_and_drop(drag_and_drop) {
 
             // Add all empty fields as dropable
             for (auto field : m_map->get_empty_fields()) {
@@ -19,9 +21,11 @@ namespace domain {
 
             m_stats = std::shared_ptr<game_stats>(new game_stats());
 
+            // Update the stats with the placed objects on the map
             for(auto field : m_map->get_fields_with_objects()){
                 field->get_object()->update_game_stats(*m_stats);
             }
+
             m_enemy = _enemies;
         }
 
@@ -50,9 +54,9 @@ namespace domain {
         }
 
         bool game_level::is_game_over(unsigned int current_duration) {
-            if(m_goal->get_max_duration() != 0) {
+            if(m_max_duration >= 0) {
                 int playing_time = current_duration - m_start_time;
-                return  m_goal->get_max_duration() - playing_time < 0;
+                return  m_max_duration - playing_time < 0;
             }
             else {
                 return false;
@@ -117,11 +121,6 @@ namespace domain {
 
                 // Update the stats
                 p_observee->update_game_stats(*m_stats);
-            }
-            else if(title == "field-added"){
-                auto object = m_map->get_last_added_field()->get_object();
-                if(object != nullptr)
-                    object->update_game_stats(*m_stats);
             }
         }
 

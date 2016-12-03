@@ -4,8 +4,8 @@
 
 #include <math.h>
 #include "level.h"
-#include "../../events/object_placed_on_field.h"
-#include "../../events/object_cannot_be_placed_on_field.h"
+#include "../../events/object_dropped_on_field.h"
+#include "../../events/object_not_dropped_on_field.h"
 #include "../../engine/graphics/box_builder.h"
 
 namespace gui {
@@ -26,7 +26,7 @@ namespace gui {
 
             // Load music
             m_music_manager.load("sounds/game.mp3", "game_bg_music");
-            m_music_manager.play("game_bg_music");
+           // m_music_manager.play("game_bg_music");
 
             // Add sounds effects
             // First load the sounds
@@ -35,15 +35,15 @@ namespace gui {
             auto &eventbus = engine::eventbus::eventbus::get_instance();
 
             // Play the pop sound when an object is placed
-            std::function<void(events::object_placed_on_field &)> on_place = [&](
-                events::object_placed_on_field &event) {
+            std::function<void(events::object_dropped_on_field &)> on_place = [&](
+                events::object_dropped_on_field &event) {
                 m_sound_manager.play("pop");
             };
             eventbus.subscribe("sound_on_place", on_place);
 
             // Play the error sound when an object cannot be placed
-            std::function<void(events::object_cannot_be_placed_on_field &)> error_place = [&](
-                events::object_cannot_be_placed_on_field &event) {
+            std::function<void(events::object_not_dropped_on_field &)> error_place = [&](
+                events::object_not_dropped_on_field &event) {
                 m_sound_manager.play("error");
             };
             eventbus.subscribe("sound_when_not_placed", error_place);
@@ -98,9 +98,10 @@ namespace gui {
             m_model.world->get_current_level().get_map()->set_display_box(builder5.build());
 
             // Reposition the goals box
-            engine::graphics::box_builder builder6(m_goals_view.m_stats_box->size());
-            builder6.as_left_top(m_top_bar.m_bar_box->left_bottom()).add_margin({20, 40});
-            m_goals_view.m_stats_box.reset(new engine::math::box2_t(builder6.build()));
+            engine::graphics::box_builder builder6(m_goals_view.m_stats_header_box->size());
+            builder6.as_right_top(m_top_bar.m_bar_box->right_bottom())
+                .add_margin({-80, 80});
+            m_goals_view.m_stats_header_box.reset(new engine::math::box2_t(builder6.build()));
         }
 
         void level::update_placeable_objects_page() {

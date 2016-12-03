@@ -10,6 +10,7 @@
 #include <map>
 #include <typeinfo>
 #include <functional>
+#include <SDL_log.h>
 #include "any.hpp"
 #include "subscriber.h"
 

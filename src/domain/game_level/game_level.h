@@ -21,7 +21,7 @@ namespace domain {
         public:
             game_level(std::string name, std::shared_ptr<map::map> map, std::shared_ptr<game_stats> goal,
                        std::shared_ptr<domain::nations::nation> _enemies,
-                       engine::draganddrop::drag_and_drop &drag_and_drop);
+                       engine::draganddrop::drag_and_drop &drag_and_drop, long duration);
 
             std::string get_name();
 
@@ -83,6 +83,7 @@ namespace domain {
 
         private:
             std::string m_name;
+            long m_max_duration;
             std::shared_ptr<domain::map::map> m_map;
             std::shared_ptr<game_stats> m_goal;
             std::shared_ptr<game_stats> m_stats;

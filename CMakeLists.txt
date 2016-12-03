@@ -71,10 +71,10 @@ set(SOURCES src/main.cpp
     src/engine/audio/sound_manager.h
     src/engine/audio/music_manager.cpp
     src/engine/audio/music_manager.h
-    src/events/object_placed_on_field.cpp
-    src/events/object_placed_on_field.h
-    src/events/object_cannot_be_placed_on_field.cpp
-    src/events/object_cannot_be_placed_on_field.h
+    src/events/object_dropped_on_field.cpp
+    src/events/object_dropped_on_field.h
+    src/events/object_not_dropped_on_field.cpp
+    src/events/object_not_dropped_on_field.h
     src/engine/audio/state.h
     src/engine/audio/sound_callback_wrapper.cpp
     src/engine/audio/sound_callback_wrapper.h

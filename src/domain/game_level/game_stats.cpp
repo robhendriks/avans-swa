@@ -7,15 +7,6 @@
 
 namespace domain {
     namespace game_level {
-        game_stats::game_stats(long max_duration) : m_max_duration(max_duration){}
-
-        void game_stats::set_max_duration(long duration) {
-            m_max_duration = duration;
-        }
-
-        long game_stats::get_max_duration() {
-            return m_max_duration;
-        }
 
         void game_stats::increase(std::string counter) {
             if (m_stats.find(counter) != m_stats.end()) {

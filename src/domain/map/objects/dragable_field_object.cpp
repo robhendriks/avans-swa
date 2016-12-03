@@ -3,6 +3,8 @@
 //
 
 #include "dragable_field_object.h"
+#include "../../../events/object_not_dropped_on_field.h"
+#include "../../../events/object_dropped_on_field.h"
 
 namespace domain {
     namespace map {
@@ -56,11 +58,21 @@ namespace domain {
 
                 // Notify
                 notify_observers(this, "object-dropped");
+
+                // Fire event
+                auto *event = new events::object_dropped_on_field(*this);
+                engine::eventbus::eventbus::get_instance().fire(*event);
+                delete event;
             }
 
             void dragable_field_object::not_dropped() {
                 // Return to start position
                 m_draw_box.reset(new engine::math::box2_t(*m_start_box));
+
+                // Fire event
+                auto *event = new events::object_not_dropped_on_field(*this);
+                engine::eventbus::eventbus::get_instance().fire(*event);
+                delete event;
             }
 
             bool dragable_field_object::can_place_on(field &field1) const {

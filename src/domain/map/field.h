@@ -41,7 +41,7 @@ namespace domain {
 
             void set_box(engine::math::box2_t box);
 
-            void place_object(objects::field_object &object);
+            bool place_object(objects::field_object &object);
 
             bool has_object() const;
 

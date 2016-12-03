@@ -35,7 +35,7 @@ namespace domain {
             }
 
             void building::update_game_stats(domain::game_level::game_stats &game_stats1) {
-                game_stats1.increase("building");
+                game_stats1.increase("buildings");
             }
         }
     }

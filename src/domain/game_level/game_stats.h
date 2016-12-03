@@ -14,23 +14,6 @@ namespace domain {
     namespace game_level {
         class game_stats {
         public:
-            /**
-             *
-             * @param max_duration - use -1 for an infinite duration
-             */
-            game_stats(long max_duration = -1);
-
-            /**
-             * Get the setted duration
-             * @return
-             */
-            long get_max_duration();
-
-            /**
-             * Set the duration
-             * @param duration
-             */
-            void set_max_duration(long duration);
 
             /**
              * Increase a counter
@@ -77,7 +60,6 @@ namespace domain {
             bool operator>=(const game_stats& other);
             game_stats operator+(const game_stats& other);
         private:
-            long m_max_duration;
             std::map<std::string, int> m_stats;
         };
     }

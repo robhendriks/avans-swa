@@ -30,7 +30,7 @@ namespace gui {
             models::level_goals_model &m_model;
             engine::graphics::texture_manager &m_texture_manager;
             engine::graphics::font_manager &m_font_manager;
-            std::unique_ptr<engine::math::box2_t> m_stats_box;
+            std::unique_ptr<engine::math::box2_t> m_stats_header_box;
         };
     }
 }

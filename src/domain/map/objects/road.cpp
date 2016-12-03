@@ -23,7 +23,7 @@ namespace domain {
             }
 
             void road::update_game_stats(domain::game_level::game_stats &game_stats1) {
-                game_stats1.increase("road");
+                game_stats1.increase("roads");
             }
         }
     }
