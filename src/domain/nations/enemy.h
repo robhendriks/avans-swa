@@ -14,12 +14,10 @@ namespace domain {
     namespace nations {
         class enemy : public domain::drawable::drawable_game_object {
         public:
+            enemy(std::string _name, int _mindamage, int _maxdamage, double _attackspersecond, int _hitpoints, int _grantedXP, int _range, int _movement, bool _boss, std::shared_ptr<nation> _nation, int _oppertunitycosts)
+            ;
 
-            enemy(const std::string &name, int mindamage, int maxdamage, int oppertunitycosts, double attackspersecond,
-                  int hitpoints, int grantedXP, int range, int movement, bool boss,
-                  const std::shared_ptr<nation> &Nation);
-
-            enemy(std::string _name, int _oppertunitycosts);
+            enemy(std::string _name, int _oppertunitycosts, bool _boss);
 
             //Returns nationname + unitname
             std::string getName();
@@ -32,19 +30,15 @@ namespace domain {
             int getHitpoints();
 
             int getRange();
-
             int getMovement();
-
-            int getOppertunity() const;
+            int getOppertunity()const;
 
             bool getBoss();
 
             //Lowers hitpoints with the amount within the parameter; if 0 calls the delete method.
             //Returns the amount of XP.
             int lowerHitpoints(int points);
-
             ~enemy();
-
 
             virtual engine::math::box2_t get_box() const;
 
@@ -74,7 +68,7 @@ namespace domain {
             std::shared_ptr<nation> Nation;
         };
 
-        bool operator<(const enemy &s1, const enemy &s2);
+        bool operator<(const std::shared_ptr<enemy> &s1, const std::shared_ptr<enemy>  &s2);
     }
 }
 

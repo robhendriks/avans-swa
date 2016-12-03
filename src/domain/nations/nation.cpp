@@ -11,7 +11,7 @@ namespace domain {
             prefixname = _prefixname;
         }
 
-        void nation::set_available_enemies(std::vector<std::shared_ptr<enemy>> _enemies) {
+        void nation::setavailableenemies(std::vector<std::shared_ptr<enemy>> _enemies) {
             enemies = _enemies;
         }
 
