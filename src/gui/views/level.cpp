@@ -7,6 +7,7 @@
 #include "../../events/object_dropped_on_field.h"
 #include "../../events/object_not_dropped_on_field.h"
 #include "../../engine/graphics/box_builder.h"
+#include "../../utils/string_utils.h"
 
 namespace gui {
     namespace views {
@@ -23,6 +24,7 @@ namespace gui {
 
             // Load arrow textures
             m_top_bar.m_texture_manager.load("images/arrows.png", "arrows");
+            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 184}, {1451, 229}}, 1.5, "l_red_box");
 
             // Load music
             m_music_manager.load("sounds/game.mp3", "game_bg_music");
@@ -33,6 +35,7 @@ namespace gui {
             m_sound_manager.load("sounds/pop.wav", "pop");
             m_sound_manager.load("sounds/error.wav", "error");
             m_sound_manager.load("sounds/victory.wav", "victory");
+            m_sound_manager.load("sounds/countdown.wav", "countdown");
 
             auto &eventbus = engine::eventbus::eventbus::get_instance();
 
@@ -105,6 +108,13 @@ namespace gui {
             builder6.as_right_top(m_top_bar.m_bar_box->right_bottom())
                 .add_margin({-80, 80});
             m_goals_view.m_stats_header_box.reset(new engine::math::box2_t(builder6.build()));
+
+            if (m_model.world->get_current_level().get_max_duration() > 0) {
+                // Countdown
+                engine::graphics::box_builder builder7(m_goals_view.m_stats_header_box->size());
+                builder7.as_left_top(m_top_bar.m_bar_box->left_bottom()).add_margin({80, 80});
+                m_countdown_box.reset(new engine::math::box2_t(builder7.build()));
+            }
         }
 
         void level::update_placeable_objects_page() {
@@ -139,10 +149,11 @@ namespace gui {
         }
 
         void level::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
+            auto current_level = m_model.world->get_current_level();
             m_controller->update();
 
-            if (m_model.world->get_current_level().is_game_over(time_elapsed) ||
-                m_model.world->get_current_level().is_goal_reached()) {
+            if (current_level.is_game_over(time_elapsed) ||
+                current_level.is_goal_reached()) {
                 m_controller->show();
             }
 
@@ -155,7 +166,7 @@ namespace gui {
   //          }
 
             // Draw the map
-            m_model.world->get_current_level().get_map()->draw(m_top_bar.m_texture_manager, time_elapsed);
+            current_level.get_map()->draw(m_top_bar.m_texture_manager, time_elapsed);
 
             // Draw the arrows
             float left_arrow_y = (m_current_page == 1 ? 128 : 0);
@@ -164,8 +175,37 @@ namespace gui {
             m_top_bar.m_texture_manager.draw("arrows", {128, right_arrow_y}, *m_arrow_right_box);
 
             // Draw the placeable objects
-            for (auto &obj : m_model.world->get_current_level().get_placeable_objects()) {
+            for (auto &obj : current_level.get_placeable_objects()) {
                 obj->draw(m_top_bar.m_texture_manager, time_elapsed);
+            }
+
+            if (current_level.get_max_duration() > 0) {
+                // Draw the countdown
+
+                // Calculate time left
+                int level_time = time_elapsed - current_level.get_start_time();
+                unsigned int time_left = static_cast<unsigned int>(current_level.get_max_duration() - level_time);
+
+                engine::graphics::color4_t color{0, 0, 0};
+                if (time_left <= 53200) {
+                    // Play countdown music
+                    // First stop the bg music
+                    m_music_manager.stop();
+                    m_sound_manager.play_if("countdown", true, NULL, 128, 400);
+
+                    m_top_bar.m_texture_manager.draw("l_red_box", *m_countdown_box);
+
+                    color = {255, 255, 255};
+                } else {
+                    m_top_bar.m_texture_manager.draw("g_box", *m_countdown_box);
+                }
+
+                m_top_bar.m_texture_manager.load_text(utils::string_utils::ms_to_hms(time_left), color,
+                                                      *m_goals_view.m_font_manager.get_font("roboto", 25), "l_countdown");
+                engine::graphics::box_builder builder(m_top_bar.m_texture_manager.get_size("l_countdown"));
+                builder.to_center(*m_countdown_box);
+                m_top_bar.m_texture_manager.draw("l_countdown", builder.build());
+                m_top_bar.m_texture_manager.unload("l_countdown");
             }
         }
 
@@ -211,6 +251,7 @@ namespace gui {
 
             // Unload arrow textures
             m_top_bar.m_texture_manager.unload("arrows");
+            m_top_bar.m_texture_manager.unload("l_red_box");
 
             // can be done by the objects as well
             m_model.world->unload(m_top_bar.m_texture_manager);
@@ -227,6 +268,7 @@ namespace gui {
             m_sound_manager.unload("pop");
             m_sound_manager.unload("error");
             m_sound_manager.unload("victory");
+            m_sound_manager.unload("countdown");
 
             // Event click unsubscribe
             eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>*>(this));

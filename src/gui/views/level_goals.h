@@ -14,6 +14,7 @@ namespace gui {
     namespace views {
         class level_goals : public base_view {
             friend class level;
+            friend class win_game_over;
         public:
             level_goals(models::level_goals_model &model, engine::graphics::texture_manager &texture_manager,
                         engine::graphics::font_manager &font_manager);

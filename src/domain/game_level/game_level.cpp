@@ -208,5 +208,9 @@ namespace domain {
         bool game_level::get_spawn_bosses() {
             return m_spawn_bosses;
         }
+
+        long game_level::get_max_duration() const {
+            return m_max_duration;
+        }
     }
 }

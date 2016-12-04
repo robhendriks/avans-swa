@@ -20,12 +20,12 @@ namespace gui {
 
             // Load textures
             m_top_bar.m_texture_manager.load("images/logo.png", "logo");
-            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1255, 244}, {1454, 289}}, 1.5, "blue_btn");
-            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1255, 64}, {1454, 110}}, 1.5, "yellow_btn");
-            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1255, 184}, {1454, 229}}, 1.5, "red_btn");
+            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 244}, {1451, 289}}, 1.5, "blue_btn");
+            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 64}, {1451, 110}}, 1.5, "yellow_btn");
+            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 184}, {1451, 229}}, 1.5, "red_btn");
 
-            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1007, 571}, {1046, 602}}, 1, "green_slider_left");
-            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1080, 571}, {1119, 602}}, 1, "green_slider_right");
+            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1007, 570}, {1046, 601}}, 1, "green_slider_left");
+            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1080, 570}, {1119, 601}}, 1, "green_slider_right");
 
             // Load (and play) music
             m_music_manager.load("sounds/menu.wav", "menu_bg_music");

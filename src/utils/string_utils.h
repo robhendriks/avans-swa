@@ -17,6 +17,20 @@
 namespace utils {
     namespace string_utils {
 
+        inline std::string ms_to_hms(unsigned int ms) {
+            int s_left = ms / 1000;
+            std::string s_string = std::to_string(s_left % 60);
+            if (s_string.size() == 1) s_string = "0" + s_string;
+            s_left /= 60;
+            std::string m_string = std::to_string(s_left % 60);
+            if (m_string.size() == 1) m_string = "0" + m_string;
+            s_left /= 60;
+            std::string h_string = std::to_string(s_left % 24);
+            if (h_string.size() == 1) h_string = "0" + h_string;
+
+            return h_string + ":" + m_string + ":" + s_string;
+        }
+
         inline unsigned long hex_to_long(std::string hex) {
             unsigned long value;
             std::istringstream iss(hex);

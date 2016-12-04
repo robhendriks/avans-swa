@@ -24,6 +24,7 @@ namespace gui {
                         engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>> {
             friend class main_menu;
             friend class level;
+            friend class win_game_over;
         public:
             top_bar(engine::graphics::texture_manager &texture_manager, engine::graphics::color_manager &color_manager);
 

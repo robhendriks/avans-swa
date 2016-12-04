@@ -76,6 +76,7 @@ namespace gui {
             std::unique_ptr<engine::math::box2_t> m_placeable_objects_box;
             std::unique_ptr<engine::math::box2_t> m_arrow_left_box;
             std::unique_ptr<engine::math::box2_t> m_arrow_right_box;
+            std::unique_ptr<engine::math::box2_t> m_countdown_box;
             controllers::main_map_controller *m_controller;
             int m_pages;
             int m_current_page;

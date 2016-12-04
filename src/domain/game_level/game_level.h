@@ -43,6 +43,8 @@ namespace domain {
 
             void set_start_time(unsigned int time);
 
+            long get_max_duration() const;
+
             void add_placeable_object(map::objects::dragable_field_object &obj);
 
             void remove_placeable_object(map::objects::dragable_field_object &obj);

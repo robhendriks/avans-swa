@@ -31,7 +31,6 @@ namespace services {
             // Create the level goal
             auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats());
             goal->set_counter("buildings", 5);
-            goal->set_counter("roads", 50);
 
             auto nation = std::make_shared<domain::nations::nation>(domain::nations::nation("name", "name_pre"));
             std::vector<std::shared_ptr<domain::nations::enemy>> enemies = {};
@@ -41,7 +40,7 @@ namespace services {
             nation->setavailableenemies(enemies);
 
             auto game_level = std::unique_ptr<domain::game_level::game_level>(
-                new domain::game_level::game_level("level", map1, goal, nation , *d_a_d, -1));
+                new domain::game_level::game_level("level", map1, goal, nation , *d_a_d, 55000));
 
             // TODO: HARDCODED ATM
             // Add placeable objects
