@@ -82,6 +82,10 @@ namespace domain {
             bool get_spawn_bosses();
 
         private:
+            void check_goals_reached();
+
+            std::vector<std::string> m_not_reached_goals;
+
             std::string m_name;
             long m_max_duration;
             std::shared_ptr<domain::map::map> m_map;

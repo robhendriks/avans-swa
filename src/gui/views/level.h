@@ -18,6 +18,7 @@
 #include "../../engine/input/keycodes.h"
 #include "../../engine/events/key_down.h"
 #include "level_goals.h"
+#include "../../events/goal_reached.h"
 
 
 namespace gui {
@@ -36,7 +37,8 @@ namespace gui {
     namespace views {
         class level : public base_view,
                       engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>,
-                      engine::eventbus::subscriber<engine::events::key_down> {
+                      engine::eventbus::subscriber<engine::events::key_down>,
+                      engine::eventbus::subscriber<events::goal_reached> {
         public:
 
             level(top_bar &top_bar1, level_goals &goals_view, engine::audio::music_manager &music_manager,
@@ -55,6 +57,8 @@ namespace gui {
             void on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event);
 
             void on_event(engine::events::key_down &event);
+
+            void on_event(events::goal_reached &event);
 
         private:
             void update_placeable_objects_page();

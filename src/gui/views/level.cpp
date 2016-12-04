@@ -32,6 +32,8 @@ namespace gui {
             // First load the sounds
             m_sound_manager.load("sounds/pop.wav", "pop");
             m_sound_manager.load("sounds/error.wav", "error");
+            m_sound_manager.load("sounds/victory.wav", "victory");
+
             auto &eventbus = engine::eventbus::eventbus::get_instance();
 
             // Play the pop sound when an object is placed
@@ -48,9 +50,10 @@ namespace gui {
             };
             eventbus.subscribe("sound_when_not_placed", error_place);
 
-            // Event click subscribe
+            // Events subscribe
             eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>*>(this));
             eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::key_down>*>(this));
+            eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<events::goal_reached>*>(this));
         }
 
         void level::on_display_change(engine::math::box2_t display_box) {
@@ -198,6 +201,10 @@ namespace gui {
             }
         }
 
+        void level::on_event(events::goal_reached &event) {
+            m_sound_manager.play("victory");
+        }
+
         void level::after() {
             m_top_bar.after();
             m_goals_view.after();
@@ -219,10 +226,12 @@ namespace gui {
             // Unload sounds
             m_sound_manager.unload("pop");
             m_sound_manager.unload("error");
+            m_sound_manager.unload("victory");
 
             // Event click unsubscribe
             eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>*>(this));
             eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::key_down>*>(this));
+            eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<events::goal_reached>*>(this));
         }
 
         void level::set_controller(controllers::main_map_controller &controller) {

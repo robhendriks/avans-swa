@@ -31,7 +31,7 @@ namespace services {
             // Create the level goal
             auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats());
             goal->set_counter("buildings", 5);
-            goal->set_counter("roads", 5);
+            goal->set_counter("roads", 50);
 
             auto nation = std::make_shared<domain::nations::nation>(domain::nations::nation("name", "name_pre"));
             std::vector<std::shared_ptr<domain::nations::enemy>> enemies = {};

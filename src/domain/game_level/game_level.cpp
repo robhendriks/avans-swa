@@ -5,6 +5,7 @@
 #include "game_level.h"
 #include "../map/objects/building.h"
 #include "../map/objects/road.h"
+#include "../../events/goal_reached.h"
 
 namespace domain {
     namespace game_level {
@@ -21,10 +22,18 @@ namespace domain {
 
             m_stats = std::shared_ptr<game_stats>(new game_stats());
 
+            // Set all goals as not reached
+            for (auto &g : m_goal->get()) {
+                m_not_reached_goals.push_back(g.first);
+            }
+
             // Update the stats with the placed objects on the map
             for(auto field : m_map->get_fields_with_objects()){
                 field->get_object()->update_game_stats(*m_stats);
             }
+
+            // Check if there are already some goals reached
+            check_goals_reached();
 
             m_enemy = _enemies;
         }
@@ -121,6 +130,26 @@ namespace domain {
 
                 // Update the stats
                 p_observee->update_game_stats(*m_stats);
+
+                check_goals_reached();
+            }
+        }
+
+        void game_level::check_goals_reached() {
+            for (auto it = m_not_reached_goals.begin(); it != m_not_reached_goals.end();) {
+
+                // Check if the goal is now reached
+                if (m_stats->get_count(*it) >= m_goal->get_count(*it)) {
+                    // Reached remove from arrow and fire the event
+                    auto *event = new events::goal_reached(*it);
+                    engine::eventbus::eventbus::get_instance().fire(event);
+                    delete event;
+
+                    // Erase from vector
+                    it = m_not_reached_goals.erase(it);
+                } else {
+                    ++it;
+                }
             }
         }
 
