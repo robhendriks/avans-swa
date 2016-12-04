@@ -20,6 +20,28 @@ namespace domain {
             m_map->add_observer(this);
             m_stats = std::shared_ptr<game_stats>(new game_stats());
             m_enemy = _enemies;
+
+//Create resource objects and sets them to 0.
+            auto templist = std::vector<std::shared_ptr<domain::resources::resource>>(5);
+            templist[0] = std::make_shared<domain::resources::resource>(*new domain::resources::resource());
+            templist[1] =  std::make_shared<domain::resources::resource>(*new domain::resources::resource());
+            templist[2] =  std::make_shared<domain::resources::resource>(*new domain::resources::resource());
+            templist[3] =  std::make_shared<domain::resources::resource>(*new domain::resources::resource());
+            templist[4] =  std::make_shared<domain::resources::resource>(*new domain::resources::resource());
+
+            templist[0]->set_count(100);
+            templist[0]->set_resource_type(domain::resources::wood);
+            templist[1]->set_count(25);
+            templist[1]->set_resource_type(domain::resources::ore);
+            templist[2]->set_count(100);
+            templist[2]->set_resource_type(domain::resources::gold);
+            templist[3]->set_count(0);
+            templist[3]->set_resource_type(domain::resources::silicium);
+            templist[4]->set_count(0);
+            templist[4]->set_resource_type(domain::resources::uranium);
+            m_resources = templist;
+
+
         }
 
         std::string game_level::get_name() {
@@ -187,6 +209,9 @@ namespace domain {
 
         bool game_level::get_spawn_bosses() {
             return m_spawn_bosses;
+        }
+        std::vector<std::shared_ptr<domain::resources::resource>> game_level::get_resources(){
+            return m_resources;
         }
     }
 }

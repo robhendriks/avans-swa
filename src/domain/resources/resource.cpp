@@ -19,6 +19,21 @@ namespace domain {
         resource_type resource::get_resource_type(){
             return this->_type;
         }
+        bool resource::check_resource(int amount){
+            if(_count >=amount){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        void resource::decrement_resource(int amount){
+            _count = _count - amount;
+        }
+
+        void resource::increment_resource(int amount){
+            _count = _count + amount;
+        }
 
         void resource::set_resource_type(resource_type type) {
             this->_type = type;

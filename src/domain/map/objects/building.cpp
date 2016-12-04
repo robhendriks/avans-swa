@@ -34,6 +34,23 @@ namespace domain {
 
             dragable_field_object *building::clone() const {
                 return new building(*this);
+
+
+            }
+            std::vector<std::shared_ptr<domain::resources::resource>> building::get_required_resources() {
+                return required_resources;
+            }
+
+            void building::set_required_resource(std::vector<std::shared_ptr<domain::resources::resource>> resources){
+                required_resources = resources;
+            }
+
+
+            std::shared_ptr<domain::resources::resource> building::get_produced_resources(){
+                return produced_resource;
+            }
+            void building::set_produced_resource(std::shared_ptr<domain::resources::resource> resource){
+                produced_resource = resource;
             }
         }
     }

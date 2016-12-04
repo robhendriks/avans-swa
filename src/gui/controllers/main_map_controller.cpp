@@ -51,7 +51,15 @@ namespace gui {
             for (auto enemy : m_wave_management_service.get_enemies(m_engine.get_time_elapsed())) {
                 current_enemies.push_back(enemy);
             }
+            //Updates resources
             m_model.world->get_current_level().set_enemies_in_lvl(current_enemies);
+           for(auto&x:m_model.world->get_current_level().get_map()->get_fields_with_objects()){
+               //TODO get the proper building which is not really possible now
+                x->get_object()->get_field()->get_max_row();
+               m_model.world->get_current_level().get_resources()[0]->increment_resource(1);
+
+               };
+
         }
 
 

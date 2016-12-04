@@ -23,6 +23,16 @@ namespace domain {
 
             int get_count();
 
+            //Check if amount of resources exceeds the required amount.
+            //Returns False when amount is higher than count; else true
+            bool check_resource(int amount);
+
+            //Decrement the resource with the given amount. Only use after you used check_resource!!
+            void decrement_resource(int amount);
+
+            //Increment the resource with the given amount.
+            void increment_resource(int amount);
+
             ~resource();
 
         private:
