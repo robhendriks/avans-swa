@@ -29,9 +29,9 @@ namespace domain {
 
             virtual engine::math::box2_t get_box() const = 0;
 
-            float get_row() const;
+            float get_max_row() const;
 
-            void set_row(float row);
+            void set_max_row(float row);
 
             float get_max_column() const;
 
@@ -42,6 +42,8 @@ namespace domain {
             void set_transition(long transition_time);
 
             void set_current_column(float column);
+
+            void set_current_row(float row);
 
         protected:
             SDL_Texture *m_texture;
@@ -56,14 +58,19 @@ namespace domain {
             // basic implementation is to draw the current object (needs to be overwritten for also drawing children)
             virtual void draw_object(engine::graphics::texture_manager &texture_manager);
 
-            float m_row = 1;
+            // count based
             float m_max_column = 1;
+            float m_max_row = 1;
+
             long m_transition = 1000;
             unsigned int m_last_transition_time = 0;
-            float m_current_column = 0;
 
+            // index based
+            float m_current_column = 0;
+            float m_current_row = 0;
 
             virtual void animation(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed);
+
 
         };
     }

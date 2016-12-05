@@ -27,7 +27,6 @@ namespace engine {
         try {
             init_sdl();
             create_window();
-
             m_state = WARMEDUP;
         } catch (std::runtime_error &e) {
             fprintf(stderr, "%s\n", e.what());
