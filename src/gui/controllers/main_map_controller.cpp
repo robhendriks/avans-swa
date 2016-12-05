@@ -86,6 +86,20 @@ namespace gui {
             }
         }
 
+        void main_map_controller::pause() {
+            // Let the level know
+            m_model.world.get()->get_current_level().pause();
+
+            // Pause or resume the engine
+            if (m_engine.get_state() == engine::PAUSED) {
+                m_engine.resume();
+                m_model.paused = false;
+            } else {
+                m_engine.pause();
+                m_model.paused = true;
+            }
+        };
+
         void
         main_map_controller::set_menu_controller(std::shared_ptr<gui::controllers::menu_controller> menu_controller) {
             m_menu_controller = menu_controller;

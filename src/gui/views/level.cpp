@@ -25,6 +25,8 @@ namespace gui {
             // Load arrow textures
             m_top_bar.m_texture_manager.load("images/arrows.png", "arrows");
             m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 184}, {1451, 229}}, 1.5, "l_red_box");
+            m_top_bar.m_texture_manager.load("images/pause.png", "l_pause");
+            m_top_bar.m_texture_manager.load("images/play.png", "l_play");
 
             // Load music
             m_music_manager.load("sounds/game.mp3", "game_bg_music");
@@ -115,6 +117,11 @@ namespace gui {
                 builder7.as_left_top(m_top_bar.m_bar_box->left_bottom()).add_margin({80, 80});
                 m_countdown_box.reset(new engine::math::box2_t(builder7.build()));
             }
+
+            // Set the pause box
+            engine::graphics::box_builder builder8(m_top_bar.m_texture_manager.get_size("l_pause"));
+            builder8.as_left_top(m_top_bar.m_bar_box->left_top()).add_margin({50, 0});
+            m_pause_box.reset(new engine::math::box2_t(builder8.build()));
         }
 
         void level::update_placeable_objects_page() {
@@ -157,7 +164,12 @@ namespace gui {
                 m_controller->show();
             }
 
+            // Draw the top bar
             m_top_bar.draw(time_elapsed, display_box);
+            // With the pause or play btn
+            m_top_bar.m_texture_manager.draw(m_model.paused ? "l_play" : "l_pause", *m_pause_box);
+
+            // Draw the goals
             m_goals_view.draw(time_elapsed, display_box);
 
             // draw enemies
@@ -212,18 +224,27 @@ namespace gui {
         void level::on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event) {
             engine::math::vec2_t *position = engine::input::input_handler::get_instance()->get_mouse_position();
 
-            if (m_arrow_left_box->contains(*position)) {
-                navigate_left();
-            } else if (m_arrow_right_box->contains(*position)) {
-                navigate_right();
+            if (m_pause_box->contains(*position)) {
+                on_pause();
+            } else if (!m_model.paused) {
+                // Only if not paused
+                if (m_arrow_left_box->contains(*position)) {
+                    navigate_left();
+                } else if (m_arrow_right_box->contains(*position)) {
+                    navigate_right();
+                }
             }
         }
 
         void level::on_event(engine::events::key_down &event) {
-            if (event.get_keycode() == engine::input::keycodes::keycode::LEFT) {
-                navigate_left();
-            } else if (event.get_keycode() == engine::input::keycodes::keycode::RIGHT) {
-                navigate_right();
+            if (event.get_keycode() == engine::input::keycodes::keycode::PAUSE) {
+                on_pause();
+            } else if (!m_model.paused) {
+                if (event.get_keycode() == engine::input::keycodes::keycode::LEFT) {
+                    navigate_left();
+                } else if (event.get_keycode() == engine::input::keycodes::keycode::RIGHT) {
+                    navigate_right();
+                }
             }
         }
 
@@ -242,7 +263,9 @@ namespace gui {
         }
 
         void level::on_event(events::goal_reached &event) {
-            m_sound_manager.play("victory");
+            if (!m_model.paused) {
+                m_sound_manager.play("victory");
+            }
         }
 
         void level::after() {
@@ -252,6 +275,8 @@ namespace gui {
             // Unload arrow textures
             m_top_bar.m_texture_manager.unload("arrows");
             m_top_bar.m_texture_manager.unload("l_red_box");
+            m_top_bar.m_texture_manager.unload("l_pause");
+            m_top_bar.m_texture_manager.unload("l_play");
 
             // can be done by the objects as well
             m_model.world->unload(m_top_bar.m_texture_manager);
@@ -278,6 +303,22 @@ namespace gui {
 
         void level::set_controller(controllers::main_map_controller &controller) {
             m_controller = &controller;
+        }
+
+        void level::on_pause() {
+            m_controller->pause(); // Will pause or resume the game
+
+            if (m_model.paused) {
+                // Pause the music
+                m_music_manager.pause();
+                // Pause all sounds
+                m_sound_manager.pause_all();
+            } else {
+                // Resume all music
+                m_music_manager.resume();
+                // Resume all sounds
+                m_sound_manager.resume_all();
+            };
         }
     }
 }

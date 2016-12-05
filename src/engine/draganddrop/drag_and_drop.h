@@ -15,6 +15,7 @@
 #include "../events/mouse_motion.h"
 #include "../eventbus/eventbus.h"
 #include "../input/input_handler.h"
+#include "../events/engine_state_changed.h"
 
 namespace engine {
     namespace draganddrop {
@@ -54,12 +55,17 @@ namespace engine {
 
             bool set_dragging(dragable &dragable1, bool force = false);
 
+            void start();
+
+            void stop();
+
         private:
             std::vector<dragable*> m_dragables;
             dragable* m_dragging;
             std::vector<dropable*> m_dropables;
 
             bool m_select_and_drop;
+            bool m_started;
             math::vec2_t *m_mouse_position_on_select;
         };
     }

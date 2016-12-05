@@ -83,6 +83,11 @@ namespace domain {
 
             bool get_spawn_bosses();
 
+            /**
+             * Pause or resume the game level
+             */
+            void pause();
+
         private:
             void check_goals_reached();
 
@@ -114,6 +119,8 @@ namespace domain {
             std::shared_ptr<domain::nations::nation> m_enemy;
             // spawn boss units
             bool m_spawn_bosses = true;
+
+            bool m_paused;
         };
     }
 }

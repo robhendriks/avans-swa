@@ -13,7 +13,10 @@ namespace domain {
                                std::shared_ptr<domain::nations::nation> _enemies,
                                engine::draganddrop::drag_and_drop &drag_and_drop, long duration) :
             m_name(name), m_max_duration(duration), m_map(map), m_goal(goal), m_start_time(0),
-            m_drag_and_drop(drag_and_drop) {
+            m_drag_and_drop(drag_and_drop), m_paused(true) {
+
+            // Call pause to start the level....
+            pause();
 
             // Add all empty fields as dropable
             for (auto field : m_map->get_empty_fields()) {
@@ -211,6 +214,20 @@ namespace domain {
 
         long game_level::get_max_duration() const {
             return m_max_duration;
+        }
+
+        void game_level::pause() {
+            if (m_paused) {
+                // Resume
+                m_drag_and_drop.start();
+
+                m_paused = false;
+            } else {
+                // Pause
+                m_drag_and_drop.stop();
+
+                m_paused = true;
+            }
         }
     }
 }
