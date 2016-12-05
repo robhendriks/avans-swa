@@ -45,13 +45,10 @@ namespace domain {
                 required_resources = resources;
             }
 
+            void building::update(domain::game_level::game_level game_level){
 
-            std::shared_ptr<domain::resources::resource> building::get_produced_resources(){
-                return produced_resource;
             }
-            void building::set_produced_resource(std::shared_ptr<domain::resources::resource> resource){
-                produced_resource = resource;
-            }
+
         }
     }
 }

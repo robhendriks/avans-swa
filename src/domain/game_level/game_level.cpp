@@ -213,5 +213,8 @@ namespace domain {
         std::vector<std::shared_ptr<domain::resources::resource>> game_level::get_resources(){
             return m_resources;
         }
+        void game_level::update(){
+            m_map->update_objects(this);
+        }
     }
 }

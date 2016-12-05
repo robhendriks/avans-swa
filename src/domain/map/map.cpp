@@ -212,6 +212,23 @@ namespace domain {
 
             return fields;
         }
+        void map::update_objects(domain::game_level::game_level *game_level){
+            for (auto &field : m_fields) {
+                //Check if the field has an object attached
+                if (field && field->has_object()){
+                    //field has an object, now we dynamiclly cast it to a building; to filter.
+                    auto *building =  dynamic_cast<objects::building*>(field->get_object());
+                    if(building != nullptr){
+                        //we now determined it's a building; calling the update method
+
+                    }
+
+                } {
+
+                }
+            }
+        }
+
     }
 }
 

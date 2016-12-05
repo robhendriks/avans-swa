@@ -6,6 +6,8 @@
 #include "json_level_loader.h"
 #include "../../domain/map/objects/building.h"
 #include "../../domain/map/objects/road.h"
+#include "../../domain/map/objects/economic_building.h"
+#include "../../domain/resources/resource.h"
 
 namespace services {
     namespace level_loader {
@@ -41,7 +43,8 @@ namespace services {
             // TODO: HARDCODED ATM
             // Add placeable objects
             engine::math::box2_t building_box {{0, 0}, {0, 0}}; // This box will be overwritten by the view
-            auto *building = new domain::map::objects::building(building_box);
+            auto *building = new domain::map::objects::economic_building(building_box, std::make_shared<domain::resources::resource>(*new domain::resources::resource()));
+
             building->set_draw_settings("images/building-a.png");
             game_level->add_placeable_object(*building);
 

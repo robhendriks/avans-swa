@@ -87,6 +87,8 @@ namespace domain {
 
             std::vector<std::shared_ptr<domain::resources::resource>> get_resources();
 
+            void update();
+
         private:
             std::string m_name;
             std::shared_ptr<domain::map::map> m_map;
