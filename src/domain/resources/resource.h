@@ -1,23 +1,18 @@
 #ifndef CITY_DEFENCE_RESOURCE_H
 #define CITY_DEFENCE_RESOURCE_H
 
+#include <string>
 namespace domain {
     namespace resources {
-        enum resource_type {
-            wood,
-            ore,
-            gold,
-            uranium,
-            silicium
-        };
+
 
         class resource {
         public:
             resource();
 
-            void set_resource_type(resource_type);
+            void set_resource_type(std::string _resourcename);
 
-            resource_type get_resource_type();
+            std::string get_resource_type();
 
             void set_count(int count);
 
@@ -36,7 +31,7 @@ namespace domain {
             ~resource();
 
         private:
-            resource_type _type;
+            std::string resourcename;
             int _count;
         };
     }

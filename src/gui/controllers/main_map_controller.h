@@ -60,6 +60,7 @@ namespace gui {
             models::main_map_model &m_model;
             models::transition_level_model &m_trans_model;
             services::wave::wave_management &m_wave_management_service;
+            unsigned int m_previous_time;
 
             // set values of the wave_management_service
             void set_settings_wave_management_service(domain::game_level::game_level lvl);

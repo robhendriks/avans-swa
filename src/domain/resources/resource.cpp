@@ -16,8 +16,8 @@ namespace domain {
             this->_count = count;
         }
 
-        resource_type resource::get_resource_type(){
-            return this->_type;
+        std::string resource::get_resource_type(){
+            return resourcename;
         }
         bool resource::check_resource(int amount){
             if(_count >=amount){
@@ -35,8 +35,8 @@ namespace domain {
             _count = _count + amount;
         }
 
-        void resource::set_resource_type(resource_type type) {
-            this->_type = type;
+        void resource::set_resource_type(std::string _resourcename) {
+            resourcename = _resourcename;
         }
 
         resource::~resource() {

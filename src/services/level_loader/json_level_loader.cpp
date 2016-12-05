@@ -43,7 +43,12 @@ namespace services {
             // TODO: HARDCODED ATM
             // Add placeable objects
             engine::math::box2_t building_box {{0, 0}, {0, 0}}; // This box will be overwritten by the view
-            auto *building = new domain::map::objects::economic_building(building_box, std::make_shared<domain::resources::resource>(*new domain::resources::resource()));
+            //Temperatay hardcoded resource
+            domain::resources::resource res = *new domain::resources::resource();
+            res.set_count(2);
+            res.set_resource_type("wood");
+
+            auto *building = new domain::map::objects::economic_building(building_box, std::make_shared<domain::resources::resource>(res));
 
             building->set_draw_settings("images/building-a.png");
             game_level->add_placeable_object(*building);

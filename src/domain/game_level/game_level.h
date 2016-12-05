@@ -87,6 +87,8 @@ namespace domain {
 
             std::vector<std::shared_ptr<domain::resources::resource>> get_resources();
 
+            void set_resources(std::vector<std::shared_ptr<domain::resources::resource>> resources);
+
             void update();
 
         private:

@@ -32,18 +32,28 @@ namespace domain {
                 produced_resources = resource;
             }
 
-            std::shared_ptr<domain::resources::resource> economic_building::get_produced_resources(){
+            std::shared_ptr<domain::resources::resource> economic_building::get_produced_resources() {
                 return produced_resources;
             }
 
-            void economic_building::set_produced_resource(std::shared_ptr<domain::resources::resource> resource)  {
+            void economic_building::set_produced_resource(std::shared_ptr<domain::resources::resource> resource) {
                 produced_resources = resource;
             }
 
-            void economic_building::update(domain::game_level::game_level game_level){
-                //TODO
-            }
+            void economic_building::update(domain::game_level::game_level game_level) {
+                int counter = 0;
+                auto resources = game_level.get_resources();
+                for (auto resource:resources) {
+                    if (resource->get_resource_type() == produced_resources->get_resource_type()) {
 
+                        //Update gamelevel
+                        resources[counter]->set_count(resources[counter]->get_count()+produced_resources->get_count());
+                        game_level.set_resources(resources);
+                        break;
+                    }
+                    counter++;
+                }
+            }
 
 
         }

@@ -16,6 +16,8 @@ namespace gui {
 
             m_view.set_controller(*this);
             m_trans_view.set_controller(*this);
+
+            m_previous_time =0;
         }
 
         void main_map_controller::show() {
@@ -54,7 +56,13 @@ namespace gui {
 
             m_model.world->get_current_level().set_enemies_in_lvl(current_enemies);
             //Updates building, calles method within the level
-            m_model.world->get_current_level().update();
+            if(m_engine.get_time_elapsed() > m_previous_time + 2500){
+
+                //Updating
+                m_model.world->get_current_level().update();
+                m_previous_time = m_engine.get_time_elapsed();
+            }
+
 
         }
 

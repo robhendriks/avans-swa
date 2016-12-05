@@ -16,10 +16,6 @@ namespace domain {
     }
     namespace map {
         class field;
-        namespace objects {
-            class building;
-        }
-
     }
 }
 

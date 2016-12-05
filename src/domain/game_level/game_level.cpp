@@ -30,15 +30,15 @@ namespace domain {
             templist[4] =  std::make_shared<domain::resources::resource>(*new domain::resources::resource());
 
             templist[0]->set_count(100);
-            templist[0]->set_resource_type(domain::resources::wood);
+            templist[0]->set_resource_type("wood");
             templist[1]->set_count(25);
-            templist[1]->set_resource_type(domain::resources::ore);
+            templist[1]->set_resource_type("ore");
             templist[2]->set_count(100);
-            templist[2]->set_resource_type(domain::resources::gold);
+            templist[2]->set_resource_type("gold");
             templist[3]->set_count(0);
-            templist[3]->set_resource_type(domain::resources::silicium);
+            templist[3]->set_resource_type("silicium");
             templist[4]->set_count(0);
-            templist[4]->set_resource_type(domain::resources::uranium);
+            templist[4]->set_resource_type("uranium");
             m_resources = templist;
 
 
@@ -213,8 +213,14 @@ namespace domain {
         std::vector<std::shared_ptr<domain::resources::resource>> game_level::get_resources(){
             return m_resources;
         }
+
+        void game_level::set_resources(std::vector<std::shared_ptr<domain::resources::resource>> resources){
+            m_resources = resources;
+        }
         void game_level::update(){
             m_map->update_objects(this);
         }
+
+
     }
 }
