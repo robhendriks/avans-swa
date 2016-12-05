@@ -22,10 +22,17 @@ namespace services {
                 vec_nations = load_nations(
                     m_root["nations-url"]);
             }
-            auto i = vec_nations.front();
-            
-            std::cout<<i;
+            if (this->vec_nations.empty()) {
+                vec_nations = load_nations(
+                    m_root["nations-url"]);
+            }
+
+
             //load buildings if not loaded yet
+            if (this->vec_building.empty()) {
+                std::string buildings = m_root["building-url"];
+                vec_building.push_back(load_buildings(buildings));
+            }
             if (this->vec_building.empty()) {
                 json buildings = m_root["buildings"];
                 if (buildings.is_array()) {
@@ -44,22 +51,30 @@ namespace services {
                     }
                 }
             }
+            if (this->vec_levels.empty()) {
+                json lvls = m_root["lvls"];
+                if (lvls.is_array()) {
+                    for (json &lvl : lvls) {
+                        vec_levels.push_back(load_all_levels(lvl));
+                    }
+                }
+            }
 
             // Create the level
             auto *d_a_d = new engine::draganddrop::drag_and_drop();
             auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats(3, 0, 10000));
 
             // this piece is for now placeholder till load_nations work
-            std::shared_ptr<domain::nations::nation> nation = vec_nations.front();
+//            std::shared_ptr<domain::nations::nation> nation = vec_nations.front();
             //auto nation = avaiable_nations.front();
             //auto nation = std::make_shared<domain::nations::nation>(domain::nations::nation("name", "name_pre"));
-            std::vector<std::shared_ptr<domain::nations::enemy>> enemies = {};
+//            std::vector<std::shared_ptr<domain::nations::enemy>> enemies = nation->getavailableenemies();
             //enemies.push_back(std::make_shared<domain::nations::enemy>(domain::nations::enemy("name", 1)));
-            nation->setavailableenemies(enemies);
+            //nation->setavailableenemies(enemies);
 
 
             auto game_level = std::unique_ptr<domain::game_level::game_level>(
-                new domain::game_level::game_level("level", vec_levels.front(), goal, nation, *d_a_d));
+                new domain::game_level::game_level("level", vec_levels.front(), goal, vec_nations.front(), *d_a_d));
 
             // TODO: HARDCODED ATM
             // Add placeable objects
@@ -124,7 +139,12 @@ namespace services {
 
                         std::cout << enemy_name << enemey_min_damage << enemey_max_damage << enemey_hitpoints
                                   << enemy_type << enemey_oppertunity_cost << enemey_movement_speed;
+
+                        current_nation->setavailableenemies(pre_vec_enemies);
+                        pre_nation_list.push_back(current_nation);
                     }
+
+
                     // std::cout << id << name;
                 }
             } catch (std::exception &e) {
@@ -273,37 +293,87 @@ namespace services {
                     int range = 0;
                     int type = building_data["type"];
                     auto output_sources = std::vector<std::shared_ptr<domain::resources::resource>>();
+                    auto costs = std::vector<std::shared_ptr<domain::resources::resource>>();
                     engine::math::box2_t building_box{{10, 10},
                                                       {42, 42}};
 
-                    for (json &building_prop : building_data) {
-                        for (json &output : building_prop) {
 
+                    //                            enum resource_type {
+//                                wood,
+//                                ore,
+//                                gold,
+//                                uranium,
+//                                silicium
+//                            };
+
+
+//                    json data = building_data["cost"];
+//                    if (!data.is_array()) {
+//                        return;
+//                    }
+//
+//                    for (json &elem : data) {
+//
+//                    }
+//                    auto data_building_cost = building_data["cost"];
+//                    auto it = data_building_cost.begin();
+//                        for (it != data_building_cost.end(); ++it;) {
+//                            std::cout << it.key() << " : " << it.value() << "\n";
+//                        }
+
+                    auto data_building_cost = building_data["cost"];
+                    auto it = data_building_cost.begin();
+                    for (json::iterator building_costs_item = data_building_cost.begin(); it != data_building_cost.end(); ++it) {
+
+                        std::string source_name = building_costs_item.key();
+                        int source_count = building_costs_item.value();
+
+                        costs.push_back(std::make_shared<domain::resources::resource>( building_costs_item.key() , building_costs_item.value()));
+                        std::cout << source_name << source_count<<"\n";
+                    }
+                    for (json &building_costs : building_data["cost"]) {
+
+//
+//                        try {
+//                            domain::resources::resource_type wood;
+//                            auto cost_name = building_costs;
+//                            std::cout << cost_name;
+//                            int wood_costs = building_costs;
+//                            auto cost_wood = std::make_shared<domain::resources::resource>(wood, wood_costs);
+//
+//                        } catch (std::exception &e) {
+//                            auto d = e.what();
+//                            std::cout << d;
+//                        }
+
+                    }
+                    for (json &building_properties : building_data["properties"]) {
+                        for (json &building_output : building_properties["output"]) {
 
                             //type 2 = dmg building
                             if (type == 2) {
-
-                                std::cout << output;
-                                min_dmg = static_cast<int>(building_data["min-damage"]);
-                                max_dmg = static_cast<int>(building_data["max-damage"]);
-                                range = static_cast<int>(building_data["range"]);
+                                min_dmg = static_cast<int>(building_output["min-damage"]);
+                                max_dmg = static_cast<int>(building_output["max-damage"]);
+                                range = static_cast<int>(building_output["range"]);
 
                             } else {
                                 //output_sources.push_back( new std::shared_ptr<domain::resources::resource>(output));
 
                             }
+
                         }
                     }
 
 
                     std::cout << min_dmg << max_dmg << range;
 
-                    auto costs = std::vector<std::shared_ptr<domain::resources::resource>>();
+//                    auto costs = std::vector<std::shared_ptr<domain::resources::resource>>();
 
                     auto building = domain::map::objects::building(building_box, building_root["id"],
                                                                    building_root["hitpoints"],
                                                                    building_root["health-ragen"], building_root["name"],
-                                                                   building_root["type"], costs, 0, 0, 0, output_sources);
+                                                                   building_root["type"], costs, 0, 0, 0,
+                                                                   output_sources);
                 }
 
                 //vect
