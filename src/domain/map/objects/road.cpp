@@ -21,6 +21,10 @@ namespace domain {
             dragable_field_object *road::clone() const {
                 return new road(*this);
             }
+
+            void road::update_game_stats(domain::game_level::game_stats &game_stats1) {
+                game_stats1.increase("roads");
+            }
         }
     }
 }

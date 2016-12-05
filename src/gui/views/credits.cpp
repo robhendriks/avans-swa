@@ -23,8 +23,9 @@ gui::views::credits::credits(engine::graphics::texture_manager &texture_manager,
 
 void gui::views::credits::before() {
     // Play some music
-    m_music_manager.load("sounds/uaoi.mp3", "credits_bg_music");
+    m_music_manager.load("sounds/credits_music.mp3", "credits_bg_music");
     m_music_manager.play("credits_bg_music");
+    m_music_manager.set_volume(128);
 
     // Load the title
     m_texture_manager.load_text("CityDefence", {255, 193, 132}, *m_font_manager.get_font("roboto", 50), "c_title");

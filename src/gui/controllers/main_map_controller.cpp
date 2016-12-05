@@ -9,10 +9,12 @@ namespace gui {
     namespace controllers {
         main_map_controller::main_map_controller(views::level &view, engine::engine &engine,
                                                  views::win_game_over &transition_view, models::main_map_model &model,
-                                                 models::transition_level_model &transition_model, game &game1,
+                                                 models::transition_level_model &transition_model,
+                                                 models::level_goals_model &level_goals_model, game &game1,
                                                  services::wave::wave_management &wave_management) :
             base_controller(game1), m_view(view), m_trans_view(transition_view), m_engine(engine), m_model(model),
-            m_trans_model(transition_model), m_wave_management_service(wave_management) {
+            m_trans_model(transition_model), m_level_goals_model(level_goals_model),
+            m_wave_management_service(wave_management) {
 
             m_view.set_controller(*this);
             m_trans_view.set_controller(*this);
@@ -22,8 +24,12 @@ namespace gui {
 
         void main_map_controller::show() {
             auto &lvl = m_model.world->get_current_level();
-            if (lvl.get_start_time() == 0)
+            if (lvl.get_start_time() == 0) {
                 lvl.set_start_time(m_engine.get_time_elapsed());
+            }
+
+            m_level_goals_model.game_goals = lvl.get_goal();
+            m_level_goals_model.game_stats = lvl.get_stats();
 
             if (is_lvl_done()) {
                 m_trans_model.stats_lvl = lvl.get_stats();

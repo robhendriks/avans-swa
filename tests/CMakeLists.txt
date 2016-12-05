@@ -7,6 +7,7 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 include_directories(../third_party/json/src
     ../third_party/di-cpp14/include
     ../third_party/type
+    ../third_party/nanosvg
     ${SDL2_INCLUDE_DIR}
     ${SDL2_IMAGE_INCLUDE_DIR}
     ${SDL2_TTF_INCLUDE_DIR}

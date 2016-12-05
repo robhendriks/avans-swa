@@ -8,6 +8,7 @@
 #include <memory>
 #include "../../../engine/draganddrop/dragable.h"
 #include "field_object.h"
+#include "../../game_level/game_stats_modifier.h"
 
 
 namespace domain {

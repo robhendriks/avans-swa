@@ -10,6 +10,7 @@
 #include "../../engine/engine.h"
 #include "../models/main_map_model.h"
 #include "../models/transition_level_model.h"
+#include "../models/level_goals_model.h"
 #include "../../domain/gameworld/game_world.h"
 #include "../views/level.h"
 #include "../views/win_game_over.h"
@@ -34,6 +35,7 @@ namespace gui {
         public:
             main_map_controller(views::level &view, engine::engine &engine, views::win_game_over &transition_view,
                                 models::main_map_model &model, models::transition_level_model &transition_model,
+                                models::level_goals_model &level_goals_model,
                                 game &game1, services::wave::wave_management &wave_management);
 
             void show();
@@ -59,6 +61,7 @@ namespace gui {
             engine::engine &m_engine;
             models::main_map_model &m_model;
             models::transition_level_model &m_trans_model;
+            models::level_goals_model &m_level_goals_model;
             services::wave::wave_management &m_wave_management_service;
             unsigned int m_previous_time;
 

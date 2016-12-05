@@ -17,6 +17,8 @@
 #include "../../engine/audio/sound_manager.h"
 #include "../../engine/input/keycodes.h"
 #include "../../engine/events/key_down.h"
+#include "level_goals.h"
+#include "../../events/goal_reached.h"
 
 
 namespace gui {
@@ -35,10 +37,11 @@ namespace gui {
     namespace views {
         class level : public base_view,
                       engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>,
-                      engine::eventbus::subscriber<engine::events::key_down> {
+                      engine::eventbus::subscriber<engine::events::key_down>,
+                      engine::eventbus::subscriber<events::goal_reached> {
         public:
 
-            level(top_bar &top_bar1, engine::audio::music_manager &music_manager,
+            level(top_bar &top_bar1, level_goals &goals_view, engine::audio::music_manager &music_manager,
                   engine::window &window, models::main_map_model &model, engine::audio::sound_manager &sound_manager);
 
             void set_controller(controllers::main_map_controller &controller);
@@ -55,6 +58,8 @@ namespace gui {
 
             void on_event(engine::events::key_down &event);
 
+            void on_event(events::goal_reached &event);
+
         private:
             void update_placeable_objects_page();
 
@@ -63,6 +68,7 @@ namespace gui {
             void navigate_right();
 
             top_bar &m_top_bar;
+            level_goals &m_goals_view;
             engine::audio::music_manager &m_music_manager;
             engine::window &m_window;
             models::main_map_model &m_model;
@@ -70,6 +76,7 @@ namespace gui {
             std::unique_ptr<engine::math::box2_t> m_placeable_objects_box;
             std::unique_ptr<engine::math::box2_t> m_arrow_left_box;
             std::unique_ptr<engine::math::box2_t> m_arrow_right_box;
+            std::unique_ptr<engine::math::box2_t> m_countdown_box;
             controllers::main_map_controller *m_controller;
             int m_pages;
             int m_current_page;

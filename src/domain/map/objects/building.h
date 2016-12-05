@@ -5,8 +5,12 @@
 #include "../../../engine/draganddrop/dragable.h"
 #include "dragable_field_object.h"
 #include "../field.h"
+
 #include "../../resources/resource.h"
 #include "../../game_level/game_level.h"
+
+#include "../../game_level/game_stats_modifier.h"
+
 
 namespace domain {
     namespace map {
@@ -24,6 +28,7 @@ namespace domain {
 
                 bool can_place_on(field &field1) const;
 
+
                 std::vector<std::shared_ptr<domain::resources::resource>> get_required_resources();
                 void set_required_resource(std::vector<std::shared_ptr<domain::resources::resource>> resources);
 
@@ -32,6 +37,9 @@ namespace domain {
             private:
                 //List of required resources to constuct this building
                 std::vector<std::shared_ptr<domain::resources::resource>> required_resources;
+
+
+                void update_game_stats(domain::game_level::game_stats &game_stats1);
 
             };
         }

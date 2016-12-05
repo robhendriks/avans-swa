@@ -31,7 +31,8 @@ namespace gui {
                           engine::eventbus::subscriber<engine::events::mouse_motion>,
                           engine::eventbus::subscriber<engine::events::key_down> {
         public:
-            main_menu(top_bar &top_bar1, engine::audio::music_manager &music_manager, engine::graphics::font_manager &font_manager);
+            main_menu(top_bar &top_bar1, engine::audio::music_manager &music_manager,
+                      engine::graphics::font_manager &font_manager, engine::audio::sound_manager &sound_manager);
 
             void before();
 
@@ -50,13 +51,14 @@ namespace gui {
             void set_controller(std::shared_ptr<controllers::menu_controller> menu_controller);
 
         private:
-            void set_sliders(unsigned int pos);
+            void set_sliders(unsigned int pos, bool force = false);
 
             void menu_btn_click(engine::math::vec2_t mouse_pos);
 
             top_bar &m_top_bar;
             engine::audio::music_manager &m_music_manager;
             engine::graphics::font_manager &m_font_manager;
+            engine::audio::sound_manager &m_sound_manager;
             std::unique_ptr<engine::math::box2_t> m_logo_box;
             std::unique_ptr<engine::math::box2_t> m_play_btn_box;
             std::unique_ptr<engine::math::box2_t> m_play_text_box;
@@ -67,7 +69,7 @@ namespace gui {
             std::unique_ptr<engine::math::box2_t> m_slider_left_box;
             std::unique_ptr<engine::math::box2_t> m_slider_right_box;
             std::vector<engine::math::box2_t> m_slider_positions;
-            int m_current_slider_pos;
+            unsigned int m_current_slider_pos;
         };
     }
 }

@@ -71,10 +71,10 @@ set(SOURCES src/main.cpp
     src/engine/audio/sound_manager.h
     src/engine/audio/music_manager.cpp
     src/engine/audio/music_manager.h
-    src/events/object_placed_on_field.cpp
-    src/events/object_placed_on_field.h
-    src/events/object_cannot_be_placed_on_field.cpp
-    src/events/object_cannot_be_placed_on_field.h
+    src/events/object_dropped_on_field.cpp
+    src/events/object_dropped_on_field.h
+    src/events/object_not_dropped_on_field.cpp
+    src/events/object_not_dropped_on_field.h
     src/engine/audio/state.h
     src/engine/audio/sound_callback_wrapper.cpp
     src/engine/audio/sound_callback_wrapper.h
@@ -134,11 +134,19 @@ set(SOURCES src/main.cpp
     src/services/wave/wavegenerator.h
     src/services/wave/wave_management.cpp
     src/services/wave/wave_management.h
-    src/engine/events/key_down.cpp src/domain/map/objects/economic_building.cpp src/domain/map/objects/economic_building.h src/domain/map/objects/defensive_building.cpp src/domain/map/objects/defensive_building.h)
+        src/domain/map/objects/economic_building.h
+        src/domain/map/objects/economic_building.cpp
+        src/domain/map/objects/defensive_building.h
+        src/domain/map/objects/defensive_building.cpp
+
+
+    src/engine/events/key_down.cpp src/gui/views/level_goals.cpp src/gui/views/level_goals.h src/gui/models/level_goals_model.h src/domain/game_level/game_stats_modifier.h src/events/goal_reached.cpp src/events/goal_reached.h)
+
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include
         third_party/type
+        third_party/nanosvg
         ${SDL2_INCLUDE_DIR}
         ${SDL2_IMAGE_INCLUDE_DIR}
         ${SDL2_TTF_INCLUDE_DIRS}

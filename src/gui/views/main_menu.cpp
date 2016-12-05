@@ -7,11 +7,12 @@
 
 namespace gui {
     namespace views {
-        main_menu::main_menu(top_bar &top_bar1, engine::audio::music_manager &music_manager, engine::graphics::font_manager &font_manager)
-            : m_top_bar(top_bar1), m_music_manager(music_manager), m_font_manager(font_manager), m_logo_box(nullptr),
-              m_play_btn_box(nullptr), m_play_text_box(nullptr), m_load_btn_box(nullptr), m_load_text_box(nullptr),
-              m_credits_btn_box(nullptr), m_credits_text_box(nullptr), m_slider_left_box(nullptr),
-              m_slider_right_box(nullptr) {
+        main_menu::main_menu(top_bar &top_bar1, engine::audio::music_manager &music_manager,
+                             engine::graphics::font_manager &font_manager, engine::audio::sound_manager &sound_manager)
+            : m_top_bar(top_bar1), m_music_manager(music_manager), m_font_manager(font_manager),
+              m_sound_manager(sound_manager), m_logo_box(nullptr), m_play_btn_box(nullptr), m_play_text_box(nullptr),
+              m_load_btn_box(nullptr), m_load_text_box(nullptr), m_credits_btn_box(nullptr),
+              m_credits_text_box(nullptr), m_slider_left_box(nullptr), m_slider_right_box(nullptr) {
         }
 
         void main_menu::before() {
@@ -19,15 +20,19 @@ namespace gui {
 
             // Load textures
             m_top_bar.m_texture_manager.load("images/logo.png", "logo");
-            m_top_bar.m_texture_manager.load("images/blue_button.png", "blue_btn");
-            m_top_bar.m_texture_manager.load("images/yellow_button.png", "yellow_btn");
-            m_top_bar.m_texture_manager.load("images/red_button.png", "red_btn");
-            m_top_bar.m_texture_manager.load("images/green_slider_left.png", "green_slider_left");
-            m_top_bar.m_texture_manager.load("images/green_slider_right.png", "green_slider_right");
+            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 244}, {1451, 289}}, 1.5, "blue_btn");
+            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 64}, {1451, 110}}, 1.5, "yellow_btn");
+            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 184}, {1451, 229}}, 1.5, "red_btn");
+
+            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1007, 570}, {1046, 601}}, 1, "green_slider_left");
+            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1080, 570}, {1119, 601}}, 1, "green_slider_right");
 
             // Load (and play) music
             m_music_manager.load("sounds/menu.wav", "menu_bg_music");
             m_music_manager.play("menu_bg_music");
+
+            // Load sound effects
+            m_sound_manager.load("sounds/menu_rollover.wav", "menu_rollover");
 
             // Load the menu texts
             m_top_bar.m_texture_manager.load_text("Play", {0, 0, 0}, *m_font_manager.get_font("roboto", 46), "m_t_play");
@@ -86,7 +91,7 @@ namespace gui {
             m_slider_positions.push_back(*m_credits_btn_box);
 
             if (m_slider_left_box == nullptr || m_slider_right_box == nullptr) {
-                set_sliders(0);
+                set_sliders(0, true);
             }
         }
 
@@ -157,8 +162,8 @@ namespace gui {
             }
         }
 
-        void main_menu::set_sliders(unsigned int pos) {
-            if (pos < m_slider_positions.size()) {
+        void main_menu::set_sliders(unsigned int pos, bool force) {
+            if (pos < m_slider_positions.size() && (pos != m_current_slider_pos || force)) {
                 auto box = m_slider_positions[pos];
 
                 // Create the left slider box
@@ -174,6 +179,9 @@ namespace gui {
                 m_slider_right_box.reset(new engine::math::box2_t(builder2.build()));
 
                 m_current_slider_pos = pos;
+
+                // Play sound effect
+                m_sound_manager.play("menu_rollover");
             }
         }
 
@@ -190,6 +198,9 @@ namespace gui {
 
             // Unload music
             m_music_manager.unload("menu_bg_music");
+
+            // Unload sound
+            m_sound_manager.unload("menu_rollover");
 
             // Unload texts
             m_top_bar.m_texture_manager.unload("m_t_play");

@@ -2,8 +2,8 @@
 #define CITY_DEFENCE_BASE_FIELD_CPP
 
 #include "field.h"
-#include "../../events/object_placed_on_field.h"
-#include "../../events/object_cannot_be_placed_on_field.h"
+#include "../../events/object_dropped_on_field.h"
+#include "../../events/object_not_dropped_on_field.h"
 #include "objects/dragable_field_object.h"
 
 
@@ -51,11 +51,12 @@ namespace domain {
         bool field::drop(engine::draganddrop::dragable *dragable1) {
             auto *object = dynamic_cast<objects::dragable_field_object*>(dragable1);
             if (object && object->can_place_on(*this)) {
-                // Remove this as dropable
-                m_drag_and_drop->remove_dropable(this);
+                if (place_object(*object)) {
+                    // Remove this as dropable
+                    m_drag_and_drop->remove_dropable(this);
 
-                object->set_max_column(2);
-                place_object(*object);
+                    object->set_max_column(2);
+                }
 
                 return true;
             }
@@ -81,24 +82,18 @@ namespace domain {
          *
          * @param object
          */
-        void field::place_object(objects::field_object &object) {
+        bool field::place_object(objects::field_object &object) {
             if (!has_object()) {
                 m_object = &object;
                 m_object->set_field(std::shared_ptr<field>(this));
 
-                // Fire event
-                auto *event = new events::object_placed_on_field(*this, object);
-                engine::eventbus::eventbus::get_instance().fire(*event);
-                delete event;
-
                 // notify local observers
                 notify_observers(this, "object-placed");
-            } else {
-                // Fire event
-                auto *event = new events::object_cannot_be_placed_on_field(*this, object);
-                engine::eventbus::eventbus::get_instance().fire(*event);
-                delete event;
+
+                return true;
             }
+
+            return false;
         }
 
         /**
