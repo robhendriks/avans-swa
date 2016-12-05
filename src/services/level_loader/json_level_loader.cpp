@@ -40,7 +40,7 @@ namespace services {
             nation->setavailableenemies(enemies);
 
             auto game_level = std::unique_ptr<domain::game_level::game_level>(
-                new domain::game_level::game_level("level", map1, goal, nation , *d_a_d, 55000));
+                new domain::game_level::game_level("level", map1, goal, nation , *d_a_d, 125000));
 
             // TODO: HARDCODED ATM
             // Add placeable objects
