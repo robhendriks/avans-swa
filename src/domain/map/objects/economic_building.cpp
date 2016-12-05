@@ -42,13 +42,13 @@ namespace domain {
 
             void economic_building::update(domain::game_level::game_level game_level) {
                 int counter = 0;
-                auto resources = game_level.get_resources();
-                for (auto resource:resources) {
+                auto resourcelist = game_level.get_resources();
+                for (auto resource:resourcelist) {
                     if (resource->get_resource_type() == produced_resources->get_resource_type()) {
 
                         //Update gamelevel
-                        resources[counter]->set_count(resources[counter]->get_count()+produced_resources->get_count());
-                        game_level.set_resources(resources);
+                        resourcelist[counter]->set_count(resourcelist[counter]->get_count()+produced_resources->get_count());
+                        game_level.set_resources(resourcelist);
                         break;
                     }
                     counter++;
