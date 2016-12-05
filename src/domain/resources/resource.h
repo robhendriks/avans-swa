@@ -15,6 +15,8 @@ namespace domain {
         public:
             resource();
 
+            resource(resource_type _type, int _count);
+
             void set_resource_type(resource_type);
 
             resource_type get_resource_type();

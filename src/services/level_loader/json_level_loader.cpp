@@ -22,7 +22,9 @@ namespace services {
                 vec_nations = load_nations(
                     m_root["nations-url"]);
             }
-
+            auto i = vec_nations.front();
+            
+            std::cout<<i;
             //load buildings if not loaded yet
             if (this->vec_building.empty()) {
                 json buildings = m_root["buildings"];
@@ -48,7 +50,7 @@ namespace services {
             auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats(3, 0, 10000));
 
             // this piece is for now placeholder till load_nations work
-            auto nation = vec_nations.front();
+            std::shared_ptr<domain::nations::nation> nation = vec_nations.front();
             //auto nation = avaiable_nations.front();
             //auto nation = std::make_shared<domain::nations::nation>(domain::nations::nation("name", "name_pre"));
             std::vector<std::shared_ptr<domain::nations::enemy>> enemies = {};
@@ -264,23 +266,48 @@ namespace services {
 //                                "range": 2
 //                        }
 
-                engine::math::box2_t building_box{{10, 10},
-                                                  {42, 42}};
+                for (json &building_data : building_root) {
 
-                int min_dmg =0;
-                if(building_root["type"] == 2){
+                    int min_dmg = 0;
+                    int max_dmg = 0;
+                    int range = 0;
+                    int type = building_data["type"];
+                    auto output_sources = std::vector<std::shared_ptr<domain::resources::resource>>();
+                    engine::math::box2_t building_box{{10, 10},
+                                                      {42, 42}};
 
+                    for (json &building_prop : building_data) {
+                        for (json &output : building_prop) {
+
+
+                            //type 2 = dmg building
+                            if (type == 2) {
+
+                                std::cout << output;
+                                min_dmg = static_cast<int>(building_data["min-damage"]);
+                                max_dmg = static_cast<int>(building_data["max-damage"]);
+                                range = static_cast<int>(building_data["range"]);
+
+                            } else {
+                                //output_sources.push_back( new std::shared_ptr<domain::resources::resource>(output));
+
+                            }
+                        }
+                    }
+
+
+                    std::cout << min_dmg << max_dmg << range;
+
+                    auto costs = std::vector<std::shared_ptr<domain::resources::resource>>();
+
+                    auto building = domain::map::objects::building(building_box, building_root["id"],
+                                                                   building_root["hitpoints"],
+                                                                   building_root["health-ragen"], building_root["name"],
+                                                                   building_root["type"], costs, 0, 0, 0, output_sources);
                 }
-                int max_dmg=0;
-                int range = 0;
 
-                std::cout << min_dmg << max_dmg << range;
                 //vect
-                auto costs = std::vector<std::shared_ptr<domain::resources::resource>>();
-                auto output = std::vector<std::shared_ptr<domain::resources::resource>>();
-                auto building = domain::map::objects::building(building_box, building_root["id"], building_root["hitpoints"],
-                                                          building_root["health-ragen"], building_root["name"],
-                                                          building_root["type"],costs,0,0,0,output);
+
 
 
             } catch (std::exception &e) {

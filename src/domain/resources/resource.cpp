@@ -26,6 +26,8 @@ namespace domain {
 
         resource::~resource() {
         }
+
+        resource::resource(resource_type _type, int _count) : _type(_type), _count(_count) {}
     }
 }
 #endif //CITY_DEFENCE_RESOURCE_CPP
