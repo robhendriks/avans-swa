@@ -27,6 +27,7 @@ namespace gui {
             m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 184}, {1451, 229}}, 1.5, "l_red_box");
             m_top_bar.m_texture_manager.load("images/pause.png", "l_pause");
             m_top_bar.m_texture_manager.load("images/play.png", "l_play");
+            m_top_bar.m_texture_manager.load("images/play_large.png", "l_play_large");
 
             // Load music
             m_music_manager.load("sounds/game.mp3", "game_bg_music");
@@ -122,6 +123,16 @@ namespace gui {
             engine::graphics::box_builder builder8(m_top_bar.m_texture_manager.get_size("l_pause"));
             builder8.as_left_top(m_top_bar.m_bar_box->left_top()).add_margin({50, 0});
             m_pause_box.reset(new engine::math::box2_t(builder8.build()));
+
+            // Set the overlay box
+            engine::graphics::box_builder builder9(display_box.size() - engine::math::vec2_t{0, m_top_bar.m_bar_box->height()});
+            builder9.as_left_top(m_top_bar.m_bar_box->left_bottom());
+            m_overlay_box.reset(new engine::math::box2_t(builder9.build()));
+
+            // Set the overlay resume box
+            engine::graphics::box_builder builder10(m_top_bar.m_texture_manager.get_size("l_play_large"));
+            builder10.to_center(*m_overlay_box);
+            m_overlay_resume_box.reset(new engine::math::box2_t(builder10.build()));
         }
 
         void level::update_placeable_objects_page() {
@@ -219,12 +230,20 @@ namespace gui {
                 m_top_bar.m_texture_manager.draw("l_countdown", builder.build());
                 m_top_bar.m_texture_manager.unload("l_countdown");
             }
+
+            // Draw overflow on pause
+            if (m_model.paused) {
+                m_top_bar.m_color_manager.draw({0, 0, 0, 180}, *m_overlay_box);
+
+                // Draw resume btn in the center of the overlay
+                m_top_bar.m_texture_manager.draw("l_play_large", *m_overlay_resume_box);
+            }
         }
 
         void level::on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event) {
             engine::math::vec2_t *position = engine::input::input_handler::get_instance()->get_mouse_position();
 
-            if (m_pause_box->contains(*position)) {
+            if (m_pause_box->contains(*position) || m_overlay_resume_box->contains(*position)) {
                 on_pause();
             } else if (!m_model.paused) {
                 // Only if not paused
@@ -237,7 +256,8 @@ namespace gui {
         }
 
         void level::on_event(engine::events::key_down &event) {
-            if (event.get_keycode() == engine::input::keycodes::keycode::PAUSE) {
+            if (event.get_keycode() == engine::input::keycodes::keycode::PAUSE ||
+                event.get_keycode() == engine::input::keycodes::keycode::ENTER) {
                 on_pause();
             } else if (!m_model.paused) {
                 if (event.get_keycode() == engine::input::keycodes::keycode::LEFT) {
