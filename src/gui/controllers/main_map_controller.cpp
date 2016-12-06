@@ -55,6 +55,10 @@ namespace gui {
         void main_map_controller::update() {
             auto current_enemies = m_model.world->get_current_level().get_enemies_in_lvl();
             for (auto enemy : m_wave_management_service.get_enemies(m_engine.get_time_elapsed())) {
+                // set start dest (enemy still needs ai now its a stupid god)
+                auto empty_field_pos = m_model.world->get_current_level().get_map()->get_empty_fields()[0]->get_box();
+
+                enemy->set_box(std::make_shared<engine::math::box2_t>(empty_field_pos));
                 current_enemies.push_back(enemy);
             }
 

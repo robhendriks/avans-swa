@@ -40,9 +40,12 @@ namespace domain {
             int lowerHitpoints(int points);
             ~enemy();
 
+            virtual void set_box(std::shared_ptr<engine::math::box2_t> destination);
             virtual engine::math::box2_t get_box() const;
 
         private:
+            std::shared_ptr<engine::math::box2_t> m_destination;
+
             std::string name;
             int mindamage;
             int maxdamage;

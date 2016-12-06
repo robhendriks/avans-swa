@@ -13,7 +13,7 @@ namespace domain {
             boss = _boss;
         }
 
-        enemy::enemy(std::string _name, int _mindamage, int _maxdamage, double _attackspersecond, int _hitpoints, int _grantedXP, int _range, int _movement, bool _boss, std::shared_ptr<nation> _nation, int _oppertunitycosts) {
+        enemy::enemy(std::string _name, int _mindamage, int _maxdamage, double _attackspersecond, int _hitpoints, int _grantedXP, int _range, int _movement, bool _boss, std::shared_ptr<nation> _nation, int _oppertunitycosts) : m_destination(nullptr) {
             name = _name;
             mindamage = _mindamage;
             maxdamage = _maxdamage;
@@ -80,7 +80,11 @@ namespace domain {
         }
 
         engine::math::box2_t enemy::get_box() const {
-            return engine::math::box2_t(engine::math::vec2_t(1,1), engine::math::vec2_t(1,1));
+            return *m_destination;
+        }
+
+        void enemy::set_box(std::shared_ptr<engine::math::box2_t> destination) {
+            m_destination = destination;
         }
 
         bool operator<(const std::shared_ptr<enemy>&  s1, const std::shared_ptr<enemy>&  s2){

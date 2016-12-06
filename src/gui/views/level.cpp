@@ -168,7 +168,6 @@ namespace gui {
 
         void level::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
             auto current_level = m_model.world->get_current_level();
-            m_controller->update();
 
             if (current_level.is_game_over(time_elapsed) ||
                 current_level.is_goal_reached()) {
@@ -182,11 +181,6 @@ namespace gui {
 
             // Draw the goals
             m_goals_view.draw(time_elapsed, display_box);
-
-            // draw enemies
-//            for(auto &enemy : m_model.world->get_current_level().get_enemies_in_lvl()) {
-                //enemy->draw(m_top_bar.m_texture_manager, time_elapsed);
-  //          }
 
             // Draw the map
             current_level.get_map()->draw(m_top_bar.m_texture_manager, time_elapsed);
@@ -243,6 +237,14 @@ namespace gui {
                 // Draw resume btn in the center of the overlay
                 m_top_bar.m_texture_manager.draw("l_play_large", *m_overlay_resume_box);
             }
+
+            //draw enemies
+            for(auto &enemy : m_model.world->get_current_level().get_enemies_in_lvl()) {
+                enemy->draw(m_top_bar.m_texture_manager, time_elapsed);
+            }
+
+            m_controller->update();
+
         }
 
         void level::on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event) {
