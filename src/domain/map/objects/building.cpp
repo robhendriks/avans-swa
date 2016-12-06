@@ -53,6 +53,13 @@ namespace domain {
                 game_stats1.increase("buildings");
             }
 
+            building::building(const engine::math::box2_t &box, const std::string &id, int hitpoints,
+                               double health_ragen, const std::string &name,
+                               const std::vector<std::shared_ptr<resources::resource>> &required_resources
+                               )
+                : dragable_field_object(box), id(id), hitpoints(hitpoints), health_ragen(health_ragen), name(name),
+                  required_resources(required_resources) {}
+
         }
     }
 }

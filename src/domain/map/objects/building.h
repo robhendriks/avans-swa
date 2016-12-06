@@ -5,18 +5,17 @@
 #include "../../../engine/draganddrop/dragable.h"
 #include "dragable_field_object.h"
 #include "../field.h"
-
 #include "../../resources/resource.h"
 #include "../../game_level/game_level.h"
-
-#include "../../game_level/game_stats_modifier.h"
-
 
 namespace domain {
     namespace map {
         namespace objects {
             class building : public dragable_field_object {
             public:
+                building(const engine::math::box2_t &box, const std::string &id, int hitpoints, double health_ragen,
+                         const std::string &name,
+                         const std::vector<std::shared_ptr<resources::resource>> &required_resources);
 
                 building(engine::math::box2_t box);
 
@@ -35,10 +34,12 @@ namespace domain {
                 virtual void update(domain::game_level::game_level game_level);
 
             private:
-                //List of required resources to constuct this building
+                std::string  id;
+                int hitpoints;
+                double health_ragen;
+                std::string name;
+                int type;
                 std::vector<std::shared_ptr<domain::resources::resource>> required_resources;
-
-
                 void update_game_stats(domain::game_level::game_stats &game_stats1);
 
             };

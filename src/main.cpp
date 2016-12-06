@@ -38,9 +38,9 @@ int main(int argc, char *argv[]) {
     // Create the ioc container
     auto *game1 = new game(*engine1->get_window());
 
-    std::ifstream file("level1.json");
+    std::ifstream file("scenarios.json");
     if (!file.is_open()) {
-        throw std::runtime_error(std::string("Unable to open file: ") + "level1.json");
+        throw std::runtime_error(std::string("Unable to open file: ") + "scenarios.json");
     }
 
     json root;
