@@ -9,6 +9,8 @@
 
 namespace domain {
     namespace map {
+        field_with_range::field_with_range(std::shared_ptr<domain::map::field> field, int range) : field(field), range_from_origin(range) {}
+
         map::map(engine::math::vec2_t size, engine::math::vec2_t tile_size) :
                 m_size(size), m_tile_size(tile_size), m_fields(std::vector<std::shared_ptr<field>>(number_of_fields())),
                 m_dest(nullptr) {
@@ -66,9 +68,13 @@ namespace domain {
             if (title == "object-placed") {
                 if(dynamic_cast<objects::building*>(p_observee->get_object())!= nullptr)
                 {
-                    auto fields = std::vector<field_with_range>();
-                    get_fields_in_range(4, p_observee, fields);
-                    for(auto field_with_range : fields)
+                    int range = 4;
+                    // set heat for itself based on range + 1
+                    p_observee->set_weight(p_observee->get_weight() + range + 1);
+
+                    // set heat for neigbours based on range
+                    auto fields = get_fields_in_range(range, p_observee);
+                    for(auto& field_with_range : fields)
                     {
                         field_with_range.field->set_weight(field_with_range.field->get_weight() + field_with_range.range_from_origin);
                     }
@@ -77,39 +83,56 @@ namespace domain {
             notify_observers(this, title);
         }
 
-        void map::get_fields_in_range(int range, field *origin, std::vector<field_with_range> &fields) {
-            if (range <= 0)
-            {
-                return;
-            } else
-            {
-                field_with_range field_container = field_with_range();
-                field_container.field = origin;
-                field_container.range_from_origin = range;
-                fields.push_back(field_container);
-                for (auto &neighbour : origin->get_neighbors()) {
-                    bool exist = false;
-                    for(auto &field_with_range : fields)
-                    {
-                        if(field_with_range.field == neighbour.get())
-                        {
-//                            if(field_with_range.range_from_origin < range)
-//                            {
-//                                field_with_range.range_from_origin = range;
-//                            }
-                            exist = true;
+        std::vector<field_with_range> map::get_fields_in_range(int range, field *origin) {
+            // what will be returned
+            std::vector<field_with_range> result;
+            // queue that still needs to be visisted
+            std::vector<std::shared_ptr<field>> queue;
+
+            // in case range is 0 or smaller return a empty list
+            if(range > 0){
+                // fill queue with all the neigbours from origin to make it the start point
+                // for every neigbour add it to the list
+                for(auto neighbour : origin->get_neighbors()){
+                    queue.push_back(neighbour);
+                }
+
+                // now that we have a start point lets go.
+                // lets do this as many times as the range and each time we go a layer deeeper!
+                for(;range >= 0; --range){
+                    // store neigbours after the queue has been finished
+                    std::vector<std::shared_ptr<field>> next_queue;
+
+                    // now go down the queue from the layer we are in now
+                    for(auto& Qfield : queue){
+                        // lets not forget while adding the possible field to the result we need to check if it already has been added
+                        // to avoid going from id 1 to id 2 to id 1 again if they are neighbours
+                        // also don't add origin.
+                        bool found = false;
+                        for(auto& Rfield : result){
+                            if(Rfield.field == Qfield || origin == Qfield.get()){
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        // in case its not found add it and add its neighbours to the queue. (in case its found no need to add them to queue)
+                        // it has already been done.
+                        if(!found){
+                            // add to result
+                            result.push_back(field_with_range(Qfield, range));
+
+                            // add its neighbour neighbours to the next queue
+                            for(auto neigbour : Qfield->get_neighbors()){
+                                next_queue.push_back(neigbour);
+                            }
                         }
                     }
-                    if(!exist)
-                    {
-//                        get_fields_in_range(range - 1, neighbour.get());
-                        field_with_range field_container = field_with_range();
-                        field_container.field = origin;
-                        field_container.range_from_origin = range;
-                        fields.push_back(field_container);
-                    }
+                    queue = next_queue;
                 }
             }
+
+            return result;
         }
 
         /**

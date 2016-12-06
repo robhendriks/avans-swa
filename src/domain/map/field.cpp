@@ -38,7 +38,7 @@ namespace domain {
             //Printing the weight on the fields
             auto m_font_manager = engine::graphics::font_manager();
             m_font_manager.add("fonts/Roboto-Regular.ttf", "roboto");
-            texture_manager.load_text(std::to_string(m_weight), {254, 12, 10}, *m_font_manager.get_font("roboto", 10), "heatmap_weight");
+            texture_manager.load_text(std::to_string(m_weight), {254, 12, 10}, *m_font_manager.get_font("roboto", 32), "heatmap_weight");
             texture_manager.draw("heatmap_weight", {0, 0}, this->get_box());
         }
         /**

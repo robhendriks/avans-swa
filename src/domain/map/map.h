@@ -21,11 +21,11 @@ namespace domain {
 
 namespace domain {
     namespace map {
-        class field_with_range{
+        struct field_with_range{
         public:
-            domain::map::field* field;
+            field_with_range(std::shared_ptr<domain::map::field> field, int range);
+            std::shared_ptr<domain::map::field> field;
             int range_from_origin;
-
         };
 
         class map : public drawable::abstract_drawable_game_object, public engine::observer::observee<map>,
@@ -68,8 +68,9 @@ namespace domain {
 
             unsigned int position_to_index(engine::math::vec2_t pos) const;
 
-            void get_fields_in_range(int range, field *origin, std::vector<field_with_range> &fields);
-
+            // get all fields in a certain range from the origin
+            // range = fields. 1 = one neighbour away
+            std::vector<field_with_range> get_fields_in_range(int range, field* origin);
             engine::math::vec2_t m_size;
             engine::math::vec2_t m_tile_size;
             std::vector<std::shared_ptr<domain::map::field>> m_fields;
