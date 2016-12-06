@@ -32,11 +32,27 @@ namespace domain {
 
             dragable_field_object *building::clone() const {
                 return new building(*this);
+
+
             }
+            std::vector<std::shared_ptr<domain::resources::resource>> building::get_required_resources() {
+                return required_resources;
+            }
+
+            void building::set_required_resource(std::vector<std::shared_ptr<domain::resources::resource>> resources){
+                required_resources = resources;
+            }
+
+
+            void building::update(domain::game_level::game_level game_level){
+
+            }
+
 
             void building::update_game_stats(domain::game_level::game_stats &game_stats1) {
                 game_stats1.increase("buildings");
             }
+
         }
     }
 }

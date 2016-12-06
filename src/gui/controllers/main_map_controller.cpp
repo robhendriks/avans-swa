@@ -18,6 +18,8 @@ namespace gui {
 
             m_view.set_controller(*this);
             m_trans_view.set_controller(*this);
+
+            m_previous_time =0;
         }
 
         void main_map_controller::show() {
@@ -55,9 +57,16 @@ namespace gui {
             for (auto enemy : m_wave_management_service.get_enemies(m_engine.get_time_elapsed())) {
                 current_enemies.push_back(enemy);
             }
-            m_model.world->get_current_level().set_enemies_in_lvl(current_enemies);
-        }
 
+            m_model.world->get_current_level().set_enemies_in_lvl(current_enemies);
+            //Updates building, calles method within the level
+            if(m_engine.get_time_elapsed() > m_previous_time + 2500){
+
+                //Updating
+                m_model.world->get_current_level().update();
+                m_previous_time = m_engine.get_time_elapsed();
+            }
+        }
 
         void main_map_controller::set_game_world(std::unique_ptr<domain::gameworld::game_world> &&game_world) {
             m_model.world = std::move(game_world);

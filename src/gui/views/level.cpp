@@ -96,9 +96,9 @@ namespace gui {
                 m_current_page = m_pages;
             }
 
+
             // Set the draw boxes for the placeable objects
             update_placeable_objects_page();
-
             // Create the box for the map
             engine::graphics::box_builder builder5({display_box.width(),
                                                     display_box.height() - m_top_bar.m_bar_box->height() -
@@ -201,6 +201,11 @@ namespace gui {
             for (auto &obj : current_level.get_placeable_objects()) {
                 obj->draw(m_top_bar.m_texture_manager, time_elapsed);
             }
+
+
+            //Draw the resources
+            //TODO: Draw resources on screen
+
 
             if (current_level.get_max_duration() > 0) {
                 // Draw the countdown

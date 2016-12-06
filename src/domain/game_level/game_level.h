@@ -13,6 +13,7 @@
 #include "../../engine/events/game_tick.h"
 #include "../nations/enemy.h"
 #include "../map/objects/dragable_field_object.h"
+#include "../resources/resource.h"
 
 
 namespace domain {
@@ -88,6 +89,12 @@ namespace domain {
              */
             void pause();
 
+            std::vector<std::shared_ptr<domain::resources::resource>> get_resources();
+
+            void set_resources(std::vector<std::shared_ptr<domain::resources::resource>> resources);
+
+            void update();
+
         private:
             void check_goals_reached();
 
@@ -104,6 +111,9 @@ namespace domain {
             engine::draganddrop::drag_and_drop &m_drag_and_drop;
 
             std::vector<std::shared_ptr<domain::nations::enemy>> m_enemies_in_lvl;
+
+            //List of the resources
+            std::vector<std::shared_ptr<domain::resources::resource>> m_resources;
 
             //(initial periode where no waves spawn in ms)
             long m_peace_period = 0;

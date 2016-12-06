@@ -5,10 +5,15 @@
 #include "../../engine/eventbus/eventbus.h"
 #include "../../engine/events/display_changed.h"
 #include "../drawable/abstract_drawable_game_object.h"
+#include "../drawable/abstract_drawable_game_object.h"
 #include <vector>
 #include <memory>
 
+
 namespace domain {
+    namespace game_level{
+        class game_level;
+    }
     namespace map {
         class field;
     }
@@ -46,6 +51,10 @@ namespace domain {
             void set_display_box(engine::math::box2_t display_box);
 
             void unload(engine::graphics::texture_manager &texture_manager);
+
+            void update_objects(domain::game_level::game_level *game_level);
+
+
 
         private:
             engine::math::vec2_t index_to_position(unsigned int index) const;
