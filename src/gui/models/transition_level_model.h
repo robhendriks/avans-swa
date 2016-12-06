@@ -10,8 +10,7 @@ namespace gui {
             transition_level_model() {};
             bool result;
             bool next_lvl_exists;
-            std::shared_ptr<domain::game_level::game_stats> stats_lvl;
-            std::shared_ptr<domain::game_level::game_stats> stats_game;
+            unsigned int duration;
         };
     }
 }

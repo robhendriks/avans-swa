@@ -52,6 +52,10 @@ namespace gui {
             models::transition_level_model &m_model;
             engine::audio::sound_manager &m_sound_manager;
             std::unique_ptr<engine::math::box2_t> m_title_box;
+            std::unique_ptr<engine::math::box2_t> m_time_header_box;
+            std::unique_ptr<engine::math::box2_t> m_time_header_text_box;
+            std::unique_ptr<engine::math::box2_t> m_time_box;
+            std::unique_ptr<engine::math::box2_t> m_time_text_box;
             std::unique_ptr<engine::math::box2_t> m_continue_box;
             std::unique_ptr<engine::math::box2_t> m_continue_text_box;
             std::unique_ptr<engine::math::box2_t> m_continue_slider_box;

@@ -30,9 +30,7 @@ namespace gui {
             m_level_goals_model.game_stats = lvl.get_stats();
 
             if (is_lvl_done()) {
-                m_trans_model.stats_lvl = lvl.get_stats();
-                m_trans_model.stats_game = std::shared_ptr<domain::game_level::game_stats>(
-                    new domain::game_level::game_stats(m_model.world->get_stats()));
+                m_trans_model.duration = m_engine.get_time_elapsed() - lvl.get_start_time();
                 m_trans_model.result = !lvl.is_game_over(m_engine.get_time_elapsed());
                 m_trans_model.next_lvl_exists = m_model.world->has_next_level();
 
