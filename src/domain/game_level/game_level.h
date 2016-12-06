@@ -84,6 +84,11 @@ namespace domain {
 
             bool get_spawn_bosses();
 
+            /**
+             * Pause or resume the game level
+             */
+            void pause();
+
             std::vector<std::shared_ptr<domain::resources::resource>> get_resources();
 
             void set_resources(std::vector<std::shared_ptr<domain::resources::resource>> resources);
@@ -124,6 +129,8 @@ namespace domain {
             std::shared_ptr<domain::nations::nation> m_enemy;
             // spawn boss units
             bool m_spawn_bosses = true;
+
+            bool m_paused;
         };
     }
 }

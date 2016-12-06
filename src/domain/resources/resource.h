@@ -10,6 +10,8 @@ namespace domain {
         public:
             resource();
 
+            resource(const std::string &resourcename, int _count);
+
             void set_resource_type(std::string _resourcename);
 
             std::string get_resource_type();

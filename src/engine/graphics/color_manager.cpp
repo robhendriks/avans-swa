@@ -8,6 +8,7 @@ namespace engine {
     namespace graphics {
 
         color_manager::color_manager(SDL_Renderer &renderer) : m_renderer(renderer) {
+            SDL_SetRenderDrawBlendMode(&m_renderer, SDL_BLENDMODE_BLEND);
         }
 
         void color_manager::draw(color4_t color, math::box2_t dest) {

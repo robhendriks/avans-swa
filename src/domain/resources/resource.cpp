@@ -41,6 +41,8 @@ namespace domain {
 
         resource::~resource() {
         }
+
+        resource::resource(const std::string &resourcename, int _count) : resourcename(resourcename), _count(_count) {}
     }
 }
 #endif //CITY_DEFENCE_RESOURCE_CPP

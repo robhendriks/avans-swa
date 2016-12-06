@@ -32,9 +32,7 @@ namespace gui {
             m_level_goals_model.game_stats = lvl.get_stats();
 
             if (is_lvl_done()) {
-                m_trans_model.stats_lvl = lvl.get_stats();
-                m_trans_model.stats_game = std::shared_ptr<domain::game_level::game_stats>(
-                    new domain::game_level::game_stats(m_model.world->get_stats()));
+                m_trans_model.duration = m_engine.get_time_elapsed() - lvl.get_start_time();
                 m_trans_model.result = !lvl.is_game_over(m_engine.get_time_elapsed());
                 m_trans_model.next_lvl_exists = m_model.world->has_next_level();
 
@@ -57,6 +55,10 @@ namespace gui {
         void main_map_controller::update() {
             auto current_enemies = m_model.world->get_current_level().get_enemies_in_lvl();
             for (auto enemy : m_wave_management_service.get_enemies(m_engine.get_time_elapsed())) {
+                // set start dest (enemy still needs ai now its a stupid god)
+                auto empty_field_pos = m_model.world->get_current_level().get_map()->get_empty_fields()[0]->get_box();
+
+                enemy->set_box(std::make_shared<engine::math::box2_t>(empty_field_pos));
                 current_enemies.push_back(enemy);
             }
 
@@ -68,10 +70,7 @@ namespace gui {
                 m_model.world->get_current_level().update();
                 m_previous_time = m_engine.get_time_elapsed();
             }
-
-
         }
-
 
         void main_map_controller::set_game_world(std::unique_ptr<domain::gameworld::game_world> &&game_world) {
             m_model.world = std::move(game_world);
@@ -97,6 +96,20 @@ namespace gui {
                 m_menu_controller->show();
             }
         }
+
+        void main_map_controller::pause() {
+            // Let the level know
+            m_model.world.get()->get_current_level().pause();
+
+            // Pause or resume the engine
+            if (m_engine.get_state() == engine::PAUSED) {
+                m_engine.resume();
+                m_model.paused = false;
+            } else {
+                m_engine.pause();
+                m_model.paused = true;
+            }
+        };
 
         void
         main_map_controller::set_menu_controller(std::shared_ptr<gui::controllers::menu_controller> menu_controller) {

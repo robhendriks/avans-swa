@@ -59,7 +59,7 @@ namespace domain {
         bool field::drop(engine::draganddrop::dragable *dragable1) {
             auto *object = dynamic_cast<objects::dragable_field_object*>(dragable1);
             if (object && object->can_place_on(*this)) {
-                if (place_object(*object)) {
+                if (place_object(object)) {
                     // Remove this as dropable
                     m_drag_and_drop->remove_dropable(this);
 
@@ -90,9 +90,9 @@ namespace domain {
          *
          * @param object
          */
-        bool field::place_object(objects::field_object &object) {
+        bool field::place_object(objects::field_object* object) {
             if (!has_object()) {
-                m_object = &object;
+                m_object = object;
                 m_object->set_field(std::shared_ptr<field>(this));
 
                 // notify local observers

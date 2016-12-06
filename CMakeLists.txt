@@ -134,14 +134,17 @@ set(SOURCES src/main.cpp
     src/services/wave/wavegenerator.h
     src/services/wave/wave_management.cpp
     src/services/wave/wave_management.h
-        src/domain/map/objects/economic_building.h
-        src/domain/map/objects/economic_building.cpp
-        src/domain/map/objects/defensive_building.h
-        src/domain/map/objects/defensive_building.cpp
-
-
-    src/engine/events/key_down.cpp src/gui/views/level_goals.cpp src/gui/views/level_goals.h src/gui/models/level_goals_model.h src/domain/game_level/game_stats_modifier.h src/events/goal_reached.cpp src/events/goal_reached.h)
-
+    src/domain/map/objects/economic_building.h
+    src/domain/map/objects/economic_building.cpp
+    src/domain/map/objects/defensive_building.h
+    src/domain/map/objects/defensive_building.cpp
+    src/engine/events/key_down.cpp src/gui/views/level_goals.cpp
+    src/gui/views/level_goals.h src/gui/models/level_goals_model.h
+    src/domain/game_level/game_stats_modifier.h
+    src/events/goal_reached.cpp
+    src/events/goal_reached.h
+    src/engine/events/engine_state_changed.cpp
+    src/engine/events/engine_state_changed.h)
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include
