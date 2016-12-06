@@ -262,7 +262,7 @@ namespace gui {
 
         void level::on_event(engine::events::key_down &event) {
             if (event.get_keycode() == engine::input::keycodes::keycode::PAUSE ||
-                event.get_keycode() == engine::input::keycodes::keycode::ENTER) {
+                (m_model.paused && event.get_keycode() == engine::input::keycodes::keycode::ENTER)) {
                 on_pause();
             } else if (!m_model.paused) {
                 if (event.get_keycode() == engine::input::keycodes::keycode::LEFT) {

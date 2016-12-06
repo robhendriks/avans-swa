@@ -94,7 +94,7 @@ namespace gui {
             engine::graphics::box_builder builder11(time_header_size + stats_header_size + 50);
             builder11.as_left_top(m_title_box->left_bottom())
                 .center_horizontal(m_title_box->min.x, m_title_box->max.x)
-                .center_vertical(m_title_box->max.y, m_continue_box->min.y).add_margin({0, -100});
+                .center_vertical(m_title_box->max.y, m_continue_box->min.y).add_margin({0, -70});
             auto wrapper_box = builder11.build();
 
             // Create the time header box
