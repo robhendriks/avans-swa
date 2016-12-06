@@ -13,6 +13,7 @@ namespace gui {
     namespace models {
         struct main_map_model {
             std::unique_ptr<domain::gameworld::game_world> world;
+            bool paused = false;
         };
     }
 }

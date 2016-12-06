@@ -52,7 +52,7 @@ namespace gui {
 
             void update();
 
-
+            void pause();
 
         private:
             std::shared_ptr<gui::controllers::menu_controller> m_menu_controller;

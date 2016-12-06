@@ -11,6 +11,7 @@
 #include "events/window_cleared.h"
 #include "events/display_changed.h"
 #include "events/game_tick.h"
+#include "events/engine_state_changed.h"
 
 namespace engine {
     engine::engine(engine_config &config) : m_window(nullptr), m_sound_manager(nullptr), m_music_manager(nullptr),
@@ -27,7 +28,7 @@ namespace engine {
         try {
             init_sdl();
             create_window();
-            m_state = WARMEDUP;
+            set_state(WARMEDUP);
         } catch (std::runtime_error &e) {
             fprintf(stderr, "%s\n", e.what());
             return;
@@ -39,7 +40,7 @@ namespace engine {
      */
     void engine::run() {
         if (m_state == WARMEDUP) {
-            m_state = RUNNING;
+            set_state(RUNNING);
             loop();
         }
     }
@@ -52,7 +53,7 @@ namespace engine {
      */
     void engine::pause() {
         if (m_state == RUNNING) {
-            m_state = PAUSED;
+            set_state(PAUSED);
             m_ticks_when_paused = m_game_ticks;
         }
     }
@@ -64,7 +65,7 @@ namespace engine {
      */
     void engine::resume() {
         if (m_state == PAUSED) {
-            m_state = RUNNING;
+            set_state(RUNNING);
             m_paused_ticks += (m_game_ticks - m_ticks_when_paused);
         }
     }
@@ -132,7 +133,7 @@ namespace engine {
      * Stop the gameloop
      */
     void engine::stop() {
-        m_state = STOPPED;
+        set_state(STOPPED);
     }
 
     /**
@@ -166,7 +167,7 @@ namespace engine {
         IMG_Quit();
         SDL_Quit();
 
-        m_state = COOLEDDOWN;
+        set_state(COOLEDDOWN);
     }
 
     /**
@@ -315,5 +316,20 @@ namespace engine {
         }
 
         return m_paused_ticks;
+    }
+
+    /**
+     * Set the state
+     *
+     * @param state1
+     */
+    void engine::set_state(state state1) {
+        if (m_state != state1) {
+            auto event = new events::engine_state_changed(state1, m_state);
+            eventbus::eventbus::get_instance().fire(event);
+            delete event;
+
+            m_state = state1;
+        }
     }
 }

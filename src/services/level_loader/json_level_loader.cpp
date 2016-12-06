@@ -42,13 +42,11 @@ namespace services {
             }
 
             //load lvl src's if not loaded yet
-            if (this->vec_levels.size() == 1) {
-                load_level_nr++;
-            }
-
-            json lvls = m_root["lvls"];
-            if (lvls.is_array()) {
-                vec_levels.push_back(load_all_levels(lvls[load_level_nr]));
+            if(vec_levels.empty()){
+                json lvls = m_root["lvls"];
+                if (lvls.is_array()) {
+                    vec_levels.push_back(load_all_levels(lvls[load_level_nr]));
+                }
             }
 
             // Create the level

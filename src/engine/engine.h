@@ -63,6 +63,8 @@ namespace engine {
         void create_window();
 
     private:
+        void set_state(state state1);
+
         window* m_window;
         audio::sound_manager *m_sound_manager;
         audio::music_manager *m_music_manager;
