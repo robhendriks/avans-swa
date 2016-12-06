@@ -6,11 +6,10 @@
 #define CITY_DEFENCE_TOP_BAR_H
 
 #include "base_view.h"
-#include "../../engine/graphics/texture_manager.h"
-#include "../../engine/graphics/color_manager.h"
 #include "../../engine/input/mouse_buttons.h"
 #include "../../engine/events/mouse_button_down.h"
 #include "../controllers/menu_controller.h"
+#include "../../domain/drawable/draw_managers_wrapper.h"
 
 namespace gui {
     namespace controllers {
@@ -26,7 +25,7 @@ namespace gui {
             friend class level;
             friend class win_game_over;
         public:
-            top_bar(engine::graphics::texture_manager &texture_manager, engine::graphics::color_manager &color_manager);
+            top_bar(domain::drawable::draw_managers_wrapper &draw_managers);
 
             void set_controller(std::shared_ptr<controllers::menu_controller> menu_controller);
 
@@ -41,8 +40,10 @@ namespace gui {
             void on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event);
 
         private:
+            domain::drawable::draw_managers_wrapper &m_draw_managers;
             engine::graphics::texture_manager &m_texture_manager;
             engine::graphics::color_manager &m_color_manager;
+            engine::graphics::font_manager &m_font_manager;
             std::unique_ptr<engine::math::box2_t> m_bar_box;
             std::unique_ptr<engine::math::box2_t> m_close_box;
             std::shared_ptr<controllers::menu_controller> m_menu_controller;

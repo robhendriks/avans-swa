@@ -32,8 +32,7 @@ namespace domain {
 
             ~field();
 
-            void draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed);
-
+            void draw(drawable::draw_managers_wrapper &draw_managers, unsigned int time_elapsed);
 
             engine::math::box2_t get_box() const;
 

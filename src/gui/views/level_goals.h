@@ -6,9 +6,8 @@
 #define CITY_DEFENCE_LEVEL_GOALS_H
 
 #include "base_view.h"
-#include "../../engine/graphics/texture_manager.h"
-#include "../../engine/graphics/font_manager.h"
 #include "../models/level_goals_model.h"
+#include "../../domain/drawable/draw_managers_wrapper.h"
 
 namespace gui {
     namespace views {
@@ -16,8 +15,7 @@ namespace gui {
             friend class level;
             friend class win_game_over;
         public:
-            level_goals(models::level_goals_model &model, engine::graphics::texture_manager &texture_manager,
-                        engine::graphics::font_manager &font_manager);
+            level_goals(models::level_goals_model &model, domain::drawable::draw_managers_wrapper &draw_managers);
 
             void before();
 
@@ -29,8 +27,7 @@ namespace gui {
 
         private:
             models::level_goals_model &m_model;
-            engine::graphics::texture_manager &m_texture_manager;
-            engine::graphics::font_manager &m_font_manager;
+            domain::drawable::draw_managers_wrapper &m_draw_managers;
             std::unique_ptr<engine::math::box2_t> m_stats_header_box;
         };
     }

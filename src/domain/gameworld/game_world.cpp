@@ -8,13 +8,7 @@ namespace domain {
            m_current_lvl = 0;
         }
 
-        game_world::~game_world() {
-        }
-
-        void game_world::unload(engine::graphics::texture_manager &texture_manager) {
-            for(auto &m : m_levels)
-                m->unload(texture_manager);
-        }
+        game_world::~game_world() {}
 
         game_level::game_level &game_world::get_current_level()  {
             return *m_levels.at(m_current_lvl).get();

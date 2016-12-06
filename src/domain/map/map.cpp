@@ -140,7 +140,7 @@ namespace domain {
          *
          * @param texture_manager
          */
-        void map::draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed) {
+        void map::draw(drawable::draw_managers_wrapper &draw_managers, unsigned int time_elapsed) {
             // The tile width and height
             int tile_width = (int) m_tile_size.x;
             int tile_height = (int) m_tile_size.y;
@@ -154,7 +154,7 @@ namespace domain {
                     float y = m_dest->min.y + (tile_height * pos.y);
                     field->set_box({{x,              y},
                                     {x + tile_width, y + tile_height}});
-                    field->draw(texture_manager, time_elapsed);
+                    field->draw(draw_managers, time_elapsed);
                 }
             }
         }
@@ -171,10 +171,10 @@ namespace domain {
             m_dest.reset(new engine::math::box2_t(builder.build()));
         }
 
-        void map::unload(engine::graphics::texture_manager &texture_manager) {
+        void map::unload(drawable::draw_managers_wrapper &draw_managers) {
             for (size_t i = 0; i < number_of_fields(); i++) {
                 if (m_fields[i]) {
-                    m_fields[i]->unload(texture_manager);
+                    m_fields[i]->unload(draw_managers);
                 }
             }
         }

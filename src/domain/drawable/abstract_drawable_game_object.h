@@ -5,8 +5,8 @@
 #ifndef CITY_DEFENCE_ABSTRACT_DRAWABLE_GAME_OBJECT_H
 #define CITY_DEFENCE_ABSTRACT_DRAWABLE_GAME_OBJECT_H
 
-#include "../../engine/graphics/texture_manager.h"
 #include "../../engine/math/box2.hpp"
+#include "draw_managers_wrapper.h"
 
 namespace domain {
     namespace drawable {
@@ -16,9 +16,9 @@ namespace domain {
 
             virtual ~abstract_drawable_game_object() {}
 
-            virtual void draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed) = 0;
+            virtual void draw(draw_managers_wrapper &draw_managers, unsigned int time_elapsed) = 0;
 
-            virtual void unload(engine::graphics::texture_manager &texture_manager)  = 0;
+            virtual void unload(draw_managers_wrapper &draw_managers)  = 0;
         };
     }
 }

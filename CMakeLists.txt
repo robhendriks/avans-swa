@@ -144,7 +144,8 @@ set(SOURCES src/main.cpp
     src/events/goal_reached.cpp
     src/events/goal_reached.h
     src/engine/events/engine_state_changed.cpp
-    src/engine/events/engine_state_changed.h)
+    src/engine/events/engine_state_changed.h
+    src/domain/drawable/draw_managers_wrapper.h)
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include

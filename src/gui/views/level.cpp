@@ -13,8 +13,8 @@ namespace gui {
     namespace views {
 
         level::level(top_bar &top_bar1, level_goals &goals_view, engine::audio::music_manager &music_manager,
-                     engine::window &window, models::main_map_model &model, engine::audio::sound_manager &sound_manager)
-            : m_top_bar(top_bar1), m_goals_view(goals_view), m_music_manager(music_manager), m_window(window),
+                     models::main_map_model &model, engine::audio::sound_manager &sound_manager)
+            : m_top_bar(top_bar1), m_goals_view(goals_view), m_music_manager(music_manager),
               m_model(model), m_sound_manager(sound_manager), m_current_page(1) {
         }
 
@@ -183,7 +183,7 @@ namespace gui {
             m_goals_view.draw(time_elapsed, display_box);
 
             // Draw the map
-            current_level.get_map()->draw(m_top_bar.m_texture_manager, time_elapsed);
+            current_level.get_map()->draw(m_top_bar.m_draw_managers, time_elapsed);
 
             // Draw the arrows
             float left_arrow_y = (m_current_page == 1 ? 128 : 0);
@@ -193,13 +193,11 @@ namespace gui {
 
             // Draw the placeable objects
             for (auto &obj : current_level.get_placeable_objects()) {
-                obj->draw(m_top_bar.m_texture_manager, time_elapsed);
+                obj->draw(m_top_bar.m_draw_managers, time_elapsed);
             }
-
 
             //Draw the resources
             //TODO: Draw resources on screen
-
 
             if (current_level.get_max_duration() > 0) {
                 // Draw the countdown
@@ -223,7 +221,7 @@ namespace gui {
                 }
 
                 m_top_bar.m_texture_manager.load_text(utils::string_utils::ms_to_hms(time_left), color,
-                                                      *m_goals_view.m_font_manager.get_font("roboto", 25), "l_countdown");
+                                                      *m_top_bar.m_font_manager.get_font("roboto", 25), "l_countdown");
                 engine::graphics::box_builder builder(m_top_bar.m_texture_manager.get_size("l_countdown"));
                 builder.to_center(*m_countdown_box);
                 m_top_bar.m_texture_manager.draw("l_countdown", builder.build());
@@ -240,7 +238,7 @@ namespace gui {
 
             //draw enemies
             for(auto &enemy : m_model.world->get_current_level().get_enemies_in_lvl()) {
-                enemy->draw(m_top_bar.m_texture_manager, time_elapsed);
+                enemy->draw(m_top_bar.m_draw_managers, time_elapsed);
             }
 
             m_controller->update();
@@ -304,9 +302,6 @@ namespace gui {
             m_top_bar.m_texture_manager.unload("l_red_box");
             m_top_bar.m_texture_manager.unload("l_pause");
             m_top_bar.m_texture_manager.unload("l_play");
-
-            // can be done by the objects as well
-            m_model.world->unload(m_top_bar.m_texture_manager);
 
             // Unload the music
             m_music_manager.unload("game_bg_music");

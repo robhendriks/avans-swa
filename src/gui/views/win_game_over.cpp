@@ -28,11 +28,11 @@ namespace gui {
             // Load texts
             std::string result = m_model.result ? "Victory" : "Defeat";
             std::string last = m_model.next_lvl_exists ? "" : " - last level";
-            m_top_bar.m_texture_manager.load_text(result + last, {255, 193, 132}, *m_goals_view.m_font_manager.get_font("roboto", 50), "w_title");
+            m_top_bar.m_texture_manager.load_text(result + last, {255, 193, 132}, *m_top_bar.m_font_manager.get_font("roboto", 50), "w_title");
 
-            m_top_bar.m_texture_manager.load_text("Duration", {255, 255, 255}, *m_goals_view.m_font_manager.get_font("roboto", 25), "w_time");
-            m_top_bar.m_texture_manager.load_text(utils::string_utils::ms_to_hms(m_model.duration), {0, 0, 0}, *m_goals_view.m_font_manager.get_font("roboto", 25), "w_time_played");
-            m_top_bar.m_texture_manager.load_text("Continue", {255, 255, 255}, *m_goals_view.m_font_manager.get_font("roboto", 25), "w_continue");
+            m_top_bar.m_texture_manager.load_text("Duration", {255, 255, 255}, *m_top_bar.m_font_manager.get_font("roboto", 25), "w_time");
+            m_top_bar.m_texture_manager.load_text(utils::string_utils::ms_to_hms(m_model.duration), {0, 0, 0}, *m_top_bar.m_font_manager.get_font("roboto", 25), "w_time_played");
+            m_top_bar.m_texture_manager.load_text("Continue", {255, 255, 255}, *m_top_bar.m_font_manager.get_font("roboto", 25), "w_continue");
 
             // Load and play sound effect
             if (m_model.result) {

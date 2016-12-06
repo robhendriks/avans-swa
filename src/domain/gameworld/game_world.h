@@ -11,8 +11,6 @@ namespace domain {
         public:
             game_world(std::vector<std::unique_ptr<game_level::game_level>> &game_levels);
 
-            void unload(engine::graphics::texture_manager &texture_manager);
-
             game_level::game_level &get_current_level();
 
             game_level::game_level &next_level();

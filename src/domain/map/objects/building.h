@@ -27,8 +27,8 @@ namespace domain {
 
                 bool can_place_on(field &field1) const;
 
-
                 std::vector<std::shared_ptr<domain::resources::resource>> get_required_resources();
+
                 void set_required_resource(std::vector<std::shared_ptr<domain::resources::resource>> resources);
 
                 virtual void update(domain::game_level::game_level game_level);

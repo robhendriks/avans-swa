@@ -42,7 +42,7 @@ namespace gui {
         public:
 
             level(top_bar &top_bar1, level_goals &goals_view, engine::audio::music_manager &music_manager,
-                  engine::window &window, models::main_map_model &model, engine::audio::sound_manager &sound_manager);
+                  models::main_map_model &model, engine::audio::sound_manager &sound_manager);
 
             void set_controller(controllers::main_map_controller &controller);
 
@@ -71,7 +71,6 @@ namespace gui {
             top_bar &m_top_bar;
             level_goals &m_goals_view;
             engine::audio::music_manager &m_music_manager;
-            engine::window &m_window;
             models::main_map_model &m_model;
             engine::audio::sound_manager &m_sound_manager;
             std::unique_ptr<engine::math::box2_t> m_placeable_objects_box;

@@ -6,7 +6,6 @@
 #define CITY_DEFENCE_MENU_GUI_H
 
 #include "../../engine/audio/music_manager.h"
-#include "../../engine/graphics/font_manager.h"
 #include "../../engine/events/mouse_motion.h"
 #include "../../engine/events/key_down.h"
 #include "base_view.h"
@@ -31,8 +30,7 @@ namespace gui {
                           engine::eventbus::subscriber<engine::events::mouse_motion>,
                           engine::eventbus::subscriber<engine::events::key_down> {
         public:
-            main_menu(top_bar &top_bar1, engine::audio::music_manager &music_manager,
-                      engine::graphics::font_manager &font_manager, engine::audio::sound_manager &sound_manager);
+            main_menu(top_bar &top_bar1, engine::audio::music_manager &music_manager, engine::audio::sound_manager &sound_manager);
 
             void before();
 
@@ -57,7 +55,6 @@ namespace gui {
 
             top_bar &m_top_bar;
             engine::audio::music_manager &m_music_manager;
-            engine::graphics::font_manager &m_font_manager;
             engine::audio::sound_manager &m_sound_manager;
             std::unique_ptr<engine::math::box2_t> m_logo_box;
             std::unique_ptr<engine::math::box2_t> m_play_btn_box;

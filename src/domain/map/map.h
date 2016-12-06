@@ -53,15 +53,13 @@ namespace domain {
 
             engine::math::vec2_t get_size() const;
 
-            void draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed);
+            void draw(drawable::draw_managers_wrapper &draw_managers, unsigned int time_elapsed);
 
             void set_display_box(engine::math::box2_t display_box);
 
-            void unload(engine::graphics::texture_manager &texture_manager);
+            void unload(drawable::draw_managers_wrapper &draw_managers);
 
             void update_objects(domain::game_level::game_level *game_level);
-
-
 
         private:
             engine::math::vec2_t index_to_position(unsigned int index) const;
