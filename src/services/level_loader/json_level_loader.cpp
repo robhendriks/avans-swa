@@ -221,7 +221,11 @@ namespace services {
                     object->set_rotation(rotation);
 
                     object->set_current_column(column);
-                    field->place_object(*object);
+                    auto b = dynamic_cast<domain::map::objects::building*>(object);
+                    if(b != nullptr){
+                        auto m = b->get_health_regen();
+                        std::cout << m;}
+                    field->place_object(object);
                     column = column + 1 <= object->get_max_column() ? column + 1 : 1;
                 }
 

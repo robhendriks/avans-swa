@@ -60,6 +60,10 @@ namespace domain {
                 : dragable_field_object(box), id(id), hitpoints(hitpoints), health_ragen(health_ragen), name(name),
                   required_resources(required_resources) {}
 
+            double building::get_health_regen() {
+                return hitpoints;
+            }
+
         }
     }
 }

@@ -33,6 +33,7 @@ namespace domain {
 
                 virtual void update(domain::game_level::game_level game_level);
 
+                double get_health_regen();
             private:
                 std::string  id;
                 int hitpoints;

@@ -37,11 +37,11 @@ namespace domain {
 
             engine::math::box2_t get_box() const;
 
-            bool drop(engine::draganddrop::dragable *dragable1);
+            bool drop(engine::draganddrop::dragable* dragable1);
 
             void set_box(engine::math::box2_t box);
 
-            bool place_object(objects::field_object &object);
+            bool place_object(objects::field_object* object);
 
             bool has_object() const;
 
