@@ -5,6 +5,7 @@
 #include "../../events/object_dropped_on_field.h"
 #include "../../events/object_not_dropped_on_field.h"
 #include "objects/dragable_field_object.h"
+#include "../../engine/graphics/font_manager.h"
 
 
 namespace domain {
@@ -32,6 +33,13 @@ namespace domain {
                 // Let the object draw
                 m_object->draw(texture_manager, time_elapsed);
             }
+
+
+            //Printing the weight on the fields
+            auto m_font_manager = engine::graphics::font_manager();
+            m_font_manager.add("fonts/Roboto-Regular.ttf", "roboto");
+            texture_manager.load_text(std::to_string(m_weight), {254, 12, 10}, *m_font_manager.get_font("roboto", 10), "heatmap_weight");
+            texture_manager.draw("heatmap_weight", {0, 0}, this->get_box());
         }
         /**
          * Get the box where the field is placed on the screen
@@ -126,6 +134,14 @@ namespace domain {
          */
         engine::math::vec2_t field::get_position() const {
             return m_pos;
+        }
+
+        long field::get_weight() const {
+            return m_weight;
+        }
+
+        void field::set_weight(long weight) {
+            m_weight = weight;
         }
     }
 }

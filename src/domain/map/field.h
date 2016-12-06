@@ -51,11 +51,15 @@ namespace domain {
 
             engine::math::vec2_t get_position() const;
 
+            long get_weight() const;
+
+            void set_weight(long weight);
         private:
             map &m_map;
             engine::math::vec2_t m_pos;
             objects::field_object *m_object;
             engine::math::box2_t *m_box;
+            long m_weight = 0;
         };
     }
 }

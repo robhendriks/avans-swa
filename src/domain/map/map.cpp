@@ -1,15 +1,17 @@
 #ifndef CITY_DEFENCE_MAP_CPP
 #define CITY_DEFENCE_MAP_CPP
 
+#include <ctgmath>
 #include "map.h"
 #include "../../engine/graphics/box_builder.h"
 #include "objects/building.h"
+#include "field.h"
 
 namespace domain {
     namespace map {
         map::map(engine::math::vec2_t size, engine::math::vec2_t tile_size) :
-            m_size(size), m_tile_size(tile_size), m_fields(std::vector<std::shared_ptr<field>>(number_of_fields())),
-            m_dest(nullptr) {
+                m_size(size), m_tile_size(tile_size), m_fields(std::vector<std::shared_ptr<field>>(number_of_fields())),
+                m_dest(nullptr) {
         }
 
         /**
@@ -59,8 +61,55 @@ namespace domain {
             return m_size;
         }
 
+
         void map::notify(field *p_observee, std::string title) {
+            if (title == "object-placed") {
+                if(dynamic_cast<objects::building*>(p_observee->get_object())!= nullptr)
+                {
+                    auto fields = std::vector<field_with_range>();
+                    get_fields_in_range(4, p_observee, fields);
+                    for(auto field_with_range : fields)
+                    {
+                        field_with_range.field->set_weight(field_with_range.field->get_weight() + field_with_range.range_from_origin);
+                    }
+                }
+            }
             notify_observers(this, title);
+        }
+
+        void map::get_fields_in_range(int range, field *origin, std::vector<field_with_range> &fields) {
+            if (range <= 0)
+            {
+                return;
+            } else
+            {
+                field_with_range field_container = field_with_range();
+                field_container.field = origin;
+                field_container.range_from_origin = range;
+                fields.push_back(field_container);
+                for (auto &neighbour : origin->get_neighbors()) {
+                    bool exist = false;
+                    for(auto &field_with_range : fields)
+                    {
+                        if(field_with_range.field == neighbour.get())
+                        {
+//                            if(field_with_range.range_from_origin < range)
+//                            {
+//                                field_with_range.range_from_origin = range;
+//                            }
+                            exist = true;
+                        }
+                    }
+                    if(!exist)
+                    {
+//                        get_fields_in_range(range - 1, neighbour.get());
+                        field_with_range field_container = field_with_range();
+                        field_container.field = origin;
+                        field_container.range_from_origin = range;
+                        fields.push_back(field_container);
+                    }
+                }
+            }
         }
 
         /**
@@ -80,7 +129,8 @@ namespace domain {
                     auto pos = index_to_position(i);
                     float x = m_dest->min.x + (tile_width * pos.x);
                     float y = m_dest->min.y + (tile_height * pos.y);
-                    field->set_box({{x, y}, {x + tile_width, y + tile_height}});
+                    field->set_box({{x,              y},
+                                    {x + tile_width, y + tile_height}});
                     field->draw(texture_manager, time_elapsed);
                 }
             }
@@ -151,7 +201,7 @@ namespace domain {
          */
         engine::math::vec2_t map::index_to_position(unsigned int index) const {
             if (index < number_of_fields()) {
-                return {(float)(index % ((int)m_size.x + 1)), (float)(index / ((int)m_size.x + 1))};
+                return {(float) (index % ((int) m_size.x + 1)), (float) (index / ((int) m_size.x + 1))};
             }
 
             return {-1, -1};
@@ -167,7 +217,7 @@ namespace domain {
          */
         unsigned int map::position_to_index(engine::math::vec2_t pos) const {
             if (pos.x <= m_size.x && pos.y <= m_size.y) {
-                return (unsigned  int)((pos.y * (m_size.x + 1)) + pos.x);
+                return (unsigned int) ((pos.y * (m_size.x + 1)) + pos.x);
             }
 
             return number_of_fields();
@@ -213,25 +263,19 @@ namespace domain {
 
             return fields;
         }
-        void map::update_objects(domain::game_level::game_level *game_level){
 
+        void map::update_objects(domain::game_level::game_level *game_level) {
             for (auto &field : m_fields) {
                 //Check if the field has an object attached
-                if (field && field->has_object()){
+                if (field && field->has_object()) {
                     //field has an object, now we dynamiclly cast it to a building; to filter.
-                    auto building =  dynamic_cast<objects::building*>(field->get_object());
-                    if(building != nullptr){
+                    auto building = dynamic_cast<objects::building *>(field->get_object());
+                    if (building != nullptr) {
                         building->update(*game_level);
-
-
                     }
-
-                } {
-
                 }
             }
         }
-
     }
 }
 
