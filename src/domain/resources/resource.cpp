@@ -42,7 +42,7 @@ namespace domain {
         resource::~resource() {
         }
 
-        resource::resource(resource_type _type, int _count) : _type(_type), _count(_count) {}
+        resource::resource(const std::string &resourcename, int _count) : resourcename(resourcename), _count(_count) {}
     }
 }
 #endif //CITY_DEFENCE_RESOURCE_CPP

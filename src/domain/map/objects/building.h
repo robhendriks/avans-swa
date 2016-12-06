@@ -6,12 +6,16 @@
 #include "dragable_field_object.h"
 #include "../field.h"
 #include "../../resources/resource.h"
+#include "../../game_level/game_level.h"
 
 namespace domain {
     namespace map {
         namespace objects {
             class building : public dragable_field_object {
             public:
+                building(const engine::math::box2_t &box, const std::string &id, int hitpoints, double health_ragen,
+                         const std::string &name,
+                         const std::vector<std::shared_ptr<resources::resource>> &required_resources);
 
                 building(engine::math::box2_t box);
 
@@ -23,24 +27,20 @@ namespace domain {
 
                 bool can_place_on(field &field1) const;
 
+
+                std::vector<std::shared_ptr<domain::resources::resource>> get_required_resources();
+                void set_required_resource(std::vector<std::shared_ptr<domain::resources::resource>> resources);
+
+                virtual void update(domain::game_level::game_level game_level);
+
             private:
                 std::string  id;
                 int hitpoints;
                 double health_ragen;
                 std::string name;
                 int type;
-                // cost have 5 types first int = gold seccond = uranium and last = silicium!
-                std::vector<std::shared_ptr<domain::resources::resource>> costs;
-
-                int output_min_damage;
-                int output_max_damage;
-                int output_range;
-                std::vector<std::shared_ptr<domain::resources::resource>> output_resource;
-            public:
-                building(const engine::math::box2_t &box, const std::string &id, int hitpoints, double health_ragen,
-                         const std::string &name, int type, const std::vector<std::shared_ptr<domain::resources::resource>> &costs,
-                         int output_min_damage, int output_max_damage, int output_range,
-                         const std::vector<std::shared_ptr<domain::resources::resource>> &output_resource);
+                std::vector<std::shared_ptr<domain::resources::resource>> required_resources;
+                void update_game_stats(domain::game_level::game_stats &game_stats1);
 
             };
         }

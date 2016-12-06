@@ -6,6 +6,8 @@
 #include "json_level_loader.h"
 #include "../../domain/map/objects/road.h"
 
+#include "../../domain/map/objects/defensive_building.h"
+#include "../../domain/map/objects/economic_building.h"
 
 namespace services {
     namespace level_loader {
@@ -16,22 +18,19 @@ namespace services {
 
 
         std::unique_ptr<domain::game_level::game_level> json_level_loader::load() {
+            //load_level needs te change in the future
+            int load_level_nr = 0;
 
             //load nations if not loaded yet.
             if (this->vec_nations.empty()) {
                 vec_nations = load_nations(
                     m_root["nations-url"]);
             }
-            if (this->vec_nations.empty()) {
-                vec_nations = load_nations(
-                    m_root["nations-url"]);
-            }
-
 
             //load buildings if not loaded yet
             if (this->vec_building.empty()) {
                 std::string buildings = m_root["building-url"];
-                vec_building.push_back(load_buildings(buildings));
+                load_buildings(buildings);
             }
             if (this->vec_building.empty()) {
                 json buildings = m_root["buildings"];
@@ -43,51 +42,27 @@ namespace services {
             }
 
             //load lvl src's if not loaded yet
-            if (this->vec_levels.empty()) {
-                json lvls = m_root["lvls"];
-                if (lvls.is_array()) {
-                    for (json &lvl : lvls) {
-                        vec_levels.push_back(load_all_levels(lvl));
-                    }
-                }
+            if (this->vec_levels.size() == 1) {
+                load_level_nr++;
             }
-            if (this->vec_levels.empty()) {
-                json lvls = m_root["lvls"];
-                if (lvls.is_array()) {
-                    for (json &lvl : lvls) {
-                        vec_levels.push_back(load_all_levels(lvl));
-                    }
-                }
+
+            json lvls = m_root["lvls"];
+            if (lvls.is_array()) {
+                vec_levels.push_back(load_all_levels(lvls[load_level_nr]));
             }
 
             // Create the level
             auto *d_a_d = new engine::draganddrop::drag_and_drop();
-            auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats(3, 0, 10000));
-
-            // this piece is for now placeholder till load_nations work
-//            std::shared_ptr<domain::nations::nation> nation = vec_nations.front();
-            //auto nation = avaiable_nations.front();
-            //auto nation = std::make_shared<domain::nations::nation>(domain::nations::nation("name", "name_pre"));
-//            std::vector<std::shared_ptr<domain::nations::enemy>> enemies = nation->getavailableenemies();
-            //enemies.push_back(std::make_shared<domain::nations::enemy>(domain::nations::enemy("name", 1)));
-            //nation->setavailableenemies(enemies);
-
-
+            auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats());
+            goal->set_counter("buildings", 5);
             auto game_level = std::unique_ptr<domain::game_level::game_level>(
-                new domain::game_level::game_level("level", vec_levels.front(), goal, vec_nations.front(), *d_a_d));
+                new domain::game_level::game_level("level", vec_levels[load_level_nr], goal, vec_nations.front(),
+                                                   *d_a_d,
+                                                   125000));
+            for (auto building : vec_building) {
+                game_level->add_placeable_object(*building);
+            }
 
-            // TODO: HARDCODED ATM
-            // Add placeable objects
-            engine::math::box2_t building_box{{10, 10},
-                                              {42, 42}};
-
-            std::string building_url = m_root["building-url"];
-            auto ssbuilding = new domain::map::objects::building(building_box);
-            ssbuilding->set_draw_settings("images/building-a.png");
-            std::cout << building_url << std::endl;
-            game_level->add_placeable_object(*ssbuilding);
-
-            // Done with building the level
             return game_level;
         }
 
@@ -135,17 +110,10 @@ namespace services {
                                                        current_nation, enemey_oppertunity_cost));
                         curren_enemy->set_draw_settings("building-a.png", {50, 50});
                         pre_vec_enemies.push_back(curren_enemy);
-
-
-                        std::cout << enemy_name << enemey_min_damage << enemey_max_damage << enemey_hitpoints
-                                  << enemy_type << enemey_oppertunity_cost << enemey_movement_speed;
-
                         current_nation->setavailableenemies(pre_vec_enemies);
                         pre_nation_list.push_back(current_nation);
                     }
 
-
-                    // std::cout << id << name;
                 }
             } catch (std::exception &e) {
                 // TODO: proper error handling
@@ -205,6 +173,7 @@ namespace services {
                 return;
             }
 
+            int column = 0;
             // Loop through all objects
             for (json &elem : data) {
                 std::string id = elem["id"];
@@ -218,15 +187,9 @@ namespace services {
 
                     std::string image_location;
 
-                    std::string building_str = "building";
+                    std::string building_str = "road";
                     if (std::mismatch(building_str.begin(), building_str.end(), id.begin()).first ==
                         building_str.end()) {
-                        object = new domain::map::objects::building(field);
-
-                        image_location = "images/";
-                        image_location += id;
-                        image_location += ".png";
-                    } else {
                         if (id == "road-straight") {
                             image_location = "images/road-straight.png";
                         } else if (id == "road-junction") {
@@ -241,6 +204,14 @@ namespace services {
 
                         // Create the object
                         object = new domain::map::objects::road(field);
+                        object->set_max_column(1);
+                    } else {
+                        object = new domain::map::objects::building(field);
+
+                        image_location = "images/";
+                        image_location += "building-a";
+                        image_location += ".png";
+                        object->set_max_column(2);
                     }
 
                     // Calculate the image start position
@@ -251,7 +222,9 @@ namespace services {
                     object->set_draw_settings(image_location, {0, image_start_y});
                     object->set_rotation(rotation);
 
+                    object->set_current_column(column);
                     field->place_object(*object);
+                    column = column + 1 <= object->get_max_column() ? column + 1 : 1;
                 }
 
                 SDL_Log("%d %d %d", x, y, rotation);
@@ -269,117 +242,78 @@ namespace services {
             try {
                 building_root << file;
 
-//                    "id": "ultimate-death-laser",
-//                        "hitpoints": 3600,
-//                        "health-regen": 6,
-//                        "name": "Ultimate Death Laser",
-//                        "type": 2,
-//                        "cost": {
-//                        "gold": 5000,
-//                            "uranium": 250,
-//                            "silicium": 500
-//                    },
-//                    "properties": {
-//                        "output": {
-//                            "min-damage": 1,
-//                                "max-damage": 600,
-//                                "range": 2
-//                        }
-
                 for (json &building_data : building_root) {
 
                     int min_dmg = 0;
                     int max_dmg = 0;
                     int range = 0;
                     int type = building_data["type"];
-                    auto output_sources = std::vector<std::shared_ptr<domain::resources::resource>>();
+                    auto output_sources = std::shared_ptr<domain::resources::resource>();
                     auto costs = std::vector<std::shared_ptr<domain::resources::resource>>();
                     engine::math::box2_t building_box{{10, 10},
                                                       {42, 42}};
 
-
-                    //                            enum resource_type {
-//                                wood,
-//                                ore,
-//                                gold,
-//                                uranium,
-//                                silicium
-//                            };
-
-
-//                    json data = building_data["cost"];
-//                    if (!data.is_array()) {
-//                        return;
-//                    }
-//
-//                    for (json &elem : data) {
-//
-//                    }
-//                    auto data_building_cost = building_data["cost"];
-//                    auto it = data_building_cost.begin();
-//                        for (it != data_building_cost.end(); ++it;) {
-//                            std::cout << it.key() << " : " << it.value() << "\n";
-//                        }
-
                     auto data_building_cost = building_data["cost"];
                     auto it = data_building_cost.begin();
-                    for (json::iterator building_costs_item = data_building_cost.begin(); it != data_building_cost.end(); ++it) {
+                    for (json::iterator building_costs_item = data_building_cost.begin();
+                         it != data_building_cost.end(); ++it) {
 
-                        std::string source_name = building_costs_item.key();
-                        int source_count = building_costs_item.value();
-
-                        costs.push_back(std::make_shared<domain::resources::resource>( building_costs_item.key() , building_costs_item.value()));
-                        std::cout << source_name << source_count<<"\n";
+                        costs.push_back(std::make_shared<domain::resources::resource>(building_costs_item.key(),
+                                                                                      building_costs_item.value()));
                     }
-                    for (json &building_costs : building_data["cost"]) {
 
-//
-//                        try {
-//                            domain::resources::resource_type wood;
-//                            auto cost_name = building_costs;
-//                            std::cout << cost_name;
-//                            int wood_costs = building_costs;
-//                            auto cost_wood = std::make_shared<domain::resources::resource>(wood, wood_costs);
-//
-//                        } catch (std::exception &e) {
-//                            auto d = e.what();
-//                            std::cout << d;
-//                        }
 
-                    }
                     for (json &building_properties : building_data["properties"]) {
-                        for (json &building_output : building_properties["output"]) {
 
+                        auto current_prop = building_properties.begin();
+                        for (json::iterator building_property_item = building_properties.begin();
+                             current_prop != building_properties.end(); ++current_prop) {
                             //type 2 = dmg building
+
                             if (type == 2) {
-                                min_dmg = static_cast<int>(building_output["min-damage"]);
-                                max_dmg = static_cast<int>(building_output["max-damage"]);
-                                range = static_cast<int>(building_output["range"]);
+                                if (building_property_item.key() == "min-damage") {
+                                    min_dmg = static_cast<int>(building_property_item.value());
+                                } else if (building_property_item.key() == "max-damage") {
+                                    max_dmg = static_cast<int>(building_property_item.value());
+                                } else if (building_property_item.key() == "range") {
+                                    range = static_cast<int>(building_property_item.value());
+                                }
+
 
                             } else {
-                                //output_sources.push_back( new std::shared_ptr<domain::resources::resource>(output));
+
+                                output_sources = std::make_shared<domain::resources::resource>(
+                                    building_property_item.key(),
+                                    building_property_item.value());
 
                             }
 
                         }
                     }
+                    if (type == 1) {
+                        std::shared_ptr<domain::map::objects::economic_building> economic_building = std::make_shared<domain::map::objects::economic_building>(
+                            building_box,
+                            building_data["id"],
+                            static_cast<int>(building_data["hitpoints"]),
+                            static_cast<double>(building_data["health-regen"]),
+                            building_data["name"],
+                            costs, output_sources);
+                        economic_building->set_draw_settings("images/building-a.png");
+                        vec_building.push_back(economic_building);
+                    } else {
+                        std::shared_ptr<domain::map::objects::defensive_building> defencive_building = std::make_shared<domain::map::objects::defensive_building>(
+                            building_box,
+                            building_data["id"],
+                            static_cast<int>(building_data["hitpoints"]),
+                            static_cast<double>(building_data["health-regen"]),
+                            building_data["name"],
+                            costs, min_dmg, max_dmg, range);
+                        defencive_building->set_draw_settings("images/building-a.png");
+                        vec_building.push_back(defencive_building);
+                    }
 
 
-                    std::cout << min_dmg << max_dmg << range;
-
-//                    auto costs = std::vector<std::shared_ptr<domain::resources::resource>>();
-
-                    auto building = domain::map::objects::building(building_box, building_root["id"],
-                                                                   building_root["hitpoints"],
-                                                                   building_root["health-ragen"], building_root["name"],
-                                                                   building_root["type"], costs, 0, 0, 0,
-                                                                   output_sources);
                 }
-
-                //vect
-
-
-
             } catch (std::exception &e) {
                 // TODO: proper error handling
                 auto d = e.what();

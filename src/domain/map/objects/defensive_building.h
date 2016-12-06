@@ -2,8 +2,8 @@
 // Created by Mark on 5-12-2016.
 //
 
-#ifndef CITY_DEFENCE_ECONOMIC_BUILDING_H
-#define CITY_DEFENCE_ECONOMIC_BUILDING_H
+#ifndef CITY_DEFENCE_DEFENSIVE_BUILDING_H
+#define CITY_DEFENCE_DEFENSIVE_BUILDING_H
 #include "building.h"
 
 namespace domain {
@@ -12,7 +12,9 @@ namespace domain {
             class defensive_building : public building
             {
             public:
-                defensive_building(engine::math::box2_t box, int _range, int _min_dmg, int _max_dmg);
+                defensive_building(engine::math::box2_t box,  const std::string &id, int hitpoints,
+                                   double health_ragen, const std::string &name,
+                                   const std::vector<std::shared_ptr<resources::resource>> &required_resources, int _range, int _min_dmg, int _max_dmg);
 
                 defensive_building(std::shared_ptr<field> field1, int _range, int _min_dmg, int _max_dmg);
 
@@ -37,4 +39,4 @@ namespace domain {
     }
 }
 
-#endif //CITY_DEFENCE_ECONOMIC_BUILDING_H
+#endif //CITY_DEFENCE_DEFENSIVE_BUILDING_H

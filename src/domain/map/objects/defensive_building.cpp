@@ -14,38 +14,44 @@ namespace domain {
     namespace map {
         namespace objects {
 
-            defensive_building::defensive_building(engine::math::box2_t box, int _range, int _min_dmg, int _max_dmg) : building(box) {
-            range = _range;
-                min_dmg = _min_dmg;
-                max_dmg = _max_dmg;
-            }
-
-            defensive_building::defensive_building(std::shared_ptr<field> field1, int _range, int _min_dmg, int _max_dmg) : building(field1){
+            defensive_building::defensive_building(engine::math::box2_t box, const std::string &id, int hitpoints,
+                                                   double health_ragen, const std::string &name,
+                                                   const std::vector<std::shared_ptr<resources::resource>> &required_resources,
+                                                   int _range, int _min_dmg, int _max_dmg) : building(box,id,hitpoints,health_ragen,name,required_resources) {
                 range = _range;
                 min_dmg = _min_dmg;
                 max_dmg = _max_dmg;
             }
 
-            defensive_building::defensive_building(const building &obj, int _range, int _min_dmg, int _max_dmg) : building(obj){
+            defensive_building::defensive_building(std::shared_ptr<field> field1, int _range, int _min_dmg,
+                                                   int _max_dmg) : building(field1) {
                 range = _range;
                 min_dmg = _min_dmg;
                 max_dmg = _max_dmg;
             }
 
-            int defensive_building::get_min_dmg(){
+            defensive_building::defensive_building(const building &obj, int _range, int _min_dmg, int _max_dmg)
+                : building(obj) {
+                range = _range;
+                min_dmg = _min_dmg;
+                max_dmg = _max_dmg;
+            }
+
+            int defensive_building::get_min_dmg() {
                 return min_dmg;
             }
-            int defensive_building::get_max_dmg(){
+
+            int defensive_building::get_max_dmg() {
                 return max_dmg;
             }
-            int defensive_building::get_range(){
+
+            int defensive_building::get_range() {
                 return range;
             }
 
-            void defensive_building::update(domain::game_level::game_level game_level){
+            void defensive_building::update(domain::game_level::game_level game_level) {
                 //TODO
             }
-
 
 
         }
