@@ -145,7 +145,8 @@ set(SOURCES src/main.cpp
     src/events/goal_reached.h
     src/engine/events/engine_state_changed.cpp
     src/engine/events/engine_state_changed.h
-    src/domain/drawable/draw_managers_wrapper.h)
+    src/domain/drawable/draw_managers_wrapper.h
+        src/domain/map/ai/ai.cpp src/domain/map/ai/ai.h src/domain/map/ai/states/attack_state.cpp src/domain/map/ai/states/attack_state.h src/domain/map/ai/states/ai_state.h src/domain/map/ai/states/move_state.cpp src/domain/map/ai/states/move_state.h)
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include
@@ -156,7 +157,7 @@ include_directories(third_party/json/src
         ${SDL2_TTF_INCLUDE_DIRS}
         ${SDL2_MIXER_INCLUDE_DIR})
 
-add_executable(city_defence ${SOURCES} src/domain/map/ai.cpp src/domain/map/ai.h)
+add_executable(city_defence ${SOURCES})
 add_library(city_defence_sources STATIC ${SOURCES})
 
 target_link_libraries(city_defence

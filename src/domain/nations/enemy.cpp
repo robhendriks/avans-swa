@@ -86,12 +86,12 @@ namespace domain {
 
         void enemy::update(unsigned int elapsed_time) {
             if(m_ai != nullptr){
-
+                m_ai->update(elapsed_time);
             }
         }
 
-        void enemy::set_ai(std::shared_ptr<domain::map::ai> ai) {
-                m_ai = ai;
+        void enemy::set_ai(std::shared_ptr<domain::map::ai::ai> ai) {
+            m_ai = ai;
         }
 
         bool operator<(const std::shared_ptr<enemy>&  s1, const std::shared_ptr<enemy>&  s2){

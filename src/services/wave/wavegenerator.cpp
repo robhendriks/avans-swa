@@ -3,15 +3,18 @@
 //
 
 #include "wavegenerator.h"
+#include "../../domain/map/objects/building.h"
 #include <algorithm>
 #include <random>
 #include <iostream>
 
 namespace services {
     namespace wave {
-
-        wavegenerator::wavegenerator() {
-
+        wavegenerator::wavegenerator(std::shared_ptr<domain::map::ai::ai> ai) {
+            m_ai = ai;
+            ai->set_target([](domain::map::objects::field_object *object) {
+                return dynamic_cast<domain::map::objects::building *>(object) != nullptr;
+            });
         }
 
         std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> wavegenerator::generateEnemies(int _time,
@@ -25,14 +28,14 @@ namespace services {
             auto olist = _nation.getavailableenemies();
             auto q = remove_if(list.begin(), list.end(),
                                [_noboss](std::shared_ptr<domain::nations::enemy> element) {
-                                   return element->is_boss() == true&&_noboss==true;
+                                   return element->is_boss() == true && _noboss == true;
                                });
             list.erase(q, list.end());
 
-            if(capoppertunity!=0){
+            if (capoppertunity != 0) {
                 auto r = remove_if(list.begin(), list.end(),
                                    [capoppertunity](std::shared_ptr<domain::nations::enemy> element) {
-                                       return element->get_oppertunity_cost() >capoppertunity;
+                                       return element->get_oppertunity_cost() > capoppertunity;
                                    });
                 list.erase(r, list.end());
             }
@@ -53,13 +56,22 @@ namespace services {
 
             //Createas the actual list of the enemies
             double temp_oppertunity = _oppertunity;
-            temp_oppertunity = _oppertunity + static_cast<double>(_oppertunity) * (1 / static_cast<double>(_nation.getavailableenemies().size()));
+            temp_oppertunity = _oppertunity + static_cast<double>(_oppertunity) *
+                                              (1 / static_cast<double>(_nation.getavailableenemies().size()));
             std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> enemies;
             for (unsigned int i = 0; i < _nation.getavailableenemies().size(); i++) {
                 temp_oppertunity = temp_oppertunity / 2;
-                int amount = temp_oppertunity /(_nation.getavailableenemies()[i]->get_oppertunity_cost());
+                int amount = temp_oppertunity / (_nation.getavailableenemies()[i]->get_oppertunity_cost());
                 for (int j = 0; j < amount; j++) {
-                    std::shared_ptr<domain::nations::enemy> e = std::make_shared<domain::nations::enemy>(*_nation.getavailableenemies()[i]);
+                    std::shared_ptr<domain::nations::enemy> e = std::make_shared<domain::nations::enemy>(
+                            *_nation.getavailableenemies()[i]);
+
+                    if (m_ai != nullptr) {
+                        domain::map::ai::ai copy = *m_ai;
+                        copy.set_unit(e);
+                        e->set_ai(std::make_shared<domain::map::ai::ai>(copy));
+                    }
+
                     enemies.push_back(
 
                             std::pair<int, std::shared_ptr<domain::nations::enemy>>{0, e});
@@ -70,14 +82,14 @@ namespace services {
 
             //Creates timestamps for spawning
             //Create a templist with numbers
-            int spreadedTime = _time/ enemies.size();
+            int spreadedTime = _time / enemies.size();
             std::vector<int> templist(enemies.size());
             for (unsigned int i = 0; i < templist.size(); i++) {
                 if (_spread == false) {
                     enemies[i].first = i * spreadedTime;
                 } else {
                     // TODO: uneven spread
-                    if(olist.size()<(unsigned int)100){
+                    if (olist.size() < (unsigned int) 100) {
 
                     }
                 }
@@ -86,10 +98,14 @@ namespace services {
             return enemies;
 
         }
+
         wavegenerator::~wavegenerator() {
 
         }
 
+        std::shared_ptr<domain::map::ai::ai> wavegenerator::get_ai() {
+            return m_ai;
+        }
     }
 
 

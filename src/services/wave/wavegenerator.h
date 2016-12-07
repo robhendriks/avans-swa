@@ -10,12 +10,20 @@
 #include <memory>
 #include <utility>
 
+namespace domain{
+    namespace map{
+        namespace ai{
+            class ai;
+        }
+    }
+}
+
 namespace services {
     namespace wave{
         class wavegenerator {
 
         public:
-            wavegenerator();
+            wavegenerator(std::shared_ptr<domain::map::ai::ai> ai);
 
             //INPUT PARAMS FOR PROPER GENERATION
             //(REQUIRED) 1. The time in seconds over which the enemies should be generated on the map
@@ -30,11 +38,10 @@ namespace services {
             //Pair values
             //First is time mililseconds the enemy should be spawned relative to last one
             //Second is a pointer to the enemy domain object
-
-
+            std::shared_ptr<domain::map::ai::ai> get_ai();
             ~wavegenerator();
         private:
-
+            std::shared_ptr<domain::map::ai::ai> m_ai;
         };
     }
 }
