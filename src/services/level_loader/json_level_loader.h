@@ -5,7 +5,6 @@
 #ifndef CITY_DEFENCE_JSON_MAP_LOADER_H
 #define CITY_DEFENCE_JSON_MAP_LOADER_H
 
-
 #include <fstream>
 #include <json.hpp>
 #include "base_level_loader.h"
@@ -14,12 +13,16 @@
 #include "../../engine/math/vec2.hpp"
 #include "../../domain/map/objects/building.h"
 
-
 using json = nlohmann::json;
 using namespace engine::math;
 
 namespace services {
     namespace level_loader {
+
+        typedef std::shared_ptr<domain::map::map> map_ptr;
+        typedef std::shared_ptr<domain::nations::nation> nation_ptr;
+        typedef std::shared_ptr<domain::map::objects::building> building_ptr;
+
         class json_level_loader : public base_level_loader {
         public:
             json_level_loader(json root);
@@ -27,23 +30,22 @@ namespace services {
             std::unique_ptr<domain::game_level::game_level> load();
 
         private:
-            std::shared_ptr<domain::map::map> load_all_levels(std::string url);
+            map_ptr load_all_levels(std::string url);
 
             void load_fields(json &root, domain::map::map &map1);
 
             void load_objects(json &root, domain::map::map &map1);
 
-            std::vector<std::shared_ptr<domain::nations::nation>> load_nations(std::string nation_url);
-
-            json m_root;
-            std::vector<std::shared_ptr<domain::map::objects::building>> vec_building;
-            std::vector<std::shared_ptr<domain::nations::nation>> vec_nations;
-            std::vector<std::shared_ptr<domain::map::map>> vec_levels;
+            std::vector<nation_ptr> load_nations(std::string nation_url);
 
             std::shared_ptr<domain::map::objects::building> load_buildings(std::string url);
 
-
+            json m_root;
+            std::vector<building_ptr> vec_building;
+            std::vector<nation_ptr> vec_nations;
+            std::vector<map_ptr> vec_levels;
         };
+
     };
 };
 

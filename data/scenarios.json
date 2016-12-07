@@ -3,6 +3,7 @@
   "building-url": "buildings.json",
   "lvls": [
     "level1.json",
-    "level2.json"
+    "level2.json",
+    "level3.json"
   ]
 }

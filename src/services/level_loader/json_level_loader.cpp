@@ -12,10 +12,8 @@
 namespace services {
     namespace level_loader {
 
-        json_level_loader::json_level_loader(json root) : m_root(root) {
-
-        }
-
+        json_level_loader::json_level_loader(json root)
+            : m_root(root) {}
 
         std::unique_ptr<domain::game_level::game_level> json_level_loader::load() {
             //load_level needs te change in the future
@@ -42,7 +40,7 @@ namespace services {
             }
 
             //load lvl src's if not loaded yet
-            if(vec_levels.empty()){
+            if (vec_levels.empty()) {
                 json lvls = m_root["lvls"];
                 if (lvls.is_array()) {
                     vec_levels.push_back(load_all_levels(lvls[load_level_nr]));
@@ -51,7 +49,7 @@ namespace services {
 
             // Create the level
             auto *d_a_d = new engine::draganddrop::drag_and_drop();
-            auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats());
+            auto goal = std::make_shared<domain::game_level::game_stats>();
             goal->set_counter("buildings", 5);
             auto game_level = std::unique_ptr<domain::game_level::game_level>(
                 new domain::game_level::game_level("level", vec_levels[load_level_nr], goal, vec_nations.front(),
@@ -64,11 +62,8 @@ namespace services {
             return game_level;
         }
 
-
-        std::vector<std::shared_ptr<domain::nations::nation>>
-        json_level_loader::load_nations(std::string nation_url) {
-
-            std::vector<std::shared_ptr<domain::nations::nation>> pre_nation_list;
+        std::vector<nation_ptr> json_level_loader::load_nations(std::string nation_url) {
+            std::vector<nation_ptr> pre_nation_list;
 
             std::ifstream file(nation_url);
             if (!file.is_open()) {
@@ -96,7 +91,6 @@ namespace services {
                         int enemey_hitpoints = static_cast<int>(enemy["hitpoints"]);
                         std::string enemy_type = enemy["type"];
                         int enemey_oppertunity_cost = static_cast<int>(enemy["oppertunity-cost"]);
-
 
                         bool boss = false;
                         if (enemy_type == "boss") { boss = true; };
@@ -127,29 +121,42 @@ namespace services {
                 return;
             }
 
-            json tiles = root["tiles"];
-            if (!tiles.is_object()) {
+            json elements = root["tiles"];
+            if (!elements.is_array()) {
                 return;
             }
 
-            size_t tileCount = tiles["count"];
-            SDL_Log("Loading %d tile(s)...\n", tileCount);
+            SDL_Log("Loading %zu tiles...\n", elements.size());
 
-            json data = tiles["data"];
-            if (!data.is_array()) {
-                return;
-            }
+            int tile_width = 64;
+            int tile_height = 64;
+            int tileset_columns = 17; // 1088 / 64 = 17
 
-            for (json &elem : data) {
-                int x = elem["x"];
-                int y = elem["y"];
-                int type = elem["type"];
+            for (json &elem : elements) {
+                int tile_x = elem.value("x", -1); // get x, default to -1
+                int tile_y = elem.value("y", -1); // get y, default to -1
+                int tile_id = elem.value("id", -1); // get id, default to -1
 
-                SDL_Log("%d %d %d", x, y, type);
+                // Report and continue if there's bogus data
+                if (tile_x < 0 || tile_y < 0 || tile_id < 0) {
+                    SDL_Log("Invalid data for tile at %i:%i.", tile_x, tile_y);
+                    continue;
+                }
 
-                // Create the field, note that the field will automatically be added to the map
-                auto *field = new domain::map::field(map1, {(float) x, (float) y});
-                field->set_draw_settings("images/grass.png");
+                // Calculate the tile's sprite row and column
+                int image_row = tile_id / tileset_columns;
+                int image_column = tile_id % tileset_columns;
+
+                // Create the field and add it to the map
+                auto *field = new domain::map::field(map1, {
+                    static_cast<float>(tile_x),
+                    static_cast<float>(tile_y)});
+
+                auto image_start_position = vec2_t{
+                    static_cast<float>(image_column * tile_width),
+                    static_cast<float>(image_row * tile_height)};
+
+                field->set_draw_settings("images/tileset.png", image_start_position);
             }
         }
 
@@ -158,22 +165,16 @@ namespace services {
                 return;
             }
 
-            json level_objects = root["objects"];
-            if (!level_objects.is_object()) {
+            json elements = root["objects"];
+            if (!elements.is_array()) {
                 return;
             }
 
-            size_t level_objects_count = level_objects["count"];
-            SDL_Log("Loading %d level objects(s)...\n", level_objects_count);
-
-            json data = level_objects["data"];
-            if (!data.is_array()) {
-                return;
-            }
-
+            SDL_Log("Loading %zu objects...\n", elements.size());
+return;
             int column = 0;
             // Loop through all objects
-            for (json &elem : data) {
+            for (json &elem : elements) {
                 std::string id = elem["id"];
                 int x = elem["x"];
                 int y = elem["y"];
@@ -221,10 +222,11 @@ namespace services {
                     object->set_rotation(rotation);
 
                     object->set_current_column(column);
-                    auto b = dynamic_cast<domain::map::objects::building*>(object);
-                    if(b != nullptr){
+                    auto b = dynamic_cast<domain::map::objects::building *>(object);
+                    if (b != nullptr) {
                         auto m = b->get_health_regen();
-                        std::cout << m;}
+                        std::cout << m;
+                    }
                     field->place_object(object);
                     column = column + 1 <= object->get_max_column() ? column + 1 : 1;
                 }
@@ -326,30 +328,35 @@ namespace services {
         }
 
         std::shared_ptr<domain::map::map> json_level_loader::load_all_levels(std::string url) {
-
-            std::shared_ptr<domain::map::map> map;
             std::ifstream file(url);
             if (!file.is_open()) {
                 throw std::runtime_error(std::string("Unable to open file: ") + url);
-
             }
 
-            json map_root;
             try {
+                json map_root;
                 map_root << file;
 
-                float width = map_root["width"];
-                float height = map_root["height"];
-                map = std::shared_ptr<domain::map::map>(new domain::map::map({width - 1, height - 1}, {32, 32}));
+                int width = map_root.value("width", -1);
+                int height = map_root.value("height", -1);
+
+                if (width < 1 || height < 1) {
+                    throw std::runtime_error(std::string("Invalid world dimensions in file: ") + url);
+                }
+
+                // Create the map (currently uses fixed tile dimensions)
+                auto map = std::make_shared<domain::map::map>(
+                    vec2_t{static_cast<float>(width - 1), static_cast<float>(height - 1)},
+                    vec2_t{64, 64});
+
                 load_fields(map_root, *map);
                 load_objects(map_root, *map);
+
+                return map;
             } catch (std::exception &e) {
-                // TODO: proper error handling
-                auto d = e.what();
-                std::cout << d;
+                std::cout << e.what() << "\n";
                 throw;
             }
-            return map;
         }
 
     }
