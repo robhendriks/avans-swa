@@ -31,10 +31,10 @@ namespace domain {
             m_texture = nullptr;
         }
 
-        void drawable_game_object::draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed) {
-            load_texture_if_not_loaded_yet(texture_manager);
-            animation(texture_manager, time_elapsed);
-            draw_object(texture_manager);
+        void drawable_game_object::draw(draw_managers_wrapper &draw_managers, unsigned int time_elapsed) {
+            load_texture_if_not_loaded_yet(draw_managers.texture_manager);
+            animation(draw_managers.texture_manager, time_elapsed);
+            draw_object(draw_managers.texture_manager);
         }
 
         void drawable_game_object::load_texture_if_not_loaded_yet(engine::graphics::texture_manager &texture_manager) {
@@ -77,8 +77,8 @@ namespace domain {
             }
         }
 
-        void drawable_game_object::unload(engine::graphics::texture_manager &texture_manager) {
-            texture_manager.unload(m_file_loc);
+        void drawable_game_object::unload(draw_managers_wrapper &draw_managers) {
+            draw_managers.texture_manager.unload(m_file_loc);
             this->m_texture = nullptr;
         }
 

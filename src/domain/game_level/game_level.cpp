@@ -71,10 +71,6 @@ namespace domain {
             return m_map;
         }
 
-        void game_level::unload(engine::graphics::texture_manager &texture_manager) {
-            m_map->unload(texture_manager);
-        }
-
         std::shared_ptr<game_stats> game_level::get_goal() {
             return m_goal;
         }

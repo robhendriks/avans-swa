@@ -46,6 +46,9 @@ namespace gui {
             gui::controllers::main_map_controller *m_controller;
             models::transition_level_model &m_model;
             engine::audio::sound_manager &m_sound_manager;
+            engine::graphics::texture_manager &m_texture_manager;
+            engine::graphics::color_manager &m_color_manager;
+            engine::graphics::font_manager &m_font_manager;
             std::unique_ptr<engine::math::box2_t> m_title_box;
             std::unique_ptr<engine::math::box2_t> m_time_header_box;
             std::unique_ptr<engine::math::box2_t> m_time_header_text_box;

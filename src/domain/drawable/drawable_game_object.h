@@ -10,6 +10,7 @@
 #include "../../engine/graphics/texture_manager.h"
 #include "abstract_drawable_game_object.h"
 #include <memory>
+
 namespace domain {
     namespace drawable {
         class drawable_game_object : public abstract_drawable_game_object {
@@ -22,10 +23,10 @@ namespace domain {
 
             // can be overwritten in case you don't want to load the textures of the current object because there is a chance
             // you won't draw them but only of a child object. (if overwritten no call will be made to draw_object)
-            virtual void draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed);
+            virtual void draw(draw_managers_wrapper &draw_managers, unsigned int time_elapsed);
 
             // override in case something else gets drawn instead of only itself
-            virtual void unload(engine::graphics::texture_manager &texture_manager);
+            virtual void unload(draw_managers_wrapper &draw_managers);
 
             virtual engine::math::box2_t get_box() const = 0;
 

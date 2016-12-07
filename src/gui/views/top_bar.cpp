@@ -8,9 +8,9 @@
 namespace gui {
     namespace views {
 
-        top_bar::top_bar(engine::graphics::texture_manager &texture_manager,
-                         engine::graphics::color_manager &color_manager) :
-            m_texture_manager(texture_manager), m_color_manager(color_manager), m_menu_controller(nullptr) {
+        top_bar::top_bar(domain::drawable::draw_managers_wrapper &draw_managers) : m_draw_managers(draw_managers),
+            m_texture_manager(draw_managers.texture_manager), m_color_manager(draw_managers.color_manager),
+            m_font_manager(draw_managers.font_manager), m_menu_controller(nullptr) {
 
         }
 

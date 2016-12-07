@@ -8,12 +8,8 @@
 namespace gui {
     namespace views {
         main_menu::main_menu(top_bar &top_bar1, engine::audio::music_manager &music_manager,
-                             engine::graphics::font_manager &font_manager, engine::audio::sound_manager &sound_manager)
-            : m_top_bar(top_bar1), m_music_manager(music_manager), m_font_manager(font_manager),
-              m_sound_manager(sound_manager), m_logo_box(nullptr), m_play_btn_box(nullptr), m_play_text_box(nullptr),
-              m_load_btn_box(nullptr), m_load_text_box(nullptr), m_credits_btn_box(nullptr),
-              m_credits_text_box(nullptr), m_slider_left_box(nullptr), m_slider_right_box(nullptr) {
-        }
+                             engine::audio::sound_manager &sound_manager)
+            : m_top_bar(top_bar1), m_music_manager(music_manager), m_sound_manager(sound_manager) {}
 
         void main_menu::before() {
             m_top_bar.before();
@@ -35,9 +31,9 @@ namespace gui {
             m_sound_manager.load("sounds/menu_rollover.wav", "menu_rollover");
 
             // Load the menu texts
-            m_top_bar.m_texture_manager.load_text("Play", {0, 0, 0}, *m_font_manager.get_font("roboto", 46), "m_t_play");
-            m_top_bar.m_texture_manager.load_text("Load", {0, 0, 0}, *m_font_manager.get_font("roboto", 46), "m_t_load");
-            m_top_bar.m_texture_manager.load_text("Credits", {0, 0, 0}, *m_font_manager.get_font("roboto", 46), "m_t_credits");
+            m_top_bar.m_texture_manager.load_text("Play", {0, 0, 0}, *m_top_bar.m_font_manager.get_font("roboto", 46), "m_t_play");
+            m_top_bar.m_texture_manager.load_text("Load", {0, 0, 0}, *m_top_bar.m_font_manager.get_font("roboto", 46), "m_t_load");
+            m_top_bar.m_texture_manager.load_text("Credits", {0, 0, 0}, *m_top_bar.m_font_manager.get_font("roboto", 46), "m_t_credits");
 
             auto &eventbus = engine::eventbus::eventbus::get_instance();
             eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>*> (this));

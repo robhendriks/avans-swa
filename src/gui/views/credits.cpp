@@ -5,12 +5,9 @@
 #include "credits.h"
 #include "../../engine/graphics/box_builder.h"
 
-gui::views::credits::credits(engine::graphics::texture_manager &texture_manager,
-                             engine::graphics::font_manager &font_manager,
-                             engine::graphics::color_manager &color_manager, engine::window &window,
+gui::views::credits::credits(domain::drawable::draw_managers_wrapper &draw_managers, engine::window &window,
                              engine::audio::music_manager &music_manager) :
-    m_texture_manager(texture_manager), m_font_manager(font_manager), m_color_manager(color_manager),
-    m_music_manager(music_manager), m_window(window),
+    m_draw_managers(draw_managers), m_music_manager(music_manager), m_window(window),
     m_header_box(nullptr), m_credits_box(nullptr), m_title_box(nullptr), m_moveable_box(nullptr) {
 
     m_names.push_back("Robbie op de Weegh");
@@ -28,12 +25,13 @@ void gui::views::credits::before() {
     m_music_manager.set_volume(128);
 
     // Load the title
-    m_texture_manager.load_text("CityDefence", {255, 193, 132}, *m_font_manager.get_font("roboto", 50), "c_title");
+    m_draw_managers.texture_manager.load_text("CityDefence", {255, 193, 132},
+                                                *m_draw_managers.font_manager.get_font("roboto", 50), "c_title");
 
     // Load the names
-    auto *font = m_font_manager.get_font("roboto", 44);
+    auto *font = m_draw_managers.font_manager.get_font("roboto", 44);
     for (auto &name : m_names) {
-        m_texture_manager.load_text(name, {255, 255, 255}, *font, "n_" + name);
+        m_draw_managers.texture_manager.load_text(name, {255, 255, 255}, *font, "n_" + name);
     }
 }
 
@@ -44,7 +42,7 @@ void gui::views::credits::on_display_change(engine::math::box2_t display_box) {
     m_header_box.reset(new engine::math::box2_t(builder1.build()));
 
     // Create the title box
-    engine::graphics::box_builder builder2(m_texture_manager.get_size("c_title"));
+    engine::graphics::box_builder builder2(m_draw_managers.texture_manager.get_size("c_title"));
     builder2.to_center(*m_header_box);
     m_title_box.reset(new engine::math::box2_t(builder2.build()));
 
@@ -57,7 +55,7 @@ void gui::views::credits::on_display_change(engine::math::box2_t display_box) {
     std::vector<engine::math::box2_t> move_boxes;
 
     for (auto &name : m_names) {
-        engine::graphics::box_builder builder4(m_texture_manager.get_size("n_" + name));
+        engine::graphics::box_builder builder4(m_draw_managers.texture_manager.get_size("n_" + name));
 
         if (move_boxes.size() > 0) {
             builder4.as_left_top(move_boxes.back().left_bottom());
@@ -80,10 +78,10 @@ void gui::views::credits::after() {
     m_music_manager.unload("credits_bg_music");
 
     // Unload the texts
-    m_texture_manager.unload("c_title");
+    m_draw_managers.texture_manager.unload("c_title");
 
     for (auto &name : m_names) {
-        m_texture_manager.unload("n_" + name);
+        m_draw_managers.texture_manager.unload("n_" + name);
     }
 }
 
@@ -93,10 +91,10 @@ void gui::views::credits::draw(unsigned int time_elapsed, engine::math::box2_t d
 
     int i = 0;
     for (auto &box : m_moveable_box->get_boxes()) {
-        m_texture_manager.draw("n_" + m_names[i++], {0, 0}, box);
+        m_draw_managers.texture_manager.draw("n_" + m_names[i++], {0, 0}, box);
     }
 
     // Draw header
-    m_color_manager.draw({0, 0, 0}, *m_header_box);
-    m_texture_manager.draw("c_title", {0, 0}, *m_title_box);
+    m_draw_managers.color_manager.draw({0, 0, 0}, *m_header_box);
+    m_draw_managers.texture_manager.draw("c_title", {0, 0}, *m_title_box);
 }

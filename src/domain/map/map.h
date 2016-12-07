@@ -21,6 +21,13 @@ namespace domain {
 
 namespace domain {
     namespace map {
+        struct field_with_range{
+        public:
+            field_with_range(std::shared_ptr<domain::map::field> field, int range);
+            std::shared_ptr<domain::map::field> field;
+            int range_from_origin;
+        };
+
         class map : public drawable::abstract_drawable_game_object, public engine::observer::observee<map>,
                     public engine::observer::observer<field> {
         public:
@@ -46,21 +53,22 @@ namespace domain {
 
             engine::math::vec2_t get_size() const;
 
-            void draw(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed);
+            void draw(drawable::draw_managers_wrapper &draw_managers, unsigned int time_elapsed);
 
             void set_display_box(engine::math::box2_t display_box);
 
-            void unload(engine::graphics::texture_manager &texture_manager);
+            void unload(drawable::draw_managers_wrapper &draw_managers);
 
             void update_objects(domain::game_level::game_level *game_level);
-
-
 
         private:
             engine::math::vec2_t index_to_position(unsigned int index) const;
 
             unsigned int position_to_index(engine::math::vec2_t pos) const;
 
+            // get all fields in a certain range from the origin
+            // range = fields. 1 = one neighbour away
+            std::vector<field_with_range> get_fields_in_range(int range, field* origin);
             engine::math::vec2_t m_size;
             engine::math::vec2_t m_tile_size;
             std::vector<std::shared_ptr<domain::map::field>> m_fields;

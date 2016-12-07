@@ -28,8 +28,6 @@ namespace domain {
 
             std::shared_ptr<domain::map::map> get_map();
 
-            virtual void unload(engine::graphics::texture_manager &texture_manager);
-
             virtual void notify(domain::map::objects::dragable_field_object *p_observee, std::string title);
 
             virtual bool is_goal_reached();
