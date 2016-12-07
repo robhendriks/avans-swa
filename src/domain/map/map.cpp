@@ -93,7 +93,7 @@ namespace domain {
             if(range > 0){
                 // fill queue with all the neighbours from origin to make it the start point
                 // for every neighbour add it to the list
-                for(auto neighbour : origin->get_neighbors()){
+                for(auto& neighbour : origin->get_neighbors()){
                     queue.push_back(neighbour);
                 }
 
@@ -123,7 +123,7 @@ namespace domain {
                             result.push_back(field_with_range(Qfield, range));
 
                             // add its neighbour neighbours to the next queue
-                            for(auto neigbour : Qfield->get_neighbors()){
+                            for(auto& neigbour : Qfield->get_neighbors()){
                                 next_queue.push_back(neigbour);
                             }
                         }

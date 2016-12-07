@@ -25,14 +25,14 @@ namespace services {
             auto olist = _nation.getavailableenemies();
             auto q = remove_if(list.begin(), list.end(),
                                [_noboss](std::shared_ptr<domain::nations::enemy> element) {
-                                   return element->getBoss() == true&&_noboss==true;
+                                   return element->is_boss() == true&&_noboss==true;
                                });
             list.erase(q, list.end());
 
             if(capoppertunity!=0){
                 auto r = remove_if(list.begin(), list.end(),
                                    [capoppertunity](std::shared_ptr<domain::nations::enemy> element) {
-                                       return element->getOppertunity() >capoppertunity;
+                                       return element->get_oppertunity_cost() >capoppertunity;
                                    });
                 list.erase(r, list.end());
             }
@@ -44,7 +44,7 @@ namespace services {
             _nation.setavailableenemies(list);
 
             if (_nation.getavailableenemies().size() == 0 ||
-                _nation.getavailableenemies()[0]->getOppertunity() > _oppertunity) {
+                _nation.getavailableenemies()[0]->get_oppertunity_cost() > _oppertunity) {
                 //Returns empty list in case no enemy is cheap enough
                 return std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>>(0);
             }
@@ -57,13 +57,12 @@ namespace services {
             std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> enemies;
             for (unsigned int i = 0; i < _nation.getavailableenemies().size(); i++) {
                 temp_oppertunity = temp_oppertunity / 2;
-                int amount = temp_oppertunity /(_nation.getavailableenemies()[i]->getOppertunity());
+                int amount = temp_oppertunity /(_nation.getavailableenemies()[i]->get_oppertunity_cost());
                 for (int j = 0; j < amount; j++) {
                     std::shared_ptr<domain::nations::enemy> e = std::make_shared<domain::nations::enemy>(*_nation.getavailableenemies()[i]);
                     enemies.push_back(
 
-                            std::pair<int, std::shared_ptr<domain::nations::enemy>>{0,
-                                                                                    e});
+                            std::pair<int, std::shared_ptr<domain::nations::enemy>>{0, e});
 
                 }
             }
@@ -86,10 +85,7 @@ namespace services {
             }
             return enemies;
 
-
         }
-
-
         wavegenerator::~wavegenerator() {
 
         }

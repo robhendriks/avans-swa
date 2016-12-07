@@ -5,16 +5,19 @@
 #include "ai.h"
 #include "objects/road.h"
 #include "objects/building.h"
+#include "../nations/enemy.h"
 
 namespace domain {
     namespace map {
         domain::map::ai::ai() {
-            m_initialised = false;
+            m_unit = nullptr;
+            m_map = nullptr;
         }
 
-        domain::map::ai::ai(std::shared_ptr<map> current_map) {
-            m_next_field = get_spawn_point(current_map);
-            m_initialised = true;
+        domain::map::ai::ai(std::shared_ptr<map> current_map, std::shared_ptr<domain::nation::enemy> unit) {
+            m_map = current_map;
+            m_current_field = get_spawn_point();
+            m_unit = unit;
         }
 
         std::shared_ptr<field> ai::get_next_field(std::shared_ptr<field> current_field) {
@@ -48,12 +51,12 @@ namespace domain {
             }
         }
 
-        std::shared_ptr<field> ai::get_spawn_point(std::shared_ptr<map> current_map) {
-            if(current_map != nullptr)
+        std::shared_ptr<field> ai::get_spawn_point() {
+            if(m_map != nullptr)
             {
                 auto spawn_point = std::shared_ptr<field>();
 
-                auto fields = current_map->get_fields_with_objects();
+                auto fields = m_map->get_fields_with_objects();
                 for(auto &field : fields)
                 {
                     //if I can dynamic cast it to road, it's a road and a valid spawn point
@@ -81,9 +84,17 @@ namespace domain {
         }
 
         bool ai::is_initialised() const {
-            return m_initialised;
+            return m_map != nullptr && m_unit != nullptr;
         }
 
+        void ai::set_map(std::shared_ptr<map> map) {
+            m_map = map;
+            m_current_field = get_spawn_point();
+        }
+
+        void ai::set_unit(std::shared_ptr<domain::nation::enemy> unit) {
+            m_unit = unit;
+        }
 
     }
 }

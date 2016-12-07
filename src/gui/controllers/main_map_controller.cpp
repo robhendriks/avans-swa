@@ -58,10 +58,7 @@ namespace gui {
             for (auto enemy : m_wave_management_service.get_enemies(m_engine.get_time_elapsed())) {
                 // set start dest (enemy still needs ai now its stupid)
                 //Bert: Start dest now is the first tile in map with a road.
-                auto map = m_model.world->get_current_level().get_map();
-                auto location = enemy->update(map, m_engine.get_time_elapsed());
-
-                enemy->set_box(std::make_shared<engine::math::box2_t>(location->get_box()));
+                enemy->update(m_engine.get_time_elapsed());
                 current_enemies.push_back(enemy);
 
             }

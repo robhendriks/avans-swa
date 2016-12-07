@@ -237,9 +237,9 @@ namespace gui {
             }
 
             //draw enemies
-            for(auto &enemy : m_model.world->get_current_level().get_enemies_in_lvl()) {
-                enemy->draw(m_top_bar.m_draw_managers, time_elapsed);
-            }
+           // for(auto &enemy : m_model.world->get_current_level().get_enemies_in_lvl()) {
+           //     enemy->draw(m_top_bar.m_draw_managers, time_elapsed);
+           // }
 
             m_controller->update();
 
