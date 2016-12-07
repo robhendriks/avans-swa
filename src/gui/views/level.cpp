@@ -252,7 +252,8 @@ namespace gui {
         void level::on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event) {
             engine::math::vec2_t *position = engine::input::input_handler::get_instance()->get_mouse_position();
 
-            if (m_pause_box->contains(*position) || (m_model.paused && m_overlay_resume_box->contains(*position))) {
+            if (m_pause_box->contains(*position) ||
+                (m_model.paused && !m_in_game_menu.m_show && m_overlay_resume_box->contains(*position))) {
                 m_in_game_menu.m_show = false;
                 on_pause();
             } else if (!m_model.paused) {

@@ -18,7 +18,17 @@ namespace gui {
             // Load textures
             m_top_bar.m_texture_manager.load("images/menu_icon.png", "igm_icon");
             m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 184}, {1451, 229}}, 1.5, "igm_red_btn");
+            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 64}, {1451, 110}}, 1.5, "igm_yellow_btn");
             m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 124}, {1451, 169}}, 1.5, "igm_green_btn");
+            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1, 310}, {101, 410}}, 3.5, "igm_grey_panel");
+
+            // Load texts
+            m_top_bar.m_texture_manager.load_text("Save", {255, 255, 255},
+                                                  *m_top_bar.m_font_manager.get_font("roboto", 25), "igm_save");
+            m_top_bar.m_texture_manager.load_text("Quit", {255, 255, 255},
+                                                  *m_top_bar.m_font_manager.get_font("roboto", 25), "igm_quit");
+            m_top_bar.m_texture_manager.load_text("Back", {255, 255, 255},
+                                                  *m_top_bar.m_font_manager.get_font("roboto", 25), "igm_back");
 
             // Subscribe to events
             auto &eventbus = engine::eventbus::eventbus::get_instance();
@@ -41,6 +51,35 @@ namespace gui {
             m_overlay_box.reset(new engine::math::box2_t(builder2.build()));
 
             // Create the menu box
+            engine::graphics::box_builder builder3(m_top_bar.m_texture_manager.get_size("igm_grey_panel"));
+            builder3.to_center(*m_overlay_box);
+            m_menu_box.reset(new engine::math::box2_t(builder3.build()));
+
+            // Create the menu button boxes and text boxes
+            auto btn_size = m_top_bar.m_texture_manager.get_size("igm_green_btn");
+            auto margin_between_btns = (m_menu_box->height() - btn_size.y * 3) / 4;
+            engine::graphics::box_builder builder4(btn_size);
+            builder4.as_left_top(m_menu_box->left_top()).center_horizontal(m_menu_box->min.x, m_menu_box->max.x)
+                .add_margin({0, margin_between_btns});
+            m_save_btn_box.reset(new engine::math::box2_t(builder4.build()));
+
+            engine::graphics::box_builder builder5(m_top_bar.m_texture_manager.get_size("igm_save"));
+            builder5.to_center(*m_save_btn_box);
+            m_save_btn_text_box.reset(new engine::math::box2_t(builder5.build()));
+
+            builder4.add_margin({0, margin_between_btns + btn_size.y});
+            m_back_btn_box.reset(new engine::math::box2_t(builder4.build()));
+
+            engine::graphics::box_builder builder6(m_top_bar.m_texture_manager.get_size("igm_back"));
+            builder6.to_center(*m_back_btn_box);
+            m_back_btn_text_box.reset(new engine::math::box2_t(builder6.build()));
+
+            builder4.add_margin({0, margin_between_btns + btn_size.y});
+            m_quit_btn_box.reset(new engine::math::box2_t(builder4.build()));
+
+            engine::graphics::box_builder builder7(m_top_bar.m_texture_manager.get_size("igm_quit"));
+            builder7.to_center(*m_quit_btn_box);
+            m_quit_btn_text_box.reset(new engine::math::box2_t(builder7.build()));
         }
 
         void in_game_menu::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
@@ -52,6 +91,19 @@ namespace gui {
             // Draw the menu and overlay on show
             if (m_show) {
                 m_top_bar.m_color_manager.draw({0, 0, 0, 180}, *m_overlay_box);
+
+                // Menu (wrapper)
+                m_top_bar.m_texture_manager.draw("igm_grey_panel", *m_menu_box);
+
+                // Menu buttons
+                m_top_bar.m_texture_manager.draw("igm_green_btn", *m_save_btn_box);
+                m_top_bar.m_texture_manager.draw("igm_save", *m_save_btn_text_box);
+
+                m_top_bar.m_texture_manager.draw("igm_yellow_btn", *m_back_btn_box);
+                m_top_bar.m_texture_manager.draw("igm_back", *m_back_btn_text_box);
+
+                m_top_bar.m_texture_manager.draw("igm_red_btn", *m_quit_btn_box);
+                m_top_bar.m_texture_manager.draw("igm_quit", *m_quit_btn_text_box);
             }
         }
 
@@ -88,7 +140,14 @@ namespace gui {
             // Unload textures
             m_top_bar.m_texture_manager.unload("igm_icon");
             m_top_bar.m_texture_manager.unload("igm_red_btn");
+            m_top_bar.m_texture_manager.unload("igm_yellow_btn");
             m_top_bar.m_texture_manager.unload("igm_green_btn");
+            m_top_bar.m_texture_manager.unload("igm_grey_panel");
+
+            // Unload texts
+            m_top_bar.m_texture_manager.unload("igm_save");
+            m_top_bar.m_texture_manager.unload("igm_quit");
+            m_top_bar.m_texture_manager.unload("igm_back");
 
             // Unsubscribe to events
             auto &eventbus = engine::eventbus::eventbus::get_instance();

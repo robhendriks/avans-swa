@@ -48,6 +48,13 @@ namespace gui {
             bool m_show;
             std::unique_ptr<engine::math::box2_t> m_menu_icon_box;
             std::unique_ptr<engine::math::box2_t> m_overlay_box;
+            std::unique_ptr<engine::math::box2_t> m_menu_box;
+            std::unique_ptr<engine::math::box2_t> m_save_btn_box;
+            std::unique_ptr<engine::math::box2_t> m_save_btn_text_box;
+            std::unique_ptr<engine::math::box2_t> m_back_btn_box;
+            std::unique_ptr<engine::math::box2_t> m_back_btn_text_box;
+            std::unique_ptr<engine::math::box2_t> m_quit_btn_box;
+            std::unique_ptr<engine::math::box2_t> m_quit_btn_text_box;
             std::vector<std::function<void(bool)>> m_callbacks;
         };
     }
