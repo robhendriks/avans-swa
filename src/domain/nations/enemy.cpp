@@ -87,6 +87,19 @@ namespace domain {
             m_destination = destination;
         }
 
+        std::shared_ptr<domain::map::field> enemy::update(std::shared_ptr<domain::map::map> current_map, unsigned int elapsed_time) {
+            set_ai(current_map);
+            auto location = m_ai.move(elapsed_time);
+            return location;
+        }
+
+        void enemy::set_ai(std::shared_ptr<domain::map::map> current_map) {
+            if(!m_ai.is_initialised())
+            {
+                m_ai = domain::map::ai(current_map);
+            }
+        }
+
         bool operator<(const std::shared_ptr<enemy>&  s1, const std::shared_ptr<enemy>&  s2){
 
             return s1->getOppertunity() < s2->getOppertunity();

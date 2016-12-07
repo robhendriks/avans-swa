@@ -9,7 +9,12 @@
 namespace domain {
     namespace map {
         domain::map::ai::ai() {
+            m_initialised = false;
+        }
 
+        domain::map::ai::ai(std::shared_ptr<map> current_map) {
+            m_next_field = get_spawn_point(current_map);
+            m_initialised = true;
         }
 
         std::shared_ptr<field> ai::get_next_field(std::shared_ptr<field> current_field) {
@@ -67,14 +72,16 @@ namespace domain {
             }
         }
 
-        std::shared_ptr<field> ai::move(std::shared_ptr<map> current_map, int times) {
-            auto next_field = get_next_field(get_spawn_point(current_map));
-            //hardcoded for moving over path
-            for(int i = 25; i >= 0; i--)
-            {
-                next_field = get_next_field(next_field);
+        std::shared_ptr<field> ai::move(unsigned int elapsed_time) {
+            if(static_cast<int>(elapsed_time) - static_cast<int>(m_last_movement_time) > m_movement_time) {
+                m_next_field = get_next_field(m_next_field);
+                m_last_movement_time = elapsed_time;
             }
-            return next_field;
+            return m_next_field;
+        }
+
+        bool ai::is_initialised() const {
+            return m_initialised;
         }
 
 

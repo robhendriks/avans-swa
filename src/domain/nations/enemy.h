@@ -9,6 +9,7 @@
 #include <memory>
 #include "nation.h"
 #include "../drawable/drawable_game_object.h"
+#include "../map/ai.h"
 
 namespace domain {
     namespace nations {
@@ -43,6 +44,10 @@ namespace domain {
             virtual void set_box(std::shared_ptr<engine::math::box2_t> destination);
             virtual engine::math::box2_t get_box() const;
 
+            std::shared_ptr<domain::map::field> update(std::shared_ptr<domain::map::map> current_map, unsigned int elapsed_time);
+
+            void set_ai(std::shared_ptr<domain::map::map> current_map);
+
         private:
             std::shared_ptr<engine::math::box2_t> m_destination;
 
@@ -66,6 +71,8 @@ namespace domain {
             int movement;
 
             bool boss;
+
+            domain::map::ai m_ai = domain::map::ai();
 
             //So we directly know which Nations this Unit belongs to.
             std::shared_ptr<nation> Nation;
