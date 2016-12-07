@@ -126,7 +126,6 @@ namespace gui {
         }
 
         void win_game_over::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
-            m_in_game_menu.draw(time_elapsed, display_box);
             m_goals_view.draw(time_elapsed, display_box);
 
             m_texture_manager.draw("w_title", *m_title_box);
@@ -151,6 +150,9 @@ namespace gui {
                     }
                 }
             }
+
+            // Draw at last because of the overlay
+            m_in_game_menu.draw(time_elapsed, display_box);
         }
 
         void win_game_over::on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event) {

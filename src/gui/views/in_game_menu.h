@@ -55,6 +55,8 @@ namespace gui {
             std::unique_ptr<engine::math::box2_t> m_back_btn_text_box;
             std::unique_ptr<engine::math::box2_t> m_quit_btn_box;
             std::unique_ptr<engine::math::box2_t> m_quit_btn_text_box;
+            std::unique_ptr<engine::math::box2_t> m_cross_circle_box;
+            std::unique_ptr<engine::math::box2_t> m_cross_box;
             std::vector<std::function<void(bool)>> m_callbacks;
         };
     }

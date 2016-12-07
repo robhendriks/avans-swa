@@ -15,12 +15,17 @@ namespace gui {
         void in_game_menu::before() {
             m_top_bar.before();
 
+            // Make sure it's not shown
+            m_show = false;
+
             // Load textures
             m_top_bar.m_texture_manager.load("images/menu_icon.png", "igm_icon");
             m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 184}, {1451, 229}}, 1.5, "igm_red_btn");
             m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 64}, {1451, 110}}, 1.5, "igm_yellow_btn");
             m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 124}, {1451, 169}}, 1.5, "igm_green_btn");
             m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1, 310}, {101, 410}}, 3.5, "igm_grey_panel");
+            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{758, 625}, {794, 661}}, 1, "igm_red_circle");
+            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{9, 703}, {27, 721}}, 1, "igm_white_cross");
 
             // Load texts
             m_top_bar.m_texture_manager.load_text("Save", {255, 255, 255},
@@ -80,6 +85,15 @@ namespace gui {
             engine::graphics::box_builder builder7(m_top_bar.m_texture_manager.get_size("igm_quit"));
             builder7.to_center(*m_quit_btn_box);
             m_quit_btn_text_box.reset(new engine::math::box2_t(builder7.build()));
+
+            // Create the right top cross
+            engine::graphics::box_builder builder8(m_top_bar.m_texture_manager.get_size("igm_red_circle"));
+            builder8.as_center(m_menu_box->right_top()).add_margin({-4, 8});
+            m_cross_circle_box.reset(new engine::math::box2_t(builder8.build()));
+
+            engine::graphics::box_builder builder9(m_top_bar.m_texture_manager.get_size("igm_white_cross"));
+            builder9.to_center(*m_cross_circle_box);
+            m_cross_box.reset(new engine::math::box2_t(builder9.build()));
         }
 
         void in_game_menu::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
@@ -104,6 +118,10 @@ namespace gui {
 
                 m_top_bar.m_texture_manager.draw("igm_red_btn", *m_quit_btn_box);
                 m_top_bar.m_texture_manager.draw("igm_quit", *m_quit_btn_text_box);
+
+                // Menu (wrapper) cross
+                m_top_bar.m_texture_manager.draw("igm_red_circle", *m_cross_circle_box);
+                m_top_bar.m_texture_manager.draw("igm_white_cross", *m_cross_box);
             }
         }
 
@@ -116,6 +134,16 @@ namespace gui {
 
             if (m_menu_icon_box->contains(*position)) {
                 change_show();
+            }
+
+            if (m_show) {
+                if (m_quit_btn_box->contains(*position)) {
+                    m_top_bar.m_menu_controller->show();
+                } else if (m_back_btn_box->contains(*position)|| m_cross_circle_box->contains(*position)) {
+                    change_show();
+                } else if (m_save_btn_box->contains(*position)) {
+
+                }
             }
         }
 
@@ -143,6 +171,8 @@ namespace gui {
             m_top_bar.m_texture_manager.unload("igm_yellow_btn");
             m_top_bar.m_texture_manager.unload("igm_green_btn");
             m_top_bar.m_texture_manager.unload("igm_grey_panel");
+            m_top_bar.m_texture_manager.unload("igm_grey_cicle");
+            m_top_bar.m_texture_manager.unload("igm_white_cross");
 
             // Unload texts
             m_top_bar.m_texture_manager.unload("igm_save");

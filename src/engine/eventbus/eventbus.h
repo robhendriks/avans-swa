@@ -52,7 +52,7 @@ namespace engine {
                 std::string type_name = typeid(T).name();
 
                 // Loop for "normal" m_subscribers
-                m_unsubscribe_count = 0;
+                m_unsubscribe_count[type_name] = 0;
                 std::vector<subscriber<T>*> notified;
                 size_t original_size = m_subscribers[type_name].size();
                 for (size_t i = 0; i < original_size; i++) {
@@ -63,12 +63,13 @@ namespace engine {
                         p_subscriber->on_event(event);
                         notified.push_back(p_subscriber);
                         // When the subscriber, unsubscribes himself start over again
-                        if (m_unsubscribe_count != 0) {
+                        if (m_unsubscribe_count[type_name] != 0) {
                             // Start over again with the loop
                             i = 0;
-                            m_unsubscribe_count = 0;
+
                             // Decrease original_size, so new subscribers won't be notified
-                            original_size--;
+                            original_size -= m_unsubscribe_count[type_name];
+                            m_unsubscribe_count[type_name] = 0;
                         }
                     }
                 }
@@ -126,11 +127,17 @@ namespace engine {
              */
             template<class T>
             void unsubscribe(subscriber<T> *subscriber1) {
-                auto &subscribers_array = m_subscribers[typeid(T).name()];
+                std::string type_name = typeid(T).name();
+
+                auto &subscribers_array = m_subscribers[type_name];
                 for (size_t i = 0; i < subscribers_array.size(); i++) {
                     if (subscribers_array[i].as<subscriber<T>*>() == subscriber1) {
                         subscribers_array.erase(subscribers_array.begin() + i);
-                        m_unsubscribe_count++;
+
+                        if (m_unsubscribe_count.find(type_name) != m_unsubscribe_count.end()) {
+                            m_unsubscribe_count[typeid(T).name()]++;
+                        }
+
                         return;
                     }
                 }
@@ -157,7 +164,7 @@ namespace engine {
             std::map<std::string, std::vector<type::any>> m_subscribers;
 
             // This is needed to track changes of the m_subscribers map when an event is fired
-            int m_unsubscribe_count;
+            std::map<std::string, int> m_unsubscribe_count;
 
             eventbus() {}
         };
