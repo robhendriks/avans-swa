@@ -5,6 +5,7 @@
 #ifndef CITY_DEFENCE_EVENTBUS_H
 #define CITY_DEFENCE_EVENTBUS_H
 
+#include <string>
 #include <vector>
 #include <algorithm>
 #include <map>

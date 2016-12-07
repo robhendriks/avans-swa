@@ -1,12 +1,21 @@
 cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 project(city_defence VERSION 1.0 LANGUAGES C CXX)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Werror -std=c++14")
+option(BuildTests "Builds the tests." OFF)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -std=c++14")
+
+if (NOT APPLE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+endif()
 
 add_subdirectory(third_party)
-add_subdirectory(tests)
+
+if (BuildTests)
+    enable_testing()
+    add_subdirectory(tests)
+endif ()
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
@@ -81,9 +90,9 @@ set(SOURCES src/main.cpp
     src/domain/drawable/drawable_game_object.cpp
     src/domain/drawable/drawable_game_object.h
     src/domain/drawable/abstract_drawable_game_object.h
-        src/services/level_loader/base_level_loader.h
-        src/services/level_loader/json_level_loader.cpp
-        src/services/level_loader/json_level_loader.h
+    src/services/level_loader/base_level_loader.h
+    src/services/level_loader/json_level_loader.cpp
+    src/services/level_loader/json_level_loader.h
     src/gui/controllers/credits_controller.cpp
     src/gui/controllers/credits_controller.h
     src/gui/views/credits.cpp
@@ -112,16 +121,16 @@ set(SOURCES src/main.cpp
     src/domain/nations/nation.cpp
     src/domain/nations/nation.h
     src/domain/game_level/game_level.h
-        src/domain/map/objects/building.h
+    src/domain/map/objects/building.h
     src/domain/map/objects/dragable_field_object.h
-        src/domain/map/objects/road.h
-        src/domain/map/objects/building.cpp
+    src/domain/map/objects/road.h
+    src/domain/map/objects/building.cpp
     src/domain/map/objects/dragable_field_object.cpp
-        src/domain/map/objects/road.cpp
-        src/domain/map/field.h
-        src/domain/map/field.cpp
-        src/domain/map/objects/field_object.h
-        src/engine/events/display_changed.cpp
+    src/domain/map/objects/road.cpp
+    src/domain/map/field.h
+    src/domain/map/field.cpp
+    src/domain/map/objects/field_object.h
+    src/engine/events/display_changed.cpp
     src/engine/events/display_changed.h
     src/engine/events/game_tick.cpp
     src/engine/events/game_tick.h
@@ -148,23 +157,23 @@ set(SOURCES src/main.cpp
     src/domain/drawable/draw_managers_wrapper.h)
 
 include_directories(third_party/json/src
-        third_party/di-cpp14/include
-        third_party/type
-        third_party/nanosvg
-        ${SDL2_INCLUDE_DIR}
-        ${SDL2_IMAGE_INCLUDE_DIR}
-        ${SDL2_TTF_INCLUDE_DIRS}
-        ${SDL2_MIXER_INCLUDE_DIR})
+    third_party/di-cpp14/include
+    third_party/type
+    third_party/nanosvg
+    ${SDL2_INCLUDE_DIR}
+    ${SDL2_IMAGE_INCLUDE_DIR}
+    ${SDL2_TTF_INCLUDE_DIRS}
+    ${SDL2_MIXER_INCLUDE_DIR})
 
 add_executable(city_defence ${SOURCES})
 add_library(city_defence_sources STATIC ${SOURCES})
 
 target_link_libraries(city_defence
-        ${SDL2_LIBRARY}
-        ${SDL2_IMAGE_LIBRARY}
-        ${SDL2_TTF_LIBRARIES}
-        ${SDL2_MIXER_LIBRARY})
+    ${SDL2_LIBRARY}
+    ${SDL2_IMAGE_LIBRARY}
+    ${SDL2_TTF_LIBRARIES}
+    ${SDL2_MIXER_LIBRARY})
 
 add_custom_command(TARGET city_defence PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/data $<TARGET_FILE_DIR:city_defence>/)
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/data $<TARGET_FILE_DIR:city_defence>/)

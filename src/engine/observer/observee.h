@@ -6,6 +6,7 @@
 #define CITY_DEFENCE_OBSERVEE_H
 
 #include "observer.h"
+#include <string>
 #include <vector>
 
 namespace engine {
