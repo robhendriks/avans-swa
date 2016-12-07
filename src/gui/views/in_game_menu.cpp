@@ -184,6 +184,9 @@ namespace gui {
 
             eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>*>(this));
             eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::key_down>*>(this));
+
+            // Clear callbacks
+            m_callbacks.clear();
         }
     }
 }
