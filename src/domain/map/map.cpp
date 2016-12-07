@@ -72,7 +72,7 @@ namespace domain {
                     // set heat for itself based on range + 1
                     p_observee->set_weight(p_observee->get_weight() + range + 1);
 
-                    // set heat for neigbours based on range
+                    // set heat for neighbours based on range
                     auto fields = get_fields_in_range(range, p_observee);
                     for(auto& field_with_range : fields)
                     {
@@ -91,8 +91,8 @@ namespace domain {
 
             // in case range is 0 or smaller return a empty list
             if(range > 0){
-                // fill queue with all the neigbours from origin to make it the start point
-                // for every neigbour add it to the list
+                // fill queue with all the neighbours from origin to make it the start point
+                // for every neighbour add it to the list
                 for(auto neighbour : origin->get_neighbors()){
                     queue.push_back(neighbour);
                 }
@@ -100,7 +100,7 @@ namespace domain {
                 // now that we have a start point lets go.
                 // lets do this as many times as the range and each time we go a layer deeeper!
                 for(;range >= 0; --range){
-                    // store neigbours after the queue has been finished
+                    // store neighbours after the queue has been finished
                     std::vector<std::shared_ptr<field>> next_queue;
 
                     // now go down the queue from the layer we are in now

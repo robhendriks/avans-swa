@@ -4,6 +4,7 @@
 
 #include "main_map_controller.h"
 #include "../controllers/menu_controller.h"
+#include "../../domain/map/ai.h"
 
 namespace gui {
     namespace controllers {
@@ -55,11 +56,16 @@ namespace gui {
         void main_map_controller::update() {
             auto current_enemies = m_model.world->get_current_level().get_enemies_in_lvl();
             for (auto enemy : m_wave_management_service.get_enemies(m_engine.get_time_elapsed())) {
-                // set start dest (enemy still needs ai now its a stupid god)
-                auto empty_field_pos = m_model.world->get_current_level().get_map()->get_empty_fields()[0]->get_box();
+                // set start dest (enemy still needs ai now its stupid)
+                //Bert: Start dest now is the first tile in map with a road.
+                auto a_i = domain::map::ai();
+                auto map = m_model.world->get_current_level().get_map();
+                auto location = a_i.move(map, 15);
 
-                enemy->set_box(std::make_shared<engine::math::box2_t>(empty_field_pos));
+
+                enemy->set_box(std::make_shared<engine::math::box2_t>(location->get_box()));
                 current_enemies.push_back(enemy);
+
             }
 
             m_model.world->get_current_level().set_enemies_in_lvl(current_enemies);
