@@ -114,6 +114,15 @@ namespace gui {
             }
         };
 
+        /**
+         * Called after a level is done or stopped
+         */
+        void main_map_controller::resume_engine_if() {
+            if (m_engine.get_state() == engine::PAUSED) {
+                m_engine.resume();
+            }
+        }
+
         void
         main_map_controller::set_menu_controller(std::shared_ptr<gui::controllers::menu_controller> menu_controller) {
             m_menu_controller = menu_controller;

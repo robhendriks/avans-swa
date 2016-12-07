@@ -25,6 +25,7 @@ namespace gui {
             friend class in_game_menu;
             friend class level;
             friend class win_game_over;
+            friend class credits;
         public:
             top_bar(domain::drawable::draw_managers_wrapper &draw_managers);
 

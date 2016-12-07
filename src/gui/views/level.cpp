@@ -329,6 +329,9 @@ namespace gui {
             eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>*>(this));
             eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::key_down>*>(this));
             eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<events::goal_reached>*>(this));
+
+            // Make sure the engine is running (so animations will work)
+            m_controller->resume_engine_if();
         }
 
         void level::set_controller(controllers::main_map_controller &controller) {

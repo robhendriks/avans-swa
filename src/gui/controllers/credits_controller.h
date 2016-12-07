@@ -9,6 +9,12 @@
 #include "../views/credits.h"
 
 namespace gui {
+    namespace views {
+        class credits;
+    }
+}
+
+namespace gui {
     namespace controllers {
         class credits_controller : public base_controller {
         public:
