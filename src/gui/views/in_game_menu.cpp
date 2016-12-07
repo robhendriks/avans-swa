@@ -30,9 +30,9 @@ namespace gui {
             // Load texts
             m_top_bar.m_texture_manager.load_text("Save", {255, 255, 255},
                                                   *m_top_bar.m_font_manager.get_font("roboto", 25), "igm_save");
-            m_top_bar.m_texture_manager.load_text("Quit Game", {255, 255, 255},
+            m_top_bar.m_texture_manager.load_text("Back to Main Menu", {255, 255, 255},
                                                   *m_top_bar.m_font_manager.get_font("roboto", 25), "igm_quit");
-            m_top_bar.m_texture_manager.load_text("Back", {255, 255, 255},
+            m_top_bar.m_texture_manager.load_text("Continue the Game", {255, 255, 255},
                                                   *m_top_bar.m_font_manager.get_font("roboto", 25), "igm_back");
 
             // Subscribe to events
