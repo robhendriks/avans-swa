@@ -2,15 +2,13 @@
 // Created by robbie on 20-11-2016.
 //
 
-#include <fstream>
 #include "json_level_loader.h"
-#include "../../domain/map/objects/road.h"
-
-#include "../../domain/map/objects/defensive_building.h"
-#include "../../domain/map/objects/economic_building.h"
 
 namespace services {
     namespace level_loader {
+
+        const int json_level_loader::TILE_WIDTH = 64;
+        const int json_level_loader::TILE_HEIGHT = 64;
 
         json_level_loader::json_level_loader(json root)
             : m_root(root) {}
@@ -128,19 +126,17 @@ namespace services {
 
             SDL_Log("Loading %zu tiles...\n", elements.size());
 
-            int tile_width = 64;
-            int tile_height = 64;
             int tileset_columns = 17; // 1088 / 64 = 17
 
             for (json &elem : elements) {
                 int tile_x = elem.value("x", -1); // get x, default to -1
                 int tile_y = elem.value("y", -1); // get y, default to -1
                 int tile_id = elem.value("id", -1); // get id, default to -1
+                bool tile_placeable = !elem.value("immutable", false); // get immutability, default to false
 
-                // Report and continue if there's bogus data
+                // Report if there's bogus data
                 if (tile_x < 0 || tile_y < 0 || tile_id < 0) {
-                    SDL_Log("Invalid data for tile at %i:%i.", tile_x, tile_y);
-                    continue;
+                    throw std::runtime_error("Error: could not load tile");
                 }
 
                 // Calculate the tile's sprite row and column
@@ -153,8 +149,8 @@ namespace services {
                     static_cast<float>(tile_y)});
 
                 auto image_start_position = vec2_t{
-                    static_cast<float>(image_column * tile_width),
-                    static_cast<float>(image_row * tile_height)};
+                    static_cast<float>(image_column * TILE_WIDTH),
+                    static_cast<float>(image_row * TILE_HEIGHT)};
 
                 field->set_draw_settings("images/tileset.png", image_start_position);
             }
@@ -171,7 +167,7 @@ namespace services {
             }
 
             SDL_Log("Loading %zu objects...\n", elements.size());
-return;
+            return;
             int column = 0;
             // Loop through all objects
             for (json &elem : elements) {
@@ -235,7 +231,7 @@ return;
             }
         }
 
-        std::shared_ptr<domain::map::objects::building> json_level_loader::load_buildings(std::string url) {
+        building_ptr json_level_loader::load_buildings(std::string url) {
             std::shared_ptr<domain::map::objects::building> building;
             std::ifstream file(url);
             if (!file.is_open()) {
@@ -327,13 +323,13 @@ return;
             return building;
         }
 
-        std::shared_ptr<domain::map::map> json_level_loader::load_all_levels(std::string url) {
-            std::ifstream file(url);
-            if (!file.is_open()) {
-                throw std::runtime_error(std::string("Unable to open file: ") + url);
-            }
+        map_ptr json_level_loader::load_all_levels(std::string url) {
+            std::ifstream file;
+            file.exceptions(std::ifstream::failbit);
 
             try {
+                file.open(url);
+
                 json map_root;
                 map_root << file;
 
@@ -341,20 +337,20 @@ return;
                 int height = map_root.value("height", -1);
 
                 if (width < 1 || height < 1) {
-                    throw std::runtime_error(std::string("Invalid world dimensions in file: ") + url);
+                    throw std::runtime_error("Error: could not load map");
                 }
 
-                // Create the map (currently uses fixed tile dimensions)
+                // Create the map
                 auto map = std::make_shared<domain::map::map>(
                     vec2_t{static_cast<float>(width - 1), static_cast<float>(height - 1)},
-                    vec2_t{64, 64});
+                    vec2_t{static_cast<float>(TILE_WIDTH), static_cast<float>(TILE_HEIGHT)});
 
                 load_fields(map_root, *map);
                 load_objects(map_root, *map);
 
                 return map;
             } catch (std::exception &e) {
-                std::cout << e.what() << "\n";
+                std::cerr << e.what() << "\n";
                 throw;
             }
         }

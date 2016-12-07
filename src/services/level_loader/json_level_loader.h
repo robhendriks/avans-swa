@@ -5,6 +5,7 @@
 #ifndef CITY_DEFENCE_JSON_MAP_LOADER_H
 #define CITY_DEFENCE_JSON_MAP_LOADER_H
 
+#include <iostream>
 #include <fstream>
 #include <json.hpp>
 #include "base_level_loader.h"
@@ -12,6 +13,9 @@
 #include "../../domain/map/map.h"
 #include "../../engine/math/vec2.hpp"
 #include "../../domain/map/objects/building.h"
+#include "../../domain/map/objects/road.h"
+#include "../../domain/map/objects/defensive_building.h"
+#include "../../domain/map/objects/economic_building.h"
 
 using json = nlohmann::json;
 using namespace engine::math;
@@ -25,6 +29,9 @@ namespace services {
 
         class json_level_loader : public base_level_loader {
         public:
+            static const int TILE_WIDTH;
+            static const int TILE_HEIGHT;
+
             json_level_loader(json root);
 
             std::unique_ptr<domain::game_level::game_level> load();
