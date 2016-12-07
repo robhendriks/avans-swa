@@ -9,9 +9,9 @@
 namespace gui {
     namespace views {
 
-        win_game_over::win_game_over(top_bar &top_bar1, level_goals &goals_view, models::transition_level_model &model,
+        win_game_over::win_game_over(in_game_menu &in_game_menu1, level_goals &goals_view, models::transition_level_model &model,
             engine::audio::sound_manager &sound_manager) :
-                m_top_bar(top_bar1), m_goals_view(goals_view), m_controller(nullptr), m_model(model),
+                m_in_game_menu(in_game_menu1), m_goals_view(goals_view), m_controller(nullptr), m_model(model),
                 m_sound_manager(sound_manager) {
 
         }

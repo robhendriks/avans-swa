@@ -10,6 +10,7 @@
 #include "../../engine/graphics/moveable_box.h"
 #include "../controllers/main_map_controller.h"
 #include "../models/transition_level_model.h"
+#include "in_game_menu.h"
 #include <memory>
 
 namespace gui {
@@ -20,17 +21,11 @@ namespace gui {
 
 namespace gui {
     namespace views {
-        class top_bar;
-    }
-}
-
-namespace gui {
-    namespace views {
         class win_game_over
             : public base_view,
               engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>> {
         public:
-            win_game_over(top_bar &top_bar1, level_goals &goals_view, models::transition_level_model &model,
+            win_game_over(in_game_menu &in_game_menu1, level_goals &goals_view, models::transition_level_model &model,
                 engine::audio::sound_manager &sound_manager);
 
             void before();
@@ -46,7 +41,7 @@ namespace gui {
             void set_controller(gui::controllers::main_map_controller &controller);
 
         private:
-            top_bar &m_top_bar;
+            in_game_menu &m_in_game_menu;
             level_goals &m_goals_view;
             gui::controllers::main_map_controller *m_controller;
             models::transition_level_model &m_model;

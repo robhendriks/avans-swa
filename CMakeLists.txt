@@ -144,7 +144,7 @@ set(SOURCES src/main.cpp
     src/events/goal_reached.cpp
     src/events/goal_reached.h
     src/engine/events/engine_state_changed.cpp
-    src/engine/events/engine_state_changed.h)
+    src/engine/events/engine_state_changed.h src/gui/views/in_game_menu.cpp src/gui/views/in_game_menu.h)
 
 include_directories(third_party/json/src
         third_party/di-cpp14/include

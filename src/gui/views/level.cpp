@@ -12,9 +12,9 @@
 namespace gui {
     namespace views {
 
-        level::level(top_bar &top_bar1, level_goals &goals_view, engine::audio::music_manager &music_manager,
+        level::level(in_game_menu &in_game_menu1, level_goals &goals_view, engine::audio::music_manager &music_manager,
                      engine::window &window, models::main_map_model &model, engine::audio::sound_manager &sound_manager)
-            : m_top_bar(top_bar1), m_goals_view(goals_view), m_music_manager(music_manager), m_window(window),
+            : m_in_game_menu(in_game_menu1), m_goals_view(goals_view), m_music_manager(music_manager), m_window(window),
               m_model(model), m_sound_manager(sound_manager), m_current_page(1) {
         }
 
@@ -95,7 +95,6 @@ namespace gui {
             if (m_current_page > m_pages) {
                 m_current_page = m_pages;
             }
-
 
             // Set the draw boxes for the placeable objects
             update_placeable_objects_page();
@@ -196,14 +195,11 @@ namespace gui {
                 obj->draw(m_top_bar.m_texture_manager, time_elapsed);
             }
 
-
             //Draw the resources
             //TODO: Draw resources on screen
 
-
+            // Draw the countdown when needed
             if (current_level.get_max_duration() > 0) {
-                // Draw the countdown
-
                 // Calculate time left
                 int level_time = time_elapsed - current_level.get_start_time();
                 unsigned int time_left = static_cast<unsigned int>(current_level.get_max_duration() - level_time);
@@ -230,6 +226,11 @@ namespace gui {
                 m_top_bar.m_texture_manager.unload("l_countdown");
             }
 
+            // Draw enemies
+            for(auto &enemy : current_level.get_enemies_in_lvl()) {
+                enemy->draw(m_top_bar.m_texture_manager, time_elapsed);
+            }
+
             // Draw overflow on pause
             if (m_model.paused) {
                 m_top_bar.m_color_manager.draw({0, 0, 0, 180}, *m_overlay_box);
@@ -238,13 +239,7 @@ namespace gui {
                 m_top_bar.m_texture_manager.draw("l_play_large", *m_overlay_resume_box);
             }
 
-            //draw enemies
-            for(auto &enemy : m_model.world->get_current_level().get_enemies_in_lvl()) {
-                enemy->draw(m_top_bar.m_texture_manager, time_elapsed);
-            }
-
             m_controller->update();
-
         }
 
         void level::on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event) {
