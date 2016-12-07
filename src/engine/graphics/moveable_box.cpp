@@ -71,6 +71,10 @@ namespace engine {
             m_prev_time = time;
         }
 
+        void moveable_box::change_speed(math::vec2_t speed) {
+            m_speed = math::vec2_t({speed.x, speed.y});
+        }
+
         const std::vector<math::box2_t> &moveable_box::get_boxes() const {
             return m_move_boxes;
         }

@@ -14,6 +14,10 @@ gui::views::credits::credits(top_bar &top_bar1, engine::audio::music_manager &mu
     m_names.push_back("Rob Hendriks");
     m_names.push_back("Mark Arnoldussen");
     m_names.push_back("Bert Alderliesten");
+
+    m_special_thanks.push_back("With special thanks to:");
+    m_special_thanks.push_back("Reinout Versteeg");
+    m_special_thanks.push_back("Bart Gelens");
 }
 
 void gui::views::credits::before() {
@@ -39,6 +43,11 @@ void gui::views::credits::before() {
     auto *font = m_top_bar.m_font_manager.get_font("roboto", 44);
     for (auto &name : m_names) {
         m_top_bar.m_texture_manager.load_text(name, {255, 255, 255}, *font, "n_" + name);
+    }
+
+    // Load special thanks
+    for (auto &special : m_special_thanks) {
+        m_top_bar.m_texture_manager.load_text(special, {0, 0, 0}, *font, "n_" + special);
     }
 
     // Subscribe to events
@@ -89,7 +98,7 @@ void gui::views::credits::on_display_change(engine::math::box2_t display_box) {
 
     // Create the back box
     engine::graphics::box_builder builder5(m_top_bar.m_texture_manager.get_size("c_green_box"));
-    builder5.as_left_bottom(display_box.left_bottom()).add_margin({150, -150});
+    builder5.center_vertical(m_header_box->min.y, m_header_box->max.y).add_margin({10, 0});
     m_back_box.reset(new engine::math::box2_t(builder5.build()));
 
     // Create back text box
@@ -118,6 +127,30 @@ void gui::views::credits::on_display_change(engine::math::box2_t display_box) {
     std::reverse(slider_move_boxes.begin(),slider_move_boxes.end());
 
     m_moveable_slider_box.reset(new engine::graphics::moveable_box(*m_back_slider_box, slider_move_boxes, {-0.3, 0}, -1));
+
+    // Create the special thanks move boxes
+    auto special_text_height = m_top_bar.m_texture_manager.get_size("n_" + m_special_thanks[0]).y;
+    engine::graphics::box_builder builder9({display_box.width(), special_text_height});
+    builder9.center_vertical(move_boxes.back().max.y, display_box.max.y);
+    auto special_space_box = builder9.build();
+
+    std::vector<engine::math::box2_t> special_move_boxes;
+
+    for (auto &special : m_special_thanks) {
+        engine::graphics::box_builder builder10(m_top_bar.m_texture_manager.get_size("n_" + special));
+        if (special_move_boxes.size() > 0) {
+            builder10.as_left_top(special_move_boxes.back().right_top());
+        } else {
+            builder10.to_center(special_space_box);
+        }
+
+        builder10.add_margin({static_cast<float>(display_box.width() / 1.3), 0});
+
+        special_move_boxes.push_back(builder10.build());
+    }
+
+    m_moveable_special_box.reset(new engine::graphics::moveable_box(special_space_box, special_move_boxes, {-0.6, 0}, -1));
+    m_at_slow_speed = false;
 }
 
 void gui::views::credits::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
@@ -129,6 +162,28 @@ void gui::views::credits::draw(unsigned int time_elapsed, engine::math::box2_t d
     int i = 0;
     for (auto &box : m_moveable_box->get_boxes()) {
         m_top_bar.m_texture_manager.draw("n_" + m_names[i++], box);
+    }
+
+    // Draw the special thanks to
+    m_moveable_special_box->move(time_elapsed);
+    i = 0;
+    bool slowed_down = false;
+    for (auto &box : m_moveable_special_box->get_boxes()) {
+        m_top_bar.m_texture_manager.draw("n_" + m_special_thanks[i++], box);
+        if (box.contains({display_box.center().x, box.center().y})) {
+            if (!m_at_slow_speed) {
+                m_moveable_special_box->change_speed({-0.1, 0});
+                m_at_slow_speed = true;
+            }
+
+            slowed_down = true;
+        }
+    }
+
+    if (!slowed_down && m_at_slow_speed) {
+        // Back to normal speed
+        m_moveable_special_box->change_speed({-0.6, 0});
+        m_at_slow_speed = false;
     }
 
     // Draw header
@@ -185,6 +240,10 @@ void gui::views::credits::after() {
 
     for (auto &name : m_names) {
         m_top_bar.m_texture_manager.unload("n_" + name);
+    }
+
+    for (auto &special : m_special_thanks) {
+        m_top_bar.m_texture_manager.unload("n_" + special);
     }
 
     // Unsubscribe to events

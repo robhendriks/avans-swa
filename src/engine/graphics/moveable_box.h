@@ -15,9 +15,15 @@ namespace engine {
         public:
             moveable_box(math::box2_t display_box, std::vector<math::box2_t> move_boxes, math::vec2_t speed,
                          int loops = 1, math::vec2_t *restart_center = nullptr);
+
             ~moveable_box();
+
             void move(unsigned int time);
+
             const std::vector<math::box2_t> &get_boxes() const;
+
+            void change_speed(math::vec2_t speed);
+
         private:
             math::box2_t m_display_box;
             std::vector<math::box2_t> m_move_boxes;

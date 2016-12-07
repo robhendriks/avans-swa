@@ -48,7 +48,10 @@ namespace gui {
             std::unique_ptr<engine::math::box2_t> m_back_text_box;
             std::unique_ptr<engine::math::box2_t> m_back_slider_box;
             std::unique_ptr<engine::graphics::moveable_box> m_moveable_slider_box;
+            std::unique_ptr<engine::graphics::moveable_box> m_moveable_special_box;
             std::vector<std::string> m_names;
+            std::vector<std::string> m_special_thanks;
+            bool m_at_slow_speed;
         };
     }
 }
