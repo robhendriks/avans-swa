@@ -21,8 +21,8 @@ namespace services {
                                                                                                             int capoppertunity,
                                                                                                             bool _noboss) {
             //Start by clearing boss/to strong enemies based on the parameters
-            auto list = _nation.getavailableenemies();
-            auto olist = _nation.getavailableenemies();
+            auto list = _nation.get_enemies();
+            auto olist = _nation.get_enemies();
             auto q = remove_if(list.begin(), list.end(),
                                [_noboss](std::shared_ptr<domain::nations::enemy> element) {
                                    return element->getBoss() == true&&_noboss==true;
@@ -41,10 +41,10 @@ namespace services {
 
             //Checks if enemies can be spawned based on the given _oppertunity
             std::sort(list.begin(), list.end());
-            _nation.setavailableenemies(list);
+            _nation.set_enemies(list);
 
-            if (_nation.getavailableenemies().size() == 0 ||
-                _nation.getavailableenemies()[0]->getOppertunity() > _oppertunity) {
+            if (_nation.get_enemies().size() == 0 ||
+                _nation.get_enemies()[0]->getOppertunity() > _oppertunity) {
                 //Returns empty list in case no enemy is cheap enough
                 return std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>>(0);
             }
@@ -53,13 +53,13 @@ namespace services {
 
             //Createas the actual list of the enemies
             double temp_oppertunity = _oppertunity;
-            temp_oppertunity = _oppertunity + static_cast<double>(_oppertunity) * (1 / static_cast<double>(_nation.getavailableenemies().size()));
+            temp_oppertunity = _oppertunity + static_cast<double>(_oppertunity) * (1 / static_cast<double>(_nation.get_enemies().size()));
             std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> enemies;
-            for (unsigned int i = 0; i < _nation.getavailableenemies().size(); i++) {
+            for (unsigned int i = 0; i < _nation.get_enemies().size(); i++) {
                 temp_oppertunity = temp_oppertunity / 2;
-                int amount = temp_oppertunity /(_nation.getavailableenemies()[i]->getOppertunity());
+                int amount = temp_oppertunity /(_nation.get_enemies()[i]->getOppertunity());
                 for (int j = 0; j < amount; j++) {
-                    std::shared_ptr<domain::nations::enemy> e = std::make_shared<domain::nations::enemy>(*_nation.getavailableenemies()[i]);
+                    std::shared_ptr<domain::nations::enemy> e = std::make_shared<domain::nations::enemy>(*_nation.get_enemies()[i]);
                     enemies.push_back(
 
                             std::pair<int, std::shared_ptr<domain::nations::enemy>>{0,

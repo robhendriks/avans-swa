@@ -28,7 +28,7 @@ namespace domain {
         }
 
         std::string enemy::getName() {
-            return Nation.get()->getprefixname()+" - "+name;
+            return Nation.get()->get_prefix()+" - "+name;
         }
 
 

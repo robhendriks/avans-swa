@@ -6,30 +6,42 @@
 
 namespace domain {
     namespace nations {
-        nation::nation(std::string _name, std::string _prefixname) {
-            name = _name;
-            prefixname = _prefixname;
+
+        nation::nation() {}
+
+        nation::nation(const std::string &id, const std::string &name, const std::string &prefix)
+            : m_id{id}, m_name{name}, m_prefix{prefix} {}
+
+        std::string nation::get_id() const {
+            return m_id;
         }
 
-        void nation::setavailableenemies(std::vector<std::shared_ptr<enemy>> _enemies) {
-            enemies = _enemies;
+        void nation::set_id(const std::string &id) {
+            m_id = id;
         }
 
-
-        std::string nation::getName() {
-            return name;
+        std::string nation::get_name() const {
+            return m_name;
         }
 
-        std::string nation::getprefixname() {
-            return prefixname;
+        void nation::set_name(const std::string &name) {
+            m_name = name;
         }
 
-        std::vector<std::shared_ptr<enemy>> nation::getavailableenemies() {
-            return enemies;
+        std::string nation::get_prefix() const {
+            return m_prefix;
         }
 
-        nation::~nation() {
+        void nation::set_prefix(const std::string &prefix) {
+            m_prefix = prefix;
+        }
 
+        const std::vector<enemy_ptr> &nation::get_enemies() const {
+            return m_enemies;
+        }
+
+        void nation::set_enemies(const std::vector<enemy_ptr> &enemies) {
+            m_enemies = enemies;
         }
 
     }

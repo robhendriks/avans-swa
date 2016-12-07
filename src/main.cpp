@@ -4,8 +4,18 @@
 #include "config/json_config.h"
 #include "utils/string_utils.h"
 #include "services/level_loader/json_level_loader.h"
+#include "services/level_loader/nation_deserializer.h"
+#include "services/level_loader/nations_deserializer.h"
+
+using namespace services::level_loader;
+using namespace utils::json_utils;
 
 int main(int argc, char *argv[]) {
+    // Register type deserializers
+    json_factory::get()
+        .register_deserializer<nation_ptr>(std::make_shared<nation_deserializer>())
+        .register_deserializer<nation_ptr_vector>(std::make_shared<nations_deserializer>());
+
     /**
      * CONFIG
      */
@@ -21,7 +31,7 @@ int main(int argc, char *argv[]) {
     w_config.h = json_config->get_int("window.height", w_config.h);
     w_config.debug = json_config->get_bool("window.debug", w_config.debug);
 
-    engine::engine_config e_config = { w_config };
+    engine::engine_config e_config = {w_config};
 
     // Create a font_manager with fonts
     auto *font_manager = new engine::graphics::font_manager();
@@ -73,15 +83,16 @@ int main(int argc, char *argv[]) {
     auto &eventbus = engine::eventbus::eventbus::get_instance();
 
     // Subscribe the game to the window cleared event and display changed events
-    eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::window_cleared>*>(game1));
-    eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::display_changed>*>(game1));
+    eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::window_cleared> *>(game1));
+    eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::display_changed> *>(game1));
 
     /**
      * END OF SUBSCRIBERS REGISTRY
      */
 
     // Start with show
-    gui::controllers::menu_controller* menu_controller = boost::di::make_injector(di_config()).create<gui::controllers::menu_controller*>();
+    gui::controllers::menu_controller *menu_controller = boost::di::make_injector(
+        di_config()).create<gui::controllers::menu_controller *>();
     menu_controller->show();
 
     // Run the game

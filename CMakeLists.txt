@@ -154,7 +154,11 @@ set(SOURCES src/main.cpp
     src/events/goal_reached.h
     src/engine/events/engine_state_changed.cpp
     src/engine/events/engine_state_changed.h
-    src/domain/drawable/draw_managers_wrapper.h)
+    src/domain/drawable/draw_managers_wrapper.h
+    src/services/level_loader/nation_deserializer.cpp
+    src/services/level_loader/nation_deserializer.h
+    src/services/level_loader/nations_deserializer.cpp
+    src/services/level_loader/nations_deserializer.h)
 
 include_directories(third_party/json/src
     third_party/di-cpp14/include

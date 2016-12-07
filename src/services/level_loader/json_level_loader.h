@@ -9,6 +9,7 @@
 #include <fstream>
 #include <json.hpp>
 #include "base_level_loader.h"
+#include "../../utils/json_utils.hpp"
 #include "../../config/json_config.h"
 #include "../../domain/map/map.h"
 #include "../../engine/math/vec2.hpp"
@@ -16,15 +17,17 @@
 #include "../../domain/map/objects/road.h"
 #include "../../domain/map/objects/defensive_building.h"
 #include "../../domain/map/objects/economic_building.h"
+#include "nation_deserializer.h"
+#include "nations_deserializer.h"
 
 using json = nlohmann::json;
 using namespace engine::math;
+using namespace utils::json_utils;
 
 namespace services {
     namespace level_loader {
 
         typedef std::shared_ptr<domain::map::map> map_ptr;
-        typedef std::shared_ptr<domain::nations::nation> nation_ptr;
         typedef std::shared_ptr<domain::map::objects::building> building_ptr;
 
         class json_level_loader : public base_level_loader {
@@ -37,20 +40,25 @@ namespace services {
             std::unique_ptr<domain::game_level::game_level> load();
 
         private:
+            template<typename T>
+            bool load(const std::string &filename, T &obj);
+
             map_ptr load_all_levels(std::string url);
 
             void load_fields(json &root, domain::map::map &map1);
 
             void load_objects(json &root, domain::map::map &map1);
 
-            std::vector<nation_ptr> load_nations(std::string nation_url);
+            void load_nation_units(nation_ptr &nation, const json &elem);
 
-            std::shared_ptr<domain::map::objects::building> load_buildings(std::string url);
+            building_ptr load_buildings_json(std::string url);
 
             json m_root;
-            std::vector<building_ptr> vec_building;
-            std::vector<nation_ptr> vec_nations;
-            std::vector<map_ptr> vec_levels;
+            std::vector<building_ptr> m_buildings;
+            std::vector<nation_ptr> m_nations;
+            std::vector<map_ptr> m_levels;
+            bool m_nations_loaded;
+            bool m_buildings_loaded;
         };
 
     };
