@@ -61,14 +61,13 @@ namespace domain {
 
             void update_objects(domain::game_level::game_level *game_level);
 
+            // get all fields in a certain range from the origin
+            // range = fields. 1 = one neighbour away
+            std::vector<field_with_range> get_fields_in_range(int range, field* origin);
         private:
             engine::math::vec2_t index_to_position(unsigned int index) const;
 
             unsigned int position_to_index(engine::math::vec2_t pos) const;
-
-            // get all fields in a certain range from the origin
-            // range = fields. 1 = one neighbour away
-            std::vector<field_with_range> get_fields_in_range(int range, field* origin);
             engine::math::vec2_t m_size;
             engine::math::vec2_t m_tile_size;
             std::vector<std::shared_ptr<domain::map::field>> m_fields;

@@ -3,6 +3,7 @@
 //
 
 #include "game_stats.h"
+#include <string>
 #include <algorithm>
 
 namespace domain {

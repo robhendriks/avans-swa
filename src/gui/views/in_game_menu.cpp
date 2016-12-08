@@ -47,7 +47,7 @@ namespace gui {
 
             // Create the menu icon box
             engine::graphics::box_builder builder1(m_top_bar.m_texture_manager.get_size("igm_icon"));
-            builder1.as_left_top(m_top_bar.m_bar_box->left_top());
+            builder1.as_left_top(m_top_bar.m_bar_box->left_top()).add_margin({5, 0});
             m_menu_icon_box.reset(new engine::math::box2_t(builder1.build()));
 
             // Create the overlay box

@@ -160,10 +160,10 @@ namespace gui {
                 // Set the object box
                 if (page_counter == m_current_page) {
                     builder4.add_margin({50, 0});
-                    obj->set_box(builder4.build());
+                    obj->set_box(std::make_shared<engine::math::box2_t>(builder4.build()));
                     builder4.add_margin({m_model.world->get_current_level().get_map()->get_tile_size().x, 0});
                 } else {
-                    obj->set_box(box_for_hidden_object);
+                    obj->set_box(std::make_shared<engine::math::box2_t>(box_for_hidden_object));
                 }
 
                 // Count the objects (for the page)

@@ -9,66 +9,35 @@
 #include <memory>
 #include "nation.h"
 #include "../drawable/drawable_game_object.h"
+#include "../map/ai/ai.h"
+#include "../combat/attacker.h"
+#include "../combat/defender.h"
 
 namespace domain {
     namespace nations {
-        class enemy : public domain::drawable::drawable_game_object {
+        class enemy : public domain::drawable::drawable_game_object, public domain::combat::attacker, public domain::combat::defender {
         public:
-            enemy(std::string _name, int _mindamage, int _maxdamage, double _attackspersecond, int _hitpoints, int _grantedXP, int _range, int _movement, bool _boss, std::shared_ptr<nation> _nation, int _oppertunitycosts)
-            ;
-
-            enemy(std::string _name, int _oppertunitycosts, bool _boss);
-
+            enemy(std::string name, int min_damage, int max_damage,
+                  double attacks_per_second, int hitpoints, int granted_xp, int range,
+                  int movement, bool boss, std::shared_ptr<nation> nation, int oppertunity_costs);
+            enemy(std::string name, int oppertunity_costs, bool boss);
             //Returns nationname + unitname
-            std::string getName();
-
-            //Returns a random number within the range of min & max damage
-            int getDamage();
-
-            double getattackspersecond();
-
-            int getHitpoints();
-
-            int getRange();
-            int getMovement();
-            int getOppertunity()const;
-
-            bool getBoss();
-
-            //Lowers hitpoints with the amount within the parameter; if 0 calls the delete method.
-            //Returns the amount of XP.
-            int lowerHitpoints(int points);
-            ~enemy();
-
+            std::string get_name();
+            int get_oppertunity_cost()const;
+            bool is_boss();
             virtual void set_box(std::shared_ptr<engine::math::box2_t> destination);
             virtual engine::math::box2_t get_box() const;
-
+            void update(unsigned int elapsed_time);
+            void set_ai(std::shared_ptr<domain::map::ai::ai> ai);
+            ~enemy();
         private:
             std::shared_ptr<engine::math::box2_t> m_destination;
-
-            std::string name;
-            int mindamage;
-            int maxdamage;
-
+            std::string m_name;
             //Cost for using this enemy; to generate proper waves.
-            int oppertunitycosts;
-
-            //Attacks per second
-            double attackspersecond;
-            int hitpoints;
-
-            int grantedXP;
-
-            //Range in tiles
-            int range;
-
-            //Tiles/second
-            int movement;
-
-            bool boss;
-
-            //So we directly know which Nations this Unit belongs to.
-            std::shared_ptr<nation> Nation;
+            int m_oppertunity_cost;
+            bool m_boss;
+            std::shared_ptr<domain::map::ai::ai> m_ai;
+            std::shared_ptr<nation> m_nation;
         };
 
         bool operator<(const std::shared_ptr<enemy> &s1, const std::shared_ptr<enemy>  &s2);

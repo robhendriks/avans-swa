@@ -28,6 +28,8 @@ namespace services{
             std::shared_ptr<domain::nations::nation> get_spawnable_nation();
             void set_spawn_bosses(bool bosses);
             bool get_spawn_bosses();
+            std::shared_ptr<wavegenerator> get_wave_generator();
+
             // reset (should be called after lvl is over)
             void reset();
         private:

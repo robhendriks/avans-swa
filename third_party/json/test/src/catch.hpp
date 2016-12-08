@@ -6568,7 +6568,7 @@ namespace Catch {
         mutable RunTests::InWhatOrder m_currentSortOrder;
         mutable std::vector<TestCase> m_sortedFunctions;
         size_t m_unnamedCount;
-        std::ios_base::Init m_ostreamInit; // Forces cout/ cerr to be initialised
+        std::ios_base::Init m_ostreamInit; // Forces cout/ cerr to be m_initialised
     };
 
     ///////////////////////////////////////////////////////////////////////////

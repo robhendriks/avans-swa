@@ -16,25 +16,21 @@ namespace domain {
         class enemy;
         class nation {
         public:
-            nation(std::string _name, std::string _prefixname);
+            nation(std::string _name, std::string _prefix_name);
 
+            void set_available_enemies(std::vector<std::shared_ptr<enemy>> _enemies);
 
-            void setavailableenemies(std::vector<std::shared_ptr<enemy>> _enemies);
+            std::string get_name();
 
+            std::string get_prefix_name();
 
-            std::string getName();
-
-            std::string getprefixname();
-
-            std::vector<std::shared_ptr<enemy>> getavailableenemies();
+            std::vector<std::shared_ptr<enemy>> get_available_enemies();
 
             ~nation();
-
         private:
-            std::string name;
-            std::string prefixname;
-            std::vector<std::shared_ptr<enemy>> enemies;
-
+            std::string m_name;
+            std::string m_prefix_name;
+            std::vector<std::shared_ptr<enemy>> m_enemies;
         };
     }
 }

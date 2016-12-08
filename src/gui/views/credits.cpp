@@ -18,6 +18,7 @@ gui::views::credits::credits(top_bar &top_bar1, engine::audio::music_manager &mu
     m_special_thanks.push_back("With special thanks to:");
     m_special_thanks.push_back("Reinout Versteeg");
     m_special_thanks.push_back("Bart Gelens");
+    m_special_thanks.push_back("Niels Evenblij");
 }
 
 void gui::views::credits::before() {

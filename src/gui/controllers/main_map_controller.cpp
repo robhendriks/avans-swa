@@ -56,13 +56,17 @@ namespace gui {
 
         // this needs to be handled by eventbus
         void main_map_controller::update() {
+
             auto current_enemies = m_model.world->get_current_level().get_enemies_in_lvl();
             for (auto enemy : m_wave_management_service.get_enemies(m_engine.get_time_elapsed())) {
-                // set start dest (enemy still needs ai now its a stupid god)
-                auto empty_field_pos = m_model.world->get_current_level().get_map()->get_empty_fields()[0]->get_box();
-
-                enemy->set_box(std::make_shared<engine::math::box2_t>(empty_field_pos));
                 current_enemies.push_back(enemy);
+            }
+
+
+            for(auto enemy : current_enemies){
+                // set start dest (enemy still needs ai now its stupid)
+                //Bert: Start dest now is the first tile in map with a road.
+                enemy->update(m_engine.get_time_elapsed());
             }
 
             m_model.world->get_current_level().set_enemies_in_lvl(current_enemies);
@@ -136,6 +140,7 @@ namespace gui {
             m_wave_management_service.set_waves_interval(lvl.get_waves_interval());
             m_wave_management_service.set_spawn_bosses(lvl.get_spawn_bosses());
             m_wave_management_service.set_spawnable_nation(lvl.get_enemy_nation());
+            m_wave_management_service.get_wave_generator()->get_ai()->set_map(lvl.get_map());
         }
     }
 }

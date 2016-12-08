@@ -108,7 +108,7 @@ namespace services {
                                                        current_nation, enemey_oppertunity_cost));
                         curren_enemy->set_draw_settings("images/building-a.png");
                         pre_vec_enemies.push_back(curren_enemy);
-                        current_nation->setavailableenemies(pre_vec_enemies);
+                        current_nation->set_available_enemies(pre_vec_enemies);
                         pre_nation_list.push_back(current_nation);
                     }
 
@@ -221,10 +221,6 @@ namespace services {
                     object->set_rotation(rotation);
 
                     object->set_current_column(column);
-                    auto b = dynamic_cast<domain::map::objects::building*>(object);
-                    if(b != nullptr){
-                        auto m = b->get_health_regen();
-                        std::cout << m;}
                     field->place_object(object);
                     column = column + 1 <= object->get_max_column() ? column + 1 : 1;
                 }

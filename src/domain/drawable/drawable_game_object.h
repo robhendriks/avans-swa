@@ -30,6 +30,8 @@ namespace domain {
 
             virtual engine::math::box2_t get_box() const = 0;
 
+            virtual  void set_box(std::shared_ptr<engine::math::box2_t> box) = 0;
+
             float get_max_row() const;
 
             void set_max_row(float row);

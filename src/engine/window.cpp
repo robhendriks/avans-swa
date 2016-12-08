@@ -99,8 +99,14 @@ namespace engine {
     }
 
     math::box2_t window::get_display_box() const {
+#ifdef __APPLE__
+        int w, h;
+        SDL_GetWindowSize(mWindow, &w, &h);
+        return {0, 0, static_cast<float>(w), static_cast<float>(h)};
+#else
         auto surface = *get_surface();
         return math::box2_t({{0, 0}, {(float)surface.w, (float)surface.h}});
+#endif
     }
 
     SDL_Surface *window::get_surface() const {
