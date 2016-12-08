@@ -3,17 +3,16 @@
 //
 
 #include "game_level.h"
-#include "../map/objects/building.h"
-#include "../map/objects/road.h"
-#include "../../events/goal_reached.h"
 
 namespace domain {
     namespace game_level {
-        game_level::game_level(std::string name, std::shared_ptr<domain::map::map> map, std::shared_ptr<game_stats> goal,
+        game_level::game_level(const std::string &id, const std::string &title, const std::string &description,
+                               std::shared_ptr<domain::map::map> map, std::shared_ptr<game_stats> goal,
                                std::shared_ptr<domain::nations::nation> _enemies,
-                               engine::draganddrop::drag_and_drop &drag_and_drop, long duration) :
-            m_name(name), m_max_duration(duration), m_map(map), m_goal(goal), m_start_time(0),
-            m_drag_and_drop(drag_and_drop), m_paused(true) {
+                               engine::draganddrop::drag_and_drop &drag_and_drop, long duration)
+            : m_id{id}, m_title{title}, m_description{description},
+              m_max_duration{duration}, m_map(map), m_goal(goal),
+              m_start_time(0), m_drag_and_drop(drag_and_drop), m_paused(true) {
 
             // Call pause to start the level....
             pause();
@@ -31,7 +30,7 @@ namespace domain {
             }
 
             // Update the stats with the placed objects on the map
-            for(auto field : m_map->get_fields_with_objects()){
+            for (auto field : m_map->get_fields_with_objects()) {
                 field->get_object()->update_game_stats(*m_stats);
             }
 
@@ -40,13 +39,13 @@ namespace domain {
 
             m_enemy = _enemies;
 
-                //Create resource objects and sets them to 0.
+            //Create resource objects and sets them to 0.
             auto templist = std::vector<std::shared_ptr<domain::resources::resource>>(5);
             templist[0] = std::make_shared<domain::resources::resource>(*new domain::resources::resource());
-            templist[1] =  std::make_shared<domain::resources::resource>(*new domain::resources::resource());
-            templist[2] =  std::make_shared<domain::resources::resource>(*new domain::resources::resource());
-            templist[3] =  std::make_shared<domain::resources::resource>(*new domain::resources::resource());
-            templist[4] =  std::make_shared<domain::resources::resource>(*new domain::resources::resource());
+            templist[1] = std::make_shared<domain::resources::resource>(*new domain::resources::resource());
+            templist[2] = std::make_shared<domain::resources::resource>(*new domain::resources::resource());
+            templist[3] = std::make_shared<domain::resources::resource>(*new domain::resources::resource());
+            templist[4] = std::make_shared<domain::resources::resource>(*new domain::resources::resource());
 
             templist[0]->set_count(100);
             templist[0]->set_resource_type("wood");
@@ -59,12 +58,18 @@ namespace domain {
             templist[4]->set_count(0);
             templist[4]->set_resource_type("uranium");
             m_resources = templist;
-
-
         }
 
-        std::string game_level::get_name() {
-            return m_name;
+        std::string game_level::get_id() const {
+            return m_id;
+        }
+
+        std::string game_level::get_title() const {
+            return m_title;
+        }
+
+        std::string game_level::get_description() const {
+            return m_description;
         }
 
         std::shared_ptr<domain::map::map> game_level::get_map() {
@@ -84,11 +89,10 @@ namespace domain {
         }
 
         bool game_level::is_game_over(unsigned int current_duration) {
-            if(m_max_duration >= 0) {
+            if (m_max_duration >= 0) {
                 int playing_time = current_duration - m_start_time;
-                return  m_max_duration - playing_time < 0;
-            }
-            else {
+                return m_max_duration - playing_time < 0;
+            } else {
                 return false;
             }
         }
@@ -115,7 +119,8 @@ namespace domain {
             obj.remove_observer(this);
 
             // Erase from vector
-            m_placeable_objects.erase(std::remove(m_placeable_objects.begin(), m_placeable_objects.end(), &obj), m_placeable_objects.end());
+            m_placeable_objects.erase(std::remove(m_placeable_objects.begin(), m_placeable_objects.end(), &obj),
+                                      m_placeable_objects.end());
         };
 
 
@@ -230,14 +235,15 @@ namespace domain {
             return m_spawn_bosses;
         }
 
-        std::vector<std::shared_ptr<domain::resources::resource>> game_level::get_resources(){
+        std::vector<std::shared_ptr<domain::resources::resource>> game_level::get_resources() {
             return m_resources;
         }
 
-        void game_level::set_resources(std::vector<std::shared_ptr<domain::resources::resource>> resources){
+        void game_level::set_resources(std::vector<std::shared_ptr<domain::resources::resource>> resources) {
             m_resources = resources;
         }
-        void game_level::update(){
+
+        void game_level::update() {
             m_map->update_objects(this);
         }
 

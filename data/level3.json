@@ -1,507 +1,510 @@
 {
-  "height": 8,
-  "major-id": "foo",
-  "nation-id": "bar",
-  "objects": [
-    {
-      "entry-point": true,
-      "height": 1,
-      "id": 65,
-      "type": "road",
-      "width": 1,
-      "x": 0,
-      "y": 1
-    },
-    {
-      "entry-point": true,
-      "height": 1,
-      "id": 66,
-      "type": "road",
-      "width": 1,
-      "x": 0,
-      "y": 5
-    },
-    {
-      "entry-point": true,
-      "height": 1,
-      "id": 68,
-      "type": "road",
-      "width": 1,
-      "x": 7,
-      "y": 3
-    },
-    {
-      "height": 1,
-      "id": 69,
-      "type": "road",
-      "width": 1,
-      "x": 6,
-      "y": 3
-    },
-    {
-      "height": 1,
-      "id": 70,
-      "type": "road",
-      "width": 1,
-      "x": 6,
-      "y": 2
-    },
-    {
-      "height": 1,
-      "id": 71,
-      "type": "road",
-      "width": 1,
-      "x": 6,
-      "y": 4
-    },
-    {
-      "height": 1,
-      "id": 72,
-      "type": "road",
-      "width": 1,
-      "x": 5,
-      "y": 4
-    },
-    {
-      "height": 1,
-      "id": 73,
-      "type": "road",
-      "width": 1,
-      "x": 5,
-      "y": 5
-    },
-    {
-      "height": 1,
-      "id": 78,
-      "type": "road",
-      "width": 1,
-      "x": 4,
-      "y": 5
-    },
-    {
-      "height": 1,
-      "id": 79,
-      "type": "road",
-      "width": 1,
-      "x": 4,
-      "y": 6
-    },
-    {
-      "height": 1,
-      "id": 80,
-      "type": "road",
-      "width": 1,
-      "x": 3,
-      "y": 6
-    },
-    {
-      "height": 1,
-      "id": 81,
-      "type": "road",
-      "width": 1,
-      "x": 2,
-      "y": 6
-    },
-    {
-      "height": 1,
-      "id": 82,
-      "type": "road",
-      "width": 1,
-      "x": 2,
-      "y": 5
-    },
-    {
-      "height": 1,
-      "id": 86,
-      "type": "road",
-      "width": 1,
-      "x": 1,
-      "y": 5
-    },
-    {
-      "height": 1,
-      "id": 87,
-      "type": "road",
-      "width": 1,
-      "x": 1,
-      "y": 4
-    },
-    {
-      "height": 1,
-      "id": 88,
-      "type": "road",
-      "width": 1,
-      "x": 2,
-      "y": 4
-    },
-    {
-      "height": 1,
-      "id": 90,
-      "type": "road",
-      "width": 1,
-      "x": 1,
-      "y": 1
-    },
-    {
-      "height": 1,
-      "id": 91,
-      "type": "road",
-      "width": 1,
-      "x": 2,
-      "y": 1
-    },
-    {
-      "height": 1,
-      "id": 92,
-      "type": "road",
-      "width": 1,
-      "x": 2,
-      "y": 2
-    },
-    {
-      "height": 1,
-      "id": 93,
-      "type": "road",
-      "width": 1,
-      "x": 3,
-      "y": 2
-    },
-    {
-      "height": 1,
-      "id": 94,
-      "type": "road",
-      "width": 1,
-      "x": 5,
-      "y": 2
-    },
-    {
-      "height": 1,
-      "id": 95,
-      "type": "road",
-      "width": 1,
-      "x": 4,
-      "y": 2
-    },
-    {
-      "height": 1,
-      "id": 97,
-      "type": "road",
-      "width": 1,
-      "x": 2,
-      "y": 3
-    },
-    {
-      "building-id": "igloo",
-      "height": 1,
-      "id": 141,
-      "properties": null,
-      "type": "building",
-      "width": 1,
-      "x": 3,
-      "y": 3
-    }
-  ],
-  "tiles": [
-    {
-      "id": 68,
-      "immutable": true,
-      "x": 0,
-      "y": 0
-    },
-    {
-      "id": 69,
-      "immutable": true,
-      "x": 1,
-      "y": 0
-    },
-    {
-      "id": 70,
-      "immutable": true,
-      "x": 2,
-      "y": 0
-    },
-    {
-      "id": 85,
-      "immutable": true,
-      "x": 0,
-      "y": 1
-    },
-    {
-      "id": 86,
-      "immutable": true,
-      "x": 1,
-      "y": 1
-    },
-    {
-      "id": 88,
-      "immutable": true,
-      "x": 2,
-      "y": 1
-    },
-    {
-      "id": 69,
-      "immutable": false,
-      "x": 3,
-      "y": 1
-    },
-    {
-      "id": 69,
-      "immutable": true,
-      "x": 4,
-      "y": 1
-    },
-    {
-      "id": 69,
-      "immutable": false,
-      "x": 5,
-      "y": 1
-    },
-    {
-      "id": 70,
-      "immutable": true,
-      "x": 6,
-      "y": 1
-    },
-    {
-      "id": 119,
-      "immutable": true,
-      "x": 0,
-      "y": 2
-    },
-    {
-      "id": 72,
-      "immutable": true,
-      "x": 1,
-      "y": 2
-    },
-    {
-      "id": 86,
-      "immutable": true,
-      "x": 2,
-      "y": 2
-    },
-    {
-      "id": 86,
-      "immutable": true,
-      "x": 3,
-      "y": 2
-    },
-    {
-      "id": 86,
-      "immutable": true,
-      "x": 4,
-      "y": 2
-    },
-    {
-      "id": 86,
-      "immutable": true,
-      "x": 5,
-      "y": 2
-    },
-    {
-      "id": 88,
-      "immutable": true,
-      "x": 6,
-      "y": 2
-    },
-    {
-      "id": 70,
-      "immutable": true,
-      "x": 7,
-      "y": 2
-    },
-    {
-      "id": 85,
-      "immutable": false,
-      "x": 1,
-      "y": 3
-    },
-    {
-      "id": 86,
-      "immutable": true,
-      "x": 2,
-      "y": 3
-    },
-    {
-      "id": 71,
-      "immutable": false,
-      "x": 3,
-      "y": 3
-    },
-    {
-      "id": 103,
-      "immutable": true,
-      "x": 4,
-      "y": 3
-    },
-    {
-      "id": 72,
-      "immutable": false,
-      "x": 5,
-      "y": 3
-    },
-    {
-      "id": 86,
-      "immutable": true,
-      "x": 6,
-      "y": 3
-    },
-    {
-      "id": 87,
-      "immutable": true,
-      "x": 7,
-      "y": 3
-    },
-    {
-      "id": 68,
-      "immutable": true,
-      "x": 0,
-      "y": 4
-    },
-    {
-      "id": 89,
-      "immutable": true,
-      "x": 1,
-      "y": 4
-    },
-    {
-      "id": 71,
-      "immutable": true,
-      "x": 2,
-      "y": 4
-    },
-    {
-      "id": 104,
-      "immutable": true,
-      "x": 3,
-      "y": 4
-    },
-    {
-      "id": 68,
-      "immutable": true,
-      "x": 4,
-      "y": 4
-    },
-    {
-      "id": 89,
-      "immutable": true,
-      "x": 5,
-      "y": 4
-    },
-    {
-      "id": 71,
-      "immutable": true,
-      "x": 6,
-      "y": 4
-    },
-    {
-      "id": 104,
-      "immutable": true,
-      "x": 7,
-      "y": 4
-    },
-    {
-      "id": 85,
-      "immutable": true,
-      "x": 0,
-      "y": 5
-    },
-    {
-      "id": 86,
-      "immutable": true,
-      "x": 1,
-      "y": 5
-    },
-    {
-      "id": 88,
-      "immutable": true,
-      "x": 2,
-      "y": 5
-    },
-    {
-      "id": 69,
-      "immutable": false,
-      "x": 3,
-      "y": 5
-    },
-    {
-      "id": 89,
-      "immutable": true,
-      "x": 4,
-      "y": 5
-    },
-    {
-      "id": 86,
-      "immutable": true,
-      "x": 5,
-      "y": 5
-    },
-    {
-      "id": 87,
-      "immutable": true,
-      "x": 6,
-      "y": 5
-    },
-    {
-      "id": 102,
-      "immutable": true,
-      "x": 0,
-      "y": 6
-    },
-    {
-      "id": 120,
-      "immutable": true,
-      "x": 1,
-      "y": 6
-    },
-    {
-      "id": 72,
-      "immutable": true,
-      "x": 2,
-      "y": 6
-    },
-    {
-      "id": 86,
-      "immutable": true,
-      "x": 3,
-      "y": 6
-    },
-    {
-      "id": 71,
-      "immutable": true,
-      "x": 4,
-      "y": 6
-    },
-    {
-      "id": 120,
-      "immutable": true,
-      "x": 5,
-      "y": 6
-    },
-    {
-      "id": 104,
-      "immutable": true,
-      "x": 6,
-      "y": 6
-    },
-    {
-      "id": 119,
-      "immutable": true,
-      "x": 2,
-      "y": 7
-    },
-    {
-      "id": 103,
-      "immutable": true,
-      "x": 3,
-      "y": 7
-    },
-    {
-      "id": 104,
-      "immutable": true,
-      "x": 4,
-      "y": 7
-    }
-  ],
-  "width": 8
+    "description": "The third level.",
+    "height": 8,
+    "id": "level-3",
+    "major-id": "augustus",
+    "nation-id": "the-fallen",
+    "objects": [
+        {
+            "entry-point": true,
+            "height": 1,
+            "id": 65,
+            "type": "road",
+            "width": 1,
+            "x": 0,
+            "y": 1
+        },
+        {
+            "entry-point": true,
+            "height": 1,
+            "id": 66,
+            "type": "road",
+            "width": 1,
+            "x": 0,
+            "y": 5
+        },
+        {
+            "entry-point": true,
+            "height": 1,
+            "id": 68,
+            "type": "road",
+            "width": 1,
+            "x": 7,
+            "y": 3
+        },
+        {
+            "height": 1,
+            "id": 69,
+            "type": "road",
+            "width": 1,
+            "x": 6,
+            "y": 3
+        },
+        {
+            "height": 1,
+            "id": 70,
+            "type": "road",
+            "width": 1,
+            "x": 6,
+            "y": 2
+        },
+        {
+            "height": 1,
+            "id": 71,
+            "type": "road",
+            "width": 1,
+            "x": 6,
+            "y": 4
+        },
+        {
+            "height": 1,
+            "id": 72,
+            "type": "road",
+            "width": 1,
+            "x": 5,
+            "y": 4
+        },
+        {
+            "height": 1,
+            "id": 73,
+            "type": "road",
+            "width": 1,
+            "x": 5,
+            "y": 5
+        },
+        {
+            "height": 1,
+            "id": 78,
+            "type": "road",
+            "width": 1,
+            "x": 4,
+            "y": 5
+        },
+        {
+            "height": 1,
+            "id": 79,
+            "type": "road",
+            "width": 1,
+            "x": 4,
+            "y": 6
+        },
+        {
+            "height": 1,
+            "id": 80,
+            "type": "road",
+            "width": 1,
+            "x": 3,
+            "y": 6
+        },
+        {
+            "height": 1,
+            "id": 81,
+            "type": "road",
+            "width": 1,
+            "x": 2,
+            "y": 6
+        },
+        {
+            "height": 1,
+            "id": 82,
+            "type": "road",
+            "width": 1,
+            "x": 2,
+            "y": 5
+        },
+        {
+            "height": 1,
+            "id": 86,
+            "type": "road",
+            "width": 1,
+            "x": 1,
+            "y": 5
+        },
+        {
+            "height": 1,
+            "id": 87,
+            "type": "road",
+            "width": 1,
+            "x": 1,
+            "y": 4
+        },
+        {
+            "height": 1,
+            "id": 88,
+            "type": "road",
+            "width": 1,
+            "x": 2,
+            "y": 4
+        },
+        {
+            "height": 1,
+            "id": 90,
+            "type": "road",
+            "width": 1,
+            "x": 1,
+            "y": 1
+        },
+        {
+            "height": 1,
+            "id": 91,
+            "type": "road",
+            "width": 1,
+            "x": 2,
+            "y": 1
+        },
+        {
+            "height": 1,
+            "id": 92,
+            "type": "road",
+            "width": 1,
+            "x": 2,
+            "y": 2
+        },
+        {
+            "height": 1,
+            "id": 93,
+            "type": "road",
+            "width": 1,
+            "x": 3,
+            "y": 2
+        },
+        {
+            "height": 1,
+            "id": 94,
+            "type": "road",
+            "width": 1,
+            "x": 5,
+            "y": 2
+        },
+        {
+            "height": 1,
+            "id": 95,
+            "type": "road",
+            "width": 1,
+            "x": 4,
+            "y": 2
+        },
+        {
+            "height": 1,
+            "id": 97,
+            "type": "road",
+            "width": 1,
+            "x": 2,
+            "y": 3
+        },
+        {
+            "building-id": "igloo",
+            "height": 1,
+            "id": 141,
+            "properties": null,
+            "type": "building",
+            "width": 1,
+            "x": 3,
+            "y": 3
+        }
+    ],
+    "tiles": [
+        {
+            "id": 68,
+            "immutable": true,
+            "x": 0,
+            "y": 0
+        },
+        {
+            "id": 69,
+            "immutable": true,
+            "x": 1,
+            "y": 0
+        },
+        {
+            "id": 70,
+            "immutable": true,
+            "x": 2,
+            "y": 0
+        },
+        {
+            "id": 85,
+            "immutable": true,
+            "x": 0,
+            "y": 1
+        },
+        {
+            "id": 86,
+            "immutable": true,
+            "x": 1,
+            "y": 1
+        },
+        {
+            "id": 88,
+            "immutable": true,
+            "x": 2,
+            "y": 1
+        },
+        {
+            "id": 69,
+            "immutable": false,
+            "x": 3,
+            "y": 1
+        },
+        {
+            "id": 69,
+            "immutable": true,
+            "x": 4,
+            "y": 1
+        },
+        {
+            "id": 69,
+            "immutable": false,
+            "x": 5,
+            "y": 1
+        },
+        {
+            "id": 70,
+            "immutable": true,
+            "x": 6,
+            "y": 1
+        },
+        {
+            "id": 119,
+            "immutable": true,
+            "x": 0,
+            "y": 2
+        },
+        {
+            "id": 72,
+            "immutable": true,
+            "x": 1,
+            "y": 2
+        },
+        {
+            "id": 86,
+            "immutable": true,
+            "x": 2,
+            "y": 2
+        },
+        {
+            "id": 86,
+            "immutable": true,
+            "x": 3,
+            "y": 2
+        },
+        {
+            "id": 86,
+            "immutable": true,
+            "x": 4,
+            "y": 2
+        },
+        {
+            "id": 86,
+            "immutable": true,
+            "x": 5,
+            "y": 2
+        },
+        {
+            "id": 88,
+            "immutable": true,
+            "x": 6,
+            "y": 2
+        },
+        {
+            "id": 70,
+            "immutable": true,
+            "x": 7,
+            "y": 2
+        },
+        {
+            "id": 85,
+            "immutable": false,
+            "x": 1,
+            "y": 3
+        },
+        {
+            "id": 86,
+            "immutable": true,
+            "x": 2,
+            "y": 3
+        },
+        {
+            "id": 71,
+            "immutable": false,
+            "x": 3,
+            "y": 3
+        },
+        {
+            "id": 103,
+            "immutable": true,
+            "x": 4,
+            "y": 3
+        },
+        {
+            "id": 72,
+            "immutable": false,
+            "x": 5,
+            "y": 3
+        },
+        {
+            "id": 86,
+            "immutable": true,
+            "x": 6,
+            "y": 3
+        },
+        {
+            "id": 87,
+            "immutable": true,
+            "x": 7,
+            "y": 3
+        },
+        {
+            "id": 68,
+            "immutable": true,
+            "x": 0,
+            "y": 4
+        },
+        {
+            "id": 89,
+            "immutable": true,
+            "x": 1,
+            "y": 4
+        },
+        {
+            "id": 71,
+            "immutable": true,
+            "x": 2,
+            "y": 4
+        },
+        {
+            "id": 104,
+            "immutable": true,
+            "x": 3,
+            "y": 4
+        },
+        {
+            "id": 68,
+            "immutable": true,
+            "x": 4,
+            "y": 4
+        },
+        {
+            "id": 89,
+            "immutable": true,
+            "x": 5,
+            "y": 4
+        },
+        {
+            "id": 71,
+            "immutable": true,
+            "x": 6,
+            "y": 4
+        },
+        {
+            "id": 104,
+            "immutable": true,
+            "x": 7,
+            "y": 4
+        },
+        {
+            "id": 85,
+            "immutable": true,
+            "x": 0,
+            "y": 5
+        },
+        {
+            "id": 86,
+            "immutable": true,
+            "x": 1,
+            "y": 5
+        },
+        {
+            "id": 88,
+            "immutable": true,
+            "x": 2,
+            "y": 5
+        },
+        {
+            "id": 69,
+            "immutable": false,
+            "x": 3,
+            "y": 5
+        },
+        {
+            "id": 89,
+            "immutable": true,
+            "x": 4,
+            "y": 5
+        },
+        {
+            "id": 86,
+            "immutable": true,
+            "x": 5,
+            "y": 5
+        },
+        {
+            "id": 87,
+            "immutable": true,
+            "x": 6,
+            "y": 5
+        },
+        {
+            "id": 102,
+            "immutable": true,
+            "x": 0,
+            "y": 6
+        },
+        {
+            "id": 120,
+            "immutable": true,
+            "x": 1,
+            "y": 6
+        },
+        {
+            "id": 72,
+            "immutable": true,
+            "x": 2,
+            "y": 6
+        },
+        {
+            "id": 86,
+            "immutable": true,
+            "x": 3,
+            "y": 6
+        },
+        {
+            "id": 71,
+            "immutable": true,
+            "x": 4,
+            "y": 6
+        },
+        {
+            "id": 120,
+            "immutable": true,
+            "x": 5,
+            "y": 6
+        },
+        {
+            "id": 104,
+            "immutable": true,
+            "x": 6,
+            "y": 6
+        },
+        {
+            "id": 119,
+            "immutable": true,
+            "x": 2,
+            "y": 7
+        },
+        {
+            "id": 103,
+            "immutable": true,
+            "x": 3,
+            "y": 7
+        },
+        {
+            "id": 104,
+            "immutable": true,
+            "x": 4,
+            "y": 7
+        }
+    ],
+    "title": "Level 3",
+    "width": 8
 }

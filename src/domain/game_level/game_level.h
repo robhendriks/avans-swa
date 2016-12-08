@@ -14,17 +14,24 @@
 #include "../nations/enemy.h"
 #include "../map/objects/dragable_field_object.h"
 #include "../resources/resource.h"
-
+#include "../map/objects/building.h"
+#include "../map/objects/road.h"
+#include "../../events/goal_reached.h"
 
 namespace domain {
     namespace game_level {
         class game_level : public engine::observer::observer<domain::map::objects::dragable_field_object> {
         public:
-            game_level(std::string name, std::shared_ptr<map::map> map, std::shared_ptr<game_stats> goal,
+            game_level(const std::string &id, const std::string &title, const std::string &description,
+                       std::shared_ptr<map::map> map, std::shared_ptr<game_stats> goal,
                        std::shared_ptr<domain::nations::nation> _enemies,
                        engine::draganddrop::drag_and_drop &drag_and_drop, long duration);
 
-            std::string get_name();
+            std::string get_id() const;
+
+            std::string get_title() const;
+
+            std::string get_description() const;
 
             std::shared_ptr<domain::map::map> get_map();
 
@@ -98,7 +105,9 @@ namespace domain {
 
             std::vector<std::string> m_not_reached_goals;
 
-            std::string m_name;
+            std::string m_id;
+            std::string m_title;
+            std::string m_description;
             long m_max_duration;
             std::shared_ptr<domain::map::map> m_map;
             std::shared_ptr<game_stats> m_goal;

@@ -40,10 +40,10 @@ namespace services {
                 load(buildings_filename, m_buildings);
 
             //load lvl src's if not loaded yet
-            if (m_levels.empty()) {
+            if (m_maps.empty()) {
                 json lvls = m_root["lvls"];
                 if (lvls.is_array()) {
-                    m_levels.push_back(load_all_levels(lvls[load_level_nr]));
+                    m_maps.push_back(load_all_levels(lvls[load_level_nr]));
                 }
             }
 
@@ -52,7 +52,7 @@ namespace services {
             auto goal = std::make_shared<domain::game_level::game_stats>();
             goal->set_counter("buildings", 5);
             auto game_level = std::unique_ptr<domain::game_level::game_level>(
-                new domain::game_level::game_level("level", m_levels[load_level_nr], goal, m_nations.front(),
+                new domain::game_level::game_level("level", "", "", m_maps[load_level_nr], goal, m_nations.front(),
                                                    *d_a_d,
                                                    125000));
             for (auto building : m_buildings) {
@@ -224,12 +224,12 @@ namespace services {
 
         }
 
-        map_ptr json_level_loader::load_all_levels(std::string url) {
+        map_ptr json_level_loader::load_all_levels(std::string filename) {
             std::ifstream file;
             file.exceptions(std::ifstream::failbit);
 
             try {
-                file.open(url);
+                file.open(filename);
 
                 json map_root;
                 map_root << file;
