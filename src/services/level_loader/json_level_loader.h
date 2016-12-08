@@ -43,12 +43,6 @@ namespace services {
             template<typename T>
             bool load(const std::string &filename, T &obj);
 
-            map_ptr load_all_levels(std::string filename);
-
-            void load_fields(json &root, domain::map::map &map1);
-
-            void load_objects(json &root, domain::map::map &map1);
-
             json m_root;
             std::vector<building_ptr> m_buildings;
             std::vector<nation_ptr> m_nations;

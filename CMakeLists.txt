@@ -8,7 +8,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -std=c++14")
 
 if (NOT APPLE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
-endif()
+endif ()
 
 add_subdirectory(third_party)
 
@@ -162,7 +162,20 @@ set(SOURCES src/main.cpp
     src/services/level_loader/enemies_deserializer.cpp
     src/services/level_loader/enemies_deserializer.h
     src/services/level_loader/enemy_deserializer.cpp
-    src/services/level_loader/enemy_deserializer.h)
+    src/services/level_loader/enemy_deserializer.h
+    src/services/level_loader/building_deserializer.cpp
+    src/services/level_loader/building_deserializer.h
+    src/services/level_loader/buildings_deserializer.cpp
+    src/services/level_loader/buildings_deserializer.h
+    src/services/level_loader/resources_deserializer.cpp
+    src/services/level_loader/resources_deserializer.h
+    src/services/level_loader/field_deserializer.cpp
+    src/services/level_loader/field_deserializer.h
+    src/services/level_loader/fields_deserializer.cpp
+    src/services/level_loader/fields_deserializer.h
+    src/services/level_loader/map_deserializer.cpp
+    src/services/level_loader/map_deserializer.h
+    src/services/level_loader/serialization.h)
 
 include_directories(third_party/json/src
     third_party/di-cpp14/include
@@ -173,7 +186,7 @@ include_directories(third_party/json/src
     ${SDL2_TTF_INCLUDE_DIRS}
     ${SDL2_MIXER_INCLUDE_DIR})
 
-add_executable(city_defence ${SOURCES} src/services/level_loader/building_deserializer.cpp src/services/level_loader/building_deserializer.h src/services/level_loader/buildings_deserializer.cpp src/services/level_loader/buildings_deserializer.h src/services/level_loader/resources_deserializer.cpp src/services/level_loader/resources_deserializer.h)
+add_executable(city_defence ${SOURCES})
 add_library(city_defence_sources STATIC ${SOURCES})
 
 target_link_libraries(city_defence

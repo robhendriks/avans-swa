@@ -37,7 +37,7 @@ namespace utils {
             }
 
             template<typename T>
-            json_factory &register_deserializer(const json_deserializer_ptr<T> &deserializer) {
+            json_factory &register_type(const json_deserializer_ptr<T> &deserializer) {
                 m_map.emplace(typeid(T).name(), deserializer);
                 return *this;
             }
