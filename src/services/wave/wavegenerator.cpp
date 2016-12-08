@@ -12,7 +12,7 @@ namespace services {
     namespace wave {
         wavegenerator::wavegenerator(std::shared_ptr<domain::map::ai::ai> ai) {
             m_ai = ai;
-            ai->set_target([](domain::map::objects::field_object *object) {
+            ai->set_target_func([](domain::map::objects::field_object *object) {
                 return dynamic_cast<domain::map::objects::building *>(object) != nullptr;
             });
         }
@@ -67,9 +67,9 @@ namespace services {
                             *_nation.getavailableenemies()[i]);
 
                     if (m_ai != nullptr) {
-                        domain::map::ai::ai copy = *m_ai;
-                        copy.set_unit(e);
-                        e->set_ai(std::make_shared<domain::map::ai::ai>(copy));
+                        domain::map::ai::ai clone = m_ai->clone();
+                        clone.set_unit(e);
+                        e->set_ai(std::make_shared<domain::map::ai::ai>(clone));
                     }
 
                     enemies.push_back(

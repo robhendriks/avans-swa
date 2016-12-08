@@ -5,14 +5,28 @@
 #ifndef CITY_DEFENCE_MOVE_STATE_H
 #define CITY_DEFENCE_MOVE_STATE_H
 
-#include "ai_state.h"
+#include "state.h"
+#include "../../field.h"
 
-namespace map {
-    namespace ai {
-        namespace states {
-            class move_state : public ai_state{
+namespace domain {
+    namespace map {
+        namespace ai {
+            namespace states {
+                class move_state : public state {
+                public:
+                    move_state();
+                    void update(ai * ai, unsigned int elapsed_time);
+                private:
+                    int m_last_movement_time = 0;
+                    // to make sure you don't go back (maybe we want him to go back if building is placed behind him/
+                    // need to experiment
+                    std::shared_ptr<field> m_last_field;
+                    std::shared_ptr<field> m_next_field;
 
-            };
+                    void move(ai * ai, unsigned int elapsed_time);
+                    std::shared_ptr<field> get_next_field(domain::map::ai::ai *ai);
+                };
+            }
         }
     }
 }
