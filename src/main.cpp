@@ -22,6 +22,8 @@ int main(int argc, char *argv[]) {
         .register_type<resource_ptr_vector>(std::make_shared<resources_deserializer>())
         .register_type<field_ptr>(std::make_shared<field_deserializer>())
         .register_type<field_ptr_vector>(std::make_shared<fields_deserializer>())
+        .register_type<object_ptr>(std::make_shared<object_deserializer>())
+        .register_type<object_ptr_vector>(std::make_shared<objects_deserializer>())
         .register_type<map_ptr>(std::make_shared<map_deserializer>());
 
     /**

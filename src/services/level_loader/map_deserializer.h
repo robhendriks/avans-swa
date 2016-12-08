@@ -9,6 +9,7 @@
 #include "../../domain/map/map.h"
 #include "../../engine/math/vec2.hpp"
 #include "fields_deserializer.h"
+#include "objects_deserializer.h"
 #include "json_level_loader.h"
 
 using namespace domain::map;

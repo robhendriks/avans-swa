@@ -55,17 +55,19 @@ namespace domain {
          * @return bool - whether it is successfully placed or not
          */
         bool field::drop(engine::draganddrop::dragable *dragable1) {
-            auto *object = dynamic_cast<objects::dragable_field_object*>(dragable1);
-            if (object && object->can_place_on(*this)) {
-                if (place_object(object)) {
-                    // Remove this as dropable
-                    m_drag_and_drop->remove_dropable(this);
-
-                    object->set_max_column(2);
-                }
-
-                return true;
-            }
+//            auto *object = dynamic_cast<objects::dragable_field_object*>(dragable1);
+//
+//
+//            if (object && object->can_place_on(*this)) {
+//                if (place_object(object)) {
+//                    // Remove this as dropable
+//                    m_drag_and_drop->remove_dropable(this);
+//
+//                    object->set_max_column(2);
+//                }
+//
+//                return true;
+//            }
 
             return false;
         }
@@ -88,10 +90,10 @@ namespace domain {
          *
          * @param object
          */
-        bool field::place_object(objects::field_object* object) {
+        bool field::place_object(const objects::field_object_ptr &object) {
             if (!has_object()) {
                 m_object = object;
-                m_object->set_field(std::shared_ptr<field>(this));
+                m_object->set_field(shared_from_this());
 
                 // notify local observers
                 notify_observers(this, "object-placed");
@@ -112,7 +114,7 @@ namespace domain {
         /**
          * @return object* - the object that is placed on this field or a nullptr when nothing is placed
          */
-        objects::field_object *field::get_object() const {
+        objects::field_object_ptr field::get_object() const {
             return m_object;
         }
 

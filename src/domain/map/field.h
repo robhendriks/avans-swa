@@ -12,6 +12,8 @@ namespace domain {
     namespace map {
         namespace objects {
             class field_object;
+
+            using field_object_ptr = std::shared_ptr<field_object>;
         }
     }
 }
@@ -28,8 +30,11 @@ namespace domain {
     namespace map {
 
 
-        class field : public drawable::drawable_game_object, public engine::draganddrop::dropable,
-                      public engine::observer::observee<field> {
+        class field
+            : public std::enable_shared_from_this<field>,
+              public drawable::drawable_game_object,
+              public engine::draganddrop::dropable,
+              public engine::observer::observee<field> {
         public:
 
             field(const engine::math::vec2_t &pos);
@@ -40,15 +45,15 @@ namespace domain {
 
             engine::math::box2_t get_box() const;
 
-            bool drop(engine::draganddrop::dragable* dragable1);
+            bool drop(engine::draganddrop::dragable *dragable1);
 
             void set_box(engine::math::box2_t box);
 
-            bool place_object(objects::field_object* object);
+            bool place_object(const objects::field_object_ptr &object);
 
             bool has_object() const;
 
-            objects::field_object *get_object() const;
+            objects::field_object_ptr get_object() const;
 
             std::vector<std::shared_ptr<field>> get_neighbors() const;
 
@@ -61,10 +66,11 @@ namespace domain {
             long get_weight() const;
 
             void set_weight(long weight);
+
         private:
             map_ptr m_map;
             engine::math::vec2_t m_pos;
-            objects::field_object *m_object;
+            objects::field_object_ptr m_object;
             engine::math::box2_t *m_box;
             long m_weight = 0;
         };

@@ -44,7 +44,13 @@ namespace services {
             }
 
             // Load objects
-            // TODO: deserialize map objects
+            object_ptr_vector objects;
+            if (json.find("objects") != json.end())
+                objects = json_deserialize<object_ptr_vector>(json["objects"]);
+
+            fields.front()->place_object(objects.front());
+
+            // TODO: stuff with objects
 
             return result;
         }

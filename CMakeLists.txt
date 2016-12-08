@@ -175,6 +175,10 @@ set(SOURCES src/main.cpp
     src/services/level_loader/fields_deserializer.h
     src/services/level_loader/map_deserializer.cpp
     src/services/level_loader/map_deserializer.h
+    src/services/level_loader/object_deserializer.h
+    src/services/level_loader/object_deserializer.cpp
+    src/services/level_loader/objects_deserializer.h
+    src/services/level_loader/objects_deserializer.cpp
     src/services/level_loader/serialization.h)
 
 include_directories(third_party/json/src

@@ -14,6 +14,8 @@
 #include "resources_deserializer.h"
 #include "field_deserializer.h"
 #include "fields_deserializer.h"
+#include "object_deserializer.h"
+#include "objects_deserializer.h"
 #include "map_deserializer.h"
 
 #endif //CITY_DEFENCE_SERIALIZATION_H
