@@ -10,7 +10,6 @@ namespace domain {
             return m_hp;
         }
 
-
         int  defender::lower_hitpoints(int points) {
             if(m_hp - points >= 0)
                 m_hp -= points;

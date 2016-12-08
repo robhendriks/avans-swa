@@ -139,11 +139,16 @@ namespace domain {
 
         void field::notify(objects::field_object *p_observee, std::string title) {
             if (title == "object-destroyed") {
-                m_object = nullptr;
-                m_drag_and_drop->add_dropable(*this);
+                // it can be that a object still is linked to this field but still needs to be removed even
+                // if it is already removed from the field itself
+                if(m_object != nullptr){
+                    notify_observers(this, title);
+                    m_object = nullptr;
+                    m_drag_and_drop->add_dropable(*this);
+                }
             }
 
-            notify_observers(this, title);
+
         }
     }
 }

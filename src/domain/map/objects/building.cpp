@@ -61,15 +61,12 @@ namespace domain {
                   required_resources(required_resources){}
 
             int building::lower_hitpoints(int by) {
-                if(get_hp() != 0){
-                    int result = domain::combat::defender::lower_hitpoints(by);
-                    if (result == 0) {
-                        notify_observers(this, "object-destroyed");
-                    }
-                    return result;
+                SDL_Log("%d", get_hp());
+                int result = domain::combat::defender::lower_hitpoints(by);
+                if (result == 0) {
+                    notify_observers(this, "object-destroyed");
                 }
-                else
-                    return 0;
+                return result;
             }
 
 
