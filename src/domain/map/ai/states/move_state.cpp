@@ -2,6 +2,7 @@
 // Created by te on 08-Dec-16.
 //
 
+#include <iostream>
 #include "move_state.h"
 #include "../ai.h"
 #include "../../objects/road.h"
@@ -17,39 +18,28 @@ namespace domain {
                 }
 
                 void move_state::update(domain::map::ai::ai *ai, unsigned int elapsed_time) {
-                    // first we can only move if its a drawable
-                    auto result = dynamic_cast<domain::drawable::drawable_game_object*>(ai->get_unit().get());
-                    if(result != nullptr){
-                        // step 3: check if its time to move
-                        if (static_cast<int>(elapsed_time) - m_last_movement_time > 1000) {
-                            m_last_movement_time = elapsed_time;
-                            // step 3.1 check if we are in transition
-                            if (m_next_field != nullptr) {
-                                // step 3.1.1 check if we arrived at the target location or we have to choose a new target
-                                if (m_next_field->get_box() == result->get_box()) {
-                                    // first last set the last field to the current because we reached our destination
-                                    m_last_field = ai->get_current_field();
-                                    // same for this
-                                    ai->set_current_field(m_next_field);
-                                    // and set our next location to this
-                                    m_next_field = get_next_field(ai);
+                    // step 3.1 check if we are in transition
+                    if (m_next_field != nullptr) {
+                        // step 3.1.1 check if we arrived at the target location or we have to choose a new target
+                        if (m_next_field->get_box() == ai->get_unit()->get_box()) {
+                            // first last set the last field to the current because we reached our destination
+                            m_last_field = ai->get_current_field();
+                            // same for this
+                            ai->set_current_field(m_next_field);
+                            // now that we have moved set the current time we are on that field equal to the elapsed time.
+                            m_time_moved_on_current_field = elapsed_time;
+                            // and set our next location to this
+                            m_next_field = get_next_field(ai);
 
-                                    // now that move is complete lets switch to searching for targets
-                                    ai->set_state(get_next_state());
-                                } else {
-                                    // animation logic
-                                    move(ai, elapsed_time);
-                                    // for now lets move it straight away to the next one XD (100% movement speed
-                                    result->set_box(std::make_shared<engine::math::box2_t>(m_next_field->get_box()));
-                                    m_next_field = nullptr;
-                                }
-                            } else {
-                                m_next_field = get_next_field(ai);
-                            }
+                            // now that move is complete lets switch to searching for targets
+                            ai->set_state(get_next_state());
+                        } else {
+                            // animation logic
+                            move(ai, elapsed_time);
+                            m_next_field = nullptr;
                         }
-                    }
-                    else{
-                        ai->set_state(get_next_state());
+                    } else {
+                        m_next_field = get_next_field(ai);
                     }
                 }
 
@@ -80,6 +70,36 @@ namespace domain {
                 }
 
                 void move_state::move(domain::map::ai::ai *ai, unsigned int elapsed_time) {
+                    // then its the spawn point and we just set the time
+                    if(m_time_moved_on_current_field == -1){
+                        m_time_moved_on_current_field = elapsed_time;
+                    }
+
+                    // time on field
+                    auto current_time_on_field = elapsed_time - m_time_moved_on_current_field;
+
+                    // % of total time
+                    auto percentage = static_cast<double>(current_time_on_field) / static_cast<double>(ai->get_unit()->get_movement()) * 100;
+
+                    // for easier use
+                    auto f_box = m_next_field->get_box();
+                    auto u_box = ai->get_unit()->get_box();
+
+                    // differences and then 1%
+                    auto difference_min_x_1 = static_cast<double>(f_box.min.x - u_box.min.x) / 100;
+                    auto difference_min_y_1 = static_cast<double>(f_box.min.y - u_box.min.y)  / 100;
+                    auto difference_max_x_1 = static_cast<double>(f_box.max.x - u_box.max.x)  / 100;
+                    auto difference_max_y_1 = static_cast<double>(f_box.max.y - u_box.max.y) / 100;
+
+                    // create a new box for the new location of the unit
+                    engine::math::box2_t new_box = {
+                        {static_cast<float>(u_box.min.x + (difference_min_x_1 * percentage)),
+                                static_cast<float>(u_box.min.y + (difference_min_y_1 * percentage))},
+                        {static_cast<float>(u_box.max.x + (difference_max_x_1 * percentage)),
+                                static_cast<float>(u_box.max.y + (difference_max_y_1 * percentage))}
+                    };
+
+                    ai->get_unit()->set_box(std::make_shared<engine::math::box2_t>(new_box));
 
                 }
             }

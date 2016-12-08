@@ -17,7 +17,7 @@ namespace domain {
                     move_state();
                     void update(ai * ai, unsigned int elapsed_time);
                 private:
-                    int m_last_movement_time = 0;
+                    int m_time_moved_on_current_field = -1;
                     // to make sure you don't go back (maybe we want him to go back if building is placed behind him/
                     // need to experiment
                     std::shared_ptr<field> m_last_field;

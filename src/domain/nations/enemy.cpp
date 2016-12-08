@@ -15,7 +15,7 @@ namespace domain {
         }
 
         enemy::enemy(std::string name, int min_damage, int max_damage, double attacks_per_second, int hitpoints, int granted_xp, int range, int movement, bool boss, std::shared_ptr<nation> nation, int oppertunity_costs)
-                : domain::combat::attacker(min_damage, max_damage, attacks_per_second, range, movement), domain::combat::defender(0, 0),  m_destination(nullptr){
+                : domain::combat::attacker(min_damage, max_damage, attacks_per_second, range, 1000), domain::combat::defender(0, 0),  m_destination(nullptr){
             m_name = name;
             m_boss = boss;
             m_nation = nation;
