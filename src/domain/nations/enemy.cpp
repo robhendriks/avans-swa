@@ -73,7 +73,6 @@ namespace domain {
         }
 
         enemy::~enemy() {
-
         }
 
         engine::math::box2_t enemy::get_box() const {
@@ -95,7 +94,6 @@ namespace domain {
         }
 
         bool operator<(const std::shared_ptr<enemy>&  s1, const std::shared_ptr<enemy>&  s2){
-
             return s1->get_oppertunity_cost() < s2->get_oppertunity_cost();
         }
 

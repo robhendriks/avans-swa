@@ -44,7 +44,7 @@ namespace services {
 
             //Checks if enemies can be spawned based on the given _oppertunity
             std::sort(list.begin(), list.end());
-            _nation.setavailableenemies(list);
+            _nation.set_available_enemies(list);
 
             if (_nation.get_available_enemies().size() == 0 ||
                     _nation.get_available_enemies()[0]->get_oppertunity_cost() > _oppertunity) {

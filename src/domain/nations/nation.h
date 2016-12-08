@@ -18,9 +18,7 @@ namespace domain {
         public:
             nation(std::string _name, std::string _prefix_name);
 
-
-            void setavailableenemies(std::vector<std::shared_ptr<enemy>> _enemies);
-
+            void set_available_enemies(std::vector<std::shared_ptr<enemy>> _enemies);
 
             std::string get_name();
 
@@ -29,12 +27,10 @@ namespace domain {
             std::vector<std::shared_ptr<enemy>> get_available_enemies();
 
             ~nation();
-
         private:
             std::string m_name;
             std::string m_prefix_name;
             std::vector<std::shared_ptr<enemy>> m_enemies;
-
         };
     }
 }
