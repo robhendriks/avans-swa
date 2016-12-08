@@ -150,7 +150,7 @@ namespace domain {
                     add_placeable_object(*copy);
 
                     // Immediately start with dragging
-                    m_drag_and_drop.set_dragging(*copy);
+                    m_drag_and_drop.set_next_dragging(*copy);
                 }
             }
 

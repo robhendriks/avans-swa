@@ -6,7 +6,8 @@
 
 namespace engine {
     namespace draganddrop {
-        drag_and_drop::drag_and_drop(bool select_and_drop) : m_dragging(nullptr), m_select_and_drop(select_and_drop),
+        drag_and_drop::drag_and_drop(bool select_and_drop) : m_dragging(nullptr), m_next_dragging(nullptr),
+                                                             m_select_and_drop(select_and_drop),
                                                              m_started(false), m_mouse_position_on_select(nullptr) {
 
             // Add self as subscriber on the eventbus
@@ -54,6 +55,10 @@ namespace engine {
             }
 
             return false;
+        }
+
+        void drag_and_drop::set_next_dragging(dragable &dragable1) {
+            m_next_dragging = &dragable1;
         }
 
         void drag_and_drop::on_event(events::mouse_button_down<input::mouse_buttons::LEFT> &event) {
@@ -106,6 +111,12 @@ namespace engine {
 
                                 // Let the object know it's dropped
                                 temp->on_drop(save_drop);
+
+                                // Check for next dragging
+                                if (m_next_dragging != nullptr) {
+                                    m_dragging = m_next_dragging;
+                                    m_next_dragging = nullptr;
+                                }
 
                                 // Stop loop
                                 return;

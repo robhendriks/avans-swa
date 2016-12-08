@@ -55,6 +55,8 @@ namespace engine {
 
             bool set_dragging(dragable &dragable1, bool force = false);
 
+            void set_next_dragging(dragable &dragable1);
+
             void start();
 
             void stop();
@@ -62,6 +64,7 @@ namespace engine {
         private:
             std::vector<dragable*> m_dragables;
             dragable* m_dragging;
+            dragable* m_next_dragging;
             std::vector<dropable*> m_dropables;
 
             bool m_select_and_drop;

@@ -56,7 +56,6 @@ namespace domain {
                 // Remove this as dragable
                 m_drag_and_drop->remove_dragable(this);
 
-
                 // Fire event
                 auto *event = new events::object_dropped_on_field(*this);
                 engine::eventbus::eventbus::get_instance().fire(*event);
