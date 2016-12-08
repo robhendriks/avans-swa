@@ -18,13 +18,17 @@ namespace domain {
                 void search_and_destroy_state::update(ai *ai, unsigned int elapsed_time) {
                     // step 1: check if we have a target atm and if we can attack at all
                     if (static_cast<int>(elapsed_time) - static_cast<int>(m_last_attack_time) >
-                        ai->get_unit()->get_attack_speed() &&
+                        (1000/ai->get_unit()->get_attack_speed()) &&
                         m_current_target != nullptr) {
                         // step 1.1 attack and unset if target is destroyed
                         // TODO this needs to change to target now we know its always building
                         // TODO right now problem is that field object has no hp but 'target' does
-                        if (m_current_target->lower_hitpoints(
-                                ai->get_unit()->get_damage()) <= 0) {
+                        SDL_Log("%s %d", "hp before   : ", m_current_target->get_hp());
+                        SDL_Log("%s %d", "elapsed time: ", elapsed_time);
+                        auto current_hp = m_current_target->lower_hitpoints(
+                                ai->get_unit()->get_damage());
+                        SDL_Log("%s %d", "hp after   : ",current_hp);
+                        if (current_hp <= 0) {
                             m_current_target = nullptr;
                         }
                     }

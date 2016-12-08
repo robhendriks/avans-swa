@@ -21,7 +21,7 @@ namespace domain {
                     auto result = dynamic_cast<domain::drawable::drawable_game_object*>(ai->get_unit().get());
                     if(result != nullptr){
                         // step 3: check if its time to move
-                        if (static_cast<int>(elapsed_time) - m_last_movement_time > ai->get_unit()->get_movement()) {
+                        if (static_cast<int>(elapsed_time) - m_last_movement_time > 1000) {
                             m_last_movement_time = elapsed_time;
                             // step 3.1 check if we are in transition
                             if (m_next_field != nullptr) {

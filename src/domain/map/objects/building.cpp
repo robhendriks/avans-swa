@@ -61,7 +61,6 @@ namespace domain {
                   required_resources(required_resources){}
 
             int building::lower_hitpoints(int by) {
-                SDL_Log("%d", get_hp());
                 int result = domain::combat::defender::lower_hitpoints(by);
                 if (result == 0) {
                     notify_observers(this, "object-destroyed");
