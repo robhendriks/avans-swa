@@ -66,7 +66,8 @@ namespace domain {
 
             int building::reduce_hitpoints(int by) {
                 hitpoints -= by;
-                if(hitpoints < 0){
+                if(hitpoints <= 0){
+                    notify_observers(this, "object-destroyed");
                     hitpoints = 0;
                 }
                 return hitpoints;

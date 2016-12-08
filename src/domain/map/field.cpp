@@ -93,6 +93,7 @@ namespace domain {
             if (!has_object()) {
                 m_object = object;
                 m_object->set_field(std::shared_ptr<field>(this));
+                m_object->add_observer(this);
 
                 // notify local observers
                 notify_observers(this, "object-placed");
@@ -141,6 +142,14 @@ namespace domain {
 
         void field::set_weight(long weight) {
             m_weight = weight;
+        }
+
+        void field::notify(objects::field_object *p_observee, std::string title) {
+            if (title == "object-destroyed") {
+                m_object = nullptr;
+            }
+
+            notify_observers(this, title);
         }
     }
 }

@@ -33,7 +33,7 @@ namespace domain {
                     if (m_current_target == nullptr) {
                         // step 2.1 check if there is a target
                         for (auto &field_with_range : ai->get_map()->get_fields_in_range(ai->get_unit()->get_range(),
-                                                                                 ai->get_current_field().get())) {
+                                                                                         ai->get_current_field().get())) {
                             // step 2.1.1 check if the target is a target for us and if it is then set it
                             auto b = ai->get_is_target_func();
                             if (b(field_with_range.field->get_object())) {

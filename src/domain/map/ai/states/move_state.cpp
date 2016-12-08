@@ -32,7 +32,7 @@ namespace domain {
                                 // and set our next location to this
                                 m_next_field = get_next_field(ai);
 
-                                // now that move is complete lets switch to searching for targets == step 1.
+                                // now that move is complete lets switch to searching for targets
                                 ai->set_state(get_next_state());
                             } else {
                                 // animation logic
@@ -69,7 +69,7 @@ namespace domain {
                                 }
                             }
                         }
-                        return best_neighbour;
+                        return best_neighbour == nullptr ? m_last_field : best_neighbour;
                     }
                 }
 

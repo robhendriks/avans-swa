@@ -80,6 +80,18 @@ namespace domain {
                     }
                 }
             }
+            else if(title == "object-destroyed"){
+                int range = 4;
+                // set heat for itself based on range + 1
+                p_observee->set_weight(p_observee->get_weight() - range - 1);
+
+                // set heat for neighbours based on range
+                auto fields = get_fields_in_range(range, p_observee);
+                for(auto& field_with_range : fields)
+                {
+                    field_with_range.field->set_weight(field_with_range.field->get_weight() - field_with_range.range_from_origin);
+                }
+            }
             notify_observers(this, title);
         }
 
