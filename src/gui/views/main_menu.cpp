@@ -16,6 +16,7 @@ namespace gui {
 
             // Load textures
             m_top_bar.m_texture_manager.load("images/logo.png", "logo");
+            m_top_bar.m_texture_manager.load("images/background.jpg", "background");
             m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 244}, {1451, 289}}, 1.5, "blue_btn");
             m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 64}, {1451, 110}}, 1.5, "yellow_btn");
             m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 184}, {1451, 229}}, 1.5, "red_btn");
@@ -93,6 +94,8 @@ namespace gui {
 
         void main_menu::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
             m_top_bar.draw(time_elapsed, display_box);
+
+            m_top_bar.m_texture_manager.draw("background", display_box);
 
             // Draw the logo
             m_top_bar.m_texture_manager.draw("logo", *m_logo_box);
@@ -191,6 +194,7 @@ namespace gui {
             m_top_bar.m_texture_manager.unload("red_btn");
             m_top_bar.m_texture_manager.unload("green_slider_left");
             m_top_bar.m_texture_manager.unload("green_slider_right");
+            m_top_bar.m_texture_manager.unload("background");
 
             // Unload music
             m_music_manager.unload("menu_bg_music");
