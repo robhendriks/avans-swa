@@ -43,6 +43,8 @@ namespace domain {
 
             std::vector<std::shared_ptr<field>> get_empty_fields() const;
 
+            std::vector<std::shared_ptr<field>> get_fields() const;
+
             void add_field(std::shared_ptr<field> field1);
 
             std::vector<std::shared_ptr<field>> get_neighbors(engine::math::vec2_t position) const;

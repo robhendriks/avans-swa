@@ -56,8 +56,6 @@ namespace domain {
                 // Remove this as dragable
                 m_drag_and_drop->remove_dragable(this);
 
-                // Notify
-                notify_observers(this, "object-dropped");
 
                 // Fire event
                 auto *event = new events::object_dropped_on_field(*this);

@@ -31,6 +31,8 @@ namespace domain {
 
                 void set_required_resource(std::vector<std::shared_ptr<domain::resources::resource>> resources);
 
+                void update_game_stats(domain::game_level::game_stats &game_stats1, std::string action);
+
                 virtual void update(domain::game_level::game_level game_level);
                 virtual int lower_hitpoints(int points);
 
@@ -44,8 +46,6 @@ namespace domain {
                 std::string name;
                 int type;
                 std::vector<std::shared_ptr<domain::resources::resource>> required_resources;
-                void update_game_stats(domain::game_level::game_stats &game_stats1);
-
             };
         }
     }
