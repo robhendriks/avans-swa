@@ -32,12 +32,15 @@ namespace gui {
             m_level_goals_model.game_stats = lvl.get_stats();
 
             if (is_lvl_done()) {
+                m_model.paused = true;
+
                 m_trans_model.duration = m_engine.get_time_elapsed() - lvl.get_start_time();
                 m_trans_model.result = !lvl.is_game_over(m_engine.get_time_elapsed());
                 m_trans_model.next_lvl_exists = m_model.world->has_next_level();
 
                 view(m_trans_view);
             } else {
+                m_model.paused = false;
                 view(m_view);
             }
         }
@@ -114,6 +117,15 @@ namespace gui {
                 m_model.paused = true;
             }
         };
+
+        /**
+         * Called after a level is done or stopped
+         */
+        void main_map_controller::resume_engine_if() {
+            if (m_engine.get_state() == engine::PAUSED) {
+                m_engine.resume();
+            }
+        }
 
         void
         main_map_controller::set_menu_controller(std::shared_ptr<gui::controllers::menu_controller> menu_controller) {

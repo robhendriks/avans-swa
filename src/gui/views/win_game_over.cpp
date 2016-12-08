@@ -9,30 +9,32 @@
 namespace gui {
     namespace views {
 
-        win_game_over::win_game_over(top_bar &top_bar1, level_goals &goals_view, models::transition_level_model &model,
+        win_game_over::win_game_over(in_game_menu &in_game_menu1, level_goals &goals_view, models::transition_level_model &model,
             engine::audio::sound_manager &sound_manager) :
-                m_top_bar(top_bar1), m_goals_view(goals_view), m_controller(nullptr), m_model(model),
-                m_sound_manager(sound_manager) {
+                m_in_game_menu(in_game_menu1), m_goals_view(goals_view), m_controller(nullptr), m_model(model),
+                m_sound_manager(sound_manager), m_texture_manager(m_in_game_menu.m_top_bar.m_texture_manager),
+                m_color_manager(m_in_game_menu.m_top_bar.m_color_manager),
+                m_font_manager(m_in_game_menu.m_top_bar.m_font_manager) {
 
         }
 
         void win_game_over::before() {
-            m_top_bar.before();
+            m_in_game_menu.before();
             m_goals_view.before();
 
             // Load textures
-            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 124}, {1451, 169}}, 2, "w_green_box");
-            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 184}, {1451, 229}}, 1.5, "w_red_box");
-            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1080, 630}, {1119, 661}}, 0.8, "red_slider_right");
+            m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 124}, {1451, 169}}, 2, "w_green_box");
+            m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 184}, {1451, 229}}, 1.5, "w_red_box");
+            m_texture_manager.load_from_svg("images/ui-pack.svg", {{1080, 630}, {1119, 661}}, 0.8, "red_slider_right");
 
             // Load texts
             std::string result = m_model.result ? "Victory" : "Defeat";
             std::string last = m_model.next_lvl_exists ? "" : " - last level";
-            m_top_bar.m_texture_manager.load_text(result + last, {255, 193, 132}, *m_top_bar.m_font_manager.get_font("roboto", 50), "w_title");
+            m_texture_manager.load_text(result + last, {255, 193, 132}, *m_font_manager.get_font("roboto", 50), "w_title");
 
-            m_top_bar.m_texture_manager.load_text("Duration", {255, 255, 255}, *m_top_bar.m_font_manager.get_font("roboto", 25), "w_time");
-            m_top_bar.m_texture_manager.load_text(utils::string_utils::ms_to_hms(m_model.duration), {0, 0, 0}, *m_top_bar.m_font_manager.get_font("roboto", 25), "w_time_played");
-            m_top_bar.m_texture_manager.load_text("Continue", {255, 255, 255}, *m_top_bar.m_font_manager.get_font("roboto", 25), "w_continue");
+            m_texture_manager.load_text("Duration", {255, 255, 255}, *m_font_manager.get_font("roboto", 25), "w_time");
+            m_texture_manager.load_text(utils::string_utils::ms_to_hms(m_model.duration), {0, 0, 0}, *m_font_manager.get_font("roboto", 25), "w_time_played");
+            m_texture_manager.load_text("Continue", {255, 255, 255}, *m_font_manager.get_font("roboto", 25), "w_continue");
 
             // Load and play sound effect
             if (m_model.result) {
@@ -48,27 +50,27 @@ namespace gui {
         }
 
         void win_game_over::on_display_change(engine::math::box2_t display_box) {
-            m_top_bar.on_display_change(display_box);
+            m_in_game_menu.on_display_change(display_box);
             m_goals_view.on_display_change(display_box);
 
             // Create title box
-            engine::graphics::box_builder builder1(m_top_bar.m_texture_manager.get_size("w_title"));
-            builder1.as_left_top(m_top_bar.m_bar_box->left_bottom()).add_margin({0, 40})
-                .center_horizontal(m_top_bar.m_bar_box->min.x, m_top_bar.m_bar_box->max.x);
+            engine::graphics::box_builder builder1(m_texture_manager.get_size("w_title"));
+            builder1.as_left_top(m_in_game_menu.m_top_bar.m_bar_box->left_bottom()).add_margin({0, 40})
+                .center_horizontal(m_in_game_menu.m_top_bar.m_bar_box->min.x, m_in_game_menu.m_top_bar.m_bar_box->max.x);
             m_title_box.reset(new engine::math::box2_t(builder1.build()));
 
             // Create the continue box
-            engine::graphics::box_builder builder2(m_top_bar.m_texture_manager.get_size("w_green_box"));
+            engine::graphics::box_builder builder2(m_texture_manager.get_size("w_green_box"));
             builder2.as_right_bottom(display_box.right_bottom()).add_margin({-150, -150});
             m_continue_box.reset(new engine::math::box2_t(builder2.build()));
 
             // Create continue text box
-            engine::graphics::box_builder builder3(m_top_bar.m_texture_manager.get_size("w_continue"));
+            engine::graphics::box_builder builder3(m_texture_manager.get_size("w_continue"));
             builder3.as_left_top(m_continue_box->left_top()).add_margin({20, 10});
             m_continue_text_box.reset(new engine::math::box2_t(builder3.build()));
 
             // Create the slider move boxes
-            auto slider_size = m_top_bar.m_texture_manager.get_size("red_slider_right");
+            auto slider_size = m_texture_manager.get_size("red_slider_right");
 
             engine::graphics::box_builder builder5({m_continue_box->width() - 6, slider_size.y});
             builder5.as_left_bottom(m_continue_box->left_bottom()).add_margin({4, -10});
@@ -87,7 +89,7 @@ namespace gui {
 
             m_moveable_slider_box.reset(new engine::graphics::moveable_box(*m_continue_slider_box, slider_move_boxes, {0.3, 0}, -1));
 
-            auto time_header_size = m_top_bar.m_texture_manager.get_size("w_red_box");
+            auto time_header_size = m_texture_manager.get_size("w_red_box");
             auto stats_header_size = m_goals_view.m_stats_header_box->size();
 
             // Stats wrapper box
@@ -103,17 +105,17 @@ namespace gui {
             m_time_header_box.reset(new engine::math::box2_t(builder7.build()));
 
             // Create the time header text box
-            engine::graphics::box_builder builder8(m_top_bar.m_texture_manager.get_size("w_time"));
+            engine::graphics::box_builder builder8(m_texture_manager.get_size("w_time"));
             builder8.to_center(*m_time_header_box);
             m_time_header_text_box.reset(new engine::math::box2_t(builder8.build()));
 
             // Create the time box
-            engine::graphics::box_builder builder9(m_top_bar.m_texture_manager.get_size("g_box"));
+            engine::graphics::box_builder builder9(m_texture_manager.get_size("g_box"));
             builder9.as_left_top(m_time_header_box->left_bottom()).add_margin({0, 10});
             m_time_box.reset(new engine::math::box2_t(builder9.build()));
 
             // Create the time text box
-            engine::graphics::box_builder builder10(m_top_bar.m_texture_manager.get_size("w_time_played"));
+            engine::graphics::box_builder builder10(m_texture_manager.get_size("w_time_played"));
             builder10.to_center(*m_time_box);
             m_time_text_box.reset(new engine::math::box2_t(builder10.build()));
 
@@ -124,31 +126,33 @@ namespace gui {
         }
 
         void win_game_over::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
-            m_top_bar.draw(time_elapsed, display_box);
             m_goals_view.draw(time_elapsed, display_box);
 
-            m_top_bar.m_texture_manager.draw("w_title", *m_title_box);
-            m_top_bar.m_texture_manager.draw("w_red_box", *m_time_header_box);
-            m_top_bar.m_texture_manager.draw("w_time", *m_time_header_text_box);
-            m_top_bar.m_texture_manager.draw("g_box", *m_time_box);
-            m_top_bar.m_texture_manager.draw("w_time_played", *m_time_text_box);
-            m_top_bar.m_texture_manager.draw("w_green_box", *m_continue_box);
-            m_top_bar.m_texture_manager.draw("w_continue", *m_continue_text_box);
+            m_texture_manager.draw("w_title", *m_title_box);
+            m_texture_manager.draw("w_red_box", *m_time_header_box);
+            m_texture_manager.draw("w_time", *m_time_header_text_box);
+            m_texture_manager.draw("g_box", *m_time_box);
+            m_texture_manager.draw("w_time_played", *m_time_text_box);
+            m_texture_manager.draw("w_green_box", *m_continue_box);
+            m_texture_manager.draw("w_continue", *m_continue_text_box);
 
             m_moveable_slider_box->move(time_elapsed);
             for (auto &box : m_moveable_slider_box->get_boxes()) {
                 if (m_continue_slider_box->contains(box)) {
-                    m_top_bar.m_texture_manager.draw("red_slider_right", box);
+                    m_texture_manager.draw("red_slider_right", box);
                 } else {
                     if (m_continue_slider_box->contains(box.min)) {
                         auto show_box = engine::math::box2_t(box.min, m_continue_slider_box->max);
-                        m_top_bar.m_texture_manager.draw("red_slider_right", {0, 0}, show_box);
+                        m_texture_manager.draw("red_slider_right", {0, 0}, show_box);
                     } else if (m_continue_slider_box->contains(box.max)) {
                         auto show_box = engine::math::box2_t(m_continue_slider_box->min, box.max);
-                        m_top_bar.m_texture_manager.draw("red_slider_right", {show_box.min.x - box.min.x, 0}, show_box);
+                        m_texture_manager.draw("red_slider_right", {show_box.min.x - box.min.x, 0}, show_box);
                     }
                 }
             }
+
+            // Draw at last because of the overlay
+            m_in_game_menu.draw(time_elapsed, display_box);
         }
 
         void win_game_over::on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event) {
@@ -164,19 +168,19 @@ namespace gui {
         }
 
         void win_game_over::after() {
-            m_top_bar.after();
+            m_in_game_menu.after();
             m_goals_view.after();
 
             // Unload textures
-            m_top_bar.m_texture_manager.unload("w_green_box");
-            m_top_bar.m_texture_manager.unload("w_red_box");
-            m_top_bar.m_texture_manager.unload("red_slider_right");
+            m_texture_manager.unload("w_green_box");
+            m_texture_manager.unload("w_red_box");
+            m_texture_manager.unload("red_slider_right");
 
             // Unload texts
-            m_top_bar.m_texture_manager.unload("w_title");
-            m_top_bar.m_texture_manager.unload("w_time");
-            m_top_bar.m_texture_manager.unload("w_time_played");
-            m_top_bar.m_texture_manager.unload("w_continue");
+            m_texture_manager.unload("w_title");
+            m_texture_manager.unload("w_time");
+            m_texture_manager.unload("w_time_played");
+            m_texture_manager.unload("w_continue");
 
             // Unload sounds
             m_sound_manager.unload("w_sound");

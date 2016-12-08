@@ -12,22 +12,33 @@
 namespace gui {
     namespace views {
 
-        level::level(top_bar &top_bar1, level_goals &goals_view, engine::audio::music_manager &music_manager,
-                     models::main_map_model &model, engine::audio::sound_manager &sound_manager)
-            : m_top_bar(top_bar1), m_goals_view(goals_view), m_music_manager(music_manager),
-              m_model(model), m_sound_manager(sound_manager), m_current_page(1) {
+        level::level(in_game_menu &in_game_menu1, level_goals &goals_view, engine::audio::music_manager &music_manager,
+                      models::main_map_model &model, engine::audio::sound_manager &sound_manager)
+            : m_in_game_menu(in_game_menu1), m_goals_view(goals_view), m_music_manager(music_manager),
+              m_model(model), m_sound_manager(sound_manager),
+              m_texture_manager(m_in_game_menu.m_top_bar.m_texture_manager),
+              m_color_manager(m_in_game_menu.m_top_bar.m_color_manager),
+              m_font_manager(m_in_game_menu.m_top_bar.m_font_manager),
+              m_current_page(1) {
         }
 
         void level::before() {
-            m_top_bar.before();
+            m_in_game_menu.before();
             m_goals_view.before();
 
+            // Add callback on menu show
+            m_in_game_menu.call_on_show_change([&](bool show) {
+                if ((show && !m_model.paused) || (!show && m_model.paused)) {
+                    on_pause();
+                }
+            });
+
             // Load arrow textures
-            m_top_bar.m_texture_manager.load("images/arrows.png", "arrows");
-            m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 184}, {1451, 229}}, 1.5, "l_red_box");
-            m_top_bar.m_texture_manager.load("images/pause.png", "l_pause");
-            m_top_bar.m_texture_manager.load("images/play.png", "l_play");
-            m_top_bar.m_texture_manager.load("images/play_large.png", "l_play_large");
+            m_texture_manager.load("images/arrows.png", "arrows");
+            m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 184}, {1451, 229}}, 1.5, "l_red_box");
+            m_texture_manager.load("images/pause.png", "l_pause");
+            m_texture_manager.load("images/play.png", "l_play");
+            m_texture_manager.load("images/play_large.png", "l_play_large");
 
             // Load music
             m_music_manager.load("sounds/game.mp3", "game_bg_music");
@@ -63,7 +74,7 @@ namespace gui {
         }
 
         void level::on_display_change(engine::math::box2_t display_box) {
-            m_top_bar.on_display_change(display_box);
+            m_in_game_menu.on_display_change(display_box);
             m_goals_view.on_display_change(display_box);
 
             // Create the box for the placeable objects
@@ -96,42 +107,36 @@ namespace gui {
                 m_current_page = m_pages;
             }
 
-
             // Set the draw boxes for the placeable objects
             update_placeable_objects_page();
             // Create the box for the map
             engine::graphics::box_builder builder5({display_box.width(),
-                                                    display_box.height() - m_top_bar.m_bar_box->height() -
+                                                    display_box.height() - m_in_game_menu.m_top_bar.m_bar_box->height() -
                                                     m_placeable_objects_box->height()});
-            builder5.as_left_top(m_top_bar.m_bar_box->left_top());
+            builder5.as_left_top(m_in_game_menu.m_top_bar.m_bar_box->left_top());
             m_model.world->get_current_level().get_map()->set_display_box(builder5.build());
 
             // Reposition the goals box
             engine::graphics::box_builder builder6(m_goals_view.m_stats_header_box->size());
-            builder6.as_right_top(m_top_bar.m_bar_box->right_bottom())
+            builder6.as_right_top(m_in_game_menu.m_top_bar.m_bar_box->right_bottom())
                 .add_margin({-80, 80});
             m_goals_view.m_stats_header_box.reset(new engine::math::box2_t(builder6.build()));
 
             if (m_model.world->get_current_level().get_max_duration() > 0) {
                 // Countdown
                 engine::graphics::box_builder builder7(m_goals_view.m_stats_header_box->size());
-                builder7.as_left_top(m_top_bar.m_bar_box->left_bottom()).add_margin({80, 80});
+                builder7.as_left_top(m_in_game_menu.m_top_bar.m_bar_box->left_bottom()).add_margin({80, 80});
                 m_countdown_box.reset(new engine::math::box2_t(builder7.build()));
             }
 
             // Set the pause box
-            engine::graphics::box_builder builder8(m_top_bar.m_texture_manager.get_size("l_pause"));
-            builder8.as_left_top(m_top_bar.m_bar_box->left_top()).add_margin({50, 0});
+            engine::graphics::box_builder builder8(m_texture_manager.get_size("l_pause"));
+            builder8.as_left_top(m_in_game_menu.m_top_bar.m_bar_box->left_top()).add_margin({50, 0});
             m_pause_box.reset(new engine::math::box2_t(builder8.build()));
 
-            // Set the overlay box
-            engine::graphics::box_builder builder9(display_box.size() - engine::math::vec2_t{0, m_top_bar.m_bar_box->height()});
-            builder9.as_left_top(m_top_bar.m_bar_box->left_bottom());
-            m_overlay_box.reset(new engine::math::box2_t(builder9.build()));
-
             // Set the overlay resume box
-            engine::graphics::box_builder builder10(m_top_bar.m_texture_manager.get_size("l_play_large"));
-            builder10.to_center(*m_overlay_box);
+            engine::graphics::box_builder builder10(m_in_game_menu.m_top_bar.m_texture_manager.get_size("l_play_large"));
+            builder10.to_center(*m_in_game_menu.m_overlay_box);
             m_overlay_resume_box.reset(new engine::math::box2_t(builder10.build()));
         }
 
@@ -174,34 +179,31 @@ namespace gui {
                 m_controller->show();
             }
 
-            // Draw the top bar
-            m_top_bar.draw(time_elapsed, display_box);
             // With the pause or play btn
-            m_top_bar.m_texture_manager.draw(m_model.paused ? "l_play" : "l_pause", *m_pause_box);
+            m_texture_manager.draw(m_model.paused ? "l_play" : "l_pause", *m_pause_box);
 
             // Draw the goals
             m_goals_view.draw(time_elapsed, display_box);
 
             // Draw the map
-            current_level.get_map()->draw(m_top_bar.m_draw_managers, time_elapsed);
+            current_level.get_map()->draw(m_in_game_menu.m_top_bar.m_draw_managers, time_elapsed);
 
             // Draw the arrows
             float left_arrow_y = (m_current_page == 1 ? 128 : 0);
-            m_top_bar.m_texture_manager.draw("arrows", {0, left_arrow_y}, *m_arrow_left_box);
+            m_texture_manager.draw("arrows", {0, left_arrow_y}, *m_arrow_left_box);
             float right_arrow_y = (m_current_page == m_pages ? 128 : 0);
-            m_top_bar.m_texture_manager.draw("arrows", {128, right_arrow_y}, *m_arrow_right_box);
+            m_texture_manager.draw("arrows", {128, right_arrow_y}, *m_arrow_right_box);
 
             // Draw the placeable objects
             for (auto &obj : current_level.get_placeable_objects()) {
-                obj->draw(m_top_bar.m_draw_managers, time_elapsed);
+                obj->draw(m_in_game_menu.m_top_bar.m_draw_managers, time_elapsed);
             }
 
             //Draw the resources
             //TODO: Draw resources on screen
 
+            // Draw the countdown when needed
             if (current_level.get_max_duration() > 0) {
-                // Draw the countdown
-
                 // Calculate time left
                 int level_time = time_elapsed - current_level.get_start_time();
                 unsigned int time_left = static_cast<unsigned int>(current_level.get_max_duration() - level_time);
@@ -213,42 +215,46 @@ namespace gui {
                     m_music_manager.stop();
                     m_sound_manager.play_if("countdown", true, NULL, 128, 400);
 
-                    m_top_bar.m_texture_manager.draw("l_red_box", *m_countdown_box);
+                    m_texture_manager.draw("l_red_box", *m_countdown_box);
 
                     color = {255, 255, 255};
                 } else {
-                    m_top_bar.m_texture_manager.draw("g_box", *m_countdown_box);
+                    m_texture_manager.draw("g_box", *m_countdown_box);
                 }
 
-                m_top_bar.m_texture_manager.load_text(utils::string_utils::ms_to_hms(time_left), color,
-                                                      *m_top_bar.m_font_manager.get_font("roboto", 25), "l_countdown");
-                engine::graphics::box_builder builder(m_top_bar.m_texture_manager.get_size("l_countdown"));
+                m_texture_manager.load_text(utils::string_utils::ms_to_hms(time_left), color,
+                                                      *m_font_manager.get_font("roboto", 25), "l_countdown");
+                engine::graphics::box_builder builder(m_texture_manager.get_size("l_countdown"));
                 builder.to_center(*m_countdown_box);
-                m_top_bar.m_texture_manager.draw("l_countdown", builder.build());
-                m_top_bar.m_texture_manager.unload("l_countdown");
+                m_texture_manager.draw("l_countdown", builder.build());
+                m_texture_manager.unload("l_countdown");
+            }
+
+            // Draw enemies
+            for(auto &enemy : current_level.get_enemies_in_lvl()) {
+                enemy->draw(m_in_game_menu.m_top_bar.m_draw_managers, time_elapsed);
             }
 
             // Draw overflow on pause
-            if (m_model.paused) {
-                m_top_bar.m_color_manager.draw({0, 0, 0, 180}, *m_overlay_box);
+            if (m_model.paused && !m_in_game_menu.m_show) {
+                m_color_manager.draw({0, 0, 0, 180}, *m_in_game_menu.m_overlay_box);
 
                 // Draw resume btn in the center of the overlay
-                m_top_bar.m_texture_manager.draw("l_play_large", *m_overlay_resume_box);
+                m_texture_manager.draw("l_play_large", *m_overlay_resume_box);
             }
 
-            //draw enemies
-           for(auto &enemy : m_model.world->get_current_level().get_enemies_in_lvl()) {
-               enemy->draw(m_top_bar.m_draw_managers, time_elapsed);
-           }
+            // Draw the in game menu as last because of the overlay
+            m_in_game_menu.draw(time_elapsed, display_box);
 
             m_controller->update();
-
         }
 
         void level::on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event) {
             engine::math::vec2_t *position = engine::input::input_handler::get_instance()->get_mouse_position();
 
-            if (m_pause_box->contains(*position) || (m_model.paused && m_overlay_resume_box->contains(*position))) {
+            if (m_pause_box->contains(*position) ||
+                (m_model.paused && !m_in_game_menu.m_show && m_overlay_resume_box->contains(*position))) {
+                m_in_game_menu.m_show = false;
                 on_pause();
             } else if (!m_model.paused) {
                 // Only if not paused
@@ -261,14 +267,16 @@ namespace gui {
         }
 
         void level::on_event(engine::events::key_down &event) {
-            if (event.get_keycode() == engine::input::keycodes::keycode::PAUSE ||
-                (m_model.paused && event.get_keycode() == engine::input::keycodes::keycode::ENTER)) {
-                on_pause();
-            } else if (!m_model.paused) {
-                if (event.get_keycode() == engine::input::keycodes::keycode::LEFT) {
-                    navigate_left();
-                } else if (event.get_keycode() == engine::input::keycodes::keycode::RIGHT) {
-                    navigate_right();
+            if (!m_in_game_menu.m_show) {
+                if (event.get_keycode() == engine::input::keycodes::keycode::PAUSE ||
+                    (m_model.paused && event.get_keycode() == engine::input::keycodes::keycode::ENTER)) {
+                    on_pause();
+                } else if (!m_model.paused) {
+                    if (event.get_keycode() == engine::input::keycodes::keycode::LEFT) {
+                        navigate_left();
+                    } else if (event.get_keycode() == engine::input::keycodes::keycode::RIGHT) {
+                        navigate_right();
+                    }
                 }
             }
         }
@@ -294,14 +302,14 @@ namespace gui {
         }
 
         void level::after() {
-            m_top_bar.after();
+            m_in_game_menu.after();
             m_goals_view.after();
 
             // Unload arrow textures
-            m_top_bar.m_texture_manager.unload("arrows");
-            m_top_bar.m_texture_manager.unload("l_red_box");
-            m_top_bar.m_texture_manager.unload("l_pause");
-            m_top_bar.m_texture_manager.unload("l_play");
+            m_texture_manager.unload("arrows");
+            m_texture_manager.unload("l_red_box");
+            m_texture_manager.unload("l_pause");
+            m_texture_manager.unload("l_play");
 
             // Unload the music
             m_music_manager.unload("game_bg_music");
@@ -321,6 +329,9 @@ namespace gui {
             eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>*>(this));
             eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::key_down>*>(this));
             eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<events::goal_reached>*>(this));
+
+            // Make sure the engine is running (so animations will work)
+            m_controller->resume_engine_if();
         }
 
         void level::set_controller(controllers::main_map_controller &controller) {

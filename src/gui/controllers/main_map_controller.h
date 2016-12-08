@@ -54,6 +54,8 @@ namespace gui {
 
             void pause();
 
+            void resume_engine_if();
+
         private:
             std::shared_ptr<gui::controllers::menu_controller> m_menu_controller;
             views::level &m_view;
