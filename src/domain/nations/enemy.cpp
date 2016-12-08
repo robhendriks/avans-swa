@@ -5,15 +5,18 @@
 
 #include <random>
 #include "enemy.h"
+
 namespace domain {
     namespace nations {
         enemy::enemy(std::string _name, int _oppertunitycosts, bool _boss) {
             name = _name;
-            oppertunitycosts =_oppertunitycosts;
+            oppertunitycosts = _oppertunitycosts;
             boss = _boss;
         }
 
-        enemy::enemy(std::string _name, int _mindamage, int _maxdamage, double _attackspersecond, int _hitpoints, int _grantedXP, int _range, int _movement, bool _boss, std::shared_ptr<nation> _nation, int _oppertunitycosts) : m_destination(nullptr) {
+        enemy::enemy(std::string _name, int _mindamage, int _maxdamage, double _attackspersecond, int _hitpoints,
+                     int _grantedXP, int _range, double _movement, bool _boss, int _oppertunitycosts) : m_destination(
+            nullptr) {
             name = _name;
             mindamage = _mindamage;
             maxdamage = _maxdamage;
@@ -23,12 +26,11 @@ namespace domain {
             range = _range;
             movement = _movement;
             boss = _boss;
-            Nation = _nation;
-            oppertunitycosts =_oppertunitycosts;
+            oppertunitycosts = _oppertunitycosts;
         }
 
         std::string enemy::getName() {
-            return Nation.get()->get_prefix()+" - "+name;
+            return m_nation->get_prefix() + " - " + name;
         }
 
 
@@ -43,31 +45,32 @@ namespace domain {
             return attackspersecond;
         }
 
-        int enemy::getHitpoints(){
+        int enemy::getHitpoints() {
             return hitpoints;
         }
 
-        int enemy::getRange(){
+        int enemy::getRange() {
             return range;
         }
-        int enemy::getMovement(){
+
+        double enemy::getMovement() {
             return movement;
         }
-        int enemy::getOppertunity()const {
+
+        int enemy::getOppertunity() const {
             return oppertunitycosts;
         }
 
-        bool enemy::getBoss(){
+        bool enemy::getBoss() {
             return boss;
         }
 
-        int  enemy::lowerHitpoints(int points){
+        int enemy::lowerHitpoints(int points) {
 
-            if(hitpoints <= points){
+            if (hitpoints <= points) {
                 delete this;
                 return grantedXP;
-            }
-            else{
+            } else {
                 hitpoints = hitpoints - points;
             }
             return 0;
@@ -85,9 +88,17 @@ namespace domain {
             m_destination = destination;
         }
 
-        bool operator<(const std::shared_ptr<enemy>&  s1, const std::shared_ptr<enemy>&  s2){
+        bool operator<(const std::shared_ptr<enemy> &s1, const std::shared_ptr<enemy> &s2) {
 
             return s1->getOppertunity() < s2->getOppertunity();
+        }
+
+        const nation_ptr& enemy::get_nation() const {
+            return m_nation;
+        }
+
+        void enemy::set_nation(const nation_ptr &nation) {
+            m_nation = nation;
         }
 
     }

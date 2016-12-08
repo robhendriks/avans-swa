@@ -12,10 +12,13 @@
 
 namespace domain {
     namespace nations {
+
+        using nation_ptr = std::shared_ptr<nation>;
+
         class enemy : public domain::drawable::drawable_game_object {
         public:
-            enemy(std::string _name, int _mindamage, int _maxdamage, double _attackspersecond, int _hitpoints, int _grantedXP, int _range, int _movement, bool _boss, std::shared_ptr<nation> _nation, int _oppertunitycosts)
-            ;
+            enemy(std::string _name, int _mindamage, int _maxdamage, double _attackspersecond, int _hitpoints,
+                  int _grantedXP, int _range, double _movement, bool _boss, int _oppertunitycosts);
 
             enemy(std::string _name, int _oppertunitycosts, bool _boss);
 
@@ -30,18 +33,26 @@ namespace domain {
             int getHitpoints();
 
             int getRange();
-            int getMovement();
-            int getOppertunity()const;
+
+            double getMovement();
+
+            int getOppertunity() const;
 
             bool getBoss();
 
             //Lowers hitpoints with the amount within the parameter; if 0 calls the delete method.
             //Returns the amount of XP.
             int lowerHitpoints(int points);
+
             ~enemy();
 
             virtual void set_box(std::shared_ptr<engine::math::box2_t> destination);
+
             virtual engine::math::box2_t get_box() const;
+
+            const nation_ptr &get_nation() const;
+
+            void set_nation(const nation_ptr &nation);
 
         private:
             std::shared_ptr<engine::math::box2_t> m_destination;
@@ -63,15 +74,15 @@ namespace domain {
             int range;
 
             //Tiles/second
-            int movement;
+            double movement;
 
             bool boss;
 
             //So we directly know which Nations this Unit belongs to.
-            std::shared_ptr<nation> Nation;
+            nation_ptr m_nation;
         };
 
-        bool operator<(const std::shared_ptr<enemy> &s1, const std::shared_ptr<enemy>  &s2);
+        bool operator<(const std::shared_ptr<enemy> &s1, const std::shared_ptr<enemy> &s2);
     }
 }
 

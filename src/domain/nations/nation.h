@@ -15,11 +15,14 @@ namespace domain {
 
         class enemy;
 
-        typedef std::shared_ptr<enemy> enemy_ptr;
+        using enemy_ptr = std::shared_ptr<enemy>;
+        using enemy_ptr_vector = std::vector<enemy_ptr>;
 
         class nation {
         public:
             nation();
+
+            nation (const std::string &id, const std::string &name, const std::string &prefix, const enemy_ptr_vector &enemies);
 
             nation(const std::string &id, const std::string &name, const std::string &prefix);
 
@@ -37,15 +40,15 @@ namespace domain {
 
             void set_prefix(const std::string &prefix);
 
-            const std::vector<enemy_ptr> &get_enemies() const;
+            const enemy_ptr_vector &get_enemies() const;
 
-            void set_enemies(const std::vector<enemy_ptr> &enemies);
+            void set_enemies(const enemy_ptr_vector &enemies);
 
         private:
             std::string m_id;
             std::string m_name;
             std::string m_prefix;
-            std::vector<enemy_ptr> m_enemies;
+            enemy_ptr_vector m_enemies;
         };
 
     }

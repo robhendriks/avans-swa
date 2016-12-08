@@ -9,8 +9,12 @@ namespace domain {
 
         nation::nation() {}
 
+        nation::nation(const std::string &id, const std::string &name, const std::string &prefix,
+                       const enemy_ptr_vector &enemies)
+            : m_id{id}, m_name{name}, m_prefix{prefix}, m_enemies{enemies} {}
+
         nation::nation(const std::string &id, const std::string &name, const std::string &prefix)
-            : m_id{id}, m_name{name}, m_prefix{prefix} {}
+            : nation{id, name, prefix, {}} {}
 
         std::string nation::get_id() const {
             return m_id;

@@ -49,10 +49,6 @@ namespace services {
 
             void load_objects(json &root, domain::map::map &map1);
 
-            void load_nation_units(nation_ptr &nation, const json &elem);
-
-            building_ptr load_buildings_json(std::string url);
-
             json m_root;
             std::vector<building_ptr> m_buildings;
             std::vector<nation_ptr> m_nations;

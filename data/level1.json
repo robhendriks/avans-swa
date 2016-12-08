@@ -1,250 +1,250 @@
 {
-    "description": "The first level.",
-    "height": 8,
-    "id": "level-1",
-    "major-id": "augustus",
-    "nation-id": "the-fallen",
-    "objects": [
-        {
-            "entry-point": true,
-            "height": 1,
-            "id": 126,
-            "type": "road",
-            "width": 1,
-            "x": 6,
-            "y": 4
-        },
-        {
-            "height": 1,
-            "id": 127,
-            "type": "road",
-            "width": 1,
-            "x": 5,
-            "y": 4
-        },
-        {
-            "height": 1,
-            "id": 128,
-            "type": "road",
-            "width": 1,
-            "x": 4,
-            "y": 4
-        },
-        {
-            "height": 1,
-            "id": 129,
-            "type": "road",
-            "width": 1,
-            "x": 3,
-            "y": 4
-        },
-        {
-            "height": 1,
-            "id": 132,
-            "type": "road",
-            "width": 1,
-            "x": 3,
-            "y": 3
-        },
-        {
-            "height": 1,
-            "id": 135,
-            "type": "road",
-            "width": 1,
-            "x": 3,
-            "y": 5
-        },
-        {
-            "height": 1,
-            "id": 136,
-            "type": "road",
-            "width": 1,
-            "x": 3,
-            "y": 2
-        },
-        {
-            "height": 1,
-            "id": 137,
-            "type": "road",
-            "width": 1,
-            "x": 2,
-            "y": 2
-        },
-        {
-            "building-id": "castle",
-            "height": 1,
-            "id": 176,
-            "properties": null,
-            "type": "building",
-            "width": 1,
-            "x": 4,
-            "y": 3
-        }
-    ],
-    "tiles": [
-        {
-            "id": 5,
-            "immutable": true,
-            "x": 1,
-            "y": 1
-        },
-        {
-            "id": 6,
-            "immutable": false,
-            "x": 2,
-            "y": 1
-        },
-        {
-            "id": 7,
-            "immutable": true,
-            "x": 3,
-            "y": 1
-        },
-        {
-            "id": 22,
-            "immutable": false,
-            "x": 1,
-            "y": 2
-        },
-        {
-            "id": 23,
-            "immutable": true,
-            "x": 2,
-            "y": 2
-        },
-        {
-            "id": 25,
-            "immutable": true,
-            "x": 3,
-            "y": 2
-        },
-        {
-            "id": 6,
-            "immutable": true,
-            "x": 4,
-            "y": 2
-        },
-        {
-            "id": 7,
-            "immutable": true,
-            "x": 5,
-            "y": 2
-        },
-        {
-            "id": 39,
-            "immutable": true,
-            "x": 1,
-            "y": 3
-        },
-        {
-            "id": 9,
-            "immutable": false,
-            "x": 2,
-            "y": 3
-        },
-        {
-            "id": 23,
-            "immutable": true,
-            "x": 3,
-            "y": 3
-        },
-        {
-            "id": 23,
-            "immutable": false,
-            "x": 4,
-            "y": 3
-        },
-        {
-            "id": 25,
-            "immutable": false,
-            "x": 5,
-            "y": 3
-        },
-        {
-            "id": 7,
-            "immutable": true,
-            "x": 6,
-            "y": 3
-        },
-        {
-            "id": 22,
-            "immutable": true,
-            "x": 2,
-            "y": 4
-        },
-        {
-            "id": 23,
-            "immutable": true,
-            "x": 3,
-            "y": 4
-        },
-        {
-            "id": 23,
-            "immutable": true,
-            "x": 4,
-            "y": 4
-        },
-        {
-            "id": 23,
-            "immutable": true,
-            "x": 5,
-            "y": 4
-        },
-        {
-            "id": 24,
-            "immutable": true,
-            "x": 6,
-            "y": 4
-        },
-        {
-            "id": 22,
-            "immutable": true,
-            "x": 2,
-            "y": 5
-        },
-        {
-            "id": 23,
-            "immutable": true,
-            "x": 3,
-            "y": 5
-        },
-        {
-            "id": 8,
-            "immutable": false,
-            "x": 4,
-            "y": 5
-        },
-        {
-            "id": 40,
-            "immutable": true,
-            "x": 5,
-            "y": 5
-        },
-        {
-            "id": 41,
-            "immutable": true,
-            "x": 6,
-            "y": 5
-        },
-        {
-            "id": 39,
-            "immutable": true,
-            "x": 2,
-            "y": 6
-        },
-        {
-            "id": 40,
-            "immutable": true,
-            "x": 3,
-            "y": 6
-        },
-        {
-            "id": 58,
-            "immutable": true,
-            "x": 4,
-            "y": 6
-        }
-    ],
-    "title": "Level 1",
-    "width": 8
+  "description": "The first level.",
+  "height": 8,
+  "id": "level-1",
+  "major-id": "augustus",
+  "nation-id": "the-fallen",
+  "objects": [
+    {
+      "entry-point": true,
+      "height": 1,
+      "id": 126,
+      "type": "road",
+      "width": 1,
+      "x": 6,
+      "y": 4
+    },
+    {
+      "height": 1,
+      "id": 127,
+      "type": "road",
+      "width": 1,
+      "x": 5,
+      "y": 4
+    },
+    {
+      "height": 1,
+      "id": 128,
+      "type": "road",
+      "width": 1,
+      "x": 4,
+      "y": 4
+    },
+    {
+      "height": 1,
+      "id": 129,
+      "type": "road",
+      "width": 1,
+      "x": 3,
+      "y": 4
+    },
+    {
+      "height": 1,
+      "id": 132,
+      "type": "road",
+      "width": 1,
+      "x": 3,
+      "y": 3
+    },
+    {
+      "height": 1,
+      "id": 135,
+      "type": "road",
+      "width": 1,
+      "x": 3,
+      "y": 5
+    },
+    {
+      "height": 1,
+      "id": 136,
+      "type": "road",
+      "width": 1,
+      "x": 3,
+      "y": 2
+    },
+    {
+      "height": 1,
+      "id": 137,
+      "type": "road",
+      "width": 1,
+      "x": 2,
+      "y": 2
+    },
+    {
+      "building-id": "castle",
+      "height": 1,
+      "id": 176,
+      "properties": null,
+      "type": "building",
+      "width": 1,
+      "x": 4,
+      "y": 3
+    }
+  ],
+  "tiles": [
+    {
+      "id": 5,
+      "immutable": true,
+      "x": 1,
+      "y": 1
+    },
+    {
+      "id": 6,
+      "immutable": false,
+      "x": 2,
+      "y": 1
+    },
+    {
+      "id": 7,
+      "immutable": true,
+      "x": 3,
+      "y": 1
+    },
+    {
+      "id": 22,
+      "immutable": false,
+      "x": 1,
+      "y": 2
+    },
+    {
+      "id": 23,
+      "immutable": true,
+      "x": 2,
+      "y": 2
+    },
+    {
+      "id": 25,
+      "immutable": true,
+      "x": 3,
+      "y": 2
+    },
+    {
+      "id": 6,
+      "immutable": true,
+      "x": 4,
+      "y": 2
+    },
+    {
+      "id": 7,
+      "immutable": true,
+      "x": 5,
+      "y": 2
+    },
+    {
+      "id": 39,
+      "immutable": true,
+      "x": 1,
+      "y": 3
+    },
+    {
+      "id": 9,
+      "immutable": false,
+      "x": 2,
+      "y": 3
+    },
+    {
+      "id": 23,
+      "immutable": true,
+      "x": 3,
+      "y": 3
+    },
+    {
+      "id": 23,
+      "immutable": false,
+      "x": 4,
+      "y": 3
+    },
+    {
+      "id": 25,
+      "immutable": false,
+      "x": 5,
+      "y": 3
+    },
+    {
+      "id": 7,
+      "immutable": true,
+      "x": 6,
+      "y": 3
+    },
+    {
+      "id": 22,
+      "immutable": true,
+      "x": 2,
+      "y": 4
+    },
+    {
+      "id": 23,
+      "immutable": true,
+      "x": 3,
+      "y": 4
+    },
+    {
+      "id": 23,
+      "immutable": true,
+      "x": 4,
+      "y": 4
+    },
+    {
+      "id": 23,
+      "immutable": true,
+      "x": 5,
+      "y": 4
+    },
+    {
+      "id": 24,
+      "immutable": true,
+      "x": 6,
+      "y": 4
+    },
+    {
+      "id": 22,
+      "immutable": true,
+      "x": 2,
+      "y": 5
+    },
+    {
+      "id": 23,
+      "immutable": true,
+      "x": 3,
+      "y": 5
+    },
+    {
+      "id": 8,
+      "immutable": false,
+      "x": 4,
+      "y": 5
+    },
+    {
+      "id": 40,
+      "immutable": true,
+      "x": 5,
+      "y": 5
+    },
+    {
+      "id": 41,
+      "immutable": true,
+      "x": 6,
+      "y": 5
+    },
+    {
+      "id": 39,
+      "immutable": true,
+      "x": 2,
+      "y": 6
+    },
+    {
+      "id": 40,
+      "immutable": true,
+      "x": 3,
+      "y": 6
+    },
+    {
+      "id": 58,
+      "immutable": true,
+      "x": 4,
+      "y": 6
+    }
+  ],
+  "title": "Level 1",
+  "width": 8
 }

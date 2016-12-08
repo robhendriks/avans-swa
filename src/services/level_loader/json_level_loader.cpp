@@ -62,47 +62,6 @@ namespace services {
             return game_level;
         }
 
-        void json_level_loader::load_nation_units(nation_ptr &nation, const json &elem) {
-            if (elem.find("units") == elem.end()) {
-                return;
-            }
-
-            json unit_array = elem["units"];
-            if (!unit_array.is_array()) {
-                return;
-            }
-
-            SDL_Log("[%s] Loading %zu unit(s)...\n", nation->get_name().c_str(), unit_array.size());
-
-//                    if (!data.is_array()) {
-//                        return pre_nation_list;
-//                    }
-
-//                    std::vector<std::shared_ptr<domain::nations::enemy>> pre_vec_enemies;
-//                    for (json &enemy : data) {
-//                        std::string enemy_name = enemy["name"];
-//                        double enemey_movement_speed = static_cast<double>(enemy["movement-speed"]);
-//                        int enemey_min_damage = static_cast<int>(enemy["min-damage"]);
-//                        int enemey_max_damage = static_cast<int>(enemy["max-damage"]);
-//                        int enemey_hitpoints = static_cast<int>(enemy["hitpoints"]);
-//                        std::string enemy_type = enemy["type"];
-//                        int enemey_oppertunity_cost = static_cast<int>(enemy["oppertunity-cost"]);
-//
-//                        bool boss = false;
-//                        if (enemy_type == "boss") { boss = true; };
-//                        //TODO: not 100 dynamic
-//                        std::shared_ptr<domain::nations::enemy> curren_enemy =
-//                            std::make_shared<domain::nations::enemy>(
-//                                domain::nations::enemy(enemy_name, enemey_min_damage, enemey_max_damage, 2,
-//                                                       enemey_hitpoints, 100, 2, enemey_movement_speed, boss,
-//                                                       current_nation, enemey_oppertunity_cost));
-//                        curren_enemy->set_draw_settings("images/building-a.png");
-//                        pre_vec_enemies.push_back(curren_enemy);
-//                        current_nation->setavailableenemies(pre_vec_enemies);
-//                        pre_nation_list.push_back(current_nation);
-//                    }
-        }
-
         void json_level_loader::load_fields(json &root, domain::map::map &map1) {
             if (root.find("tiles") == root.end()) {
                 return;
@@ -218,10 +177,6 @@ namespace services {
 
                 SDL_Log("%d %d %d", x, y, rotation);
             }
-        }
-
-        building_ptr json_level_loader::load_buildings_json(std::string url) {
-
         }
 
         map_ptr json_level_loader::load_all_levels(std::string filename) {

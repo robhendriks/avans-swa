@@ -7,6 +7,7 @@
 
 #include "../../utils/json_utils.hpp"
 #include "../../domain/nations/nation.h"
+#include "nation_deserializer.h"
 
 using namespace domain::nations;
 using namespace utils::json_utils;
@@ -14,7 +15,6 @@ using namespace utils::json_utils;
 namespace services {
     namespace level_loader {
 
-        using nation_ptr = std::shared_ptr<nation>;
         using nation_ptr_vector = std::vector<nation_ptr>;
 
         class nations_deserializer : public json_deserializer<nation_ptr_vector> {

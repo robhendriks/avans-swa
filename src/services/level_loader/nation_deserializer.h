@@ -7,6 +7,7 @@
 
 #include "../../utils/json_utils.hpp"
 #include "../../domain/nations/nation.h"
+#include "enemies_deserializer.h"
 
 using namespace domain::nations;
 using namespace utils::json_utils;

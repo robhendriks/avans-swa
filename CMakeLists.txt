@@ -158,7 +158,11 @@ set(SOURCES src/main.cpp
     src/services/level_loader/nation_deserializer.cpp
     src/services/level_loader/nation_deserializer.h
     src/services/level_loader/nations_deserializer.cpp
-    src/services/level_loader/nations_deserializer.h)
+    src/services/level_loader/nations_deserializer.h
+    src/services/level_loader/enemies_deserializer.cpp
+    src/services/level_loader/enemies_deserializer.h
+    src/services/level_loader/enemy_deserializer.cpp
+    src/services/level_loader/enemy_deserializer.h)
 
 include_directories(third_party/json/src
     third_party/di-cpp14/include

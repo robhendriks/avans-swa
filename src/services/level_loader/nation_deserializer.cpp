@@ -22,7 +22,16 @@ namespace services {
 
             fprintf(stdout, "Loading nation %s...\n", name.c_str());
 
-            return std::make_shared<nation>(id, name, prefix);
+            enemy_ptr_vector enemies;
+            if (json.find("units") != json.end())
+                enemies = json_deserialize<enemy_ptr_vector>(json["units"]);
+
+            auto result = std::make_shared<nation>(id, name, prefix, enemies);
+
+            for (auto &enemy : enemies)
+                enemy->set_nation(result);
+
+            return result;
         }
 
     }
