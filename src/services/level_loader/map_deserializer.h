@@ -8,6 +8,8 @@
 #include "../../utils/json_utils.hpp"
 #include "../../domain/map/map.h"
 #include "../../engine/math/vec2.hpp"
+#include "fields_deserializer.h"
+#include "json_level_loader.h"
 
 using namespace domain::map;
 using namespace utils::json_utils;

@@ -19,16 +19,20 @@ namespace domain {
 namespace domain {
     namespace map {
         class map;
+
+        using map_ptr = std::shared_ptr<map>;
     }
 }
 
 namespace domain {
     namespace map {
+
+
         class field : public drawable::drawable_game_object, public engine::draganddrop::dropable,
                       public engine::observer::observee<field> {
         public:
 
-            field(map &map1, engine::math::vec2_t pos);
+            field(const engine::math::vec2_t &pos);
 
             ~field();
 
@@ -50,11 +54,15 @@ namespace domain {
 
             engine::math::vec2_t get_position() const;
 
+            map_ptr get_map() const;
+
+            void set_map(const map_ptr &map);
+
             long get_weight() const;
 
             void set_weight(long weight);
         private:
-            map &m_map;
+            map_ptr m_map;
             engine::math::vec2_t m_pos;
             objects::field_object *m_object;
             engine::math::box2_t *m_box;

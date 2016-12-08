@@ -44,7 +44,7 @@ namespace services {
         }
 
         building_ptr
-        building_deserializer::create_economic(const nlohmann::json &json, const building_cfg_ptr &cfg) const {
+        building_deserializer::create_economic(const nlohmann::json &json, building_cfg_ptr cfg) const {
             auto result = std::make_shared<economic_building>(box2_t{0, 0, 64, 64},
                                                                cfg->id,
                                                                static_cast<int>(cfg->hp),
@@ -58,7 +58,7 @@ namespace services {
         }
 
         building_ptr
-        building_deserializer::create_defensive(const nlohmann::json &json, const building_cfg_ptr &cfg) const {
+        building_deserializer::create_defensive(const nlohmann::json &json, building_cfg_ptr cfg) const {
             int range = -1;
             double min_damage = -1;
             double max_damage = -1;

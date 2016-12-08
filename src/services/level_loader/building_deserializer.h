@@ -39,9 +39,9 @@ namespace services {
             building_ptr deserialize(const nlohmann::json &json) const override;
 
         private:
-            building_ptr create_economic(const nlohmann::json &json, const building_cfg_ptr &cfg) const;
+            building_ptr create_economic(const nlohmann::json &json, building_cfg_ptr cfg) const;
 
-            building_ptr create_defensive(const nlohmann::json &json, const building_cfg_ptr &cfg) const;
+            building_ptr create_defensive(const nlohmann::json &json, building_cfg_ptr cfg) const;
         };
 
     }

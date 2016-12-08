@@ -3,7 +3,6 @@
 //
 
 #include "map_deserializer.h"
-#include "json_level_loader.h"
 
 namespace services {
     namespace level_loader {
@@ -34,7 +33,18 @@ namespace services {
                 vec2_t{static_cast<float>(json_level_loader::TILE_WIDTH),
                        static_cast<float>(json_level_loader::TILE_HEIGHT)});
 
-            // TODO: deserialize fields and objects
+            // Load fields
+            field_ptr_vector fields;
+            if (json.find("tiles") != json.end())
+                fields = json_deserialize<field_ptr_vector>(json["tiles"]);
+
+            for (auto &field : fields) {
+                result->add_field(field);
+                field->set_map(result);
+            }
+
+            // Load objects
+            // TODO: deserialize map objects
 
             return result;
         }

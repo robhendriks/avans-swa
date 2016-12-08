@@ -11,6 +11,7 @@ using namespace utils::json_utils;
 
 int main(int argc, char *argv[]) {
     // Register type deserializers
+    // TODO: self-registering classes
     json_factory::get()
         .register_type<nation_ptr>(std::make_shared<nation_deserializer>())
         .register_type<nation_ptr_vector>(std::make_shared<nations_deserializer>())

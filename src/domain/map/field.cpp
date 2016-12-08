@@ -11,9 +11,8 @@
 namespace domain {
     namespace map {
 
-        field::field(map &map1, engine::math::vec2_t pos) : m_map(map1), m_pos(pos), m_object(nullptr), m_box(nullptr) {
-            map1.add_field(std::shared_ptr<field>(this));
-        }
+        field::field(const engine::math::vec2_t &pos)
+            : m_map{nullptr}, m_pos(pos), m_object(nullptr), m_box(nullptr) {}
 
         field::~field() {
             if (m_box != nullptr) {
@@ -123,7 +122,7 @@ namespace domain {
          * @return std::vector<field&>
          */
         std::vector<std::shared_ptr<field>> field::get_neighbors() const {
-            return m_map.get_neighbors(get_position());
+            return m_map->get_neighbors(get_position());
         }
 
         /**
@@ -133,6 +132,14 @@ namespace domain {
          */
         engine::math::vec2_t field::get_position() const {
             return m_pos;
+        }
+
+        map_ptr field::get_map() const {
+            return m_map;
+        }
+
+        void field::set_map(const map_ptr &map) {
+            m_map = map;
         }
 
         long field::get_weight() const {

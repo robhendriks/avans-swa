@@ -30,31 +30,28 @@ namespace services {
             buildings_filename = m_root.value("buildings-url", "buildings.json");
 
             // Load maps from JSON
-            // TODO: load levels on demand, not just the first level
             if (m_maps.empty()) {
                 json levels = m_root["lvls"];
                 if (levels.is_array() && levels.size() > 0) {
                     map_ptr map;
                     load(levels.front(), map);
-                    m_maps.push_back(map);
+                    m_maps.push_back(map); // TODO: load map on demand
                 }
             }
 
             // Load nations from JSON
             if (m_nations.empty())
                 load(nations_filename, m_nations);
+
             // Load buildings from JSON
             if (m_buildings.empty())
                 load(buildings_filename, m_buildings);
 
             // Create the level
-            auto *d_a_d = new engine::draganddrop::drag_and_drop();
+            auto *dnd = new engine::draganddrop::drag_and_drop();
             auto goal = std::make_shared<domain::game_level::game_stats>();
             goal->set_counter("buildings", 5);
-            auto game_level = std::unique_ptr<domain::game_level::game_level>(
-                new domain::game_level::game_level("level", "", "", m_maps.front(), goal, m_nations.front(),
-                                                   *d_a_d,
-                                                   125000));
+            auto game_level = std::make_unique<domain::game_level::game_level>("level", "", "", m_maps.front(), goal, m_nations.front(), *dnd, 125000);
             for (auto building : m_buildings) {
                 game_level->add_placeable_object(*building);
             }

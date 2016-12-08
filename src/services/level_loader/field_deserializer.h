@@ -7,9 +7,11 @@
 
 #include "../../utils/json_utils.hpp"
 #include "../../domain/map/field.h"
+#include "../../engine/math/vec2.hpp"
 
 using namespace domain::map;
 using namespace utils::json_utils;
+using namespace engine::math;
 
 namespace services {
     namespace level_loader {

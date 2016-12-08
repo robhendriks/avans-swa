@@ -9,8 +9,14 @@ namespace services {
 
         field_ptr_vector fields_deserializer::deserialize(const nlohmann::json &json) const {
             field_ptr_vector result;
+            if (!json.is_array())
+                return result;
 
-            // TODO
+            result.reserve(json.size());
+            SDL_Log("Loading %lu field(s)...\n", json.size());
+
+            for (auto &elem : json)
+                result.push_back(json_deserialize<field_ptr>(elem));
 
             return result;
         }

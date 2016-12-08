@@ -10,15 +10,10 @@
 #include <json.hpp>
 #include "base_level_loader.h"
 #include "../../utils/json_utils.hpp"
-#include "../../config/json_config.h"
 #include "../../domain/map/map.h"
-#include "../../engine/math/vec2.hpp"
-#include "../../domain/map/objects/building.h"
-#include "../../domain/map/objects/road.h"
-#include "../../domain/map/objects/defensive_building.h"
-#include "../../domain/map/objects/economic_building.h"
-#include "nation_deserializer.h"
 #include "nations_deserializer.h"
+#include "buildings_deserializer.h"
+#include "map_deserializer.h"
 
 using json = nlohmann::json;
 using namespace engine::math;
@@ -27,8 +22,7 @@ using namespace utils::json_utils;
 namespace services {
     namespace level_loader {
 
-        typedef std::shared_ptr<domain::map::map> map_ptr;
-        typedef std::shared_ptr<domain::map::objects::building> building_ptr;
+        using map_ptr_vector = std::vector<map_ptr>;
 
         class json_level_loader : public base_level_loader {
         public:
@@ -44,11 +38,9 @@ namespace services {
             bool load(const std::string &filename, T &obj);
 
             json m_root;
-            std::vector<building_ptr> m_buildings;
-            std::vector<nation_ptr> m_nations;
-            std::vector<map_ptr> m_maps;
-            bool m_nations_loaded;
-            bool m_buildings_loaded;
+            building_ptr_vector m_buildings;
+            nation_ptr_vector m_nations;
+            map_ptr_vector m_maps;
         };
 
     };
