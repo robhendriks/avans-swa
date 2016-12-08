@@ -48,6 +48,9 @@ namespace domain {
                             }
                         }
                     }
+                    else{
+                        ai->set_state(get_next_state());
+                    }
                 }
 
 
