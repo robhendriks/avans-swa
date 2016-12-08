@@ -8,6 +8,7 @@
 #include "../field.h"
 #include "states/state.h"
 #include "../../combat/attacker.h"
+#include "../../combat/defender.h"
 
 
 namespace domain {
@@ -26,8 +27,8 @@ namespace domain {
                 std::shared_ptr<map> get_map();
                 void set_unit(std::shared_ptr<domain::combat::attacker> unit);
                 std::shared_ptr<domain::combat::attacker> get_unit();
-                void set_target_func(std::function<bool(domain::map::objects::field_object *)> target);
-                std::function<bool(domain::map::objects::field_object*)> get_is_target_func();
+                void set_new_target_func(std::function<domain::combat::defender* (domain::map::field* origin, domain::map::ai::ai* ai)>  target);
+                std::function<domain::combat::defender* (domain::map::field* origin, domain::map::ai::ai* ai)>  get_new_target_func();
                 bool is_initialised() const;
                 void set_state(std::shared_ptr<states::state> state);
                 std::shared_ptr<field> get_current_field();
@@ -38,10 +39,7 @@ namespace domain {
                 std::shared_ptr<domain::map::map> m_map;
                 std::shared_ptr<domain::combat::attacker> m_unit;
 
-                // this makes the ai a implentation that only works on field objects
-                // in case it needs to work for enemies this needs to be moved to a sub class and this becomes a super and then a extra
-                // implementation for get_target basically
-                std::function<bool(domain::map::objects::field_object*)> m_is_target;
+                std::function<domain::combat::defender* (domain::map::field* origin, domain::map::ai::ai* ai)> m_new_target_func;
 
                 std::shared_ptr<states::state> m_state;
 

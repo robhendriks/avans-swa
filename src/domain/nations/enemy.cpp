@@ -55,6 +55,14 @@ namespace domain {
             m_ai = ai;
         }
 
+        void enemy::draw(drawable::draw_managers_wrapper &draw_managers, unsigned int time_elapsed) {
+            domain::combat::attacker::draw(draw_managers, time_elapsed);
+        }
+
+        void enemy::set_draw_settings(std::string file_loc, engine::math::vec2_t image_start_position) {
+            domain::combat::attacker::set_draw_settings(file_loc, image_start_position);
+        }
+
         bool operator<(const std::shared_ptr<enemy>&  s1, const std::shared_ptr<enemy>&  s2){
             return s1->get_oppertunity_cost() < s2->get_oppertunity_cost();
         }

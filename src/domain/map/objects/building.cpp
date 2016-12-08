@@ -71,7 +71,26 @@ namespace domain {
                 else
                     return 0;
             }
+
+
+
+            void building::draw(drawable::draw_managers_wrapper &draw_managers, unsigned int time_elapsed) {
+                dragable_field_object::draw(draw_managers, time_elapsed);
+            }
+
+            void building::set_draw_settings(std::string file_loc, engine::math::vec2_t image_start_position) {
+                dragable_field_object::set_draw_settings(file_loc, image_start_position);
+            }
+
+            void building::set_box(std::shared_ptr<engine::math::box2_t> box) {
+                dragable_field_object::set_box(box);
+            }
+
+            engine::math::box2_t building::get_box() const {
+                return dragable_field_object::get_box();
+            }
         }
+
     }
 }
 

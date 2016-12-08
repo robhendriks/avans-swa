@@ -57,9 +57,7 @@ namespace domain {
 
                 // start pos if possible
                 if (m_unit != nullptr){
-                    auto result = dynamic_cast<domain::drawable::drawable_game_object*>(m_unit.get());
-                    if(result != nullptr)
-                        result->set_box(std::make_shared<engine::math::box2_t>(m_current_field->get_box()));
+                    m_unit->set_box(std::make_shared<engine::math::box2_t>(m_current_field->get_box()));
                 }
             }
 
@@ -68,9 +66,7 @@ namespace domain {
 
                 // start pos if possible
                 if (m_map != nullptr){
-                    auto result = dynamic_cast<domain::drawable::drawable_game_object*>(m_unit.get());
-                    if(result != nullptr)
-                        result->set_box(std::make_shared<engine::math::box2_t>(m_current_field->get_box()));
+                    m_unit->set_box(std::make_shared<engine::math::box2_t>(m_current_field->get_box()));
                 }
             }
 
@@ -78,12 +74,12 @@ namespace domain {
                 return m_unit;
             }
 
-            void ai::set_target_func(std::function<bool(domain::map::objects::field_object *)> target) {
-                m_is_target = target;
+            void ai::set_new_target_func(std::function<domain::combat::defender* (domain::map::field* origin, domain::map::ai::ai* ai)>  target) {
+                m_new_target_func = target;
             }
 
-            std::function<bool(domain::map::objects::field_object *)> ai::get_is_target_func() {
-                return m_is_target;
+            std::function<domain::combat::defender* (domain::map::field* origin, domain::map::ai::ai* ai)>  ai::get_new_target_func() {
+                return m_new_target_func;
             }
 
             void ai::set_state(std::shared_ptr<states::state> state) {
@@ -106,7 +102,7 @@ namespace domain {
                 ai result = ai();
                 result.set_unit(m_unit);
                 result.set_map(m_map);
-                result.set_target_func(m_is_target);
+                result.set_new_target_func(m_new_target_func);
                 return result;
             }
         }

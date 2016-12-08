@@ -4,6 +4,7 @@
 
 #include "main_map_controller.h"
 #include "../controllers/menu_controller.h"
+#include "../../domain/map/objects/building.h"
 
 namespace gui {
     namespace controllers {
@@ -15,7 +16,6 @@ namespace gui {
             base_controller(game1), m_view(view), m_trans_view(transition_view), m_engine(engine), m_model(model),
             m_trans_model(transition_model), m_level_goals_model(level_goals_model),
             m_wave_management_service(wave_management) {
-
             m_view.set_controller(*this);
             m_trans_view.set_controller(*this);
 

@@ -31,15 +31,8 @@ namespace domain {
 
                     // step 2 check if we already have a target or not in case we killed the target then try to find another
                     if (m_current_target == nullptr) {
-                        // step 2.1 check if there is a target
-                        for (auto &field_with_range : ai->get_map()->get_fields_in_range(ai->get_unit()->get_range(),
-                                                                                         ai->get_current_field().get())) {
-                            // step 2.1.1 check if the target is a target for us and if it is then set it
-                            if (ai->get_is_target_func()(field_with_range.field->get_object())) {
-                                m_current_target = dynamic_cast<domain::combat::defender*>(field_with_range.field->get_object());
-                                break;
-                            }
-                        }
+                        // step 2.1 check if there is a target and then add it to the target
+                        m_current_target = ai->get_new_target_func()(ai->get_current_field().get(), ai);
                     }
 
                     // if there is no target then lets go to next state

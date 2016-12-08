@@ -5,9 +5,11 @@
 #ifndef CITY_DEFENCE_DEFENDER_H
 #define CITY_DEFENCE_DEFENDER_H
 
+#include "../drawable/drawable_game_object.h"
+
 namespace domain {
     namespace combat {
-        class defender {
+        class defender : public drawable::drawable_game_object {
         public:
             defender(int hp, int granted_xp);
             int get_hp();

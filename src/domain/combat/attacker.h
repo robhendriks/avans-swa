@@ -5,9 +5,11 @@
 #ifndef CITY_DEFENCE_ATTACKER_H
 #define CITY_DEFENCE_ATTACKER_H
 
+#include "../drawable/drawable_game_object.h"
+
 namespace domain{
     namespace combat{
-        class attacker {
+        class attacker :  public drawable::drawable_game_object {
         public:
             attacker(int min_damage, int max_damage, double attackspeed, int range, int movement = 0);
             //Returns a random number within the range of min & max damage

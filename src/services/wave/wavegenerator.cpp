@@ -12,8 +12,16 @@ namespace services {
     namespace wave {
         wavegenerator::wavegenerator(std::shared_ptr<domain::map::ai::ai> ai) {
             m_ai = ai;
-            ai->set_target_func([](domain::map::objects::field_object *object) {
-                return dynamic_cast<domain::map::objects::building *>(object) != nullptr;
+            m_ai->set_new_target_func([&](domain::map::field* origin, domain::map::ai::ai* ai1){
+                domain::map::objects::building* target = nullptr;
+                for (auto &field_with_range : ai1->get_map()->
+                        get_fields_in_range(ai1->get_unit()->get_range(), origin)) {
+                    target = dynamic_cast<domain::map::objects::building*>(field_with_range.field->get_object());
+                    if (target != nullptr) {
+                        break;
+                    }
+                }
+                return target;
             });
         }
 
@@ -23,6 +31,8 @@ namespace services {
                                                                                                             bool _spread,
                                                                                                             int capoppertunity,
                                                                                                             bool _noboss) {
+
+
             //Start by clearing boss/to strong enemies based on the parameters
             auto list = _nation.get_available_enemies();
             auto olist = _nation.get_available_enemies();
