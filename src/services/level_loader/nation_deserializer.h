@@ -24,5 +24,4 @@ namespace services {
     }
 }
 
-
 #endif //CITY_DEFENCE_NATION_DESERIALIZER_H

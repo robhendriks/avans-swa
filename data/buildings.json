@@ -1,233 +1,220 @@
-[{
-	"id": "skyscraper",
-	"hitpoints": 850,
-	"health-regen": 2,
-	"name": "Skyscraper",
-	"type": 1,
-	"cost": {
-		"steel": 75,
-		"wood": 75
-	},
-	"properties": {
-		"output": {
-			"gold": 3
-		}
-	}
-}, {
-	"id": "wood-cutter-camp",
-	"hitpoints": 500,
-	"health-regen": 1.3,
-	"name": "Wood Cutters camp",
-	"type": 1,
-	"cost": {
-		"gold": 200
-	},
-	"properties": {
-		"output": {
-			"wood": 2
-		}
-	}
-}, {
-	"id": "mine",
-	"hitpoints": 740,
-	"health-regen": 1.7,
-	"name": "Mine",
-	"type": 1,
-	"cost": {
-		"gold": 225,
-		"wood": 75
-	},
-	"properties": {
-		"output": {
-			"ore": 2
-		}
-	}
-}, {
-	"id": "silicium-factory",
-	"hitpoints": 1400,
-	"health-regen": 3,
-	"name": "Silicium Factory",
-	"type": 1,
-	"cost": {
-		"gold": 500,
-		"wood": 50,
-		"ore": 200
-	},
-	"properties": {
-		"output": {
-			"silicium": 1.5
-		}
-	}
-}, {
-	"id": "nuclear-reactor",
-	"hitpoints": 2000,
-	"health-regen": 4,
-	"name": "Nuclear Reactor",
-	"type": 1,
-	"cost": {
-		"gold": 1000,
-		"ore": 100,
-		"silicium": 150
-	},
-	"properties": {
-		"output": {
-			"uranium": 1
-		}
-	}
-}, {
-	"id": "mangonel",
-	"hitpoints": 320,
-	"health-regen": 0.5,
-	"name": "Mangonel",
-	"type": 2,
-	"cost": {
-		"wood": 50
-	},
-	"properties": {
-		"output": {
-			"min-damage": 25,
-			"max-damage": 26,
-			"range": 1
-		}
-	}
-}, {
-	"id": "tar-pit",
-	"hitpoints": 2800,
-	"health-regen": 4,
-	"name": "Tar Pit",
-	"type": 2,
-	"cost": {
-		"gold": 400,
-		"wood": 200
-	},
-	"properties": {
-		"output": {
-			"min-damage": 10,
-			"max-damage": 14,
-			"range": 3
-		}
-	}
-}, {
-	"id": "fragment-thrower",
-	"hitpoints": 1000,
-	"health-regen": 2,
-	"name": "Fragment Thrower",
-	"type": 2,
-	"cost": {
-		"ore": 150
-	},
-	"properties": {
-		"output": {
-			"min-damage": 18,
-			"max-damage": 26,
-			"range": 1
-		}
-	}
-}, {
-	"id": "flame-torch",
-	"hitpoints": 666,
-	"health-regen": 1.5,
-	"name": "Flame Torch",
-	"type": 2,
-	"cost": {
-		"gold": 200,
-		"wood": 100,
-		"ore": 10
-	},
-	"properties": {
-		"output": {
-			"min-damage": 30,
-			"max-damage": 40,
-			"range": 1
-		}
-	}
-}, {
-	"id": "cannon",
-	"hitpoints": 1300,
-	"health-regen": 3,
-	"name": "Cannon",
-	"type": 2,
-	"cost": {
-		"gold": 100,
-		"wood": 50,
-		"ore": 200
-	},
-	"properties": {
-		"output": {
-			"min-damage": 60,
-			"max-damage": 61,
-			"range": 2
-		}
-	}
-}, {
-	"id": "advanced-cannon",
-	"hitpoints": 1800,
-	"health-regen": 3.5,
-	"name": "Advanced Cannon",
-	"type": 2,
-	"cost": {
-		"gold": 200,
-		"silicium": 50,
-		"ore": 200
-	},
-	"properties": {
-		"output": {
-			"min-damage": 120,
-			"max-damage": 121,
-			"range": 2
-		}
-	}
-}, {
-	"id": "tank",
-	"hitpoints": 2550,
-	"health-regen": 5,
-	"name": "Tank",
-	"type": 2,
-	"cost": {
-		"silicium": 200,
-		"ore": 150
-	},
-	"properties": {
-		"output": {
-			"min-damage": 75,
-			"max-damage": 125,
-			"range": 2
-		}
-	}
-}, {
-	"id": "armed-wall",
-	"hitpoints": 5000,
-	"health-regen": 10,
-	"name": "Armed Wall",
-	"type": 2,
-	"cost": {
-		"silicium": 400,
-		"ore": 800,
-		"gold": 1600
-	},
-	"properties": {
-		"output": {
-			"min-damage": 150,
-			"max-damage": 160,
-			"range": 5
-		}
-	}
-}, {
-	"id": "ultimate-death-laser",
-	"hitpoints": 3600,
-	"health-regen": 6,
-	"name": "Ultimate Death Laser",
-	"type": 2,
-	"cost": {
-		"gold": 5000,
-		"uranium": 250,
-		"silicium": 500
-	},
-	"properties": {
-		"output": {
-			"min-damage": 1,
-			"max-damage": 600,
-			"range": 2
-		}
-	}
-}]
+[
+  {
+    "id": "skyscraper",
+    "hitpoints": 850,
+    "health-regen": 2,
+    "name": "Skyscraper",
+    "type": 1,
+    "cost": {
+      "steel": 75,
+      "wood": 75
+    },
+    "output": {
+      "gold": 3
+    }
+  },
+  {
+    "id": "wood-cutter-camp",
+    "hitpoints": 500,
+    "health-regen": 1.3,
+    "name": "Wood Cutters camp",
+    "type": 1,
+    "cost": {
+      "gold": 200
+    },
+    "output": {
+      "wood": 2
+    }
+  },
+  {
+    "id": "mine",
+    "hitpoints": 740,
+    "health-regen": 1.7,
+    "name": "Mine",
+    "type": 1,
+    "cost": {
+      "gold": 225,
+      "wood": 75
+    },
+    "output": {
+      "ore": 2
+    }
+  },
+  {
+    "id": "silicium-factory",
+    "hitpoints": 1400,
+    "health-regen": 3,
+    "name": "Silicium Factory",
+    "type": 1,
+    "cost": {
+      "gold": 500,
+      "wood": 50,
+      "ore": 200
+    },
+    "output": {
+      "silicium": 1.5
+    }
+  },
+  {
+    "id": "nuclear-reactor",
+    "hitpoints": 2000,
+    "health-regen": 4,
+    "name": "Nuclear Reactor",
+    "type": 1,
+    "cost": {
+      "gold": 1000,
+      "ore": 100,
+      "silicium": 150
+    },
+    "output": {
+      "uranium": 1
+    }
+  },
+  {
+    "id": "mangonel",
+    "hitpoints": 320,
+    "health-regen": 0.5,
+    "name": "Mangonel",
+    "type": 2,
+    "cost": {
+      "wood": 50
+    },
+    "properties": {
+      "min-damage": 25,
+      "max-damage": 26,
+      "range": 1
+    }
+  },
+  {
+    "id": "tar-pit",
+    "hitpoints": 2800,
+    "health-regen": 4,
+    "name": "Tar Pit",
+    "type": 2,
+    "cost": {
+      "gold": 400,
+      "wood": 200
+    },
+    "properties": {
+      "min-damage": 10,
+      "max-damage": 14,
+      "range": 3
+    }
+  },
+  {
+    "id": "fragment-thrower",
+    "hitpoints": 1000,
+    "health-regen": 2,
+    "name": "Fragment Thrower",
+    "type": 2,
+    "cost": {
+      "ore": 150
+    },
+    "properties": {
+      "min-damage": 18,
+      "max-damage": 26,
+      "range": 1
+    }
+  },
+  {
+    "id": "flame-torch",
+    "hitpoints": 666,
+    "health-regen": 1.5,
+    "name": "Flame Torch",
+    "type": 2,
+    "cost": {
+      "gold": 200,
+      "wood": 100,
+      "ore": 10
+    },
+    "properties": {
+      "min-damage": 30,
+      "max-damage": 40,
+      "range": 1
+    }
+  },
+  {
+    "id": "cannon",
+    "hitpoints": 1300,
+    "health-regen": 3,
+    "name": "Cannon",
+    "type": 2,
+    "cost": {
+      "gold": 100,
+      "wood": 50,
+      "ore": 200
+    },
+    "properties": {
+      "min-damage": 60,
+      "max-damage": 61,
+      "range": 2
+    }
+  },
+  {
+    "id": "advanced-cannon",
+    "hitpoints": 1800,
+    "health-regen": 3.5,
+    "name": "Advanced Cannon",
+    "type": 2,
+    "cost": {
+      "gold": 200,
+      "silicium": 50,
+      "ore": 200
+    },
+    "properties": {
+      "min-damage": 120,
+      "max-damage": 121,
+      "range": 2
+    }
+  },
+  {
+    "id": "tank",
+    "hitpoints": 2550,
+    "health-regen": 5,
+    "name": "Tank",
+    "type": 2,
+    "cost": {
+      "silicium": 200,
+      "ore": 150
+    },
+    "properties": {
+      "min-damage": 75,
+      "max-damage": 125,
+      "range": 2
+    }
+  },
+  {
+    "id": "armed-wall",
+    "hitpoints": 5000,
+    "health-regen": 10,
+    "name": "Armed Wall",
+    "type": 2,
+    "cost": {
+      "silicium": 400,
+      "ore": 800,
+      "gold": 1600
+    },
+    "properties": {
+      "min-damage": 150,
+      "max-damage": 160,
+      "range": 5
+    }
+  },
+  {
+    "id": "ultimate-death-laser",
+    "hitpoints": 3600,
+    "health-regen": 6,
+    "name": "Ultimate Death Laser",
+    "type": 2,
+    "cost": {
+      "gold": 5000,
+      "uranium": 250,
+      "silicium": 500
+    },
+    "properties": {
+      "min-damage": 1,
+      "max-damage": 600,
+      "range": 2
+    }
+  }
+]

@@ -6,6 +6,9 @@
 #include "services/level_loader/json_level_loader.h"
 #include "services/level_loader/nation_deserializer.h"
 #include "services/level_loader/nations_deserializer.h"
+#include "services/level_loader/building_deserializer.h"
+#include "services/level_loader/buildings_deserializer.h"
+#include "services/level_loader/resources_deserializer.h"
 
 using namespace services::level_loader;
 using namespace utils::json_utils;
@@ -14,7 +17,10 @@ int main(int argc, char *argv[]) {
     // Register type deserializers
     json_factory::get()
         .register_deserializer<nation_ptr>(std::make_shared<nation_deserializer>())
-        .register_deserializer<nation_ptr_vector>(std::make_shared<nations_deserializer>());
+        .register_deserializer<nation_ptr_vector>(std::make_shared<nations_deserializer>())
+        .register_deserializer<building_ptr>(std::make_shared<building_deserializer>())
+        .register_deserializer<building_ptr_vector>(std::make_shared<buildings_deserializer>())
+        .register_deserializer<resource_ptr_vector>(std::make_shared<resources_deserializer>());
 
     /**
      * CONFIG

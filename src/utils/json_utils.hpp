@@ -17,7 +17,9 @@ namespace utils {
         template<typename T>
         class json_deserializer {
         public:
-            virtual ~json_deserializer() = default;
+            virtual ~json_deserializer() {
+                printf("[dtor] json_deserializer<%s>\n", typeid(T).name());
+            }
 
             virtual T deserialize(const nlohmann::json &json) const = 0;
         };

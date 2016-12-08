@@ -16,10 +16,11 @@ namespace services {
             prefix = json.value("prefix", "_");
 
             if (id.empty() || name.empty() || prefix.empty()) {
+                fprintf(stderr, "Nation has missing or invalid data\n");
                 return nullptr;
             }
 
-            printf("Loading nation %s...\n", name.c_str());
+            fprintf(stdout, "Loading nation %s...\n", name.c_str());
 
             return std::make_shared<nation>(id, name, prefix);
         }

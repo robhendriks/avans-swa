@@ -17,6 +17,7 @@ namespace services {
         bool json_level_loader::load(const std::string &filename, T &obj) {
             try {
                 obj = json_deserialize_file<T>(filename);
+                return true;
             } catch (const std::exception &e) {
                 std::cerr << "Exception: " << e.what() << "\n";
                 return false;
@@ -31,9 +32,12 @@ namespace services {
             nations_filename = m_root.value("nations-url", "nations.json");
             buildings_filename = m_root.value("buildings-url", "buildings.json");
 
+            // Load nations from JSON
             if (m_nations.empty())
                 load(nations_filename, m_nations);
-
+            // Load buildings from JSON
+            if (m_buildings.empty())
+                load(buildings_filename, m_buildings);
 
             //load lvl src's if not loaded yet
             if (m_levels.empty()) {
@@ -217,93 +221,7 @@ namespace services {
         }
 
         building_ptr json_level_loader::load_buildings_json(std::string url) {
-            std::shared_ptr<domain::map::objects::building> building;
-            std::ifstream file(url);
-            if (!file.is_open()) {
-                throw std::runtime_error(std::string("Unable to open file: ") + url);
-            }
 
-            json building_root;
-            try {
-                building_root << file;
-
-                for (json &building_data : building_root) {
-                    int min_dmg = 0;
-                    int max_dmg = 0;
-                    int range = 0;
-                    int type = building_data["type"];
-                    auto output_sources = std::shared_ptr<domain::resources::resource>();
-                    auto costs = std::vector<std::shared_ptr<domain::resources::resource>>();
-                    engine::math::box2_t building_box{{10, 10}, {42, 42}};
-
-                    auto data_building_cost = building_data["cost"];
-                    auto it = data_building_cost.begin();
-                    for (json::iterator building_costs_item = data_building_cost.begin();
-                         it != data_building_cost.end(); ++it) {
-
-                        costs.push_back(std::make_shared<domain::resources::resource>(building_costs_item.key(),
-                                                                                      building_costs_item.value()));
-                    }
-
-
-                    for (json &building_properties : building_data["properties"]) {
-
-                        auto current_prop = building_properties.begin();
-                        for (json::iterator building_property_item = building_properties.begin();
-                             current_prop != building_properties.end(); ++current_prop) {
-                            //type 2 = dmg building
-
-                            if (type == 2) {
-                                if (building_property_item.key() == "min-damage") {
-                                    min_dmg = static_cast<int>(building_property_item.value());
-                                } else if (building_property_item.key() == "max-damage") {
-                                    max_dmg = static_cast<int>(building_property_item.value());
-                                } else if (building_property_item.key() == "range") {
-                                    range = static_cast<int>(building_property_item.value());
-                                }
-
-
-                            } else {
-
-                                output_sources = std::make_shared<domain::resources::resource>(
-                                    building_property_item.key(),
-                                    building_property_item.value());
-
-                            }
-
-                        }
-                    }
-                    if (type == 1) {
-                        std::shared_ptr<domain::map::objects::economic_building> economic_building = std::make_shared<domain::map::objects::economic_building>(
-                            building_box,
-                            building_data["id"],
-                            static_cast<int>(building_data["hitpoints"]),
-                            static_cast<double>(building_data["health-regen"]),
-                            building_data["name"],
-                            costs, output_sources);
-                        economic_building->set_draw_settings("images/building-a.png");
-                        m_buildings.push_back(economic_building);
-                    } else {
-                        std::shared_ptr<domain::map::objects::defensive_building> defencive_building = std::make_shared<domain::map::objects::defensive_building>(
-                            building_box,
-                            building_data["id"],
-                            static_cast<int>(building_data["hitpoints"]),
-                            static_cast<double>(building_data["health-regen"]),
-                            building_data["name"],
-                            costs, min_dmg, max_dmg, range);
-                        defencive_building->set_draw_settings("images/building-a.png");
-                        m_buildings.push_back(defencive_building);
-                    }
-
-
-                }
-            } catch (std::exception &e) {
-                // TODO: proper error handling
-                auto d = e.what();
-                std::cout << d;
-                throw;
-            }
-            return building;
         }
 
         map_ptr json_level_loader::load_all_levels(std::string url) {

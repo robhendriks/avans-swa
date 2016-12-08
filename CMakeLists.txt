@@ -169,7 +169,7 @@ include_directories(third_party/json/src
     ${SDL2_TTF_INCLUDE_DIRS}
     ${SDL2_MIXER_INCLUDE_DIR})
 
-add_executable(city_defence ${SOURCES})
+add_executable(city_defence ${SOURCES} src/services/level_loader/building_deserializer.cpp src/services/level_loader/building_deserializer.h src/services/level_loader/buildings_deserializer.cpp src/services/level_loader/buildings_deserializer.h src/services/level_loader/resources_deserializer.cpp src/services/level_loader/resources_deserializer.h)
 add_library(city_defence_sources STATIC ${SOURCES})
 
 target_link_libraries(city_defence
