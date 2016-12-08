@@ -147,6 +147,7 @@ namespace domain {
         void field::notify(objects::field_object *p_observee, std::string title) {
             if (title == "object-destroyed") {
                 m_object = nullptr;
+                m_drag_and_drop->add_dropable(*this);
             }
 
             notify_observers(this, title);

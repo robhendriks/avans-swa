@@ -19,8 +19,13 @@ namespace domain {
             pause();
 
             // Add all empty fields as dropable
-            for (auto field : m_map->get_empty_fields()) {
+            for (auto &field : m_map->get_empty_fields()) {
                 m_drag_and_drop.add_dropable(*field);
+            }
+
+            // Make sure all fields not about the drag and drop instance
+            for (auto &field : m_map->get_fields_with_objects()) {
+                field->set_drag_and_drop(&m_drag_and_drop);
             }
 
             m_stats = std::shared_ptr<game_stats>(new game_stats());
