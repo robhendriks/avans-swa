@@ -15,10 +15,10 @@ namespace domain {
     namespace nations {
         class enemy : public domain::drawable::drawable_game_object {
         public:
-            enemy(std::string name, int mindamage, int maxdamage,
-                  double attackspersecond, int hitpoints, int grantedXP, int range,
-                  int movement, bool boss, std::shared_ptr<nation> nation, int oppertunitycosts);
-            enemy(std::string name, int oppertunitycosts, bool boss);
+            enemy(std::string name, int min_damage, int max_damage,
+                  double attacks_per_second, int hitpoints, int granted_xp, int range,
+                  int movement, bool boss, std::shared_ptr<nation> nation, int oppertunity_costs);
+            enemy(std::string name, int oppertunity_costs, bool boss);
             //Returns nationname + unitname
             std::string get_name();
             //Returns a random number within the range of min & max damage
