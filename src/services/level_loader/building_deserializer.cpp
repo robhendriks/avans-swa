@@ -45,7 +45,7 @@ namespace services {
 
         building_ptr
         building_deserializer::create_economic(const nlohmann::json &json, const building_cfg_ptr &cfg) const {
-            auto result = std::make_shared<economic_building>(box2_t{10, 10, 42, 42},
+            auto result = std::make_shared<economic_building>(box2_t{0, 0, 64, 64},
                                                                cfg->id,
                                                                static_cast<int>(cfg->hp),
                                                                cfg->hp_regen,
@@ -53,7 +53,7 @@ namespace services {
                                                                cfg->cost,
                                                                cfg->output.front()); // TODO: swap .front() with the entire list
 
-            result->set_draw_settings("images/building-a.png"); // TODO: change to <building-id>.png
+            result->set_draw_settings(std::string("images/buildings/") + cfg->id + ".png");
             return result;
         }
 
@@ -82,7 +82,7 @@ namespace services {
                                                                static_cast<int>(min_damage),
                                                                static_cast<int>(max_damage));
 
-            result->set_draw_settings("images/building-a.png"); // TODO: change to <building-id>.png
+            result->set_draw_settings(std::string("images/buildings/") + cfg->id + ".png");
             return result;
         }
 

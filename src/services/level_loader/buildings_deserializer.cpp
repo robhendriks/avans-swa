@@ -9,6 +9,7 @@ namespace services {
 
         building_ptr_vector buildings_deserializer::deserialize(const nlohmann::json &json) const {
             building_ptr_vector result;
+
             if (!json.is_array())
                 return result;
 
