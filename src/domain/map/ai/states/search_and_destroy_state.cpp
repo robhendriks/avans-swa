@@ -24,7 +24,7 @@ namespace domain {
                         // TODO this needs to change to target now we know its always building
                         // TODO right now problem is that field object has no hp but 'target' does
                         if (dynamic_cast<domain::map::objects::building *>(m_current_target)->reduce_hitpoints(
-                                ai->get_unit()->get_damage()) == 0) {
+                                ai->get_unit()->get_damage()) <= 0) {
                             m_current_target = nullptr;
                         }
                     }
