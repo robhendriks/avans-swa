@@ -155,7 +155,7 @@ set(SOURCES src/main.cpp
     src/engine/events/engine_state_changed.cpp
     src/engine/events/engine_state_changed.h
     src/domain/drawable/draw_managers_wrapper.h
-        src/domain/map/ai/ai.cpp src/domain/map/ai/ai.h src/domain/map/ai/states/search_and_destroy_state.cpp src/domain/map/ai/states/search_and_destroy_state.h src/domain/map/ai/states/move_state.cpp src/domain/map/ai/states/move_state.h src/domain/map/ai/states/state.cpp src/domain/map/ai/states/state.h)
+        src/domain/map/ai/ai.cpp src/domain/map/ai/ai.h src/domain/map/ai/states/search_and_destroy_state.cpp src/domain/map/ai/states/search_and_destroy_state.h src/domain/map/ai/states/move_state.cpp src/domain/map/ai/states/move_state.h src/domain/map/ai/states/state.cpp src/domain/map/ai/states/state.h src/domain/combat/attacker.cpp src/domain/combat/attacker.h src/domain/combat/defender.cpp src/domain/combat/defender.h)
 
 include_directories(third_party/json/src
     third_party/di-cpp14/include

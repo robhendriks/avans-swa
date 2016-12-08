@@ -56,19 +56,25 @@ namespace domain {
                 m_current_field = get_spawn_point();
 
                 // start pos if possible
-                if (m_unit != nullptr)
-                    m_unit->set_box(std::make_shared<engine::math::box2_t>(m_current_field->get_box()));
+                if (m_unit != nullptr){
+                    auto result = dynamic_cast<domain::drawable::drawable_game_object*>(m_unit.get());
+                    if(result != nullptr)
+                        result->set_box(std::make_shared<engine::math::box2_t>(m_current_field->get_box()));
+                }
             }
 
-            void ai::set_unit(std::shared_ptr<domain::nations::enemy> unit) {
+            void ai::set_unit(std::shared_ptr<domain::combat::attacker> unit) {
                 m_unit = unit;
 
                 // start pos if possible
-                if (m_map != nullptr)
-                    m_unit->set_box(std::make_shared<engine::math::box2_t>(m_current_field->get_box()));
+                if (m_map != nullptr){
+                    auto result = dynamic_cast<domain::drawable::drawable_game_object*>(m_unit.get());
+                    if(result != nullptr)
+                        result->set_box(std::make_shared<engine::math::box2_t>(m_current_field->get_box()));
+                }
             }
 
-            std::shared_ptr<domain::nations::enemy> ai::get_unit() {
+            std::shared_ptr<domain::combat::attacker> ai::get_unit() {
                 return m_unit;
             }
 

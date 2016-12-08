@@ -164,8 +164,8 @@ namespace domain {
                     auto pos = index_to_position(i);
                     float x = m_dest->min.x + (tile_width * pos.x);
                     float y = m_dest->min.y + (tile_height * pos.y);
-                    field->set_box({{x,              y},
-                                    {x + tile_width, y + tile_height}});
+                    engine::math::box2_t box = {{x, y},{x + tile_width, y + tile_height}};
+                    field->set_box(std::make_shared<engine::math::box2_t>(box));
                     field->draw(draw_managers, time_elapsed);
                 }
             }

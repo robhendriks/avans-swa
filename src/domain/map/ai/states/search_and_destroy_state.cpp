@@ -23,7 +23,7 @@ namespace domain {
                         // step 1.1 attack and unset if target is destroyed
                         // TODO this needs to change to target now we know its always building
                         // TODO right now problem is that field object has no hp but 'target' does
-                        if (dynamic_cast<domain::map::objects::building *>(m_current_target)->reduce_hitpoints(
+                        if (m_current_target->lower_hitpoints(
                                 ai->get_unit()->get_damage()) <= 0) {
                             m_current_target = nullptr;
                         }
@@ -35,9 +35,8 @@ namespace domain {
                         for (auto &field_with_range : ai->get_map()->get_fields_in_range(ai->get_unit()->get_range(),
                                                                                          ai->get_current_field().get())) {
                             // step 2.1.1 check if the target is a target for us and if it is then set it
-                            auto b = ai->get_is_target_func();
-                            if (b(field_with_range.field->get_object())) {
-                                m_current_target = field_with_range.field->get_object();
+                            if (ai->get_is_target_func()(field_with_range.field->get_object())) {
+                                m_current_target = dynamic_cast<domain::combat::defender*>(field_with_range.field->get_object());
                                 break;
                             }
                         }

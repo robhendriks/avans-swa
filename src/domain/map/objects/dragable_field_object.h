@@ -24,7 +24,7 @@ namespace domain {
 
                 virtual ~dragable_field_object() = default;
 
-                virtual void set_box(engine::math::box2_t box);
+                virtual void set_box(std::shared_ptr<engine::math::box2_t> box);
 
                 virtual engine::math::box2_t get_box() const;
 

@@ -16,9 +16,6 @@ namespace domain {
         }
 
         field::~field() {
-            if (m_box != nullptr) {
-                delete m_box;
-            }
         }
 
         /**
@@ -76,12 +73,8 @@ namespace domain {
          *
          * @param box
          */
-        void field::set_box(engine::math::box2_t box) {
-            if (m_box != nullptr) {
-                delete m_box;
-            }
-
-            m_box = new engine::math::box2_t(box);
+        void field::set_box(std::shared_ptr<engine::math::box2_t> box) {
+            m_box = box;
         }
 
         /**

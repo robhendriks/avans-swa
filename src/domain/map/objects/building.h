@@ -11,17 +11,17 @@
 namespace domain {
     namespace map {
         namespace objects {
-            class building : public dragable_field_object {
+            class building : public dragable_field_object, public domain::combat::defender {
             public:
                 building(const engine::math::box2_t &box, const std::string &id, int hitpoints, double health_ragen,
                          const std::string &name,
                          const std::vector<std::shared_ptr<resources::resource>> &required_resources);
 
-                building(engine::math::box2_t box);
+                building(engine::math::box2_t box, int hitpoints = 0);
 
-                building(std::shared_ptr<field> field1);
+                building(std::shared_ptr<field> field1, int hitpoints = 0);
 
-                building(const building &obj);
+                building(const building &obj, int hitpoints = 0);
 
                 dragable_field_object *clone() const;
 
@@ -32,12 +32,9 @@ namespace domain {
                 void set_required_resource(std::vector<std::shared_ptr<domain::resources::resource>> resources);
 
                 virtual void update(domain::game_level::game_level game_level);
-
-                int get_hitpoints();
-                int reduce_hitpoints(int by);
+                virtual int lower_hitpoints(int points);
             private:
                 std::string  id;
-                int hitpoints;
                 double health_ragen;
                 std::string name;
                 int type;

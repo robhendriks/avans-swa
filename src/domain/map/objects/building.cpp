@@ -8,11 +8,11 @@ namespace domain {
     namespace map {
         namespace objects {
 
-            building::building(engine::math::box2_t box) : dragable_field_object(box) {}
+            building::building(engine::math::box2_t box, int hitpoints) : dragable_field_object(box), domain::combat::defender(hitpoints, 0) {}
 
-            building::building(std::shared_ptr<field> field1) : dragable_field_object(field1) {}
+            building::building(std::shared_ptr<field> field1, int hitpoints) : dragable_field_object(field1), domain::combat::defender(hitpoints, 0) {}
 
-            building::building(const building &obj) : dragable_field_object(obj) {}
+            building::building(const building &obj, int hitpoints) : dragable_field_object(obj), domain::combat::defender(hitpoints, 0) {}
 
             /**
              * Make sure a building can only be placed next to a road object
@@ -57,26 +57,20 @@ namespace domain {
                                double health_ragen, const std::string &name,
                                const std::vector<std::shared_ptr<resources::resource>> &required_resources
                                )
-                : dragable_field_object(box), id(id), hitpoints(hitpoints), health_ragen(health_ragen), name(name),
-                  required_resources(required_resources) {}
+                : dragable_field_object(box), domain::combat::defender(hitpoints, 0), id(id), health_ragen(health_ragen), name(name),
+                  required_resources(required_resources){}
 
-            int building::get_hitpoints() {
-                return hitpoints;
-            }
-
-            int building::reduce_hitpoints(int by) {
-                if(hitpoints == 0){
+            int building::lower_hitpoints(int by) {
+                if(get_hp() != 0){
+                    int result = domain::combat::defender::lower_hitpoints(by);
+                    if (result == 0) {
+                        notify_observers(this, "object-destroyed");
+                    }
+                    return result;
+                }
+                else
                     return 0;
-                }
-
-                hitpoints -= by;
-                if(hitpoints <= 0){
-                    notify_observers(this, "object-destroyed");
-                    hitpoints = 0;
-                }
-                return hitpoints;
             }
-
         }
     }
 }

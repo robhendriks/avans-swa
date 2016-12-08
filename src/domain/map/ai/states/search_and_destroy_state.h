@@ -7,6 +7,7 @@
 
 #include "state.h"
 #include "../../objects/field_object.h"
+#include "../../../combat/defender.h"
 
 namespace domain {
     namespace map {
@@ -18,7 +19,7 @@ namespace domain {
                     void update(ai * ai, unsigned int elapsed_time);
                 private:
                     // this one function needs to change so its not a field object but a "target' class that inherits from interface target
-                    domain::map::objects::field_object* m_current_target;
+                    domain::combat::defender* m_current_target;
                     // -----
                     int m_last_attack_time = 0;
                 };

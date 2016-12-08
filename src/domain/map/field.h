@@ -38,7 +38,7 @@ namespace domain {
 
             bool drop(engine::draganddrop::dragable* dragable1);
 
-            void set_box(engine::math::box2_t box);
+            void set_box(std::shared_ptr<engine::math::box2_t> box) ;
 
             bool place_object(objects::field_object* object);
 
@@ -59,7 +59,7 @@ namespace domain {
             map &m_map;
             engine::math::vec2_t m_pos;
             objects::field_object *m_object;
-            engine::math::box2_t *m_box;
+            std::shared_ptr<engine::math::box2_t> m_box;
             long m_weight = 0;
         };
     }
