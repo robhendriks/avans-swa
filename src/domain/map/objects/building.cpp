@@ -60,7 +60,16 @@ namespace domain {
                 : dragable_field_object(box), id(id), hitpoints(hitpoints), health_ragen(health_ragen), name(name),
                   required_resources(required_resources) {}
 
-            double building::get_health_regen() {
+            int building::get_hitpoints() {
+                return hitpoints;
+            }
+
+            int building::reduce_hitpoints(int by) {
+                hitpoints -= by;
+                if(hitpoints <= 0){
+                    notify_observers(this, "object-destroyed");
+                    hitpoints = 0;
+                }
                 return hitpoints;
             }
 

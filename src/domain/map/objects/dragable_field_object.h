@@ -14,8 +14,7 @@
 namespace domain {
     namespace map {
         namespace objects {
-            class dragable_field_object : public field_object, public engine::draganddrop::dragable,
-                                          public engine::observer::observee<dragable_field_object> {
+            class dragable_field_object : public field_object, public engine::draganddrop::dragable {
             public:
                 dragable_field_object(engine::math::box2_t box);
 

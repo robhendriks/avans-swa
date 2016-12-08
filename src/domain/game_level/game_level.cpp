@@ -137,13 +137,16 @@ namespace domain {
          * @param p_observee
          * @param title
          */
-        void game_level::notify(domain::map::objects::dragable_field_object *p_observee, std::string title) {
+        void game_level::notify(domain::map::objects::field_object *p_observee, std::string title) {
             if (title == "object-dropped") {
+                // only a dragable field object can throw this event
+                auto object = dynamic_cast<domain::map::objects::dragable_field_object*>(p_observee);
+
                 // Remove from placeable_objects
-                remove_placeable_object(*p_observee);
+                remove_placeable_object(*object);
 
                 // Create a copy of the placed field
-                auto *copy = p_observee->clone();
+                auto *copy = object->clone();
                 add_placeable_object(*copy);
 
                 // Immediately start with dragging

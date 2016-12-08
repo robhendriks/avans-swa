@@ -8,71 +8,68 @@
 namespace domain {
     namespace nations {
         enemy::enemy(std::string _name, int _oppertunitycosts, bool _boss) {
-            name = _name;
-            oppertunitycosts =_oppertunitycosts;
-            boss = _boss;
+            m_name = _name;
+            m_oppertunity_cost =_oppertunitycosts;
+            m_boss = _boss;
+            m_ai = nullptr;
         }
 
-        enemy::enemy(std::string _name, int _mindamage, int _maxdamage, double _attackspersecond, int _hitpoints, int _grantedXP, int _range, int _movement, bool _boss, std::shared_ptr<nation> _nation, int _oppertunitycosts) : m_destination(nullptr) {
-            name = _name;
-            mindamage = _mindamage;
-            maxdamage = _maxdamage;
-            attackspersecond = _attackspersecond;
-            hitpoints = _hitpoints;
-            grantedXP = _grantedXP;
-            range = _range;
-            movement = _movement;
-            boss = _boss;
-            Nation = _nation;
-            oppertunitycosts =_oppertunitycosts;
+        enemy::enemy(std::string name, int mindamage, int maxdamage, double attackspersecond, int hitpoints, int grantedXP, int range, int movement, bool boss, std::shared_ptr<nation> nation, int oppertunitycosts) : m_destination(nullptr) {
+            m_name = name;
+            m_min_damage = mindamage;
+            m_max_damage = maxdamage;
+            m_attack_speed = attackspersecond;
+            m_hp = hitpoints;
+            m_granted_xp = grantedXP;
+            m_range = range;
+            m_movement = movement;
+            m_boss = boss;
+            m_nation = nation;
+            m_oppertunity_cost = oppertunitycosts;
+            m_ai = nullptr;
         }
 
-        std::string enemy::getName() {
-            return Nation.get()->getprefixname()+" - "+name;
-
-
+        std::string enemy::get_name() {
+            return m_nation.get()->getprefixname()+" - "+m_name;
         }
 
 
-        int enemy::getDamage() {
+        int enemy::get_damage() {
             std::random_device rd; // obtain a random number from hardware
             std::mt19937 rnd(rd()); // seed the generator
-            std::uniform_int_distribution<> damage(mindamage, maxdamage);
+            std::uniform_int_distribution<> damage(m_min_damage, m_max_damage);
             return damage(rnd);
         }
 
-        double enemy::getattackspersecond() {
-            return attackspersecond;
+        double enemy::get_attack_speed(){
+            return m_attack_speed;
         }
 
-        int enemy::getHitpoints(){
-            return hitpoints;
+        int enemy::get_hp(){
+            return m_hp;
         }
 
-        int enemy::getRange(){
-            return range;
+        int enemy::get_range(){
+            return m_range;
         }
-        int enemy::getMovement(){
-            return movement;
+        int enemy::get_movement(){
+            return m_movement;
         }
-        int enemy::getOppertunity()const {
-            return oppertunitycosts;
-        }
-
-        bool enemy::getBoss(){
-            return boss;
+        int enemy::get_oppertunity_cost() const {
+            return m_oppertunity_cost;
         }
 
-        int  enemy::lowerHitpoints(int points){
+        bool enemy::is_boss(){
+            return m_boss;
+        }
 
-            if(hitpoints <= points){
-                delete this;
-                return grantedXP;
-            }
-            else{
-                hitpoints = hitpoints - points;
-            }
-            return 0;
+        int  enemy::lower_hitpoints(int points) {
+            if(m_hp - points >= 0)
+                m_hp -= points;
+            else
+                m_hp = 0;
+
+            return m_hp;
         }
 
         enemy::~enemy() {
@@ -87,9 +84,19 @@ namespace domain {
             m_destination = destination;
         }
 
+        void enemy::update(unsigned int elapsed_time) {
+            if(m_ai != nullptr){
+                m_ai->update(elapsed_time);
+            }
+        }
+
+        void enemy::set_ai(std::shared_ptr<domain::map::ai::ai> ai) {
+            m_ai = ai;
+        }
+
         bool operator<(const std::shared_ptr<enemy>&  s1, const std::shared_ptr<enemy>&  s2){
 
-            return s1->getOppertunity() < s2->getOppertunity();
+            return s1->get_oppertunity_cost() < s2->get_oppertunity_cost();
         }
 
     }
