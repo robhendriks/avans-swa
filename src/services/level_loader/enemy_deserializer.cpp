@@ -26,7 +26,7 @@ namespace services {
 
             if (name.empty() || type.empty() || hitpoints <= 0 || min_damage < 0 || max_damage < 0 ||
                 movement_speed <= 0 || oppertunity_cost < 0) {
-                fprintf(stderr, "Unit has missing or invalid data\n");
+                SDL_Log("Unit has missing or invalid data\n");
                 return nullptr;
             }
 

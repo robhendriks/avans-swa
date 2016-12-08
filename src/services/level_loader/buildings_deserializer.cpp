@@ -14,7 +14,7 @@ namespace services {
                 return result;
 
             result.reserve(json.size());
-            printf("Loading %lu building(s)...\n", json.size());
+            SDL_Log("Loading %lu building(s)...\n", json.size());
 
             for (auto &elem : json)
                 result.push_back(json_deserialize<building_ptr>(elem));

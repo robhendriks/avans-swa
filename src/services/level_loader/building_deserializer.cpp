@@ -21,7 +21,7 @@ namespace services {
             cfg->hp_regen = json.value("health-regen", -1.0);
 
             if (cfg->id.empty() || cfg->name.empty() || cfg->hp < 1.0 || cfg->hp_regen <= 0.0) {
-                fprintf(stderr, "Building has missing or invalid data\n");
+                SDL_Log("Building has missing or invalid data\n");
                 return nullptr;
             }
 
@@ -38,7 +38,7 @@ namespace services {
                 case 2:
                     return create_defensive(json, std::move(cfg));
                 default:
-                    fprintf(stderr, "Building has invalid type\n");
+                    SDL_Log("Building has invalid type\n");
                     return nullptr;
             }
         }

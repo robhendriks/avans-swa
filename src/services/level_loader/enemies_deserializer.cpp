@@ -13,7 +13,7 @@ namespace services {
                 return result;
 
             result.reserve(json.size());
-            printf("Loading %lu unit(s)...\n", json.size());
+            SDL_Log("Loading %lu unit(s)...\n", json.size());
 
             for (auto &elem : json)
                 result.push_back(json_deserialize<enemy_ptr>(elem));

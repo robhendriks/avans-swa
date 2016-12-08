@@ -16,11 +16,11 @@ namespace services {
             prefix = json.value("prefix", "_");
 
             if (id.empty() || name.empty() || prefix.empty()) {
-                fprintf(stderr, "Nation has missing or invalid data\n");
+                SDL_Log("Nation has missing or invalid data\n");
                 return nullptr;
             }
 
-            fprintf(stdout, "Loading nation %s...\n", name.c_str());
+            SDL_Log("Loading nation %s...\n", name.c_str());
 
             enemy_ptr_vector enemies;
             if (json.find("units") != json.end())
