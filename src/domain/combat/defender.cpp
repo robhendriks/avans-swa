@@ -6,6 +6,16 @@
 
 namespace domain {
     namespace combat {
+        defender::defender(int hp, int granted_xp) {
+            // a defender when 0 hp is dead
+            if(m_hp <= 0){
+                m_hp = 1;
+            }
+            else
+                m_hp = hp;
+            m_granted_xp = granted_xp;
+        }
+
         int defender::get_hp() {
             return m_hp;
         }
@@ -17,16 +27,6 @@ namespace domain {
                 m_hp = 0;
 
             return m_hp;
-        }
-
-        defender::defender(int hp, int granted_xp) {
-            // a defender when 0 hp is dead
-            if(m_hp <= 0){
-                m_hp = 1;
-            }
-            else
-                m_hp = hp;
-            m_granted_xp = granted_xp;
         }
     }
 }

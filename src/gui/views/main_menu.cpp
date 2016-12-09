@@ -93,7 +93,6 @@ namespace gui {
         }
 
         void main_menu::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
-            m_top_bar.m_texture_manager.draw("background", display_box);
 
             m_top_bar.draw(time_elapsed, display_box);
             // Draw the logo

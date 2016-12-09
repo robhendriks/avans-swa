@@ -18,9 +18,7 @@ namespace domain {
                     search_and_destroy_state();
                     void update(ai * ai, unsigned int elapsed_time);
                 private:
-                    // this one function needs to change so its not a field object but a "target' class that inherits from interface target
                     domain::combat::defender* m_current_target;
-                    // -----
                     int m_last_attack_time = 0;
                 };
             }
