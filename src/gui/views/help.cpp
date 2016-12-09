@@ -8,7 +8,7 @@
 namespace gui {
     namespace views {
 
-        help::help(top_bar &top_bar1) : m_top_bar(top_bar1), m_image("images/grass.png"), m_show(false) {
+        help::help(top_bar &top_bar1) : m_top_bar(top_bar1), m_image("images/help.png"), m_show(false) {
 
         }
 
@@ -24,8 +24,8 @@ namespace gui {
 
             // Calculate the grey_panel scale factor
             auto image_size = m_top_bar.m_texture_manager.get_size("h_image");
-            float x_scale = image_size.x / 100;
-            float y_scale = image_size.y / 100;
+            float x_scale = image_size.x / 92;
+            float y_scale = image_size.y / 92;
             float scale = (x_scale > y_scale ? x_scale : y_scale);
 
             // Load textures
