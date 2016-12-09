@@ -26,7 +26,8 @@ namespace services {
             if (json.find("units") != json.end())
                 enemies = json_deserialize<enemy_ptr_vector>(json["units"]);
 
-            auto result = std::make_shared<nation>(id, name, prefix, enemies);
+            auto result = std::make_shared<nation>(id, name, prefix);
+            result->set_enemies(enemies);
 
             for (auto &enemy : enemies)
                 enemy->set_nation(result);

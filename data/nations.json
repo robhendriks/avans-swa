@@ -5,7 +5,7 @@
     "units": [
       {
         "name": "Fallen Warrior",
-        "movement-speed": 1,
+        "movement-speed": 1000,
         "min-damage": 3,
         "max-damage": 7,
         "hitpoints": 120,
@@ -14,7 +14,7 @@
       },
       {
         "name": "Fallen Brute",
-        "movement-speed": 1,
+        "movement-speed": 1000,
         "min-damage": 11,
         "max-damage": 16,
         "hitpoints": 480,
@@ -23,7 +23,7 @@
       },
       {
         "name": "Fallen Champion",
-        "movement-speed": 0.8,
+        "movement-speed": 1000,
         "min-damage": 40,
         "max-damage": 60,
         "hitpoints": 1250,
@@ -32,7 +32,7 @@
       },
       {
         "name": "Fallen Hero",
-        "movement-speed": 0.6,
+        "movement-speed": 1000,
         "min-damage": 200,
         "max-damage": 250,
         "hitpoints": 4000,
@@ -47,7 +47,7 @@
     "units": [
       {
         "name": "Basic Demon",
-        "movement-speed": 2.5,
+        "movement-speed": 1000,
         "min-damage": 2,
         "max-damage": 4,
         "hitpoints": 60,
@@ -56,7 +56,7 @@
       },
       {
         "name": "Fire Demon",
-        "movement-speed": 2.8,
+        "movement-speed": 1000,
         "min-damage": 5,
         "max-damage": 9,
         "hitpoints": 165,
@@ -65,7 +65,7 @@
       },
       {
         "name": "Terror Demon",
-        "movement-speed": 3,
+        "movement-speed": 1000,
         "min-damage": 15,
         "max-damage": 30,
         "hitpoints": 490,
@@ -74,7 +74,7 @@
       },
       {
         "name": "Demon Lord",
-        "movement-speed": 3,
+        "movement-speed": 1000,
         "min-damage": 30,
         "max-damage": 60,
         "hitpoints": 1500,
@@ -89,7 +89,7 @@
     "units": [
       {
         "name": "Fisher",
-        "movement-speed": 1.6,
+        "movement-speed": 1000,
         "min-damage": 12,
         "max-damage": 15,
         "hitpoints": 140,
@@ -98,7 +98,7 @@
       },
       {
         "name": "Fisherman Trapper",
-        "movement-speed": 1.7,
+        "movement-speed": 1000,
         "min-damage": 30,
         "max-damage": 50,
         "hitpoints": 750,
@@ -107,7 +107,7 @@
       },
       {
         "name": "Fisherman Thrower",
-        "movement-speed": 1.8,
+        "movement-speed": 1000,
         "min-damage": 120,
         "max-damage": 150,
         "hitpoints": 2000,
@@ -116,7 +116,7 @@
       },
       {
         "name": "Legenary Fisherman",
-        "movement-speed": 1.4,
+        "movement-speed": 1000,
         "min-damage": 130,
         "max-damage": 200,
         "hitpoints": 8000,

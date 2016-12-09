@@ -194,7 +194,6 @@ set(SOURCES src/main.cpp
     src/domain/combat/attacker.h
     src/domain/combat/defender.cpp
     src/domain/combat/defender.h)
-    )
 
 include_directories(third_party/json/src
     third_party/di-cpp14/include

@@ -5,32 +5,37 @@
 
 #include <random>
 #include "enemy.h"
+
 namespace domain {
     namespace nations {
-        enemy::enemy(std::string _name, int oppertunity_costs, bool _boss) :  domain::combat::attacker(0, 0, 1, 1), domain::combat::defender(0, 0),  m_destination(nullptr) {
+        enemy::enemy(std::string _name, int oppertunity_costs, bool _boss) : domain::combat::attacker(0, 0, 1, 1),
+                                                                             domain::combat::defender(0, 0),
+                                                                             m_destination(nullptr) {
             m_name = _name;
-            m_oppertunity_cost =oppertunity_costs;
+            m_oppertunity_cost = oppertunity_costs;
             m_boss = _boss;
             m_ai = nullptr;
         }
 
-        enemy::enemy(std::string name, int min_damage, int max_damage, double attacks_per_second, int hitpoints, int granted_xp, int range, int movement, bool boss, std::shared_ptr<nation> nation, int oppertunity_costs)
-                : domain::combat::attacker(min_damage, max_damage, attacks_per_second, range, movement), domain::combat::defender(0, 0),  m_destination(nullptr){
+        enemy::enemy(std::string name, int min_damage, int max_damage, double attacks_per_second, int hitpoints,
+                     int granted_xp, int range, int movement, bool boss, int oppertunity_costs)
+            : domain::combat::attacker(min_damage, max_damage, attacks_per_second, range, movement),
+              domain::combat::defender(0, 0), m_destination(nullptr) {
             m_name = name;
             m_boss = boss;
-            m_nation = nation;
             m_oppertunity_cost = oppertunity_costs;
             m_ai = nullptr;
         }
 
         std::string enemy::get_name() {
-            return m_nation.get()->get_prefix_name()+" - "+m_name;
+            return m_nation->get_prefix() + " - " + m_name;
         }
+
         int enemy::get_oppertunity_cost() const {
             return m_oppertunity_cost;
         }
 
-        bool enemy::is_boss(){
+        bool enemy::is_boss() {
             return m_boss;
         }
 
@@ -46,7 +51,7 @@ namespace domain {
         }
 
         void enemy::update(unsigned int elapsed_time) {
-            if(m_ai != nullptr){
+            if (m_ai != nullptr) {
                 m_ai->update(elapsed_time);
             }
         }
@@ -63,7 +68,15 @@ namespace domain {
             domain::combat::attacker::set_draw_settings(file_loc, image_start_position);
         }
 
-        bool operator<(const std::shared_ptr<enemy>&  s1, const std::shared_ptr<enemy>&  s2){
+        nation_ptr enemy::get_nation() const {
+            return m_nation;
+        }
+
+        void enemy::set_nation(const nation_ptr &nation) {
+            m_nation = nation;
+        }
+
+        bool operator<(const std::shared_ptr<enemy> &s1, const std::shared_ptr<enemy> &s2) {
             return s1->get_oppertunity_cost() < s2->get_oppertunity_cost();
         }
 

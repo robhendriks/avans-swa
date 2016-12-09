@@ -30,8 +30,8 @@ namespace services {
             auto result = std::make_shared<map>(
                 vec2_t{static_cast<float>(width),
                        static_cast<float>(height)},
-                vec2_t{static_cast<float>(json_level_loader::TILE_WIDTH),
-                       static_cast<float>(json_level_loader::TILE_HEIGHT)});
+                vec2_t{static_cast<float>(64),
+                       static_cast<float>(64)});
 
             // Load fields
             field_ptr_vector fields;
@@ -48,7 +48,8 @@ namespace services {
             if (json.find("objects") != json.end())
                 objects = json_deserialize<object_ptr_vector>(json["objects"]);
 
-            fields.front()->place_object(objects.front());
+            /*fields.front()->place_object(objects.front());*/
+            // TODO: SMart Pointers!!!!
 
             // TODO: stuff with objects
 

@@ -27,8 +27,7 @@ namespace domain {
         class field : public drawable::drawable_game_object, public engine::draganddrop::dropable,
                       public engine::observer::observee<field>, engine::observer::observer<objects::field_object> {
         public:
-
-            field(map &map1, engine::math::vec2_t pos);
+            field(engine::math::vec2_t pos);
 
             ~field();
 
@@ -55,8 +54,13 @@ namespace domain {
             void set_weight(long weight);
 
             virtual void notify(objects::field_object *p_observee, std::string title);
+
+            std::shared_ptr<map> get_map() const;
+
+            void set_map(const std::shared_ptr<map> &map);
+
         private:
-            map &m_map;
+            std::shared_ptr<map> m_map;
             engine::math::vec2_t m_pos;
             objects::field_object *m_object;
             std::shared_ptr<engine::math::box2_t> m_box;
