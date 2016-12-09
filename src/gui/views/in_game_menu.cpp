@@ -8,7 +8,8 @@
 namespace gui {
     namespace views {
 
-        in_game_menu::in_game_menu(help &help_view) : m_help_view(help_view), m_show(false) {
+        in_game_menu::in_game_menu(help &help_view) : m_help_view(help_view), m_show(false),
+                                                      m_help_just_disappeared(false) {
 
         }
 
@@ -24,6 +25,10 @@ namespace gui {
                     for (auto &callback : m_callbacks) {
                         callback(show);
                     }
+                }
+
+                if (!show) {
+                    m_help_just_disappeared = true;
                 }
             });
 
@@ -145,11 +150,15 @@ namespace gui {
 
             if (m_menu_icon_box->contains(*position)) {
                 change_show();
+
+                if (m_help_view.m_show) {
+                    m_help_view.m_show = false;
+                }
             } else if (m_question_mark_icon_box->contains(*position)) {
                 m_help_view.toggle_show();
             }
 
-            if (m_show) {
+            if (m_show && !m_help_view.m_show && !m_help_just_disappeared) {
                 if (m_quit_btn_box->contains(*position)) {
                     m_help_view.m_top_bar.m_menu_controller->show();
                 } else if (m_help_btn_box->contains(*position)) {
@@ -160,12 +169,16 @@ namespace gui {
                     change_show();
                 }
             }
+
+            m_help_just_disappeared = false;
         }
 
         void in_game_menu::on_event(engine::events::key_down &event) {
-            if (!m_help_view.m_show && event.get_keycode() == engine::input::keycodes::keycode::ESCAPE) {
+            if (!m_help_view.m_show && !m_help_just_disappeared && event.get_keycode() == engine::input::keycodes::keycode::ESCAPE) {
                 change_show();
             }
+
+            m_help_just_disappeared = false;
         }
 
         void in_game_menu::change_show() {

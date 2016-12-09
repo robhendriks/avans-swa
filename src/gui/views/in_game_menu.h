@@ -46,6 +46,7 @@ namespace gui {
 
             help &m_help_view;
             bool m_show;
+            bool m_help_just_disappeared;
             std::unique_ptr<engine::math::box2_t> m_menu_icon_box;
             std::unique_ptr<engine::math::box2_t> m_question_mark_icon_box;
             std::unique_ptr<engine::math::box2_t> m_menu_box;

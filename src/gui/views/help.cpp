@@ -19,6 +19,9 @@ namespace gui {
         void help::before() {
             m_top_bar.before();
 
+            // Make sure it's not shown
+            m_show = false;
+
             // Load the texture
             m_top_bar.m_texture_manager.load(m_image, "h_image");
 

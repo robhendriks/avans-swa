@@ -236,7 +236,7 @@ namespace gui {
             }
 
             // Draw overflow on pause
-            if (m_model.paused && !m_in_game_menu.m_show) {
+            if (m_model.paused && !m_in_game_menu.m_show && !m_in_game_menu.m_help_view.m_show) {
                 m_color_manager.draw({0, 0, 0, 180}, *m_in_game_menu.m_help_view.m_overlay_box);
 
                 // Draw resume btn in the center of the overlay
@@ -253,8 +253,9 @@ namespace gui {
             engine::math::vec2_t *position = engine::input::input_handler::get_instance()->get_mouse_position();
 
             if (m_pause_box->contains(*position) ||
-                (m_model.paused && !m_in_game_menu.m_show && m_overlay_resume_box->contains(*position))) {
+                (m_model.paused && !m_in_game_menu.m_show && !m_in_game_menu.m_help_view.m_show && m_overlay_resume_box->contains(*position))) {
                 m_in_game_menu.m_show = false;
+                m_in_game_menu.m_help_view.m_show = false;
                 on_pause();
             } else if (!m_model.paused) {
                 // Only if not paused
