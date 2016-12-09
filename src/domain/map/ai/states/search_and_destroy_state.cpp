@@ -17,9 +17,10 @@ namespace domain {
 
                 void search_and_destroy_state::update(ai *ai, unsigned int elapsed_time) {
                     // step 1: check if we have a target atm and if we can attack at all
-                    if (static_cast<int>(elapsed_time) - static_cast<int>(m_last_attack_time) >
+                    if (static_cast<int>(elapsed_time) - m_last_attack_time >
                         (1000/ai->get_unit()->get_attack_speed()) &&
                         m_current_target != nullptr) {
+                        m_last_attack_time = elapsed_time;
                         // step 1.1 attack and unset if target is destroyed
                         // TODO this needs to change to target now we know its always building
                         // TODO right now problem is that field object has no hp but 'target' does

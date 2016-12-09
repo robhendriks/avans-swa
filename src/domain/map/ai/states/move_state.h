@@ -23,6 +23,12 @@ namespace domain {
                     std::shared_ptr<field> m_last_field;
                     std::shared_ptr<field> m_next_field;
 
+                    // to save the initial state and what to add to it so we don't need to recalculate it
+                    engine::math::box2_t m_init_unit_box = {{0,0},{0,0}};
+                    engine::math::box2_t m_difference_box = {{0,0},{0,0}};
+
+                    void calculate_initial_state_with_difference(domain::map::ai::ai *ai);
+
                     void move(ai * ai, unsigned int elapsed_time);
                     std::shared_ptr<field> get_next_field(domain::map::ai::ai *ai);
                 };
