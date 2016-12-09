@@ -4,6 +4,8 @@
 #include "config/json_config.h"
 #include "utils/string_utils.h"
 #include "services/level_loader/json_level_loader.h"
+#include "domain/map/ai/states/move_state.h"
+#include "domain/map/ai/states/search_and_destroy_state.h"
 #include "services/level_loader/serialization.h"
 
 using namespace services::level_loader;
@@ -75,15 +77,15 @@ int main(int argc, char *argv[]) {
 
     auto di_config = [&]() {
         return boost::di::make_injector(
-            boost::di::bind<>.to(*game1),
-            boost::di::bind<>.to(*engine1),
-            boost::di::bind<>.to(*engine1->get_texture_manager()),
-            boost::di::bind<>.to(*engine1->get_color_manager()),
-            boost::di::bind<>.to(*engine1->get_sound_manager()),
-            boost::di::bind<>.to(*engine1->get_music_manager()),
-            boost::di::bind<>.to(*engine1->get_window()),
-            boost::di::bind<>.to(*font_manager),
-            boost::di::bind<services::level_loader::base_level_loader>.to(*level_loader)
+                boost::di::bind<>.to(*game1),
+                boost::di::bind<>.to(*engine1),
+                boost::di::bind<>.to(*engine1->get_texture_manager()),
+                boost::di::bind<>.to(*engine1->get_color_manager()),
+                boost::di::bind<>.to(*engine1->get_sound_manager()),
+                boost::di::bind<>.to(*engine1->get_music_manager()),
+                boost::di::bind<>.to(*engine1->get_window()),
+                boost::di::bind<>.to(*font_manager),
+                boost::di::bind<services::level_loader::base_level_loader>.to(*level_loader)
         );
     };
 

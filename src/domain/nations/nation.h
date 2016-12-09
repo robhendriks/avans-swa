@@ -14,43 +14,24 @@ namespace domain {
     namespace nations {
 
         class enemy;
-
-        using enemy_ptr = std::shared_ptr<enemy>;
-        using enemy_ptr_vector = std::vector<enemy_ptr>;
-
         class nation {
         public:
-            nation();
+            nation(std::string _name, std::string _prefix_name);
 
-            nation (const std::string &id, const std::string &name, const std::string &prefix, const enemy_ptr_vector &enemies);
+            void set_available_enemies(std::vector<std::shared_ptr<enemy>> _enemies);
 
-            nation(const std::string &id, const std::string &name, const std::string &prefix);
+            std::string get_name();
 
-            ~nation() = default;
+            std::string get_prefix_name();
 
-            std::string get_id() const;
+            std::vector<std::shared_ptr<enemy>> get_available_enemies();
 
-            void set_id(const std::string &id);
-
-            std::string get_name() const;
-
-            void set_name(const std::string &name);
-
-            std::string get_prefix() const;
-
-            void set_prefix(const std::string &prefix);
-
-            const enemy_ptr_vector &get_enemies() const;
-
-            void set_enemies(const enemy_ptr_vector &enemies);
-
+            ~nation();
         private:
-            std::string m_id;
             std::string m_name;
-            std::string m_prefix;
-            enemy_ptr_vector m_enemies;
+            std::string m_prefix_name;
+            std::vector<std::shared_ptr<enemy>> m_enemies;
         };
-
     }
 }
 

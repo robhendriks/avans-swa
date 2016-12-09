@@ -8,7 +8,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -std=c++14")
 
 if (NOT APPLE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
-endif ()
+endif()
 
 add_subdirectory(third_party)
 
@@ -179,7 +179,22 @@ set(SOURCES src/main.cpp
     src/services/level_loader/object_deserializer.cpp
     src/services/level_loader/objects_deserializer.h
     src/services/level_loader/objects_deserializer.cpp
-    src/services/level_loader/serialization.h)
+    src/services/level_loader/serialization.h
+    src/gui/views/in_game_menu.cpp
+    src/gui/views/in_game_menu.h
+    src/domain/map/ai/ai.cpp
+    src/domain/map/ai/ai.h
+    src/domain/map/ai/states/search_and_destroy_state.cpp
+    src/domain/map/ai/states/search_and_destroy_state.h
+    src/domain/map/ai/states/move_state.cpp
+    src/domain/map/ai/states/move_state.h
+    src/domain/map/ai/states/state.cpp
+    src/domain/map/ai/states/state.h
+    src/domain/combat/attacker.cpp
+    src/domain/combat/attacker.h
+    src/domain/combat/defender.cpp
+    src/domain/combat/defender.h)
+    )
 
 include_directories(third_party/json/src
     third_party/di-cpp14/include

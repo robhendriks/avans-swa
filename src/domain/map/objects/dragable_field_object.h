@@ -14,8 +14,7 @@
 namespace domain {
     namespace map {
         namespace objects {
-            class dragable_field_object : public field_object, public engine::draganddrop::dragable,
-                                          public engine::observer::observee<dragable_field_object> {
+            class dragable_field_object : public field_object, public engine::draganddrop::dragable {
             public:
                 dragable_field_object(engine::math::box2_t box);
 
@@ -25,7 +24,7 @@ namespace domain {
 
                 virtual ~dragable_field_object() = default;
 
-                virtual void set_box(engine::math::box2_t box);
+                virtual void set_box(std::shared_ptr<engine::math::box2_t> box);
 
                 virtual engine::math::box2_t get_box() const;
 

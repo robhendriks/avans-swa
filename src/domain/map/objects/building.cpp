@@ -8,14 +8,11 @@ namespace domain {
     namespace map {
         namespace objects {
 
-            using road_ptr = std::shared_ptr<road>;
-            using building_ptr = std::shared_ptr<building>;
+            building::building(engine::math::box2_t box, int hitpoints) : dragable_field_object(box), domain::combat::defender(hitpoints, 0) {}
 
-            building::building(engine::math::box2_t box) : dragable_field_object(box) {}
+            building::building(std::shared_ptr<field> field1, int hitpoints) : dragable_field_object(field1), domain::combat::defender(hitpoints, 0) {}
 
-            building::building(std::shared_ptr<field> field1) : dragable_field_object(field1) {}
-
-            building::building(const building &obj) : dragable_field_object(obj) {}
+            building::building(const building &obj, int hitpoints) : dragable_field_object(obj), domain::combat::defender(hitpoints, 0) {}
 
             /**
              * Make sure a building can only be placed next to a road object
@@ -25,7 +22,7 @@ namespace domain {
              */
             bool building::can_place_on(field &field1) const {
                 for (auto &neighbor : field1.get_neighbors()) {
-                    if (neighbor->has_object() && dynamic_cast<road_ptr>(neighbor->get_object())) {
+                    if (neighbor->has_object() && dynamic_cast<road*>(neighbor->get_object())) {
                         return true;
                     }
                 }
@@ -60,14 +57,36 @@ namespace domain {
                                double health_ragen, const std::string &name,
                                const std::vector<std::shared_ptr<resources::resource>> &required_resources
                                )
-                : dragable_field_object(box), id(id), hitpoints(hitpoints), health_ragen(health_ragen), name(name),
-                  required_resources(required_resources) {}
+                : dragable_field_object(box), domain::combat::defender(hitpoints, 0), id(id), health_ragen(health_ragen), name(name),
+                  required_resources(required_resources){}
 
-            double building::get_health_regen() {
-                return hitpoints;
+            int building::lower_hitpoints(int by) {
+                int result = domain::combat::defender::lower_hitpoints(by);
+                if (result == 0) {
+                    notify_observers(this, "object-destroyed");
+                }
+                return result;
             }
 
+
+
+            void building::draw(drawable::draw_managers_wrapper &draw_managers, unsigned int time_elapsed) {
+                dragable_field_object::draw(draw_managers, time_elapsed);
+            }
+
+            void building::set_draw_settings(std::string file_loc, engine::math::vec2_t image_start_position) {
+                dragable_field_object::set_draw_settings(file_loc, image_start_position);
+            }
+
+            void building::set_box(std::shared_ptr<engine::math::box2_t> box) {
+                dragable_field_object::set_box(box);
+            }
+
+            engine::math::box2_t building::get_box() const {
+                return dragable_field_object::get_box();
+            }
         }
+
     }
 }
 

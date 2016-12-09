@@ -38,6 +38,7 @@ namespace engine {
                 NP9,
                 ENTER,
                 PAUSE,
+                ESCAPE,
             };
 
             inline keycode sdl_scancode_to_keycode(const SDL_Scancode &scancode) {
@@ -96,6 +97,8 @@ namespace engine {
                         return ENTER;
                     case SDL_SCANCODE_PAUSE:
                         return PAUSE;
+                    case SDL_SCANCODE_ESCAPE:
+                        return ESCAPE;
                     default:
                         return UNKNOWN;
                 }

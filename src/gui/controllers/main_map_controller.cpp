@@ -4,6 +4,7 @@
 
 #include "main_map_controller.h"
 #include "../controllers/menu_controller.h"
+#include "../../domain/map/objects/building.h"
 
 namespace gui {
     namespace controllers {
@@ -15,7 +16,6 @@ namespace gui {
             base_controller(game1), m_view(view), m_trans_view(transition_view), m_engine(engine), m_model(model),
             m_trans_model(transition_model), m_level_goals_model(level_goals_model),
             m_wave_management_service(wave_management) {
-
             m_view.set_controller(*this);
             m_trans_view.set_controller(*this);
 
@@ -32,12 +32,15 @@ namespace gui {
             m_level_goals_model.game_stats = lvl.get_stats();
 
             if (is_lvl_done()) {
+                m_model.paused = true;
+
                 m_trans_model.duration = m_engine.get_time_elapsed() - lvl.get_start_time();
                 m_trans_model.result = !lvl.is_game_over(m_engine.get_time_elapsed());
                 m_trans_model.next_lvl_exists = m_model.world->has_next_level();
 
                 view(m_trans_view);
             } else {
+                m_model.paused = false;
                 view(m_view);
             }
         }
@@ -53,13 +56,17 @@ namespace gui {
 
         // this needs to be handled by eventbus
         void main_map_controller::update() {
+
             auto current_enemies = m_model.world->get_current_level().get_enemies_in_lvl();
             for (auto enemy : m_wave_management_service.get_enemies(m_engine.get_time_elapsed())) {
-                // set start dest (enemy still needs ai now its a stupid god)
-                auto empty_field_pos = m_model.world->get_current_level().get_map()->get_empty_fields()[0]->get_box();
-
-                enemy->set_box(std::make_shared<engine::math::box2_t>(empty_field_pos));
                 current_enemies.push_back(enemy);
+            }
+
+
+            for(auto enemy : current_enemies){
+                // set start dest (enemy still needs ai now its stupid)
+                //Bert: Start dest now is the first tile in map with a road.
+                enemy->update(m_engine.get_time_elapsed());
             }
 
             m_model.world->get_current_level().set_enemies_in_lvl(current_enemies);
@@ -111,6 +118,15 @@ namespace gui {
             }
         };
 
+        /**
+         * Called after a level is done or stopped
+         */
+        void main_map_controller::resume_engine_if() {
+            if (m_engine.get_state() == engine::PAUSED) {
+                m_engine.resume();
+            }
+        }
+
         void
         main_map_controller::set_menu_controller(std::shared_ptr<gui::controllers::menu_controller> menu_controller) {
             m_menu_controller = menu_controller;
@@ -124,6 +140,7 @@ namespace gui {
             m_wave_management_service.set_waves_interval(lvl.get_waves_interval());
             m_wave_management_service.set_spawn_bosses(lvl.get_spawn_bosses());
             m_wave_management_service.set_spawnable_nation(lvl.get_enemy_nation());
+            m_wave_management_service.get_wave_generator()->get_ai()->set_map(lvl.get_map());
         }
     }
 }

@@ -145,5 +145,9 @@ namespace services {
             m_current_list.clear();
             start_time = 0;
         }
+
+        std::shared_ptr<wavegenerator> wave_management::get_wave_generator() {
+            return m_wave_gen;
+        }
     }
 }

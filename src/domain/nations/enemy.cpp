@@ -5,79 +5,36 @@
 
 #include <random>
 #include "enemy.h"
-
 namespace domain {
     namespace nations {
-        enemy::enemy(std::string _name, int _oppertunitycosts, bool _boss) {
-            name = _name;
-            oppertunitycosts = _oppertunitycosts;
-            boss = _boss;
+        enemy::enemy(std::string _name, int oppertunity_costs, bool _boss) :  domain::combat::attacker(0, 0, 1, 1), domain::combat::defender(0, 0),  m_destination(nullptr) {
+            m_name = _name;
+            m_oppertunity_cost =oppertunity_costs;
+            m_boss = _boss;
+            m_ai = nullptr;
         }
 
-        enemy::enemy(std::string _name, int _mindamage, int _maxdamage, double _attackspersecond, int _hitpoints,
-                     int _grantedXP, int _range, double _movement, bool _boss, int _oppertunitycosts) : m_destination(
-            nullptr) {
-            name = _name;
-            mindamage = _mindamage;
-            maxdamage = _maxdamage;
-            attackspersecond = _attackspersecond;
-            hitpoints = _hitpoints;
-            grantedXP = _grantedXP;
-            range = _range;
-            movement = _movement;
-            boss = _boss;
-            oppertunitycosts = _oppertunitycosts;
+        enemy::enemy(std::string name, int min_damage, int max_damage, double attacks_per_second, int hitpoints, int granted_xp, int range, int movement, bool boss, std::shared_ptr<nation> nation, int oppertunity_costs)
+                : domain::combat::attacker(min_damage, max_damage, attacks_per_second, range, movement), domain::combat::defender(0, 0),  m_destination(nullptr){
+            m_name = name;
+            m_boss = boss;
+            m_nation = nation;
+            m_oppertunity_cost = oppertunity_costs;
+            m_ai = nullptr;
         }
 
-        std::string enemy::getName() {
-            return m_nation->get_prefix() + " - " + name;
+        std::string enemy::get_name() {
+            return m_nation.get()->get_prefix_name()+" - "+m_name;
+        }
+        int enemy::get_oppertunity_cost() const {
+            return m_oppertunity_cost;
         }
 
-
-        int enemy::getDamage() {
-            std::random_device rd; // obtain a random number from hardware
-            std::mt19937 rnd(rd()); // seed the generator
-            std::uniform_int_distribution<> damage(mindamage, maxdamage);
-            return damage(rnd);
-        }
-
-        double enemy::getattackspersecond() {
-            return attackspersecond;
-        }
-
-        int enemy::getHitpoints() {
-            return hitpoints;
-        }
-
-        int enemy::getRange() {
-            return range;
-        }
-
-        double enemy::getMovement() {
-            return movement;
-        }
-
-        int enemy::getOppertunity() const {
-            return oppertunitycosts;
-        }
-
-        bool enemy::getBoss() {
-            return boss;
-        }
-
-        int enemy::lowerHitpoints(int points) {
-
-            if (hitpoints <= points) {
-                delete this;
-                return grantedXP;
-            } else {
-                hitpoints = hitpoints - points;
-            }
-            return 0;
+        bool enemy::is_boss(){
+            return m_boss;
         }
 
         enemy::~enemy() {
-
         }
 
         engine::math::box2_t enemy::get_box() const {
@@ -88,17 +45,26 @@ namespace domain {
             m_destination = destination;
         }
 
-        bool operator<(const std::shared_ptr<enemy> &s1, const std::shared_ptr<enemy> &s2) {
-
-            return s1->getOppertunity() < s2->getOppertunity();
+        void enemy::update(unsigned int elapsed_time) {
+            if(m_ai != nullptr){
+                m_ai->update(elapsed_time);
+            }
         }
 
-        const nation_ptr& enemy::get_nation() const {
-            return m_nation;
+        void enemy::set_ai(std::shared_ptr<domain::map::ai::ai> ai) {
+            m_ai = ai;
         }
 
-        void enemy::set_nation(const nation_ptr &nation) {
-            m_nation = nation;
+        void enemy::draw(drawable::draw_managers_wrapper &draw_managers, unsigned int time_elapsed) {
+            domain::combat::attacker::draw(draw_managers, time_elapsed);
+        }
+
+        void enemy::set_draw_settings(std::string file_loc, engine::math::vec2_t image_start_position) {
+            domain::combat::attacker::set_draw_settings(file_loc, image_start_position);
+        }
+
+        bool operator<(const std::shared_ptr<enemy>&  s1, const std::shared_ptr<enemy>&  s2){
+            return s1->get_oppertunity_cost() < s2->get_oppertunity_cost();
         }
 
     }

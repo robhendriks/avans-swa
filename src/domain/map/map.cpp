@@ -72,12 +72,24 @@ namespace domain {
                     // set heat for itself based on range + 1
                     p_observee->set_weight(p_observee->get_weight() + range + 1);
 
-                    // set heat for neigbours based on range
+                    // set heat for neighbours based on range
                     auto fields = get_fields_in_range(range, p_observee);
                     for(auto& field_with_range : fields)
                     {
                         field_with_range.field->set_weight(field_with_range.field->get_weight() + field_with_range.range_from_origin);
                     }
+                }
+            }
+            else if(title == "object-destroyed"){
+                int range = 4;
+                // set heat for itself based on range - 1
+                p_observee->set_weight(p_observee->get_weight() - range - 1);
+
+                // set heat for neighbours based on range
+                auto fields = get_fields_in_range(range, p_observee);
+                for(auto& field_with_range : fields)
+                {
+                    field_with_range.field->set_weight(field_with_range.field->get_weight() - field_with_range.range_from_origin);
                 }
             }
             notify_observers(this, title);
@@ -91,16 +103,16 @@ namespace domain {
 
             // in case range is 0 or smaller return a empty list
             if(range > 0){
-                // fill queue with all the neigbours from origin to make it the start point
-                // for every neigbour add it to the list
-                for(auto neighbour : origin->get_neighbors()){
+                // fill queue with all the neighbours from origin to make it the start point
+                // for every neighbour add it to the list
+                for(auto& neighbour : origin->get_neighbors()){
                     queue.push_back(neighbour);
                 }
 
                 // now that we have a start point lets go.
                 // lets do this as many times as the range and each time we go a layer deeeper!
                 for(;range >= 0; --range){
-                    // store neigbours after the queue has been finished
+                    // store neighbours after the queue has been finished
                     std::vector<std::shared_ptr<field>> next_queue;
 
                     // now go down the queue from the layer we are in now
@@ -123,7 +135,7 @@ namespace domain {
                             result.push_back(field_with_range(Qfield, range));
 
                             // add its neighbour neighbours to the next queue
-                            for(auto neigbour : Qfield->get_neighbors()){
+                            for(auto& neigbour : Qfield->get_neighbors()){
                                 next_queue.push_back(neigbour);
                             }
                         }
@@ -152,8 +164,8 @@ namespace domain {
                     auto pos = index_to_position(i);
                     float x = m_dest->min.x + (tile_width * pos.x);
                     float y = m_dest->min.y + (tile_height * pos.y);
-                    field->set_box({{x,              y},
-                                    {x + tile_width, y + tile_height}});
+                    engine::math::box2_t box = {{x, y},{x + tile_width, y + tile_height}};
+                    field->set_box(std::make_shared<engine::math::box2_t>(box));
                     field->draw(draw_managers, time_elapsed);
                 }
             }

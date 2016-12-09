@@ -20,7 +20,7 @@
 
 namespace domain {
     namespace game_level {
-        class game_level : public engine::observer::observer<domain::map::objects::dragable_field_object> {
+        class game_level : public engine::observer::observer<domain::map::objects::field_object> {
         public:
             game_level(const std::string &id, const std::string &title, const std::string &description,
                        std::shared_ptr<map::map> map, std::shared_ptr<game_stats> goal,
@@ -35,7 +35,7 @@ namespace domain {
 
             std::shared_ptr<domain::map::map> get_map();
 
-            virtual void notify(domain::map::objects::dragable_field_object *p_observee, std::string title);
+            virtual void notify(domain::map::objects::field_object *p_observee, std::string title);
 
             virtual bool is_goal_reached();
 

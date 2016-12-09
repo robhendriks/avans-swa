@@ -11,13 +11,11 @@
 namespace domain {
     namespace map {
 
-        field::field(const engine::math::vec2_t &pos)
-            : m_map{nullptr}, m_pos(pos), m_object(nullptr), m_box(nullptr) {}
+        field::field(map &map1, engine::math::vec2_t pos) : m_map(map1), m_pos(pos), m_object(nullptr), m_box(nullptr) {
+            map1.add_field(std::shared_ptr<field>(this));
+        }
 
         field::~field() {
-            if (m_box != nullptr) {
-                delete m_box;
-            }
         }
 
         /**
@@ -34,10 +32,10 @@ namespace domain {
             }
 
             // Printing the weight on the fields
-            /*draw_managers.texture_manager.load_text(std::to_string(m_weight), {254, 12, 10},
+            draw_managers.texture_manager.load_text(std::to_string(m_weight), {254, 12, 10},
                                                     *draw_managers.font_manager.get_font("roboto", 32), "heatmap_weight");
             draw_managers.texture_manager.draw("heatmap_weight", {0, 0}, this->get_box());
-            draw_managers.texture_manager.unload("heatmap_weight");*/
+            draw_managers.texture_manager.unload("heatmap_weight");
         }
         /**
          * Get the box where the field is placed on the screen
@@ -55,19 +53,17 @@ namespace domain {
          * @return bool - whether it is successfully placed or not
          */
         bool field::drop(engine::draganddrop::dragable *dragable1) {
-//            auto *object = dynamic_cast<objects::dragable_field_object*>(dragable1);
-//
-//
-//            if (object && object->can_place_on(*this)) {
-//                if (place_object(object)) {
-//                    // Remove this as dropable
-//                    m_drag_and_drop->remove_dropable(this);
-//
-//                    object->set_max_column(2);
-//                }
-//
-//                return true;
-//            }
+            auto *object = dynamic_cast<objects::dragable_field_object*>(dragable1);
+            if (object && object->can_place_on(*this)) {
+                if (place_object(object)) {
+                    // Remove this as dropable
+                    m_drag_and_drop->remove_dropable(this);
+
+                    object->set_max_column(2);
+                }
+
+                return true;
+            }
 
             return false;
         }
@@ -77,12 +73,8 @@ namespace domain {
          *
          * @param box
          */
-        void field::set_box(engine::math::box2_t box) {
-            if (m_box != nullptr) {
-                delete m_box;
-            }
-
-            m_box = new engine::math::box2_t(box);
+        void field::set_box(std::shared_ptr<engine::math::box2_t> box) {
+            m_box = box;
         }
 
         /**
@@ -90,10 +82,11 @@ namespace domain {
          *
          * @param object
          */
-        bool field::place_object(const objects::field_object_ptr &object) {
+        bool field::place_object(objects::field_object* object) {
             if (!has_object()) {
                 m_object = object;
-                m_object->set_field(shared_from_this());
+                m_object->set_field(std::shared_ptr<field>(this));
+                m_object->add_observer(this);
 
                 // notify local observers
                 notify_observers(this, "object-placed");
@@ -114,7 +107,7 @@ namespace domain {
         /**
          * @return object* - the object that is placed on this field or a nullptr when nothing is placed
          */
-        objects::field_object_ptr field::get_object() const {
+        objects::field_object *field::get_object() const {
             return m_object;
         }
 
@@ -124,7 +117,7 @@ namespace domain {
          * @return std::vector<field&>
          */
         std::vector<std::shared_ptr<field>> field::get_neighbors() const {
-            return m_map->get_neighbors(get_position());
+            return m_map.get_neighbors(get_position());
         }
 
         /**
@@ -136,20 +129,26 @@ namespace domain {
             return m_pos;
         }
 
-        map_ptr field::get_map() const {
-            return m_map;
-        }
-
-        void field::set_map(const map_ptr &map) {
-            m_map = map;
-        }
-
         long field::get_weight() const {
             return m_weight;
         }
 
         void field::set_weight(long weight) {
             m_weight = weight;
+        }
+
+        void field::notify(objects::field_object *p_observee, std::string title) {
+            if (title == "object-destroyed") {
+                // it can be that a object still is linked to this field but still needs to be removed even
+                // if it is already removed from the field itself
+                if(m_object != nullptr){
+                    notify_observers(this, title);
+                    m_object = nullptr;
+                    m_drag_and_drop->add_dropable(*this);
+                }
+            }
+
+
         }
     }
 }

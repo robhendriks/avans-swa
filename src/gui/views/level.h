@@ -19,7 +19,7 @@
 #include "../../engine/events/key_down.h"
 #include "level_goals.h"
 #include "../../events/goal_reached.h"
-
+#include "in_game_menu.h"
 
 namespace gui {
     namespace controllers {
@@ -29,7 +29,7 @@ namespace gui {
 
 namespace gui {
     namespace views {
-        class top_bar;
+        class in_game_menu;
     }
 }
 
@@ -41,7 +41,7 @@ namespace gui {
                       engine::eventbus::subscriber<events::goal_reached> {
         public:
 
-            level(top_bar &top_bar1, level_goals &goals_view, engine::audio::music_manager &music_manager,
+            level(in_game_menu &in_game_menu1, level_goals &goals_view, engine::audio::music_manager &music_manager,
                   models::main_map_model &model, engine::audio::sound_manager &sound_manager);
 
             void set_controller(controllers::main_map_controller &controller);
@@ -68,17 +68,19 @@ namespace gui {
 
             void navigate_right();
 
-            top_bar &m_top_bar;
+            in_game_menu &m_in_game_menu;
             level_goals &m_goals_view;
             engine::audio::music_manager &m_music_manager;
             models::main_map_model &m_model;
             engine::audio::sound_manager &m_sound_manager;
+            engine::graphics::texture_manager &m_texture_manager;
+            engine::graphics::color_manager &m_color_manager;
+            engine::graphics::font_manager &m_font_manager;
             std::unique_ptr<engine::math::box2_t> m_placeable_objects_box;
             std::unique_ptr<engine::math::box2_t> m_arrow_left_box;
             std::unique_ptr<engine::math::box2_t> m_arrow_right_box;
             std::unique_ptr<engine::math::box2_t> m_countdown_box;
             std::unique_ptr<engine::math::box2_t> m_pause_box;
-            std::unique_ptr<engine::math::box2_t> m_overlay_box;
             std::unique_ptr<engine::math::box2_t> m_overlay_resume_box;
             controllers::main_map_controller *m_controller;
             int m_pages;

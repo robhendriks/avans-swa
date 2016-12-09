@@ -4,8 +4,6 @@
   },
   "window": {
     "background_color": "0xFF6495ED",
-    "width": 1280,
-    "height": 720,
     "debug": true
   }
 }

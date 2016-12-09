@@ -20,7 +20,8 @@ namespace domain {
     namespace map {
         namespace objects {
             class field_object : public drawable::drawable_game_object,
-                                 public domain::game_level::game_stats_modifier{
+                                 public domain::game_level::game_stats_modifier,
+                                 public engine::observer::observee<field_object>{
             public:
                 field_object();
 

@@ -16,7 +16,7 @@ namespace engine {
 
             color4_t(float r, float g, float b, float a) : a(a), r(r), g(g), b(b) {}
 
-            color4_t(float r, float g, float b) : a(1.0f), r(g), g(g), b(b) {}
+            color4_t(float r, float g, float b) : a(255), r(g), g(g), b(b) {}
 
             color4_t(unsigned long hex) {
                 a = ((hex >> 24) & 0x000000FF);

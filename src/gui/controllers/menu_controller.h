@@ -20,6 +20,7 @@ namespace gui {
 
     namespace controllers {
         class main_map_controller;
+        class credits_controller;
     }
 }
 
