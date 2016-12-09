@@ -16,9 +16,9 @@ namespace gui {
                       models::main_map_model &model, engine::audio::sound_manager &sound_manager)
             : m_in_game_menu(in_game_menu1), m_goals_view(goals_view), m_music_manager(music_manager),
               m_model(model), m_sound_manager(sound_manager),
-              m_texture_manager(m_in_game_menu.m_top_bar.m_texture_manager),
-              m_color_manager(m_in_game_menu.m_top_bar.m_color_manager),
-              m_font_manager(m_in_game_menu.m_top_bar.m_font_manager),
+              m_texture_manager(m_in_game_menu.m_help_view.m_top_bar.m_texture_manager),
+              m_color_manager(m_in_game_menu.m_help_view.m_top_bar.m_color_manager),
+              m_font_manager(m_in_game_menu.m_help_view.m_top_bar.m_font_manager),
               m_current_page(1) {
         }
 
@@ -111,32 +111,32 @@ namespace gui {
             update_placeable_objects_page();
             // Create the box for the map
             engine::graphics::box_builder builder5({display_box.width(),
-                                                    display_box.height() - m_in_game_menu.m_top_bar.m_bar_box->height() -
+                                                    display_box.height() - m_in_game_menu.m_help_view.m_top_bar.m_bar_box->height() -
                                                     m_placeable_objects_box->height()});
-            builder5.as_left_top(m_in_game_menu.m_top_bar.m_bar_box->left_top());
+            builder5.as_left_top(m_in_game_menu.m_help_view.m_top_bar.m_bar_box->left_top());
             m_model.world->get_current_level().get_map()->set_display_box(builder5.build());
 
             // Reposition the goals box
             engine::graphics::box_builder builder6(m_goals_view.m_stats_header_box->size());
-            builder6.as_right_top(m_in_game_menu.m_top_bar.m_bar_box->right_bottom())
+            builder6.as_right_top(m_in_game_menu.m_help_view.m_top_bar.m_bar_box->right_bottom())
                 .add_margin({-80, 80});
             m_goals_view.m_stats_header_box.reset(new engine::math::box2_t(builder6.build()));
 
             if (m_model.world->get_current_level().get_max_duration() > 0) {
                 // Countdown
                 engine::graphics::box_builder builder7(m_goals_view.m_stats_header_box->size());
-                builder7.as_left_top(m_in_game_menu.m_top_bar.m_bar_box->left_bottom()).add_margin({80, 80});
+                builder7.as_left_top(m_in_game_menu.m_help_view.m_top_bar.m_bar_box->left_bottom()).add_margin({80, 80});
                 m_countdown_box.reset(new engine::math::box2_t(builder7.build()));
             }
 
             // Set the pause box
             engine::graphics::box_builder builder8(m_texture_manager.get_size("l_pause"));
-            builder8.as_left_top(m_in_game_menu.m_top_bar.m_bar_box->left_top()).add_margin({50, 0});
+            builder8.as_left_top(m_in_game_menu.m_question_mark_icon_box->right_top()).add_margin({5, 0});
             m_pause_box.reset(new engine::math::box2_t(builder8.build()));
 
             // Set the overlay resume box
-            engine::graphics::box_builder builder10(m_in_game_menu.m_top_bar.m_texture_manager.get_size("l_play_large"));
-            builder10.to_center(*m_in_game_menu.m_overlay_box);
+            engine::graphics::box_builder builder10(m_in_game_menu.m_help_view.m_top_bar.m_texture_manager.get_size("l_play_large"));
+            builder10.to_center(*m_in_game_menu.m_help_view.m_overlay_box);
             m_overlay_resume_box.reset(new engine::math::box2_t(builder10.build()));
         }
 
@@ -186,7 +186,7 @@ namespace gui {
             m_goals_view.draw(time_elapsed, display_box);
 
             // Draw the map
-            current_level.get_map()->draw(m_in_game_menu.m_top_bar.m_draw_managers, time_elapsed);
+            current_level.get_map()->draw(m_in_game_menu.m_help_view.m_top_bar.m_draw_managers, time_elapsed);
 
             // Draw the arrows
             float left_arrow_y = (m_current_page == 1 ? 128 : 0);
@@ -196,7 +196,7 @@ namespace gui {
 
             // Draw the placeable objects
             for (auto &obj : current_level.get_placeable_objects()) {
-                obj->draw(m_in_game_menu.m_top_bar.m_draw_managers, time_elapsed);
+                obj->draw(m_in_game_menu.m_help_view.m_top_bar.m_draw_managers, time_elapsed);
             }
 
             //Draw the resources
@@ -232,12 +232,12 @@ namespace gui {
 
             // Draw enemies
             for(auto &enemy : current_level.get_enemies_in_lvl()) {
-                enemy->draw(m_in_game_menu.m_top_bar.m_draw_managers, time_elapsed);
+                enemy->draw(m_in_game_menu.m_help_view.m_top_bar.m_draw_managers, time_elapsed);
             }
 
             // Draw overflow on pause
             if (m_model.paused && !m_in_game_menu.m_show) {
-                m_color_manager.draw({0, 0, 0, 180}, *m_in_game_menu.m_overlay_box);
+                m_color_manager.draw({0, 0, 0, 180}, *m_in_game_menu.m_help_view.m_overlay_box);
 
                 // Draw resume btn in the center of the overlay
                 m_texture_manager.draw("l_play_large", *m_overlay_resume_box);
