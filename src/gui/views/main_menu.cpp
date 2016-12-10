@@ -54,9 +54,14 @@ namespace gui {
             m_logo_box.reset(new engine::math::box2_t(builder1.build()));
 
             auto menu_btn_size = engine::math::vec2_t({380, 90});
+            auto menu_buttons_space = display_box.max.y - (m_logo_box->max.y + 50);
+            auto y_margin_between_buttons = menu_buttons_space / 4 - menu_btn_size.y;
+            if (y_margin_between_buttons > 50) y_margin_between_buttons = 50; // Max of 50 px
+            auto logo_margin = 50 + ((menu_buttons_space - (menu_btn_size.y * 4 + 4 * y_margin_between_buttons)) / 2);
+
             // Create the play btn box
             engine::graphics::box_builder builder2(menu_btn_size);
-            builder2.as_left_top(m_logo_box->left_bottom()).add_margin({0, 100})
+            builder2.as_left_top(m_logo_box->left_bottom()).add_margin({0, logo_margin})
                 .center_horizontal(m_logo_box->min.x, m_logo_box->max.x);
             m_play_btn_box.reset(new engine::math::box2_t(builder2.build()));
 
@@ -66,7 +71,7 @@ namespace gui {
             m_play_text_box.reset(new engine::math::box2_t(builder3.build()));
 
             // Create the load btn box
-            builder2.add_margin({0, menu_btn_size.y + 50});
+            builder2.add_margin({0, menu_btn_size.y + y_margin_between_buttons});
             m_load_btn_box.reset(new engine::math::box2_t(builder2.build()));
 
             // Create the load text box
@@ -75,7 +80,7 @@ namespace gui {
             m_load_text_box.reset(new engine::math::box2_t(builder4.build()));
 
             // Create the help btn box
-            builder2.add_margin({0, menu_btn_size.y + 50});
+            builder2.add_margin({0, menu_btn_size.y + y_margin_between_buttons});
             m_help_btn_box.reset(new engine::math::box2_t(builder2.build()));
 
             // Create the help text box
@@ -84,7 +89,7 @@ namespace gui {
             m_help_text_box.reset(new engine::math::box2_t(builder5.build()));
 
             // Create the credits btn box
-            builder2.add_margin({0, menu_btn_size.y + 50});
+            builder2.add_margin({0, menu_btn_size.y +y_margin_between_buttons});
             m_credits_btn_box.reset(new engine::math::box2_t(builder2.build()));
 
             // Create the credits text box
