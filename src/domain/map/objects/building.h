@@ -21,7 +21,7 @@ namespace domain {
 
                 building(std::shared_ptr<field> field1, int hitpoints = 0);
 
-                building(const building &obj, int hitpoints = 0);
+                building(const building &obj);
 
                 dragable_field_object *clone() const;
 

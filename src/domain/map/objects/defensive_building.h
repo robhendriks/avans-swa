@@ -18,9 +18,7 @@ namespace domain {
 
                 defensive_building(std::shared_ptr<field> field1, int _range, int _min_dmg, int _max_dmg);
 
-                defensive_building(const building &obj, int _range, int _min_dmg, int _max_dmg);
-
-
+                defensive_building(const defensive_building &obj);
 
                 int get_min_dmg();
                 int get_max_dmg();

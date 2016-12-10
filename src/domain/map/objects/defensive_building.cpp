@@ -7,9 +7,6 @@
 #ifndef CITY_DEFENCE_BUILDING_CPP
 #define CITY_DEFENCE_BUILDING_CPP
 
-#include "building.h"
-#include "road.h"
-
 namespace domain {
     namespace map {
         namespace objects {
@@ -30,11 +27,11 @@ namespace domain {
                 max_dmg = _max_dmg;
             }
 
-            defensive_building::defensive_building(const building &obj, int _range, int _min_dmg, int _max_dmg)
+            defensive_building::defensive_building(const defensive_building &obj)
                 : building(obj) {
-                range = _range;
-                min_dmg = _min_dmg;
-                max_dmg = _max_dmg;
+                range = obj.range;
+                min_dmg = obj.min_dmg;
+                max_dmg = obj.max_dmg;
             }
 
             int defensive_building::get_min_dmg() {

@@ -19,7 +19,7 @@ namespace domain {
 
                 economic_building(std::shared_ptr<field> field1, std::shared_ptr<domain::resources::resource> resource);
 
-                economic_building(const building &obj, std::shared_ptr<domain::resources::resource> resource);
+                economic_building(const economic_building &obj);
 
 
                 std::shared_ptr<domain::resources::resource> get_produced_resources();
