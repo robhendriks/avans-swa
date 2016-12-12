@@ -97,6 +97,9 @@ namespace gui {
                 set_settings_wave_management_service(m_model.world->get_current_level());
                 show();
             } else {
+                // this saves the stats of the last lvl and sets current to nullptr
+                m_model.world->set_current_level(nullptr);
+
                 m_menu_controller->show();
             }
         }

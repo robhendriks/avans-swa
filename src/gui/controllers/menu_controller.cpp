@@ -25,7 +25,6 @@ namespace gui {
 
         void menu_controller::play() {
             auto first_level = m_level_loader.load(0);
-
             m_main_map_controller.set_game_world(std::unique_ptr<domain::gameworld::game_world>(new domain::gameworld::game_world(std::move(first_level))));
             m_main_map_controller.show();
         }

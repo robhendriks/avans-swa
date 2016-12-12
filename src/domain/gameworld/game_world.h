@@ -13,6 +13,7 @@ namespace domain {
             game_level::game_level& get_current_level();
             // tranfer_stats of current lvl to m_all_stats before setting new current lvl
             void set_current_level(std::unique_ptr<game_level::game_level> game_lvl, bool tranfer_stats = true);
+
             // all lvl's or just the current one
             game_level::game_stats get_stats(bool all = false);
             ~game_world();
