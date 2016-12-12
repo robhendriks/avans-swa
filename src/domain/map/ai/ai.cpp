@@ -12,10 +12,7 @@
 namespace domain {
     namespace map {
         namespace ai {
-            ai::ai() {
-                m_unit = nullptr;
-                m_map = nullptr;
-
+            ai::ai() : m_current_field(nullptr), m_map(nullptr), m_unit(nullptr) {
                 std::shared_ptr<domain::map::ai::states::move_state> move = std::make_shared<domain::map::ai::states::move_state>(domain::map::ai::states::move_state());
                 std::shared_ptr<domain::map::ai::states::search_and_destroy_state> attack = std::make_shared<domain::map::ai::states::search_and_destroy_state>(domain::map::ai::states::search_and_destroy_state());
                 move->set_next_state(attack);

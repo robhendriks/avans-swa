@@ -20,7 +20,6 @@ namespace domain {
             enemy(std::string name, int min_damage, int max_damage,
                   double attacks_per_second, int hitpoints, int granted_xp, int range,
                   int movement, bool boss, std::shared_ptr<nation> nation, int oppertunity_costs);
-            enemy(std::string name, int oppertunity_costs, bool boss);
             //Returns nationname + unitname
             std::string get_name();
             int get_oppertunity_cost()const;
@@ -28,7 +27,6 @@ namespace domain {
             virtual void set_box(std::shared_ptr<engine::math::box2_t> destination);
             virtual engine::math::box2_t get_box() const;
             void update(unsigned int elapsed_time);
-            void set_ai(std::shared_ptr<domain::map::ai::ai> ai);
             virtual void draw(drawable::draw_managers_wrapper &draw_managers, unsigned int time_elapsed);
             virtual void set_draw_settings(std::string file_loc, engine::math::vec2_t image_start_position = {0, 0});
 
@@ -39,7 +37,6 @@ namespace domain {
             //Cost for using this enemy; to generate proper waves.
             int m_oppertunity_cost;
             bool m_boss;
-            std::shared_ptr<domain::map::ai::ai> m_ai;
             std::shared_ptr<nation> m_nation;
         };
 

@@ -38,11 +38,8 @@ namespace domain {
                 std::shared_ptr<field> m_current_field;
                 std::shared_ptr<domain::map::map> m_map;
                 std::shared_ptr<domain::combat::attacker> m_unit;
-
                 std::function<domain::combat::defender* (domain::map::field* origin, domain::map::ai::ai* ai)> m_new_target_func;
-
                 std::shared_ptr<states::state> m_state;
-
                 std::shared_ptr<field> get_spawn_point();
             };
     }

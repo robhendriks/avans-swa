@@ -110,8 +110,6 @@ namespace gui {
         }
 
         void main_menu::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
-            m_help_view.m_top_bar.m_texture_manager.draw("background", display_box);
-
             // Draw the logo
             m_help_view.m_top_bar.m_texture_manager.draw("logo", *m_logo_box);
 

@@ -78,7 +78,6 @@ namespace services {
 
                     if (m_ai != nullptr) {
                         domain::map::ai::ai clone = m_ai->clone();
-                        clone.set_unit(e);
                         e->set_ai(std::make_shared<domain::map::ai::ai>(clone));
                     }
 

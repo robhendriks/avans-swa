@@ -11,9 +11,7 @@ namespace domain {
     namespace map {
         namespace ai {
             namespace states {
-                search_and_destroy_state::search_and_destroy_state() {
-                    m_current_target = nullptr;
-                }
+                search_and_destroy_state::search_and_destroy_state() : m_current_target(nullptr) { }
 
                 void search_and_destroy_state::update(ai *ai, unsigned int elapsed_time) {
                     // step 1: check if we have a target atm and if we can attack at all
@@ -22,8 +20,6 @@ namespace domain {
                         m_current_target != nullptr) {
                         m_last_attack_time = elapsed_time;
                         // step 1.1 attack and unset if target is destroyed
-                        // TODO this needs to change to target now we know its always building
-                        // TODO right now problem is that field object has no hp but 'target' does
                         SDL_Log("%s %d", "hp before   : ", m_current_target->get_hp());
                         SDL_Log("%s %d", "elapsed time: ", elapsed_time);
                         auto current_hp = m_current_target->lower_hitpoints(
@@ -40,8 +36,8 @@ namespace domain {
                         m_current_target = ai->get_new_target_func()(ai->get_current_field().get(), ai);
                     }
 
-                    // if there is no target then lets go to next state
-                    if(m_current_target == nullptr)
+                    // if there is no target and it can move go to next state
+                    if(m_current_target == nullptr && ai->get_unit()->get_movement() != 0)
                         ai->set_state(this->get_next_state());
                 }
             }

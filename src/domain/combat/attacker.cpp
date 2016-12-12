@@ -7,9 +7,7 @@
 namespace domain {
     namespace combat {
         attacker::attacker(int min_damage, int max_damage, double attackspeed, int range, int movement) : m_min_damage(min_damage),
-        m_max_damage(max_damage), m_attack_speed(attackspeed), m_range(range), m_movement(movement){
-
-        }
+        m_max_damage(max_damage), m_attack_speed(attackspeed), m_range(range), m_movement(movement){}
 
         int attacker::get_damage() {
             std::random_device rd; // obtain a random number from hardware

@@ -12,12 +12,13 @@ namespace domain {
         namespace ai {
             namespace states {
 
-                move_state::move_state() {
-                    m_next_field = nullptr;
-                    m_last_field = nullptr;
-                }
+                move_state::move_state() : m_last_field(nullptr), m_next_field(nullptr){}
 
                 void move_state::update(domain::map::ai::ai *ai, unsigned int elapsed_time) {
+                    // in case the unit can never get to the location it wants to go to then move to next state
+                    if(ai->get_unit()->get_movement() == 0)
+                        ai->set_state(get_next_state());
+
                     // step 3.1 check if we are in transition
                     if (m_next_field != nullptr) {
                         // step 3.1.1 check if we arrived at the target location or we have to choose a new target
