@@ -15,29 +15,28 @@ namespace domain {
             m_name(name), m_max_duration(duration), m_map(map), m_goal(goal), m_start_time(0),
             m_drag_and_drop(drag_and_drop), m_paused(true) {
 
+            m_stats = std::shared_ptr<game_stats>(new game_stats());
+
             // Call pause to start the level....
             pause();
 
-            // Add all empty fields as dropable
-            for (auto &field : m_map->get_empty_fields()) {
-                m_drag_and_drop.add_dropable(*field);
-            }
+            // Observe all fields, update the stats, add the drag and drop instance and make the empty fields dropable
+            for (auto &field : m_map->get_fields()) {
+                if (field) {
+                    field->add_observer(this);
 
-            // Make sure all fields not about the drag and drop instance
-            for (auto &field : m_map->get_fields_with_objects()) {
-                field->set_drag_and_drop(&m_drag_and_drop);
+                    if (field->has_object()) {
+                        field->set_drag_and_drop(&m_drag_and_drop);
+                        field->get_object()->update_game_stats(*m_stats, "object-placed");
+                    } else {
+                        m_drag_and_drop.add_dropable(*field);
+                    }
+                }
             }
-
-            m_stats = std::shared_ptr<game_stats>(new game_stats());
 
             // Set all goals as not reached
             for (auto &g : m_goal->get()) {
-                m_not_reached_goals.push_back(g.first);
-            }
-
-            // Update the stats with the placed objects on the map
-            for(auto field : m_map->get_fields_with_objects()){
-                field->get_object()->update_game_stats(*m_stats);
+                m_reached_goals[g.first] = false;
             }
 
             // Check if there are already some goals reached
@@ -107,8 +106,6 @@ namespace domain {
         }
 
         void game_level::add_placeable_object(map::objects::dragable_field_object &obj) {
-            // Observe the placeable field
-            obj.add_observer(this);
             // Add as dragable
             m_drag_and_drop.add_dragable(obj);
 
@@ -116,9 +113,6 @@ namespace domain {
         }
 
         void game_level::remove_placeable_object(map::objects::dragable_field_object &obj) {
-            // Stop observing
-            obj.remove_observer(this);
-
             // Erase from vector
             m_placeable_objects.erase(std::remove(m_placeable_objects.begin(), m_placeable_objects.end(), &obj), m_placeable_objects.end());
         };
@@ -142,42 +136,48 @@ namespace domain {
          * @param p_observee
          * @param title
          */
-        void game_level::notify(domain::map::objects::field_object *p_observee, std::string title) {
-            if (title == "object-dropped") {
-                // only a dragable field object can throw this event
-                auto object = dynamic_cast<domain::map::objects::dragable_field_object*>(p_observee);
+        void game_level::notify(domain::map::field *p_observee, std::string title) {
+            if (title == "object-placed") {
+                // Check if it was a dragable
+                auto object = dynamic_cast<domain::map::objects::dragable_field_object*>(p_observee->get_object());
 
-                // Remove from placeable_objects
-                remove_placeable_object(*object);
+                if (object) {
+                    // Remove from placeable_objects
+                    remove_placeable_object(*object);
 
-                // Create a copy of the placed field
-                auto *copy = object->clone();
-                add_placeable_object(*copy);
+                    // Create a copy of the placed field
+                    auto *copy = object->clone();
+                    add_placeable_object(*copy);
 
-                // Immediately start with dragging
-                m_drag_and_drop.set_dragging(*copy);
-
-                // Update the stats
-                p_observee->update_game_stats(*m_stats);
-
-                check_goals_reached();
+                    // Immediately start with dragging
+                    m_drag_and_drop.set_next_dragging(*copy);
+                }
             }
+
+            // Update the stats
+            p_observee->get_object()->update_game_stats(*m_stats, title);
+
+            check_goals_reached();
         }
 
         void game_level::check_goals_reached() {
-            for (auto it = m_not_reached_goals.begin(); it != m_not_reached_goals.end();) {
+            for (auto it = m_reached_goals.begin(); it != m_reached_goals.end(); it++) {
+                // Check if the goal is reached
+                if (m_stats->get_count(it->first) >= m_goal->get_count(it->first)) {
+                    // Reached
+                    if (it->second) {
+                        // First time reached, fire the event
+                        auto *event = new events::goal_reached(it->first);
+                        engine::eventbus::eventbus::get_instance().fire(event);
+                        delete event;
 
-                // Check if the goal is now reached
-                if (m_stats->get_count(*it) >= m_goal->get_count(*it)) {
-                    // Reached remove from arrow and fire the event
-                    auto *event = new events::goal_reached(*it);
-                    engine::eventbus::eventbus::get_instance().fire(event);
-                    delete event;
-
-                    // Erase from vector
-                    it = m_not_reached_goals.erase(it);
+                        m_reached_goals[it->first] = true;
+                    }
                 } else {
-                    ++it;
+                    // Not reached
+                    if (it->second) {
+                        m_reached_goals[it->first] = false;
+                    }
                 }
             }
         }
@@ -245,7 +245,8 @@ namespace domain {
         void game_level::set_resources(std::vector<std::shared_ptr<domain::resources::resource>> resources){
             m_resources = resources;
         }
-        void game_level::update(){
+
+        void game_level::update() {
             m_map->update_objects(this);
         }
 

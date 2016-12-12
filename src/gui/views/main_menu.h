@@ -9,7 +9,7 @@
 #include "../../engine/events/mouse_motion.h"
 #include "../../engine/events/key_down.h"
 #include "base_view.h"
-#include "top_bar.h"
+#include "help.h"
 
 namespace gui {
     namespace controllers {
@@ -19,7 +19,7 @@ namespace gui {
 
 namespace gui {
     namespace views {
-        class top_bar;
+        class help;
     }
 }
 
@@ -30,7 +30,7 @@ namespace gui {
                           engine::eventbus::subscriber<engine::events::mouse_motion>,
                           engine::eventbus::subscriber<engine::events::key_down> {
         public:
-            main_menu(top_bar &top_bar1, engine::audio::music_manager &music_manager, engine::audio::sound_manager &sound_manager);
+            main_menu(help &help_view, engine::audio::music_manager &music_manager, engine::audio::sound_manager &sound_manager);
 
             void before();
 
@@ -53,12 +53,14 @@ namespace gui {
 
             void menu_btn_click(engine::math::vec2_t mouse_pos);
 
-            top_bar &m_top_bar;
+            help &m_help_view;
             engine::audio::music_manager &m_music_manager;
             engine::audio::sound_manager &m_sound_manager;
             std::unique_ptr<engine::math::box2_t> m_logo_box;
             std::unique_ptr<engine::math::box2_t> m_play_btn_box;
             std::unique_ptr<engine::math::box2_t> m_play_text_box;
+            std::unique_ptr<engine::math::box2_t> m_help_btn_box;
+            std::unique_ptr<engine::math::box2_t> m_help_text_box;
             std::unique_ptr<engine::math::box2_t> m_load_btn_box;
             std::unique_ptr<engine::math::box2_t> m_load_text_box;
             std::unique_ptr<engine::math::box2_t> m_credits_btn_box;

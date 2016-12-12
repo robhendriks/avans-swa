@@ -12,7 +12,7 @@ namespace domain {
 
             building::building(std::shared_ptr<field> field1, int hitpoints) : dragable_field_object(field1), domain::combat::defender(hitpoints, 0) {}
 
-            building::building(const building &obj, int hitpoints) : dragable_field_object(obj), domain::combat::defender(hitpoints, 0) {}
+            building::building(const building &obj) : dragable_field_object(obj), domain::combat::defender(obj) {}
 
             /**
              * Make sure a building can only be placed next to a road object
@@ -48,9 +48,12 @@ namespace domain {
 
             }
 
-
-            void building::update_game_stats(domain::game_level::game_stats &game_stats1) {
-                game_stats1.increase("buildings");
+            void building::update_game_stats(domain::game_level::game_stats &game_stats1, std::string action) {
+                if (action == "object-placed") {
+                    game_stats1.increase("buildings");
+                } else if (action == "object-destroyed") {
+                    game_stats1.decrease("buildings");
+                }
             }
 
             building::building(const engine::math::box2_t &box, const std::string &id, int hitpoints,
@@ -63,12 +66,10 @@ namespace domain {
             int building::lower_hitpoints(int by) {
                 int result = domain::combat::defender::lower_hitpoints(by);
                 if (result == 0) {
-                    notify_observers(this, "object-destroyed");
+                    m_field->place_object(nullptr);
                 }
                 return result;
             }
-
-
 
             void building::draw(drawable::draw_managers_wrapper &draw_managers, unsigned int time_elapsed) {
                 dragable_field_object::draw(draw_managers, time_elapsed);

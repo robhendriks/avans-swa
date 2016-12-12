@@ -19,9 +19,7 @@ namespace domain {
 namespace domain {
     namespace map {
         namespace objects {
-            class field_object : public drawable::drawable_game_object,
-                                 public domain::game_level::game_stats_modifier,
-                                 public engine::observer::observee<field_object>{
+            class field_object : public drawable::drawable_game_object {
             public:
                 field_object();
 
@@ -35,7 +33,7 @@ namespace domain {
 
                 std::shared_ptr<field> get_field() const;
 
-                virtual void update_game_stats(domain::game_level::game_stats &game_stats1) = 0;
+                virtual void update_game_stats(domain::game_level::game_stats &game_stats1, std::string action) = 0;
 
                 virtual ~field_object() = default;
 

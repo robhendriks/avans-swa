@@ -149,7 +149,6 @@ set(SOURCES src/main.cpp
     src/domain/map/objects/defensive_building.cpp
     src/engine/events/key_down.cpp src/gui/views/level_goals.cpp
     src/gui/views/level_goals.h src/gui/models/level_goals_model.h
-    src/domain/game_level/game_stats_modifier.h
     src/events/goal_reached.cpp
     src/events/goal_reached.h
     src/engine/events/engine_state_changed.cpp
@@ -168,7 +167,9 @@ set(SOURCES src/main.cpp
     src/domain/combat/attacker.h
     src/domain/combat/defender.cpp
     src/domain/combat/defender.h
-        src/domain/combat/ai_controlled.cpp src/domain/combat/ai_controlled.h)
+    src/gui/views/help.cpp src/gui/views/help.h
+    src/domain/combat/ai_controlled.cpp src/domain/combat/ai_controlled.h
+    )
 
 include_directories(third_party/json/src
     third_party/di-cpp14/include

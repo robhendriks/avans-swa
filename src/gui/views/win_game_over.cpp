@@ -12,9 +12,9 @@ namespace gui {
         win_game_over::win_game_over(in_game_menu &in_game_menu1, level_goals &goals_view, models::transition_level_model &model,
             engine::audio::sound_manager &sound_manager) :
                 m_in_game_menu(in_game_menu1), m_goals_view(goals_view), m_controller(nullptr), m_model(model),
-                m_sound_manager(sound_manager), m_texture_manager(m_in_game_menu.m_top_bar.m_texture_manager),
-                m_color_manager(m_in_game_menu.m_top_bar.m_color_manager),
-                m_font_manager(m_in_game_menu.m_top_bar.m_font_manager) {
+                m_sound_manager(sound_manager), m_texture_manager(m_in_game_menu.m_help_view.m_top_bar.m_texture_manager),
+                m_color_manager(m_in_game_menu.m_help_view.m_top_bar.m_color_manager),
+                m_font_manager(m_in_game_menu.m_help_view.m_top_bar.m_font_manager) {
 
         }
 
@@ -55,8 +55,8 @@ namespace gui {
 
             // Create title box
             engine::graphics::box_builder builder1(m_texture_manager.get_size("w_title"));
-            builder1.as_left_top(m_in_game_menu.m_top_bar.m_bar_box->left_bottom()).add_margin({0, 40})
-                .center_horizontal(m_in_game_menu.m_top_bar.m_bar_box->min.x, m_in_game_menu.m_top_bar.m_bar_box->max.x);
+            builder1.as_left_top(m_in_game_menu.m_help_view.m_top_bar.m_bar_box->left_bottom()).add_margin({0, 40})
+                .center_horizontal(m_in_game_menu.m_help_view.m_top_bar.m_bar_box->min.x, m_in_game_menu.m_help_view.m_top_bar.m_bar_box->max.x);
             m_title_box.reset(new engine::math::box2_t(builder1.build()));
 
             // Create the continue box

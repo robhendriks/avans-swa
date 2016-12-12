@@ -8,7 +8,6 @@
 #include <memory>
 #include <vector>
 #include <map>
-#include "game_stats_modifier.h"
 
 namespace domain {
     namespace game_level {

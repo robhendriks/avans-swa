@@ -8,17 +8,15 @@
 #include <memory>
 #include "string"
 #include "game_stats.h"
-#include "../drawable/abstract_drawable_game_object.h"
 #include "../map/map.h"
-#include "../../engine/events/game_tick.h"
 #include "../nations/enemy.h"
-#include "../map/objects/dragable_field_object.h"
 #include "../resources/resource.h"
+#include "../map/objects/dragable_field_object.h"
 
 
 namespace domain {
     namespace game_level {
-        class game_level : public engine::observer::observer<domain::map::objects::field_object> {
+        class game_level : public engine::observer::observer<domain::map::field> {
         public:
             game_level(std::string name, std::shared_ptr<map::map> map, std::shared_ptr<game_stats> goal,
                        std::shared_ptr<domain::nations::nation> _enemies,
@@ -28,7 +26,7 @@ namespace domain {
 
             std::shared_ptr<domain::map::map> get_map();
 
-            virtual void notify(domain::map::objects::field_object *p_observee, std::string title);
+            virtual void notify(domain::map::field *p_observee, std::string title);
 
             virtual bool is_goal_reached();
 
@@ -99,7 +97,8 @@ namespace domain {
         private:
             void check_goals_reached();
             int m_id = 0;
-            std::vector<std::string> m_not_reached_goals;
+
+            std::map<std::string, bool> m_reached_goals;
 
             std::string m_name;
             long m_max_duration;

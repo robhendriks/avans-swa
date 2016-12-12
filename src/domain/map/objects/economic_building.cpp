@@ -7,9 +7,6 @@
 #ifndef CITY_DEFENCE_BUILDING_CPP
 #define CITY_DEFENCE_BUILDING_CPP
 
-#include "building.h"
-#include "road.h"
-
 namespace domain {
     namespace map {
         namespace objects {
@@ -28,10 +25,8 @@ namespace domain {
                 produced_resources = resource;
             }
 
-            economic_building::economic_building(const building &obj,
-                                                 std::shared_ptr<domain::resources::resource> resource) : building(
-                obj) {
-                produced_resources = resource;
+            economic_building::economic_building(const economic_building &obj) : building(obj) {
+                produced_resources = obj.produced_resources;
             }
 
             std::shared_ptr<domain::resources::resource> economic_building::get_produced_resources() {

@@ -299,6 +299,10 @@ namespace domain {
             return fields;
         }
 
+        std::vector<std::shared_ptr<field>> map::get_fields() const {
+            return m_fields;
+        }
+
         void map::update_objects(domain::game_level::game_level *game_level) {
             for (auto &field : m_fields) {
                 //Check if the field has an object attached

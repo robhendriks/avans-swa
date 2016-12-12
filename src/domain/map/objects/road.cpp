@@ -22,8 +22,12 @@ namespace domain {
                 return new road(*this);
             }
 
-            void road::update_game_stats(domain::game_level::game_stats &game_stats1) {
-                game_stats1.increase("roads");
+            void road::update_game_stats(domain::game_level::game_stats &game_stats1, std::string action) {
+                if (action == "object-placed") {
+                    game_stats1.increase("roads");
+                } else if (action == "object-destroyed") {
+                    game_stats1.decrease("roads");
+                }
             }
         }
     }
