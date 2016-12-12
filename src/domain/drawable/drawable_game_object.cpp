@@ -56,7 +56,15 @@ namespace domain {
         }
 
         void drawable_game_object::draw_object(engine::graphics::texture_manager &texture_manager) {
-            texture_manager.draw(m_file_loc, *m_image_start_position, get_box());
+            if(m_saturated){
+                SDL_SetTextureColorMod(m_texture,255, 0, 0);
+            }
+
+            texture_manager.draw(m_texture, *m_image_start_position, get_box());
+
+            if(m_saturated){
+                SDL_SetTextureColorMod(m_texture,255,255,255);
+            }
         }
 
         void drawable_game_object::animation(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed) {
@@ -114,6 +122,14 @@ namespace domain {
             m_current_row = row;
             // reset animation for new row
             m_current_column = 0;
+        }
+
+        void drawable_game_object::set_saturated(bool on) {
+            m_saturated = on;
+        }
+
+        bool drawable_game_object::get_saturated() {
+            return m_saturated;
         }
     }
 }
