@@ -3,8 +3,6 @@
 //
 
 #include "main_map_controller.h"
-#include "../controllers/menu_controller.h"
-#include "../../domain/map/objects/building.h"
 
 namespace gui {
     namespace controllers {
@@ -12,10 +10,11 @@ namespace gui {
                                                  views::win_game_over &transition_view, models::main_map_model &model,
                                                  models::transition_level_model &transition_model,
                                                  models::level_goals_model &level_goals_model, game &game1,
-                                                 services::wave::wave_management &wave_management) :
+                                                 services::wave::wave_management &wave_management,
+                                                 services::level_loader::base_level_loader& level_loader):
             base_controller(game1), m_view(view), m_trans_view(transition_view), m_engine(engine), m_model(model),
             m_trans_model(transition_model), m_level_goals_model(level_goals_model),
-            m_wave_management_service(wave_management) {
+            m_wave_management_service(wave_management), m_level_loader(level_loader) {
             m_view.set_controller(*this);
             m_trans_view.set_controller(*this);
 
@@ -36,8 +35,7 @@ namespace gui {
 
                 m_trans_model.duration = m_engine.get_time_elapsed() - lvl.get_start_time();
                 m_trans_model.result = !lvl.is_game_over(m_engine.get_time_elapsed());
-                m_trans_model.next_lvl_exists = m_model.world->has_next_level();
-
+                m_trans_model.next_lvl_exists = m_level_loader.get_level_count() > m_model.world->get_current_level().get_id() + 1;
                 view(m_trans_view);
             } else {
                 m_model.paused = false;
@@ -87,15 +85,14 @@ namespace gui {
             set_settings_wave_management_service(lvl);
         }
 
-        domain::gameworld::game_world main_map_controller::get_game_world() {
-            return *m_model.world;
-        }
-
         void main_map_controller::next_lvl() {
             m_wave_management_service.reset();
 
-            if (m_model.world->has_next_level()) {
-                m_model.world->next_level();
+            auto current_level_id = m_model.world->get_current_level().get_id();
+            // count = from 1 and id = from 0 so + 1
+            if ( m_level_loader.get_level_count() > current_level_id + 1) {
+                m_model.world->set_current_level(m_level_loader.load(current_level_id + 1));
+
                 // set wave service values to next lvl
                 set_settings_wave_management_service(m_model.world->get_current_level());
                 show();

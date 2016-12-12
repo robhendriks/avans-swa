@@ -16,6 +16,7 @@
 #include "../views/win_game_over.h"
 #include "menu_controller.h"
 #include "../../services/wave/wave_management.h"
+#include "../../services/level_loader/base_level_loader.h"
 
 namespace gui {
     namespace views {
@@ -36,15 +37,14 @@ namespace gui {
             main_map_controller(views::level &view, engine::engine &engine, views::win_game_over &transition_view,
                                 models::main_map_model &model, models::transition_level_model &transition_model,
                                 models::level_goals_model &level_goals_model,
-                                game &game1, services::wave::wave_management &wave_management);
+                                game &game1, services::wave::wave_management &wave_management,
+                                services::level_loader::base_level_loader &level_loader);
 
             void show();
 
             void set_game_world(std::unique_ptr<domain::gameworld::game_world> &&game_world);
 
             void set_menu_controller(std::shared_ptr<gui::controllers::menu_controller> menu_controller);
-
-            domain::gameworld::game_world get_game_world();
 
             void next_lvl();
 
@@ -65,6 +65,7 @@ namespace gui {
             models::transition_level_model &m_trans_model;
             models::level_goals_model &m_level_goals_model;
             services::wave::wave_management &m_wave_management_service;
+            services::level_loader::base_level_loader& m_level_loader;
             unsigned int m_previous_time;
 
             // set values of the wave_management_service

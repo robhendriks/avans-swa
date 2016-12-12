@@ -17,9 +17,9 @@ namespace services {
         }
 
 
-        std::unique_ptr<domain::game_level::game_level> json_level_loader::load() {
+        std::unique_ptr<domain::game_level::game_level> json_level_loader::load(int id) {
             //load_level needs te change in the future
-            int load_level_nr = 0;
+            id = 0;
 
             //load nations if not loaded yet.
             if (this->vec_nations.empty()) {
@@ -45,7 +45,7 @@ namespace services {
             if(vec_levels.empty()){
                 json lvls = m_root["lvls"];
                 if (lvls.is_array()) {
-                    vec_levels.push_back(load_all_levels(lvls[load_level_nr]));
+                    vec_levels.push_back(load_all_levels(lvls[0]));
                 }
             }
 
@@ -54,7 +54,7 @@ namespace services {
             auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats());
             goal->set_counter("buildings", 5);
             auto game_level = std::unique_ptr<domain::game_level::game_level>(
-                new domain::game_level::game_level("level", vec_levels[load_level_nr], goal, vec_nations.front(),
+                new domain::game_level::game_level("level", vec_levels[0], goal, vec_nations.front(),
                                                    *d_a_d,
                                                    125000));
             for (auto building : vec_building) {
@@ -346,6 +346,14 @@ namespace services {
                 throw;
             }
             return map;
+        }
+
+        int json_level_loader::get_level_count() {
+            if(vec_levels.empty()){
+                json lvls = m_root["lvls"];
+            }
+
+            return vec_levels.size();
         }
 
     }

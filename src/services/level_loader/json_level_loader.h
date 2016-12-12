@@ -23,8 +23,8 @@ namespace services {
         class json_level_loader : public base_level_loader {
         public:
             json_level_loader(json root);
-
-            std::unique_ptr<domain::game_level::game_level> load();
+            int get_level_count();
+            std::unique_ptr<domain::game_level::game_level> load(int id);
 
         private:
             std::shared_ptr<domain::map::map> load_all_levels(std::string url);

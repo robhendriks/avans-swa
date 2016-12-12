@@ -4,38 +4,31 @@
 
 namespace domain {
     namespace gameworld{
-        game_world::game_world(std::vector<std::unique_ptr<game_level::game_level>>& game_levels) : m_levels(game_levels) {
-           m_current_lvl = 0;
-        }
+        game_world::game_world(std::unique_ptr<game_level::game_level> game_level) : m_level(std::move(game_level)) {}
 
         game_world::~game_world() {}
 
         game_level::game_level &game_world::get_current_level()  {
-            return *m_levels.at(m_current_lvl).get();
+            return *m_level;
         }
 
-        game_level::game_level &game_world::reset_level() {
-            m_current_lvl = 0;
-            return get_current_level();
+        void game_world::set_current_level(std::unique_ptr<game_level::game_level> game_lvl, bool tranfer_stats){
+            if(tranfer_stats) m_all_stats.push_back(m_level->get_stats());
+            m_level = std::move(game_lvl);
         }
 
-        game_level::game_level &game_world::next_level() {
-            m_current_lvl++;
-            return get_current_level();
-        }
+        game_level::game_stats game_world::get_stats(bool all) {
+            game_level::game_stats stat;
 
-        bool game_world::has_next_level() {
-            return m_current_lvl + 1 < m_levels.size();
-        }
-
-        game_level::game_stats game_world::get_stats() {
-            game_level::game_stats stats;
-
-            for(auto &l: m_levels){
-                stats = stats + *l->get_stats();
+            if(all){
+                for(auto lvl_stat : m_all_stats)
+                    stat = stat + *lvl_stat;
+            }
+            else{
+                stat = *m_level->get_stats();
             }
 
-            return stats;
+            return stat;
         }
     }
 }

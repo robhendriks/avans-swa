@@ -266,5 +266,13 @@ namespace domain {
                 m_paused = true;
             }
         }
+
+        int game_level::get_id() {
+            return m_id;
+        }
+
+        void game_level::set_id(int id) {
+            m_id = id;
+        }
     }
 }
