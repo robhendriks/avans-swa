@@ -82,7 +82,7 @@ namespace domain {
             }
             else if(title == "object-destroyed"){
                 int range = 4;
-                // set heat for itself based on range + 1
+                // set heat for itself based on range - 1
                 p_observee->set_weight(p_observee->get_weight() - range - 1);
 
                 // set heat for neighbours based on range

@@ -167,6 +167,8 @@ set(SOURCES src/main.cpp
     src/domain/combat/attacker.h
     src/domain/combat/defender.cpp
     src/domain/combat/defender.h
+    src/gui/views/help.cpp src/gui/views/help.h
+    src/domain/combat/ai_controlled.cpp src/domain/combat/ai_controlled.h
     )
 
 include_directories(third_party/json/src

@@ -8,12 +8,12 @@
 #include "base_view.h"
 #include "../../engine/input/mouse_buttons.h"
 #include "../../engine/events/mouse_button_down.h"
-#include "top_bar.h"
+#include "help.h"
 #include <memory>
 
 namespace gui {
     namespace views {
-        class top_bar;
+        class help;
     }
 }
 
@@ -25,7 +25,7 @@ namespace gui {
             friend class level;
             friend class win_game_over;
         public:
-            in_game_menu(top_bar &top_bar1);
+            in_game_menu(help &help_view);
 
             void before();
 
@@ -44,15 +44,16 @@ namespace gui {
         private:
             void change_show();
 
-            top_bar &m_top_bar;
+            help &m_help_view;
             bool m_show;
+            bool m_help_just_disappeared;
             std::unique_ptr<engine::math::box2_t> m_menu_icon_box;
-            std::unique_ptr<engine::math::box2_t> m_overlay_box;
+            std::unique_ptr<engine::math::box2_t> m_question_mark_icon_box;
             std::unique_ptr<engine::math::box2_t> m_menu_box;
             std::unique_ptr<engine::math::box2_t> m_save_btn_box;
             std::unique_ptr<engine::math::box2_t> m_save_btn_text_box;
-            std::unique_ptr<engine::math::box2_t> m_back_btn_box;
-            std::unique_ptr<engine::math::box2_t> m_back_btn_text_box;
+            std::unique_ptr<engine::math::box2_t> m_help_btn_box;
+            std::unique_ptr<engine::math::box2_t> m_help_btn_text_box;
             std::unique_ptr<engine::math::box2_t> m_quit_btn_box;
             std::unique_ptr<engine::math::box2_t> m_quit_btn_text_box;
             std::unique_ptr<engine::math::box2_t> m_cross_circle_box;

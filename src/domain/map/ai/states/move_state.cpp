@@ -12,12 +12,13 @@ namespace domain {
         namespace ai {
             namespace states {
 
-                move_state::move_state() {
-                    m_next_field = nullptr;
-                    m_last_field = nullptr;
-                }
+                move_state::move_state() : m_last_field(nullptr), m_next_field(nullptr){}
 
                 void move_state::update(domain::map::ai::ai *ai, unsigned int elapsed_time) {
+                    // in case the unit can never get to the location it wants to go to then move to next state
+                    if(ai->get_unit()->get_movement() == 0)
+                        ai->set_state(get_next_state());
+
                     // step 3.1 check if we are in transition
                     if (m_next_field != nullptr) {
                         // step 3.1.1 check if we arrived at the target location or we have to choose a new target
@@ -31,12 +32,14 @@ namespace domain {
                             // and set our next location to this
                             m_next_field = get_next_field(ai);
 
+                            // next up calculate the movement we have to make
+                            calculate_initial_state_with_difference(ai);
+
                             // now that move is complete lets switch to searching for targets
                             ai->set_state(get_next_state());
                         } else {
                             // animation logic
                             move(ai, elapsed_time);
-                            m_next_field = nullptr;
                         }
                     } else {
                         m_next_field = get_next_field(ai);
@@ -73,34 +76,41 @@ namespace domain {
                     // then its the spawn point and we just set the time
                     if(m_time_moved_on_current_field == -1){
                         m_time_moved_on_current_field = elapsed_time;
+                        calculate_initial_state_with_difference(ai);
                     }
 
                     // time on field
                     auto current_time_on_field = elapsed_time - m_time_moved_on_current_field;
-
                     // % of total time
-                    auto percentage = static_cast<double>(current_time_on_field) / static_cast<double>(ai->get_unit()->get_movement()) * 100;
+                    double percentage = static_cast<double>(current_time_on_field) / static_cast<double>(ai->get_unit()->get_movement()) * 100;
 
-                    // for easier use
-                    auto f_box = m_next_field->get_box();
-                    auto u_box = ai->get_unit()->get_box();
-
-                    // differences and then 1%
-                    auto difference_min_x_1 = static_cast<double>(f_box.min.x - u_box.min.x) / 100;
-                    auto difference_min_y_1 = static_cast<double>(f_box.min.y - u_box.min.y)  / 100;
-                    auto difference_max_x_1 = static_cast<double>(f_box.max.x - u_box.max.x)  / 100;
-                    auto difference_max_y_1 = static_cast<double>(f_box.max.y - u_box.max.y) / 100;
+                    // if its called not on the precise time reset it to 100 to avoid issues like 102%
+                    if(percentage > 100)
+                        percentage = 100;
 
                     // create a new box for the new location of the unit
                     engine::math::box2_t new_box = {
-                        {static_cast<float>(u_box.min.x + (difference_min_x_1 * percentage)),
-                                static_cast<float>(u_box.min.y + (difference_min_y_1 * percentage))},
-                        {static_cast<float>(u_box.max.x + (difference_max_x_1 * percentage)),
-                                static_cast<float>(u_box.max.y + (difference_max_y_1 * percentage))}
+                        {static_cast<float>(m_init_unit_box.min.x + (m_difference_box.min.x * percentage)),
+                                static_cast<float>(m_init_unit_box.min.y + (m_difference_box.min.y * percentage))},
+                        {static_cast<float>(m_init_unit_box.max.x + (m_difference_box.max.x * percentage)),
+                                static_cast<float>(m_init_unit_box.max.y + (m_difference_box.max.y * percentage))}
                     };
 
-                    ai->get_unit()->set_box(std::make_shared<engine::math::box2_t>(new_box));
+                     ai->get_unit()->set_box(std::make_shared<engine::math::box2_t>(new_box));
+                }
 
+                void move_state::calculate_initial_state_with_difference(domain::map::ai::ai *ai) {
+
+                    auto f_box = m_next_field->get_box();
+                    auto u_box = ai->get_unit()->get_box();
+
+                    m_init_unit_box = u_box;
+                    m_difference_box = {
+                            {static_cast<float>(static_cast<double>(f_box.min.x - u_box.min.x) / 100),
+                                    static_cast<float>(static_cast<double>(f_box.min.y - u_box.min.y)  / 100)},
+                            {static_cast<float>(static_cast<double>(f_box.max.x - u_box.max.x)  / 100),
+                                    static_cast<float>(static_cast<double>(f_box.max.y - u_box.max.y) / 100)}
+                    };
                 }
             }
         }
