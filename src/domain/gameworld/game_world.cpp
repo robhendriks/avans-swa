@@ -17,19 +17,10 @@ namespace domain {
             m_level = std::move(game_lvl);
         }
 
-        game_level::game_stats game_world::get_stats(bool all) {
-            game_level::game_stats stat;
-
-            if(all){
-                for(auto lvl_stat : m_all_stats)
-                    stat = stat + *lvl_stat;
-            }
-            else{
-                stat = *m_level->get_stats();
-            }
-
-            return stat;
+        std::vector<std::shared_ptr<game_level::game_stats>> game_world::get_stats_of_previous_lvls() {
+            return m_all_stats;
         }
+
     }
 }
 #endif //CITY_DEFENCE_GAME_WORLD_CPP
