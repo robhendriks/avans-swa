@@ -6,7 +6,7 @@ namespace domain {
                      int range, int movement, bool boss, std::shared_ptr<nation> nation, int oppertunity_costs)
                 :  domain::combat::attacker(min_damage, max_damage, attacks_per_second, range, movement),
                    domain::combat::defender(hitpoints, granted_xp),
-                   m_destination(nullptr), m_name(name), m_oppertunity_cost(oppertunity_costs), m_boss(boss), m_nation(nation){}
+                   m_destination(std::make_shared<engine::math::box2_t>(engine::math::box2_t({0,0},{0,0}))), m_name(name), m_oppertunity_cost(oppertunity_costs), m_boss(boss), m_nation(nation){}
 
         std::string enemy::get_name() {
             return m_nation.get()->get_prefix_name()+" - "+m_name;
