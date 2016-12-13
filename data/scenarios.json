@@ -2,8 +2,8 @@
   "nations-url": "nations.json",
   "building-url": "buildings.json",
   "lvls": [
-    "levels/level-003.json",
-    "levels/level-002.json",
-    "levels/level-001.json"
+    "level3.json",
+    "level2.json",
+    "level1.json"
   ]
 }

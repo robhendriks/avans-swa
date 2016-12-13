@@ -52,7 +52,7 @@ namespace services {
             auto *dnd = new engine::draganddrop::drag_and_drop();
 
             // Create stats
-            auto meta = m_maps[level_idx]->get_meta();
+            auto &meta = m_maps[level_idx]->get_meta();
             auto stats = std::make_shared<domain::game_level::game_stats>();
 
             // Set goals
@@ -72,19 +72,21 @@ namespace services {
 
         map_ptr json_level_loader::load_map(const std::string &filename) {
             // for the time being
+
             std::ifstream file;
-            file.exceptions(std::ifstream::failbit);
+//            file.exceptions(std::ifstream::failbit);
 
             try {
                 file.open(filename);
                 nlohmann::json json;
-                file >> json;
+                json << file;
 
                 auto deserializer = std::make_unique<map_deserializer>();
                 return deserializer->deserialize(json);
             } catch (const std::exception &e) {
-                throw;
+                SDL_Log("Unable to load map: %s\n", e.what());
             }
+            return nullptr;
         }
 
     }

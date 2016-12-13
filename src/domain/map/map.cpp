@@ -11,8 +11,8 @@ namespace domain {
     namespace map {
         field_with_range::field_with_range(std::shared_ptr<domain::map::field> field, int range) : field(field), range_from_origin(range) {}
 
-        map::map(engine::math::vec2_t size, engine::math::vec2_t tile_size) :
-                m_size(size), m_tile_size(tile_size), m_fields(std::vector<std::shared_ptr<field>>(number_of_fields())),
+        map::map(map_metadata_ptr meta, engine::math::vec2_t size, engine::math::vec2_t tile_size) :
+                m_meta(std::move(meta)), m_size(size), m_tile_size(tile_size), m_fields(std::vector<std::shared_ptr<field>>(number_of_fields())),
                 m_dest(nullptr) {
         }
 
@@ -312,12 +312,8 @@ namespace domain {
             }
         }
 
-        map_metadata_ptr map::get_meta() const {
+        const map_metadata_ptr& map::get_meta() const {
             return m_meta;
-        }
-
-        void map::set_meta(const map_metadata_ptr &meta) {
-            m_meta = meta;
         }
     }
 }

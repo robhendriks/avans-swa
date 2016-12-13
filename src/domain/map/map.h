@@ -36,12 +36,12 @@ namespace domain {
             std::map<std::string, int> goals;
         };
 
-        using map_metadata_ptr = std::shared_ptr<map_metadata>;
+        using map_metadata_ptr = std::unique_ptr<map_metadata>;
 
         class map : public drawable::abstract_drawable_game_object, public engine::observer::observee<map>,
                     public engine::observer::observer<field> {
         public:
-            map(engine::math::vec2_t size, engine::math::vec2_t tile_size);
+            map(map_metadata_ptr meta, engine::math::vec2_t size, engine::math::vec2_t tile_size);
 
             void notify(field *p_observee, std::string title);
 
@@ -75,9 +75,7 @@ namespace domain {
             // range = fields. 1 = one neighbour away
             std::vector<field_with_range> get_fields_in_range(int range, field* origin);
 
-            map_metadata_ptr get_meta() const;
-
-            void set_meta(const map_metadata_ptr &meta);
+            const map_metadata_ptr &get_meta() const;
         private:
             engine::math::vec2_t index_to_position(unsigned int index) const;
 

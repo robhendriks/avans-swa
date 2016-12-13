@@ -29,7 +29,25 @@ namespace services {
 
             SDL_Log("Loading map %s...\n", title.c_str());
 
-            auto result = std::make_shared<map>(
+            // Load goals
+            std::map<std::string, int> goals;
+            if (json.find("goals") != json.end()) {
+                nlohmann::json obj = json["goals"];
+                nlohmann::json::iterator it = obj.begin();
+
+                for (; it != obj.end(); ++it)
+                    goals[it.key()] = obj.value(it.key(), -1);
+            }
+
+            // Create metadata object
+            auto meta = std::unique_ptr<map_metadata>(new map_metadata);
+            meta->id = id;
+            meta->title = title;
+            meta->description = description;
+            meta->duration = duration;
+            meta->goals = goals;
+
+            auto result = std::make_shared<map>(std::move(meta),
                 vec2_t{static_cast<float>(width),
                        static_cast<float>(height)},
                 vec2_t{static_cast<float>(64),
@@ -59,26 +77,6 @@ namespace services {
                     }
                 }
             }
-
-
-            // Load goals
-            std::map<std::string, int> goals;
-            if (json.find("goals") != json.end()) {
-                nlohmann::json obj = json["goals"];
-                nlohmann::json::iterator it = obj.begin();
-
-                for (; it != obj.end(); ++it)
-                    goals[it.key()] = obj.value(it.key(), -1);
-            }
-
-            // Create metadata object
-            auto meta = std::make_shared<map_metadata>();
-            meta->id = id;
-            meta->title = title;
-            meta->description = description;
-            meta->duration = duration;
-            meta->goals = goals;
-            result->set_meta(meta);
 
             return result;
         }
