@@ -32,6 +32,7 @@ namespace services {
                 static_cast<float>(x), static_cast<float>(y),
                 static_cast<float>(x + width), static_cast<float>(x + height)});
 
+            result->set_id(id);
             result->set_max_column(1);
             result->set_max_row(1);
 

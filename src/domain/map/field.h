@@ -59,12 +59,17 @@ namespace domain {
 
             void set_map(const std::shared_ptr<map> &map);
 
+            int get_object_id() const;
+
+            void set_object_id(int object_id);
+
         private:
             std::shared_ptr<map> m_map;
             engine::math::vec2_t m_pos;
             objects::field_object *m_object;
             std::shared_ptr<engine::math::box2_t> m_box;
             long m_weight = 0;
+            int m_object_id = -1;
         };
     }
 }

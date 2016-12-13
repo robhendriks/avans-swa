@@ -35,6 +35,14 @@ namespace domain {
             std::shared_ptr<field> field_object::get_field() const {
                 return m_field;
             }
+
+            int field_object::get_id() const {
+                return m_id;
+            }
+
+            void field_object::set_id(int id) {
+                m_id = id;
+            }
         }
     }
 }

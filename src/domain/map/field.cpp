@@ -157,6 +157,14 @@ namespace domain {
             m_map = map;
         }
 
+        int field::get_object_id() const {
+            return m_object_id;
+        }
+
+        void field::set_object_id(int object_id) {
+            m_object_id = object_id;
+        }
+
     }
 }
 

@@ -3,6 +3,7 @@
 //
 
 #include "map_deserializer.h"
+#include "json_level_loader.h"
 
 namespace services {
     namespace level_loader {
@@ -20,7 +21,8 @@ namespace services {
             height = json.value("height", -1);
             duration = json.value("duration", -1);
 
-            if (id.empty() || title.empty() || width < 8 || width > 64 || height < 8 || height > 64 || duration < 60000) {
+            if (id.empty() || title.empty() || width < 8 || width > 64 || height < 8 || height > 64 ||
+                duration < 60000) {
                 SDL_Log("Map has missing or invalid data\n");
                 return nullptr;
             }
@@ -38,17 +40,26 @@ namespace services {
             if (json.find("tiles") != json.end())
                 fields = json_deserialize<field_ptr_vector>(json["tiles"]);
 
-            for (auto &field : fields) {
-                result->add_field(field);
-                field->set_map(result);
-            }
-
             // Load objects
             object_ptr_vector objects;
             if (json.find("objects") != json.end())
                 objects = json_deserialize<object_ptr_vector>(json["objects"]);
 
-            /*fields.front()->place_object(objects.front());*/
+            for (auto &field : fields) {
+                result->add_field(field);
+                field->set_map(result);
+
+                if (field->get_object_id() == -1)
+                    continue;
+
+                for (auto &object : objects) {
+                    if (object->get_id() == field->get_object_id()) {
+//                        field->place_object(object.get());
+                        break;
+                    }
+                }
+            }
+
 
             // Load goals
             std::map<std::string, int> goals;

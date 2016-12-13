@@ -39,7 +39,12 @@ namespace domain {
 
                 virtual ~field_object() = default;
 
+                int get_id() const;
+
+                void set_id(int id);
+
             protected:
+                int m_id = -1;
                 int m_rotation;
                 std::shared_ptr<field> m_field;
             };

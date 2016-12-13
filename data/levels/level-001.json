@@ -113,12 +113,14 @@
         {
             "id": 23,
             "immutable": true,
+            "object": 137,
             "x": 2,
             "y": 2
         },
         {
             "id": 25,
             "immutable": true,
+            "object": 136,
             "x": 3,
             "y": 2
         },
@@ -149,12 +151,14 @@
         {
             "id": 23,
             "immutable": true,
+            "object": 132,
             "x": 3,
             "y": 3
         },
         {
             "id": 23,
             "immutable": false,
+            "object": 176,
             "x": 4,
             "y": 3
         },
@@ -179,24 +183,28 @@
         {
             "id": 23,
             "immutable": true,
+            "object": 129,
             "x": 3,
             "y": 4
         },
         {
             "id": 23,
             "immutable": true,
+            "object": 128,
             "x": 4,
             "y": 4
         },
         {
             "id": 23,
             "immutable": true,
+            "object": 127,
             "x": 5,
             "y": 4
         },
         {
             "id": 24,
             "immutable": true,
+            "object": 126,
             "x": 6,
             "y": 4
         },
@@ -209,6 +217,7 @@
         {
             "id": 23,
             "immutable": true,
+            "object": 135,
             "x": 3,
             "y": 5
         },

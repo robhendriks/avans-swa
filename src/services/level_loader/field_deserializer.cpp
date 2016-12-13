@@ -11,12 +11,13 @@ namespace services {
         field_ptr field_deserializer::deserialize(const nlohmann::json &json) const {
             if (!json.is_object()) return nullptr;
 
-            int id, x, y;
+            int id, x, y, object_id;
             bool immutable;
 
             id = json.value("id", -1);
             x = json.value("x", -1);
             y = json.value("y", -1);
+            object_id = json.value("object", -1);
             immutable = json.value("immutable", false);
 
             if (id < 0 || x < 0 || y < 0) {
@@ -34,6 +35,10 @@ namespace services {
 
             auto result = std::make_shared<field>(vec2_t{static_cast<float>(x), static_cast<float>(y)});
             result->set_draw_settings("images/tileset.png", img_pos);
+
+            if (object_id > -1) {
+                result->set_object_id(object_id);
+            }
 
             return result;
         }
