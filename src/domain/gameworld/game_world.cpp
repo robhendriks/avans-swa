@@ -18,13 +18,13 @@ namespace domain {
                 s.id = m_level->get_id();
                 s.name = m_level->get_name();
                 s.stat = m_level->get_stats();
-                m_all_stats.push_back(s);
+                m_all_stats.push_back(std::make_shared<lvl_id_and_game_stats>(s));
             }
 
             m_level = std::move(game_lvl);
         }
 
-        std::vector<lvl_id_and_game_stats> game_world::get_stats_of_previous_lvls() {
+        std::vector<std::shared_ptr<lvl_id_and_game_stats>> game_world::get_stats_of_previous_lvls() {
             return m_all_stats;
         }
 
