@@ -11,7 +11,8 @@ namespace services {
     namespace level_loader {
         class base_level_loader {
         public:
-            virtual std::unique_ptr<domain::game_level::game_level> load() = 0;
+            virtual std::unique_ptr<domain::game_level::game_level> load(int id) = 0;
+            virtual int get_level_count() = 0;
             virtual ~base_level_loader() = default;
         };
     };

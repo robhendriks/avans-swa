@@ -32,6 +32,9 @@ namespace domain {
 
             virtual bool is_game_over(unsigned int current_duration);
 
+            int get_id();
+            void set_id(int id);
+
             std::shared_ptr<game_stats> get_goal();
 
             std::shared_ptr<game_stats> get_stats();
@@ -93,6 +96,7 @@ namespace domain {
 
         private:
             void check_goals_reached();
+            int m_id = 0;
 
             std::map<std::string, bool> m_reached_goals;
 

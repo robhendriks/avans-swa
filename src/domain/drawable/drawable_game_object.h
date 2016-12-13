@@ -48,6 +48,10 @@ namespace domain {
 
             void set_current_row(float row);
 
+            void set_saturated(bool on);
+
+            bool get_saturated();
+
         protected:
             SDL_Texture *m_texture;
 
@@ -71,6 +75,8 @@ namespace domain {
             // index based
             float m_current_column = 0;
             float m_current_row = 0;
+
+            bool m_saturated = false;
 
             virtual void animation(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed);
 

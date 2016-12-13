@@ -14,6 +14,10 @@ namespace domain {
                 search_and_destroy_state::search_and_destroy_state() : m_current_target(nullptr) { }
 
                 void search_and_destroy_state::update(ai *ai, unsigned int elapsed_time) {
+                    if(m_current_target != nullptr && static_cast<int>(elapsed_time) - m_last_attack_time > 1000){
+                        m_current_target->set_saturated(false);
+                    }
+
                     // step 1: check if we have a target atm and if we can attack at all
                     if (static_cast<int>(elapsed_time) - m_last_attack_time >
                         (1000/ai->get_unit()->get_attack_speed()) &&
@@ -22,10 +26,12 @@ namespace domain {
                         // step 1.1 attack and unset if target is destroyed
                         SDL_Log("%s %d", "hp before   : ", m_current_target->get_hp());
                         SDL_Log("%s %d", "elapsed time: ", elapsed_time);
+                        m_current_target->set_saturated(true);
                         auto current_hp = m_current_target->lower_hitpoints(
                                 ai->get_unit()->get_damage());
                         SDL_Log("%s %d", "hp after   : ",current_hp);
                         if (current_hp <= 0) {
+                            m_current_target->set_saturated(false);
                             m_current_target = nullptr;
                         }
                     }
@@ -37,8 +43,10 @@ namespace domain {
                     }
 
                     // if there is no target and it can move go to next state
-                    if(m_current_target == nullptr && ai->get_unit()->get_movement() != 0)
+                    if(m_current_target == nullptr && ai->get_unit()->get_movement() != 0){
                         ai->set_state(this->get_next_state());
+                    }
+
                 }
             }
         }
