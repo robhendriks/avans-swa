@@ -13,6 +13,8 @@ namespace domain {
             namespace states {
                 search_and_destroy_state::search_and_destroy_state() : m_current_target(nullptr) { }
 
+
+
                 void search_and_destroy_state::update(ai *ai, unsigned int elapsed_time) {
                     // step 1: check if we have a target atm and if we can attack at all
                     if (static_cast<int>(elapsed_time) - m_last_attack_time >
