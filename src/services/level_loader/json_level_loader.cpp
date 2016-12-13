@@ -36,9 +36,7 @@ namespace services {
             if (m_maps.empty()) {
                 json levels = m_root["lvls"];
                 if (levels.is_array() && levels.size() > 0) {
-                    map_ptr map;
-                    load(levels[level_idx], map);
-                    m_maps.push_back(map);
+                    m_maps.push_back(load_map(levels[level_idx]));
                 }
             }
 
@@ -70,6 +68,23 @@ namespace services {
                 game_level->add_placeable_object(*building);
 
             return game_level;
+        }
+
+        map_ptr json_level_loader::load_map(const std::string &filename) {
+            // for the time being
+            std::ifstream file;
+            file.exceptions(std::ifstream::failbit);
+
+            try {
+                file.open(filename);
+                nlohmann::json json;
+                file >> json;
+
+                auto deserializer = std::make_unique<map_deserializer>();
+                return deserializer->deserialize(json);
+            } catch (const std::exception &e) {
+                throw;
+            }
         }
 
     }

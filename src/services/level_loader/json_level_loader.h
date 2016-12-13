@@ -37,6 +37,8 @@ namespace services {
             template<typename T>
             bool load(const std::string &filename, T &obj);
 
+            map_ptr load_map(const std::string &filename);
+
             json m_root;
             building_ptr_vector m_buildings;
             nation_ptr_vector m_nations;
