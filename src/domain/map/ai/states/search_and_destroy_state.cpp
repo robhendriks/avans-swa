@@ -24,17 +24,19 @@ namespace domain {
                     if (static_cast<int>(elapsed_time) - m_last_attack_time >
                         (1000/ai->get_unit()->get_attack_speed()) &&
                         m_current_target != nullptr) {
-                        m_last_attack_time = elapsed_time;
-                        // step 1.1 attack and unset if target is destroyed
-                        SDL_Log("%s %d", "hp before   : ", m_current_target->get_hp());
-                        SDL_Log("%s %d", "elapsed time: ", elapsed_time);
-                        m_current_target->set_saturated(true);
-                        auto current_hp = m_current_target->lower_hitpoints(
-                                ai->get_unit()->get_damage());
-                        SDL_Log("%s %d", "hp after   : ",current_hp);
-                        if (current_hp <= 0) {
+                        if(m_current_target->get_hp() <= 0){
                             m_current_target->set_saturated(false);
                             m_current_target = nullptr;
+                        }
+                        else{
+                            m_last_attack_time = elapsed_time;
+                            // step 1.1 attack and unset if target is destroyed
+                            SDL_Log("%s %d", "hp before   : ", m_current_target->get_hp());
+                            SDL_Log("%s %d", "elapsed time: ", elapsed_time);
+                            m_current_target->set_saturated(true);
+                            auto current_hp = m_current_target->lower_hitpoints(
+                                    ai->get_unit()->get_damage());
+                            SDL_Log("%s %d", "hp after   : ",current_hp);
                         }
                     }
 
