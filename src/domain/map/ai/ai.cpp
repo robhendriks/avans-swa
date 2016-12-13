@@ -102,6 +102,10 @@ namespace domain {
                 result.set_new_target_func(m_new_target_func);
                 return result;
             }
+
+            std::shared_ptr<states::state> ai::get_state() const {
+                return m_state;
+            }
         }
     }
 }
