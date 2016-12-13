@@ -28,6 +28,16 @@ namespace domain {
             int range_from_origin;
         };
 
+        struct map_metadata {
+            std::string id;
+            std::string title;
+            std::string description;
+            int duration;
+            std::map<std::string, int> goals;
+        };
+
+        using map_metadata_ptr = std::shared_ptr<map_metadata>;
+
         class map : public drawable::abstract_drawable_game_object, public engine::observer::observee<map>,
                     public engine::observer::observer<field> {
         public:
@@ -64,6 +74,10 @@ namespace domain {
             // get all fields in a certain range from the origin
             // range = fields. 1 = one neighbour away
             std::vector<field_with_range> get_fields_in_range(int range, field* origin);
+
+            map_metadata_ptr get_meta() const;
+
+            void set_meta(const map_metadata_ptr &meta);
         private:
             engine::math::vec2_t index_to_position(unsigned int index) const;
 
@@ -72,6 +86,7 @@ namespace domain {
             engine::math::vec2_t m_tile_size;
             std::vector<std::shared_ptr<domain::map::field>> m_fields;
             std::unique_ptr<engine::math::box2_t> m_dest;
+            map_metadata_ptr m_meta;
         };
     }
 }

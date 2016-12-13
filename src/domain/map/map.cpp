@@ -311,6 +311,14 @@ namespace domain {
                 }
             }
         }
+
+        map_metadata_ptr map::get_meta() const {
+            return m_meta;
+        }
+
+        void map::set_meta(const map_metadata_ptr &meta) {
+            m_meta = meta;
+        }
     }
 }
 

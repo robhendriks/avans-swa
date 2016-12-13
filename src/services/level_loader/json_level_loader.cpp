@@ -25,6 +25,9 @@ namespace services {
         }
 
         std::unique_ptr<domain::game_level::game_level> json_level_loader::load() {
+            int level_idx = 0;
+            int nation_idx = 0;
+
             std::string nations_filename, buildings_filename;
             nations_filename = m_root.value("nations-url", "nations.json");
             buildings_filename = m_root.value("buildings-url", "buildings.json");
@@ -34,8 +37,8 @@ namespace services {
                 json levels = m_root["lvls"];
                 if (levels.is_array() && levels.size() > 0) {
                     map_ptr map;
-                    load(levels.front(), map);
-                    m_maps.push_back(map); // TODO: load map on demand
+                    load(levels[level_idx], map);
+                    m_maps.push_back(map);
                 }
             }
 
@@ -47,14 +50,24 @@ namespace services {
             if (m_buildings.empty())
                 load(buildings_filename, m_buildings);
 
-            // Create the level
+            // Create drag n' drop
             auto *dnd = new engine::draganddrop::drag_and_drop();
-            auto goal = std::make_shared<domain::game_level::game_stats>();
-            goal->set_counter("buildings", 5);
-            auto game_level = std::make_unique<domain::game_level::game_level>("level", "", "", m_maps.front(), goal, m_nations.front(), *dnd, 125000);
-            for (auto building : m_buildings) {
+
+            // Create stats
+            auto meta = m_maps[level_idx]->get_meta();
+            auto stats = std::make_shared<domain::game_level::game_stats>();
+
+            // Set goals
+            for (auto &it : meta->goals)
+                stats->set_counter(it.first, it.second);
+
+            auto game_level = std::make_unique<domain::game_level::game_level>(meta->id, meta->title, meta->description,
+                                                                               m_maps[level_idx], stats,
+                                                                               m_nations[nation_idx], *dnd,
+                                                                               meta->duration);
+
+            for (auto building : m_buildings)
                 game_level->add_placeable_object(*building);
-            }
 
             return game_level;
         }

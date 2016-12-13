@@ -22,6 +22,8 @@ namespace services {
             // set values we are going to use
             auto return_list = std::vector<std::shared_ptr<domain::nations::enemy>>();
 
+            return return_list; // TODO: NIET VERGETEN WEG TE HALEN!!!
+
             // in case there is still peace time just do nothing
             if(m_peace_including_start_time > static_cast<int>(time)){
                 return return_list;

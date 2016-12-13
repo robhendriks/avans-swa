@@ -10,7 +10,7 @@ namespace domain {
     namespace nations {
         enemy::enemy(std::string _name, int oppertunity_costs, bool _boss) : domain::combat::attacker(0, 0, 1, 1),
                                                                              domain::combat::defender(0, 0),
-                                                                             m_destination(nullptr) {
+                                                                             m_destination(std::make_shared<engine::math::box2_t>(0, 0, 0, 0)) {
             m_name = _name;
             m_oppertunity_cost = oppertunity_costs;
             m_boss = _boss;
@@ -20,7 +20,7 @@ namespace domain {
         enemy::enemy(std::string name, int min_damage, int max_damage, double attacks_per_second, int hitpoints,
                      int granted_xp, int range, int movement, bool boss, int oppertunity_costs)
             : domain::combat::attacker(min_damage, max_damage, attacks_per_second, range, movement),
-              domain::combat::defender(0, 0), m_destination(nullptr) {
+              domain::combat::defender(0, 0), m_destination(std::make_shared<engine::math::box2_t>(0, 0, 0, 0)) {
             m_name = name;
             m_boss = boss;
             m_oppertunity_cost = oppertunity_costs;

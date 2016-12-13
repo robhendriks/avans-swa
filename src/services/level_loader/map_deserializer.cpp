@@ -11,16 +11,16 @@ namespace services {
             if (!json.is_object()) return nullptr;
 
             std::string id, title, description;
-            int width, height;
+            int width, height, duration;
 
             id = json.value("id", "");
             title = json.value("title", "");
             description = json.value("description", "");
             width = json.value("width", -1);
             height = json.value("height", -1);
+            duration = json.value("duration", -1);
 
-            if (id.empty() || title.empty() ||
-                width < 8 || width > 64 || height < 8 || height > 64) {
+            if (id.empty() || title.empty() || width < 8 || width > 64 || height < 8 || height > 64 || duration < 60000) {
                 SDL_Log("Map has missing or invalid data\n");
                 return nullptr;
             }
@@ -49,9 +49,25 @@ namespace services {
                 objects = json_deserialize<object_ptr_vector>(json["objects"]);
 
             /*fields.front()->place_object(objects.front());*/
-            // TODO: SMart Pointers!!!!
 
-            // TODO: stuff with objects
+            // Load goals
+            std::map<std::string, int> goals;
+            if (json.find("goals") != json.end()) {
+                nlohmann::json obj = json["goals"];
+                nlohmann::json::iterator it = obj.begin();
+
+                for (; it != obj.end(); ++it)
+                    goals[it.key()] = obj.value(it.key(), -1);
+            }
+
+            // Create metadata object
+            auto meta = std::make_shared<map_metadata>();
+            meta->id = id;
+            meta->title = title;
+            meta->description = description;
+            meta->duration = duration;
+            meta->goals = goals;
+            result->set_meta(meta);
 
             return result;
         }
