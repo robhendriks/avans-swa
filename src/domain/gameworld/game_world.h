@@ -19,12 +19,12 @@ namespace domain {
             // tranfer_stats of current lvl to m_all_stats before setting new current lvl
             void set_current_level(std::unique_ptr<game_level::game_level> game_lvl, bool tranfer_stats = true);
 
-            std::vector<std::shared_ptr<lvl_id_and_game_stats>> get_stats_of_previous_lvls();
+            std::vector<std::unique_ptr<lvl_id_and_game_stats>> const& get_stats_of_previous_lvls();
             ~game_world();
 
         private:
             std::unique_ptr<game_level::game_level> m_level;
-            std::vector<std::shared_ptr<lvl_id_and_game_stats>> m_all_stats;
+            std::vector<std::unique_ptr<lvl_id_and_game_stats>> m_all_stats;
         };
     }
 }
