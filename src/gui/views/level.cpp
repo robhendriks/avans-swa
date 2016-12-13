@@ -14,12 +14,12 @@ namespace gui {
 
         level::level(in_game_menu &in_game_menu1, level_goals &goals_view, engine::audio::music_manager &music_manager,
                      models::main_map_model &model, engine::audio::sound_manager &sound_manager)
-                : m_in_game_menu(in_game_menu1), m_goals_view(goals_view), m_music_manager(music_manager),
-                  m_model(model), m_sound_manager(sound_manager),
-                  m_texture_manager(m_in_game_menu.m_help_view.m_top_bar.m_texture_manager),
-                  m_color_manager(m_in_game_menu.m_help_view.m_top_bar.m_color_manager),
-                  m_font_manager(m_in_game_menu.m_help_view.m_top_bar.m_font_manager),
-                  m_current_page(1) {
+            : m_in_game_menu(in_game_menu1), m_goals_view(goals_view), m_music_manager(music_manager),
+              m_model(model), m_sound_manager(sound_manager),
+              m_texture_manager(m_in_game_menu.m_help_view.m_top_bar.m_texture_manager),
+              m_color_manager(m_in_game_menu.m_help_view.m_top_bar.m_color_manager),
+              m_font_manager(m_in_game_menu.m_help_view.m_top_bar.m_font_manager),
+              m_current_page(1) {
         }
 
         void level::before() {
@@ -41,6 +41,10 @@ namespace gui {
             m_texture_manager.load("images/play.png", "l_play");
             m_texture_manager.load("images/play_large.png", "l_play_large");
 
+            // Load texts
+            m_texture_manager.load_text("Resources", {255, 255, 255},
+                                        *m_font_manager.get_font("roboto", 25), "l_resources_header_text");
+
             // Load music
             m_music_manager.load("sounds/game.mp3", "game_bg_music");
             m_music_manager.play("game_bg_music");
@@ -56,21 +60,21 @@ namespace gui {
 
             // Play the pop sound when an object is placed
             std::function<void(events::object_dropped_on_field &)> on_place = [&](
-                    events::object_dropped_on_field &event) {
+                events::object_dropped_on_field &event) {
                 m_sound_manager.play("pop");
             };
             eventbus.subscribe("sound_on_place", on_place);
 
             // Play the error sound when an object cannot be placed
             std::function<void(events::object_not_dropped_on_field &)> error_place = [&](
-                    events::object_not_dropped_on_field &event) {
+                events::object_not_dropped_on_field &event) {
                 m_sound_manager.play("error");
             };
             eventbus.subscribe("sound_when_not_placed", error_place);
 
             // Events subscribe
             eventbus.subscribe(
-                    dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>> *>(this));
+                dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>> *>(this));
             eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::key_down> *>(this));
             eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<events::goal_reached> *>(this));
         }
@@ -89,13 +93,13 @@ namespace gui {
             // Create the arrow left image box
             engine::graphics::box_builder builder2(arrow_image_size);
             builder2.as_left_top(m_placeable_objects_box->left_top()).add_margin({50, 0})
-                    .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
+                .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
             m_arrow_left_box.reset(new engine::math::box2_t(builder2.build()));
 
             // Create the arrow right image box
             engine::graphics::box_builder builder3(arrow_image_size);
             builder3.as_right_top(m_placeable_objects_box->right_top()).add_margin({-50, 0})
-                    .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
+                .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
             m_arrow_right_box.reset(new engine::math::box2_t(builder3.build()));
 
             // Calculate the pages
@@ -122,16 +126,20 @@ namespace gui {
             // Reposition the goals box
             engine::graphics::box_builder builder6(m_goals_view.m_stats_header_box->size());
             builder6.as_right_top(m_in_game_menu.m_help_view.m_top_bar.m_bar_box->right_bottom())
-                    .add_margin({-80, 80});
+                .add_margin({-80, 80});
             m_goals_view.m_stats_header_box.reset(new engine::math::box2_t(builder6.build()));
 
+            // Countdown box
+            engine::graphics::box_builder builder7(m_goals_view.m_stats_header_box->size());
+            builder7.as_left_top(m_in_game_menu.m_help_view.m_top_bar.m_bar_box->left_bottom()).add_margin(
+                {80, 80});
+
             if (m_model.world->get_current_level().get_max_duration() > 0) {
-                // Countdown
-                engine::graphics::box_builder builder7(m_goals_view.m_stats_header_box->size());
-                builder7.as_left_top(m_in_game_menu.m_help_view.m_top_bar.m_bar_box->left_bottom()).add_margin(
-                        {80, 80});
                 m_countdown_box.reset(new engine::math::box2_t(builder7.build()));
-                m_resources.reset(new engine::math::box2_t(builder7.build()));
+            } else {
+                builder7.add_margin({-m_goals_view.m_stats_header_box->width(),
+                                     -m_goals_view.m_stats_header_box->height() - 20});
+                m_countdown_box.reset(new engine::math::box2_t(builder7.build()));
             }
 
             // Set the pause box
@@ -141,9 +149,19 @@ namespace gui {
 
             // Set the overlay resume box
             engine::graphics::box_builder builder10(
-                    m_in_game_menu.m_help_view.m_top_bar.m_texture_manager.get_size("l_play_large"));
+                m_in_game_menu.m_help_view.m_top_bar.m_texture_manager.get_size("l_play_large"));
             builder10.to_center(*m_in_game_menu.m_help_view.m_overlay_box);
             m_overlay_resume_box.reset(new engine::math::box2_t(builder10.build()));
+
+            // Resources header box
+            engine::graphics::box_builder builder11(m_goals_view.m_stats_header_box->size());
+            builder11.as_left_top(m_countdown_box->left_bottom()).add_margin({0, 20});
+            m_resources_header_box.reset(new engine::math::box2_t(builder11.build()));
+
+            // Resources header text box
+            engine::graphics::box_builder builder12(m_texture_manager.get_size("l_resources_header_text"));
+            builder12.to_center(*m_resources_header_box);
+            m_resources_header_text_box.reset(new engine::math::box2_t(builder12.build()));
         }
 
         void level::update_placeable_objects_page() {
@@ -152,7 +170,7 @@ namespace gui {
             // Set the boxes for the placeable objects
             engine::graphics::box_builder builder4(m_model.world->get_current_level().get_map()->get_tile_size());
             builder4.as_left_top(m_arrow_left_box->right_top())
-                    .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
+                .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
 
             int object_counter = 0;
             int page_counter = 1;
@@ -205,25 +223,32 @@ namespace gui {
                 obj->draw(m_in_game_menu.m_help_view.m_top_bar.m_draw_managers, time_elapsed);
             }
 
-            //Create resource string
-            std::string resources = "Resources:  ";
-            for (auto resource:m_model.world->get_current_level().get_resources()) {
-                resources = resources + resource->get_resource_type() + ": ";
-                resources = resources + std::to_string(resource->get_count()) + "   -   ";
+            // Draw resources header
+            m_texture_manager.draw("g_header", *m_resources_header_box);
+            m_texture_manager.draw("l_resources_header_text", *m_resources_header_text_box);
+
+            // Draw each resource
+            engine::graphics::box_builder builder1(m_resources_header_box->size());
+            builder1.as_left_top(m_resources_header_box->left_bottom());
+            for (auto resource : m_model.world->get_current_level().get_resources()) {
+                builder1.add_margin({0, 20});
+                m_texture_manager.draw("g_box", builder1.build());
+
+                // Load the resource text
+                std::string resource_type =resource->get_resource_type();
+                resource_type[0] = toupper(resource_type[0]);
+                m_texture_manager.load_text(resource_type + ": " + std::to_string(resource->get_count()), {0, 0, 0},
+                    *m_font_manager.get_font("roboto", 25), "l_resource");
+
+                engine::graphics::box_builder builder2(m_texture_manager.get_size("l_resource"));
+                builder2.to_center(builder1.build());
+                m_texture_manager.draw("l_resource", builder2.build());
+
+                // Unload text
+                m_texture_manager.unload("l_resource");
+
+                builder1.add_margin({0, m_resources_header_box->height()});
             }
-
-            //Draws resources on screen; should be made better in final release
-            m_texture_manager.load_text(resources, {0, 0, 255},
-                                        *m_font_manager.get_font("roboto", 25), "resources");
-            engine::graphics::box_builder builder(m_texture_manager.get_size("resources"));
-
-            builder.to_center(*m_resources);
-            builder.add_margin({650, 0});
-            m_texture_manager.draw("resources", builder.build());
-
-            m_texture_manager.unload("resources");
-
-
 
             // Draw the countdown when needed
             if (current_level.get_max_duration() > 0) {
@@ -336,6 +361,9 @@ namespace gui {
             m_texture_manager.unload("l_pause");
             m_texture_manager.unload("l_play");
 
+            // Unload texts
+            m_texture_manager.unload("l_resources_header_text");
+
             // Unload the music
             m_music_manager.unload("game_bg_music");
 
@@ -352,7 +380,7 @@ namespace gui {
 
             // Event click unsubscribe
             eventbus.unsubscribe(
-                    dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>> *>(this));
+                dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>> *>(this));
             eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::key_down> *>(this));
             eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<events::goal_reached> *>(this));
 
