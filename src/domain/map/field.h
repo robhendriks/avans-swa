@@ -24,10 +24,12 @@ namespace domain {
 
 namespace domain {
     namespace map {
-        class field : public drawable::drawable_game_object, public engine::draganddrop::dropable,
+        class field : public std::enable_shared_from_this<field>,
+                      public drawable::drawable_game_object, public engine::draganddrop::dropable,
                       public engine::observer::observee<field>, engine::observer::observer<objects::field_object> {
         public:
-            field(engine::math::vec2_t pos);
+            field(engine::math::vec2_t
+                  pos);
 
             ~field();
 
@@ -35,11 +37,11 @@ namespace domain {
 
             engine::math::box2_t get_box() const;
 
-            bool drop(engine::draganddrop::dragable* dragable1);
+            bool drop(engine::draganddrop::dragable *dragable1);
 
-            void set_box(std::shared_ptr<engine::math::box2_t> box) ;
+            void set_box(std::shared_ptr<engine::math::box2_t> box);
 
-            bool place_object(objects::field_object* object);
+            bool place_object(objects::field_object *object);
 
             bool has_object() const;
 

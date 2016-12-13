@@ -83,7 +83,7 @@ namespace domain {
          * @param object
          */
         bool field::place_object(objects::field_object *object) {
-            if (!has_object()) {
+            if (!has_object() && object) {
                 m_object = object;
                 m_object->set_field(std::shared_ptr<field>(this));
                 m_object->add_observer(this);
