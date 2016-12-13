@@ -82,6 +82,7 @@ namespace gui {
             std::unique_ptr<engine::math::box2_t> m_countdown_box;
             std::unique_ptr<engine::math::box2_t> m_pause_box;
             std::unique_ptr<engine::math::box2_t> m_overlay_resume_box;
+            std::unique_ptr<engine::math::box2_t> m_resources;
             controllers::main_map_controller *m_controller;
             int m_pages;
             int m_current_page;
