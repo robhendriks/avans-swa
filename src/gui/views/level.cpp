@@ -13,13 +13,13 @@ namespace gui {
     namespace views {
 
         level::level(in_game_menu &in_game_menu1, level_goals &goals_view, engine::audio::music_manager &music_manager,
-                      models::main_map_model &model, engine::audio::sound_manager &sound_manager)
-            : m_in_game_menu(in_game_menu1), m_goals_view(goals_view), m_music_manager(music_manager),
-              m_model(model), m_sound_manager(sound_manager),
-              m_texture_manager(m_in_game_menu.m_help_view.m_top_bar.m_texture_manager),
-              m_color_manager(m_in_game_menu.m_help_view.m_top_bar.m_color_manager),
-              m_font_manager(m_in_game_menu.m_help_view.m_top_bar.m_font_manager),
-              m_current_page(1) {
+                     models::main_map_model &model, engine::audio::sound_manager &sound_manager)
+                : m_in_game_menu(in_game_menu1), m_goals_view(goals_view), m_music_manager(music_manager),
+                  m_model(model), m_sound_manager(sound_manager),
+                  m_texture_manager(m_in_game_menu.m_help_view.m_top_bar.m_texture_manager),
+                  m_color_manager(m_in_game_menu.m_help_view.m_top_bar.m_color_manager),
+                  m_font_manager(m_in_game_menu.m_help_view.m_top_bar.m_font_manager),
+                  m_current_page(1) {
         }
 
         void level::before() {
@@ -35,7 +35,8 @@ namespace gui {
 
             // Load arrow textures
             m_texture_manager.load("images/arrows.png", "arrows");
-            m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 184}, {1451, 229}}, 1.5, "l_red_box");
+            m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 184},
+                                                                   {1451, 229}}, 1.5, "l_red_box");
             m_texture_manager.load("images/pause.png", "l_pause");
             m_texture_manager.load("images/play.png", "l_play");
             m_texture_manager.load("images/play_large.png", "l_play_large");
@@ -55,22 +56,23 @@ namespace gui {
 
             // Play the pop sound when an object is placed
             std::function<void(events::object_dropped_on_field &)> on_place = [&](
-                events::object_dropped_on_field &event) {
+                    events::object_dropped_on_field &event) {
                 m_sound_manager.play("pop");
             };
             eventbus.subscribe("sound_on_place", on_place);
 
             // Play the error sound when an object cannot be placed
             std::function<void(events::object_not_dropped_on_field &)> error_place = [&](
-                events::object_not_dropped_on_field &event) {
+                    events::object_not_dropped_on_field &event) {
                 m_sound_manager.play("error");
             };
             eventbus.subscribe("sound_when_not_placed", error_place);
 
             // Events subscribe
-            eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>*>(this));
-            eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::key_down>*>(this));
-            eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<events::goal_reached>*>(this));
+            eventbus.subscribe(
+                    dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>> *>(this));
+            eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::key_down> *>(this));
+            eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<events::goal_reached> *>(this));
         }
 
         void level::on_display_change(engine::math::box2_t display_box) {
@@ -87,19 +89,19 @@ namespace gui {
             // Create the arrow left image box
             engine::graphics::box_builder builder2(arrow_image_size);
             builder2.as_left_top(m_placeable_objects_box->left_top()).add_margin({50, 0})
-                .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
+                    .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
             m_arrow_left_box.reset(new engine::math::box2_t(builder2.build()));
 
             // Create the arrow right image box
             engine::graphics::box_builder builder3(arrow_image_size);
             builder3.as_right_top(m_placeable_objects_box->right_top()).add_margin({-50, 0})
-                .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
+                    .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
             m_arrow_right_box.reset(new engine::math::box2_t(builder3.build()));
 
             // Calculate the pages
             float x_per_object = m_model.world->get_current_level().get_map()->get_tile_size().x + 50;
             float x_space = m_placeable_objects_box->width() - m_arrow_left_box->max.x -
-                (m_placeable_objects_box->max.x - m_arrow_right_box->min.x) - 50;
+                            (m_placeable_objects_box->max.x - m_arrow_right_box->min.x) - 50;
             m_objects_per_page = static_cast<int>(floor(x_space / x_per_object));
             int total_objects = m_model.world->get_current_level().get_placeable_objects().size();
             m_pages = static_cast<int>(ceil(static_cast<float>(total_objects) / m_objects_per_page));
@@ -111,7 +113,8 @@ namespace gui {
             update_placeable_objects_page();
             // Create the box for the map
             engine::graphics::box_builder builder5({display_box.width(),
-                                                    display_box.height() - m_in_game_menu.m_help_view.m_top_bar.m_bar_box->height() -
+                                                    display_box.height() -
+                                                    m_in_game_menu.m_help_view.m_top_bar.m_bar_box->height() -
                                                     m_placeable_objects_box->height()});
             builder5.as_left_top(m_in_game_menu.m_help_view.m_top_bar.m_bar_box->left_top());
             m_model.world->get_current_level().get_map()->set_display_box(builder5.build());
@@ -119,14 +122,16 @@ namespace gui {
             // Reposition the goals box
             engine::graphics::box_builder builder6(m_goals_view.m_stats_header_box->size());
             builder6.as_right_top(m_in_game_menu.m_help_view.m_top_bar.m_bar_box->right_bottom())
-                .add_margin({-80, 80});
+                    .add_margin({-80, 80});
             m_goals_view.m_stats_header_box.reset(new engine::math::box2_t(builder6.build()));
 
             if (m_model.world->get_current_level().get_max_duration() > 0) {
                 // Countdown
                 engine::graphics::box_builder builder7(m_goals_view.m_stats_header_box->size());
-                builder7.as_left_top(m_in_game_menu.m_help_view.m_top_bar.m_bar_box->left_bottom()).add_margin({80, 80});
+                builder7.as_left_top(m_in_game_menu.m_help_view.m_top_bar.m_bar_box->left_bottom()).add_margin(
+                        {80, 80});
                 m_countdown_box.reset(new engine::math::box2_t(builder7.build()));
+                m_resources.reset(new engine::math::box2_t(builder7.build()));
             }
 
             // Set the pause box
@@ -135,7 +140,8 @@ namespace gui {
             m_pause_box.reset(new engine::math::box2_t(builder8.build()));
 
             // Set the overlay resume box
-            engine::graphics::box_builder builder10(m_in_game_menu.m_help_view.m_top_bar.m_texture_manager.get_size("l_play_large"));
+            engine::graphics::box_builder builder10(
+                    m_in_game_menu.m_help_view.m_top_bar.m_texture_manager.get_size("l_play_large"));
             builder10.to_center(*m_in_game_menu.m_help_view.m_overlay_box);
             m_overlay_resume_box.reset(new engine::math::box2_t(builder10.build()));
         }
@@ -146,7 +152,7 @@ namespace gui {
             // Set the boxes for the placeable objects
             engine::graphics::box_builder builder4(m_model.world->get_current_level().get_map()->get_tile_size());
             builder4.as_left_top(m_arrow_left_box->right_top())
-                .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
+                    .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
 
             int object_counter = 0;
             int page_counter = 1;
@@ -199,8 +205,25 @@ namespace gui {
                 obj->draw(m_in_game_menu.m_help_view.m_top_bar.m_draw_managers, time_elapsed);
             }
 
-            //Draw the resources
-            //TODO: Draw resources on screen
+            //Create resource string
+            std::string resources = "Resources:  ";
+            for (auto resource:m_model.world->get_current_level().get_resources()) {
+                resources = resources + resource->get_resource_type() + ": ";
+                resources = resources + std::to_string(resource->get_count()) + "   -   ";
+            }
+
+            //Draws resources on screen; should be made better in final release
+            m_texture_manager.load_text(resources, {0, 0, 255},
+                                        *m_font_manager.get_font("roboto", 25), "resources");
+            engine::graphics::box_builder builder(m_texture_manager.get_size("resources"));
+
+            builder.to_center(*m_resources);
+            builder.add_margin({650, 0});
+            m_texture_manager.draw("resources", builder.build());
+
+            m_texture_manager.unload("resources");
+
+
 
             // Draw the countdown when needed
             if (current_level.get_max_duration() > 0) {
@@ -223,7 +246,7 @@ namespace gui {
                 }
 
                 m_texture_manager.load_text(utils::string_utils::ms_to_hms(time_left), color,
-                                                      *m_font_manager.get_font("roboto", 25), "l_countdown");
+                                            *m_font_manager.get_font("roboto", 25), "l_countdown");
                 engine::graphics::box_builder builder(m_texture_manager.get_size("l_countdown"));
                 builder.to_center(*m_countdown_box);
                 m_texture_manager.draw("l_countdown", builder.build());
@@ -231,7 +254,7 @@ namespace gui {
             }
 
             // Draw enemies
-            for(auto &enemy : current_level.get_enemies_in_lvl()) {
+            for (auto &enemy : current_level.get_enemies_in_lvl()) {
                 enemy->draw(m_in_game_menu.m_help_view.m_top_bar.m_draw_managers, time_elapsed);
             }
 
@@ -253,7 +276,8 @@ namespace gui {
             engine::math::vec2_t *position = engine::input::input_handler::get_instance()->get_mouse_position();
 
             if (m_pause_box->contains(*position) ||
-                (m_model.paused && !m_in_game_menu.m_show && !m_in_game_menu.m_help_view.m_show && m_overlay_resume_box->contains(*position))) {
+                (m_model.paused && !m_in_game_menu.m_show && !m_in_game_menu.m_help_view.m_show &&
+                 m_overlay_resume_box->contains(*position))) {
                 m_in_game_menu.m_show = false;
                 m_in_game_menu.m_help_view.m_show = false;
                 on_pause();
@@ -327,9 +351,10 @@ namespace gui {
             m_sound_manager.unload("countdown");
 
             // Event click unsubscribe
-            eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>*>(this));
-            eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::key_down>*>(this));
-            eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<events::goal_reached>*>(this));
+            eventbus.unsubscribe(
+                    dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>> *>(this));
+            eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::key_down> *>(this));
+            eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<events::goal_reached> *>(this));
 
             // Make sure the engine is running (so animations will work)
             m_controller->resume_engine_if();

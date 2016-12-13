@@ -8,7 +8,7 @@ namespace domain {
 
         game_world::~game_world() {}
 
-        game_level::game_level &game_world::get_current_level()  {
+        game_level::game_level & game_world::get_current_level()  {
             return *m_level;
         }
 
@@ -18,13 +18,13 @@ namespace domain {
                 s.id = m_level->get_id();
                 s.name = m_level->get_name();
                 s.stat = m_level->get_stats();
-                m_all_stats.push_back(s);
+                m_all_stats.push_back(std::make_unique<lvl_id_and_game_stats>(s));
             }
 
             m_level = std::move(game_lvl);
         }
 
-        std::vector<lvl_id_and_game_stats> game_world::get_stats_of_previous_lvls() {
+        std::vector<std::unique_ptr<lvl_id_and_game_stats>> const& game_world::get_stats_of_previous_lvls() {
             return m_all_stats;
         }
 

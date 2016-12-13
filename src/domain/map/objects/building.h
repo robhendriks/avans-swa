@@ -44,7 +44,6 @@ namespace domain {
                 std::string  id;
                 double health_ragen;
                 std::string name;
-                int type;
                 std::vector<std::shared_ptr<domain::resources::resource>> required_resources;
             };
         }

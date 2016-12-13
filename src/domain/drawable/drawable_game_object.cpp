@@ -56,14 +56,16 @@ namespace domain {
         }
 
         void drawable_game_object::draw_object(engine::graphics::texture_manager &texture_manager) {
-            if(m_saturated){
-                SDL_SetTextureColorMod(m_texture,255, 0, 0);
-            }
+            if(m_texture != nullptr && m_image_start_position != nullptr){
+                if(m_saturated){
+                    SDL_SetTextureColorMod(m_texture,255, 0, 0);
+                }
 
-            texture_manager.draw(m_texture, *m_image_start_position, get_box());
+                texture_manager.draw(m_texture, *m_image_start_position, get_box());
 
-            if(m_saturated){
-                SDL_SetTextureColorMod(m_texture,255,255,255);
+                if(m_saturated){
+                    SDL_SetTextureColorMod(m_texture,255,255,255);
+                }
             }
         }
 
