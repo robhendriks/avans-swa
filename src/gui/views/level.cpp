@@ -230,6 +230,7 @@ namespace gui {
             // Draw each resource
             engine::graphics::box_builder builder1(m_resources_header_box->size());
             builder1.as_left_top(m_resources_header_box->left_bottom());
+            int resource_counter =0;
             for (auto resource : m_model.world->get_current_level().get_resources()) {
                 builder1.add_margin({0, 20});
                 m_texture_manager.draw("g_box", builder1.build());
@@ -237,8 +238,16 @@ namespace gui {
                 // Load the resource text
                 std::string resource_type =resource->get_resource_type();
                 resource_type[0] = toupper(resource_type[0]);
-                m_texture_manager.load_text(resource_type + ": " + std::to_string(resource->get_count()), {0, 0, 0},
+                //Build second part of the string
+                std::string optional_increment ="";
+
+                if(m_model.previous_resource.size() != 0 && m_model.previous_resource[resource_counter]->get_count() < resource->get_count()){
+                    optional_increment =" (+ "+std::to_string(resource->get_count() - m_model.previous_resource[resource_counter]->get_count())+")";
+
+                }
+                m_texture_manager.load_text(resource_type + ": " + std::to_string(resource->get_count())+optional_increment, {0, 0, 0},
                     *m_font_manager.get_font("roboto", 25), "l_resource");
+
 
                 engine::graphics::box_builder builder2(m_texture_manager.get_size("l_resource"));
                 builder2.to_center(builder1.build());
@@ -248,6 +257,7 @@ namespace gui {
                 m_texture_manager.unload("l_resource");
 
                 builder1.add_margin({0, m_resources_header_box->height()});
+                resource_counter++;
             }
 
             // Draw the countdown when needed

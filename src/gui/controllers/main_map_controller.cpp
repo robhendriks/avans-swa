@@ -11,14 +11,14 @@ namespace gui {
                                                  models::transition_level_model &transition_model,
                                                  models::level_goals_model &level_goals_model, game &game1,
                                                  services::wave::wave_management &wave_management,
-                                                 services::level_loader::base_level_loader& level_loader):
-            base_controller(game1), m_view(view), m_trans_view(transition_view), m_engine(engine), m_model(model),
-            m_trans_model(transition_model), m_level_goals_model(level_goals_model),
-            m_wave_management_service(wave_management), m_level_loader(level_loader) {
+                                                 services::level_loader::base_level_loader &level_loader) :
+                base_controller(game1), m_view(view), m_trans_view(transition_view), m_engine(engine), m_model(model),
+                m_trans_model(transition_model), m_level_goals_model(level_goals_model),
+                m_wave_management_service(wave_management), m_level_loader(level_loader) {
             m_view.set_controller(*this);
             m_trans_view.set_controller(*this);
 
-            m_previous_time =0;
+            m_previous_time = 0;
         }
 
         void main_map_controller::show() {
@@ -35,7 +35,8 @@ namespace gui {
 
                 m_trans_model.duration = m_engine.get_time_elapsed() - lvl.get_start_time();
                 m_trans_model.result = !lvl.is_game_over(m_engine.get_time_elapsed());
-                m_trans_model.next_lvl_exists = m_level_loader.get_level_count() > m_model.world->get_current_level().get_id() + 1;
+                m_trans_model.next_lvl_exists =
+                        m_level_loader.get_level_count() > m_model.world->get_current_level().get_id() + 1;
                 view(m_trans_view);
             } else {
                 m_model.paused = false;
@@ -61,7 +62,7 @@ namespace gui {
             }
 
 
-            for(auto enemy : current_enemies){
+            for (auto enemy : current_enemies) {
                 // set start dest (enemy still needs ai now its stupid)
                 //Bert: Start dest now is the first tile in map with a road.
                 enemy->update(m_engine.get_time_elapsed());
@@ -69,8 +70,15 @@ namespace gui {
 
             m_model.world->get_current_level().set_enemies_in_lvl(current_enemies);
             //Updates building, calles method within the level
-            if(m_engine.get_time_elapsed() > m_previous_time + 2500){
+            if (m_engine.get_time_elapsed() > m_previous_time + 1500) {
 
+                //Update model with prev resource list
+                std::vector<std::shared_ptr<domain::resources::resource>> old_resources;
+                for (auto resource:m_model.world->get_current_level().get_resources()) {
+                    old_resources.push_back(std::make_shared<domain::resources::resource>(
+                            *resource));
+                }
+                m_model.previous_resource = old_resources;
                 //Updating
                 m_model.world->get_current_level().update();
                 m_previous_time = m_engine.get_time_elapsed();
@@ -90,7 +98,7 @@ namespace gui {
 
             auto current_level_id = m_model.world->get_current_level().get_id();
             // count = from 1 and id = from 0 so + 1
-            if ( m_level_loader.get_level_count() > current_level_id + 1) {
+            if (m_level_loader.get_level_count() > current_level_id + 1) {
                 m_model.world->set_current_level(m_level_loader.load(current_level_id + 1));
 
                 // set wave service values to next lvl
