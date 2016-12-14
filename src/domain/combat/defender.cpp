@@ -16,6 +16,11 @@ namespace domain {
             m_granted_xp = granted_xp;
         }
 
+        defender::defender(const defender &other) : domain::drawable::drawable_game_object(other) {
+            m_hp = other.m_hp;
+            m_granted_xp = other.m_granted_xp;
+        }
+
         int defender::get_hp() {
             return m_hp;
         }

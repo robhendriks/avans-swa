@@ -8,17 +8,26 @@
 #include "../drawable/drawable_game_object.h"
 #include "ai_controlled.h"
 
-namespace domain{
-    namespace combat{
-        class attacker :  public virtual drawable::drawable_game_object, public ai_controlled {
+namespace domain {
+    namespace combat {
+        class attacker : public virtual drawable::drawable_game_object, public ai_controlled {
         public:
             attacker(int min_damage, int max_damage, double attackspeed, int range, int movement = 0);
+
+            // Copy constructor
+            attacker(const attacker& other);
+
             //Returns a random number within the range of min & max damage
             int get_damage();
+
             double get_attack_speed();
+
             int get_range();
+
             int get_movement();
+
             virtual ~attacker() {}
+
         private:
             int m_min_damage;
             int m_max_damage;
@@ -31,7 +40,6 @@ namespace domain{
         };
     }
 }
-
 
 
 #endif //CITY_DEFENCE_ATTACKER_H

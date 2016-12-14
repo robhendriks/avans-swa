@@ -8,6 +8,15 @@ namespace domain {
                    domain::combat::defender(hitpoints, granted_xp),
                    m_destination(std::make_shared<engine::math::box2_t>(engine::math::box2_t({0,0},{0,0}))), m_name(name), m_oppertunity_cost(oppertunity_costs), m_boss(boss), m_nation(nation){}
 
+        // Copy constructor
+        enemy::enemy(const enemy &other) : domain::drawable::drawable_game_object(other), domain::combat::attacker::attacker(other), domain::combat::defender::defender(other) {
+            m_destination = other.m_destination;
+            m_name = other.m_name;
+            m_oppertunity_cost = other.m_oppertunity_cost;
+            m_boss = other.m_boss;
+            m_nation = other.m_nation;
+        }
+
         std::string enemy::get_name() {
             return m_nation.get()->get_prefix_name()+" - "+m_name;
         }

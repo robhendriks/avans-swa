@@ -20,14 +20,25 @@ namespace domain {
             enemy(std::string name, int min_damage, int max_damage,
                   double attacks_per_second, int hitpoints, int granted_xp, int range,
                   int movement, bool boss, std::shared_ptr<nation> nation, int oppertunity_costs);
+
+            // Copy constructor
+            enemy(const enemy& other);
+
             //Returns nationname + unitname
             std::string get_name();
-            int get_oppertunity_cost()const;
+
+            int get_oppertunity_cost() const;
+
             bool is_boss();
+
             virtual void set_box(std::shared_ptr<engine::math::box2_t> destination);
+
             virtual engine::math::box2_t get_box() const;
+
             void update(unsigned int elapsed_time);
+
             ~enemy();
+
         private:
             std::shared_ptr<engine::math::box2_t> m_destination;
             std::string m_name;
@@ -37,7 +48,7 @@ namespace domain {
             std::shared_ptr<nation> m_nation;
         };
 
-        bool operator<(const std::shared_ptr<enemy> &s1, const std::shared_ptr<enemy>  &s2);
+        bool operator<(const std::shared_ptr<enemy> &s1, const std::shared_ptr<enemy> &s2);
     }
 }
 

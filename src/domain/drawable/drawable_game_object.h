@@ -81,8 +81,6 @@ namespace domain {
             bool m_saturated = false;
 
             virtual void animation(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed);
-
-
         };
     }
 }

@@ -22,6 +22,14 @@ namespace domain {
             } else {
                 m_image_start_position = std::unique_ptr<engine::math::vec2_t>(new engine::math::vec2_t(*obj.m_image_start_position));
             }
+
+            m_max_column = obj.m_max_column;
+            m_max_row = obj.m_max_row;
+            m_transition = obj.m_transition;
+            m_last_transition_time = obj.m_last_transition_time;
+            m_current_column = obj.m_current_column;
+            m_current_row = obj.m_current_row;
+            m_saturated = obj.m_saturated;
         }
 
         void drawable_game_object::set_draw_settings(std::string file_loc,

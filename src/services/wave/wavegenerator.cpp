@@ -60,8 +60,6 @@ namespace services {
                 list.erase(r, list.end());
             }
 
-
-
             //Checks if enemies can be spawned based on the given _oppertunity
             std::sort(list.begin(), list.end());
             _nation.set_available_enemies(list);

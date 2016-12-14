@@ -12,10 +12,17 @@ namespace domain {
         class defender : public virtual drawable::drawable_game_object {
         public:
             defender(int hp, int granted_xp);
+
+            // Copy constructor
+            defender(const defender& other);
+
             int get_hp();
+
             //Lowers hitpoints with the amount within the parameter; limited to minimum 0
             virtual int lower_hitpoints(int points);
+
             virtual ~defender() {}
+
         private:
             // health points
             int m_hp;
