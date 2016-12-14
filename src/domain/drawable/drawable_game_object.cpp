@@ -133,5 +133,9 @@ namespace domain {
         bool drawable_game_object::get_saturated() {
             return m_saturated;
         }
+
+        float drawable_game_object::get_current_row() {
+            return m_current_row;
+        }
     }
 }

@@ -96,6 +96,33 @@ namespace domain {
                                 static_cast<float>(m_init_unit_box.max.y + (m_difference_box.max.y * percentage))}
                     };
 
+                    // set correct animation
+                    // to the right
+                    auto m_row = ai->get_unit()->get_max_row();
+                    std::cout << m_row;
+                    auto current_row = ai->get_unit()->get_current_row();
+
+                    if(m_difference_box.min.x > 0){ // to right
+                        if( current_row != 2){
+                            ai->get_unit()->set_current_row(2);
+                        }
+                    }
+                    else if(m_difference_box.min.x < 0){ // to left
+                        if( current_row != 1){
+                            ai->get_unit()->set_current_row(1);
+                        }
+                    }
+                    else if(m_difference_box.min.y < 0){ // to top
+                        if( current_row != 3){
+                            ai->get_unit()->set_current_row(3);
+                        }
+                    }
+                    else{ // to bottom
+                        if( current_row != 0){
+                            ai->get_unit()->set_current_row(0);
+                        }
+                    }
+
                      ai->get_unit()->set_box(std::make_shared<engine::math::box2_t>(new_box));
                 }
 

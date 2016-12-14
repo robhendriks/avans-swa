@@ -9,7 +9,7 @@
 
 namespace domain {
     namespace combat {
-        class defender : public drawable::drawable_game_object {
+        class defender : public virtual drawable::drawable_game_object {
         public:
             defender(int hp, int granted_xp);
             int get_hp();

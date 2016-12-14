@@ -27,9 +27,6 @@ namespace domain {
             virtual void set_box(std::shared_ptr<engine::math::box2_t> destination);
             virtual engine::math::box2_t get_box() const;
             void update(unsigned int elapsed_time);
-            virtual void draw(drawable::draw_managers_wrapper &draw_managers, unsigned int time_elapsed);
-            virtual void set_draw_settings(std::string file_loc, engine::math::vec2_t image_start_position = {0, 0});
-
             ~enemy();
         private:
             std::shared_ptr<engine::math::box2_t> m_destination;

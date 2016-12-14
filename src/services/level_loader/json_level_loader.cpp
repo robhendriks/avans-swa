@@ -106,7 +106,9 @@ namespace services {
                                 domain::nations::enemy(enemy_name, enemey_min_damage, enemey_max_damage, 2,
                                                        enemey_hitpoints, 100, 2, enemey_movement_speed, boss,
                                                        current_nation, enemey_oppertunity_cost));
-                        curren_enemy->set_draw_settings("images/building-a.png");
+                        curren_enemy->set_draw_settings("images/Fisher.png");
+                        curren_enemy->set_max_row(8);
+                        curren_enemy->set_max_column(3);
                         pre_vec_enemies.push_back(curren_enemy);
                         current_nation->set_available_enemies(pre_vec_enemies);
                         pre_nation_list.push_back(current_nation);

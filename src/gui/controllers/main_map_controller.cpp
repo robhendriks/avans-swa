@@ -63,8 +63,6 @@ namespace gui {
 
 
             for (auto enemy : current_enemies) {
-                // set start dest (enemy still needs ai now its stupid)
-                //Bert: Start dest now is the first tile in map with a road.
                 enemy->update(m_engine.get_time_elapsed());
             }
 

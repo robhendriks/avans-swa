@@ -48,6 +48,8 @@ namespace domain {
 
             void set_current_row(float row);
 
+            float get_current_row();
+
             void set_saturated(bool on);
 
             bool get_saturated();

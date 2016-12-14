@@ -35,6 +35,12 @@ namespace services {
 
             //Start by clearing boss/to strong enemies based on the parameters
             auto list = _nation.get_available_enemies();
+            auto one = list[0];
+            auto two = *list[0];
+            auto result = one->get_max_row();
+            auto result2 = two.get_max_row();
+            std::cout << result;
+            std::cout << result2;
             auto olist = _nation.get_available_enemies();
             auto q = remove_if(list.begin(), list.end(),
                                [_noboss](std::shared_ptr<domain::nations::enemy> element) {

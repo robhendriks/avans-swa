@@ -10,7 +10,7 @@
 
 namespace domain{
     namespace combat{
-        class attacker :  public drawable::drawable_game_object, public ai_controlled {
+        class attacker :  public virtual drawable::drawable_game_object, public ai_controlled {
         public:
             attacker(int min_damage, int max_damage, double attackspeed, int range, int movement = 0);
             //Returns a random number within the range of min & max damage
