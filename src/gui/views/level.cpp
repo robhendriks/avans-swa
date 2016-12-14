@@ -33,6 +33,8 @@ namespace gui {
                 }
             });
 
+            m_texture_manager.load("images/background-game.png", "background-game");
+
             // Load arrow textures
             m_texture_manager.load("images/arrows.png", "arrows");
             m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 184},
@@ -203,6 +205,8 @@ namespace gui {
                 m_controller->show();
             }
 
+            m_texture_manager.draw("background-game", display_box);
+
             // With the pause or play btn
             m_texture_manager.draw(m_model.paused ? "l_play" : "l_pause", *m_pause_box);
 
@@ -364,6 +368,8 @@ namespace gui {
         void level::after() {
             m_in_game_menu.after();
             m_goals_view.after();
+
+            m_texture_manager.unload("background-game");
 
             // Unload arrow textures
             m_texture_manager.unload("arrows");
