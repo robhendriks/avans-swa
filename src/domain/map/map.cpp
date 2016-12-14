@@ -111,7 +111,7 @@ namespace domain {
 
                 // now that we have a start point lets go.
                 // lets do this as many times as the range and each time we go a layer deeeper!
-                for(;range >= 0; --range){
+                for(;range > 0; --range){
                     // store neighbours after the queue has been finished
                     std::vector<std::shared_ptr<field>> next_queue;
 

@@ -18,31 +18,43 @@ namespace domain {
                     // in case the unit can never get to the location it wants to go to then move to next state
                     if(ai->get_unit()->get_movement() == 0)
                         ai->set_state(get_next_state());
+                    else{
+                        // step 3.1 check if we are in transition
+                        if (m_next_field != nullptr) {
+                            // step 3.1.1 check if we arrived at the target location or we have to choose a new target
+                            if (m_next_field->get_box() == ai->get_unit()->get_box()) {
+                                // first last set the last field to the current because we reached our destination
+                                m_last_field = ai->get_current_field();
+                                // same for this
+                                ai->set_current_field(m_next_field);
+                                // now that we have moved set the current time we are on that field equal to the elapsed time.
+                                m_time_moved_on_current_field = elapsed_time;
+                                // and set our next location to this
+                                m_next_field = get_next_field(ai);
 
-                    // step 3.1 check if we are in transition
-                    if (m_next_field != nullptr) {
-                        // step 3.1.1 check if we arrived at the target location or we have to choose a new target
-                        if (m_next_field->get_box() == ai->get_unit()->get_box()) {
-                            // first last set the last field to the current because we reached our destination
-                            m_last_field = ai->get_current_field();
-                            // same for this
-                            ai->set_current_field(m_next_field);
-                            // now that we have moved set the current time we are on that field equal to the elapsed time.
-                            m_time_moved_on_current_field = elapsed_time;
-                            // and set our next location to this
-                            m_next_field = get_next_field(ai);
+                                // next up calculate the movement we have to make
+                                calculate_initial_state_with_difference(ai);
 
-                            // next up calculate the movement we have to make
-                            calculate_initial_state_with_difference(ai);
+                                // next up set the animation based on the difference
+                                set_correct_animation(ai);
 
-                            // now that move is complete lets switch to searching for targets
-                            ai->set_state(get_next_state());
+                                // now that move is complete lets switch to searching for targets
+                                pauze(elapsed_time);
+                                ai->set_state(get_next_state());
+                            } else {
+                                // in case it was a pauze then we need to make it so we don't insta jump to the other field
+                                // because elapsed time is invalid
+                                recalculate_time(elapsed_time);
+                                // animation logic
+                                set_correct_animation(ai);
+                                // move logic
+                                move(ai, elapsed_time);
+                            }
                         } else {
-                            // animation logic
-                            move(ai, elapsed_time);
+                            m_next_field = get_next_field(ai);
+                            calculate_initial_state_with_difference(ai);
+                            set_correct_animation(ai);
                         }
-                    } else {
-                        m_next_field = get_next_field(ai);
                     }
                 }
 
@@ -76,7 +88,6 @@ namespace domain {
                     // then its the spawn point and we just set the time
                     if(m_time_moved_on_current_field == -1){
                         m_time_moved_on_current_field = elapsed_time;
-                        calculate_initial_state_with_difference(ai);
                     }
 
                     // time on field
@@ -96,10 +107,30 @@ namespace domain {
                                 static_cast<float>(m_init_unit_box.max.y + (m_difference_box.max.y * percentage))}
                     };
 
-                    // set correct animation
-                    // to the right
-                    auto m_row = ai->get_unit()->get_max_row();
-                    std::cout << m_row;
+
+                     ai->get_unit()->set_box(std::make_shared<engine::math::box2_t>(new_box));
+                }
+
+                void move_state::calculate_initial_state_with_difference(domain::map::ai::ai *ai) {
+
+                    auto f_box = m_next_field->get_box();
+                    auto u_box = ai->get_unit()->get_box();
+
+                    m_init_unit_box = u_box;
+                    m_difference_box = {
+                            {static_cast<float>(static_cast<double>(f_box.min.x - u_box.min.x) / 100),
+                                    static_cast<float>(static_cast<double>(f_box.min.y - u_box.min.y)  / 100)},
+                            {static_cast<float>(static_cast<double>(f_box.max.x - u_box.max.x)  / 100),
+                                    static_cast<float>(static_cast<double>(f_box.max.y - u_box.max.y) / 100)}
+                    };
+                }
+
+                void move_state::set_correct_animation(domain::map::ai::ai *ai) {
+                    // set speed of animation
+                    ai->get_unit()->set_transition(
+                            static_cast<long>(ai->get_unit()->get_movement() / ai->get_unit()->get_max_column()));
+
+                    // set correct animation (in case its not set yet to avoid resetting it
                     auto current_row = ai->get_unit()->get_current_row();
 
                     if(m_difference_box.min.x > 0){ // to right
@@ -122,22 +153,22 @@ namespace domain {
                             ai->get_unit()->set_current_row(0);
                         }
                     }
-
-                     ai->get_unit()->set_box(std::make_shared<engine::math::box2_t>(new_box));
                 }
 
-                void move_state::calculate_initial_state_with_difference(domain::map::ai::ai *ai) {
+                void move_state::recalculate_time(unsigned int time) {
+                    if(m_pauzed){
+                        auto time_on_field = m_pauzed_at - m_time_moved_on_current_field;
+                        // reset it back to the same difference
+                        m_time_moved_on_current_field = time - time_on_field;
 
-                    auto f_box = m_next_field->get_box();
-                    auto u_box = ai->get_unit()->get_box();
+                        // now its not pauzed anymore obviously
+                        m_pauzed = false;
+                    }
+                }
 
-                    m_init_unit_box = u_box;
-                    m_difference_box = {
-                            {static_cast<float>(static_cast<double>(f_box.min.x - u_box.min.x) / 100),
-                                    static_cast<float>(static_cast<double>(f_box.min.y - u_box.min.y)  / 100)},
-                            {static_cast<float>(static_cast<double>(f_box.max.x - u_box.max.x)  / 100),
-                                    static_cast<float>(static_cast<double>(f_box.max.y - u_box.max.y) / 100)}
-                    };
+                void move_state::pauze(unsigned int time) {
+                    m_pauzed = true;
+                    m_pauzed_at = time;
                 }
             }
         }

@@ -9,7 +9,7 @@ namespace domain {
         defender::defender(int hp, int granted_xp) {
             // a defender when 0 hp is dead
             if(m_hp <= 0){
-                m_hp = 1;
+                m_hp = 400;
             }
             else
                 m_hp = hp;

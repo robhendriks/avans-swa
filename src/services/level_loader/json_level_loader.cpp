@@ -103,8 +103,8 @@ namespace services {
                         //TODO: not 100 dynamic
                         std::shared_ptr<domain::nations::enemy> curren_enemy =
                             std::make_shared<domain::nations::enemy>(
-                                domain::nations::enemy(enemy_name, enemey_min_damage, enemey_max_damage, 2,
-                                                       enemey_hitpoints, 100, 2, enemey_movement_speed, boss,
+                                domain::nations::enemy(enemy_name, enemey_min_damage, enemey_max_damage, 1000,
+                                                       enemey_hitpoints, 100, 1, enemey_movement_speed, boss,
                                                        current_nation, enemey_oppertunity_cost));
                         curren_enemy->set_draw_settings("images/Fisher.png");
                         curren_enemy->set_max_row(8);
