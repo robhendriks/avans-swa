@@ -58,7 +58,6 @@ namespace gui {
 
             auto current_enemies = m_model.world->get_current_level().get_enemies_in_lvl();
             for (auto enemy : m_wave_management_service.get_enemies(m_engine.get_time_elapsed())) {
-                if(current_enemies.size() == 0)
                 current_enemies.push_back(enemy);
             }
 
