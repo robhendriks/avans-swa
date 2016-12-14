@@ -18,7 +18,7 @@ namespace domain {
                                                                                                           m_movement(
                                                                                                               movement) {}
 
-        attacker::attacker(const attacker &other) : domain::drawable::drawable_game_object(other) {
+        attacker::attacker(const attacker &other) {
             m_min_damage = other.m_min_damage;
             m_max_damage = other.m_max_damage;
             m_attack_speed = other.m_attack_speed;
