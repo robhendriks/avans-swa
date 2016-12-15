@@ -4,6 +4,6 @@
   },
   "window": {
     "background_color": "0xFF6495ED",
-    "debug": true
+    "debug": false
   }
 }

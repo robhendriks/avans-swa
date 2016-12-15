@@ -30,12 +30,6 @@ namespace domain {
                 // Let the object draw
                 m_object->draw(draw_managers, time_elapsed);
             }
-
-            // Printing the weight on the fields
-            draw_managers.texture_manager.load_text(std::to_string(m_weight), {254, 12, 10},
-                                                    *draw_managers.font_manager.get_font("roboto", 32), "heatmap_weight");
-            draw_managers.texture_manager.draw("heatmap_weight", {0, 0}, this->get_box());
-            draw_managers.texture_manager.unload("heatmap_weight");
         }
         /**
          * Get the box where the field is placed on the screen
