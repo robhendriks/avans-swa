@@ -66,7 +66,8 @@ namespace domain {
             m_resources = templist;
 
             // Add a callback for the drag and drop
-            drag_and_drop.add_on_drop_callback(std::bind(&game_level::decrement_building_cost, this, std::placeholders::_1));
+            drag_and_drop.add_on_drop_callback(
+                    std::bind(&game_level::decrement_building_cost, this, std::placeholders::_1));
         }
 
         std::string game_level::get_name() {
@@ -248,8 +249,8 @@ namespace domain {
             m_resources = resources;
         }
 
-        void game_level::update() {
-            m_map->update_objects(this);
+        void game_level::update(bool no_resources) {
+
 
             //Check objects if they can be constructed regarding resources
             for (unsigned int i = 0; i < m_placeable_objects.size(); i++) {
@@ -278,22 +279,30 @@ namespace domain {
                     }
                 }
             }
+            if (no_resources) return;
+            m_map->update_objects(this);
         }
 
-        void game_level::decrement_building_cost(engine::draganddrop::dragable& building) {
+        void game_level::decrement_building_cost(engine::draganddrop::dragable &building) {
+
+
             //Decrement the resources the buildings needs.
             std::vector<std::shared_ptr<domain::resources::resource>> resources_to_decrement = dynamic_cast<domain::map::objects::building *>(&building)->get_required_resources();
             for (auto resource_to_decrement : resources_to_decrement) {
+
                 for (auto resource_bank : m_resources) {
+
                     if (resource_bank->get_resource_type() == resource_to_decrement->get_resource_type()) {
                         resource_bank->decrement_resource(resource_to_decrement->get_count());
                         break;
+
                     }
+
                 }
             }
 
             //Calls update an additional time apart form the main cycle so resources are updates instantly after placeing building.
-            update();
+            update(true);
         }
 
         long game_level::get_max_duration() const {
