@@ -22,7 +22,6 @@ namespace domain {
                     int m_last_attack_time = 0;
 
                     engine::math::box2_t calculate_difference_between_target_and_unit(domain::map::ai::ai *ai);
-                    void set_correct_animation(ai *ai);
                 };
             }
         }
