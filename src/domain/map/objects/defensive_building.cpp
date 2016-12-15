@@ -21,7 +21,7 @@ namespace domain {
                                                    int min_damage,
                                                    int max_damage)
                 : building(box, id, hitpoints, health_ragen, name, required_resources),
-                  attacker{min_damage, max_damage, 2.0, range, 0} {}
+                  attacker(min_damage, max_damage, 2.0, range, 0) {}
 
             defensive_building::defensive_building(const defensive_building &obj)
                 : building{obj}, attacker{obj} {}
