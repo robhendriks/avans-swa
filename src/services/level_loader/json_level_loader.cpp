@@ -305,8 +305,8 @@ namespace services {
                             name, costs, output_sources);
 
                         economic_building->set_draw_settings(std::string("images/buildings/") + id + ".png");
-                        economic_building->set_max_row(4);
-                        economic_building->set_max_column(2);
+                        economic_building->set_max_rows(4);
+                        economic_building->set_max_cols(2);
 
                         vec_building.push_back(economic_building);
                     } else {
@@ -318,8 +318,8 @@ namespace services {
                             name, costs, min_dmg, max_dmg, range);
 
                         defencive_building->set_draw_settings(std::string("images/buildings/") + id + ".png");
-                        defencive_building->set_max_row(4);
-                        defencive_building->set_max_column(2);
+                        defencive_building->set_max_rows(4);
+                        defencive_building->set_max_cols(2);
 
                         vec_building.push_back(defencive_building);
                     }

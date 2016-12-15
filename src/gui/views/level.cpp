@@ -115,6 +115,7 @@ namespace gui {
                 m_current_page = m_pages;
             }
 
+
             // Set the draw boxes for the placeable objects
             update_placeable_objects_page();
             // Create the box for the map
