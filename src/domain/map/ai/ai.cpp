@@ -79,6 +79,14 @@ namespace domain {
                 return m_new_target_func;
             }
 
+            std::function<void (std::string title, domain::map::ai::ai* ai, engine::math::box2_t& difference)>  ai::get_animation_transition_func(){
+                return m_animation_transition_func;
+            }
+
+            void ai::set_animation_transition_func(std::function<void(std::string title, domain::map::ai::ai *ai, engine::math::box2_t& difference)> func) {
+                m_animation_transition_func = func;
+            }
+
             void ai::set_state(std::shared_ptr<states::state> state) {
                 m_state = state;
             }
@@ -100,6 +108,7 @@ namespace domain {
                 result.set_unit(m_unit);
                 result.set_map(m_map);
                 result.set_new_target_func(m_new_target_func);
+                result.set_animation_transition_func(m_animation_transition_func);
                 return result;
             }
 
