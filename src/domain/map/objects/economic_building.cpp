@@ -29,6 +29,10 @@ namespace domain {
                 produced_resources = obj.produced_resources;
             }
 
+            dragable_field_object *economic_building::clone() const {
+                return new economic_building(*this);
+            }
+
             std::shared_ptr<domain::resources::resource> economic_building::get_produced_resources() {
                 return produced_resources;
             }
@@ -52,8 +56,6 @@ namespace domain {
                     counter++;
                 }
             }
-
-
         }
     }
 }
