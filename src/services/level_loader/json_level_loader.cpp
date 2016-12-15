@@ -250,8 +250,9 @@ namespace services {
                     int type = building_data["type"];
                     auto output_sources = std::shared_ptr<domain::resources::resource>();
                     auto costs = std::vector<std::shared_ptr<domain::resources::resource>>();
-                    engine::math::box2_t building_box{{10, 10},
-                                                      {42, 42}};
+                    engine::math::box2_t building_box{{0, 0},
+                                                      {64, 64}};
+
 
                     auto data_building_cost = building_data["cost"];
                     auto it = data_building_cost.begin();
@@ -290,25 +291,36 @@ namespace services {
 
                         }
                     }
+
+                    std::string id, name;
+                    id = building_data.value("id", "");
+                    name = building_data.value("name", "");
+
                     if (type == 1) {
                         std::shared_ptr<domain::map::objects::economic_building> economic_building = std::make_shared<domain::map::objects::economic_building>(
                             building_box,
-                            building_data["id"],
+                            id,
                             static_cast<int>(building_data["hitpoints"]),
                             static_cast<double>(building_data["health-regen"]),
-                            building_data["name"],
-                            costs, output_sources);
-                        economic_building->set_draw_settings("images/building-a.png");
+                            name, costs, output_sources);
+
+                        economic_building->set_draw_settings(std::string("images/buildings/") + id + ".png");
+                        economic_building->set_max_row(4);
+                        economic_building->set_max_column(2);
+
                         vec_building.push_back(economic_building);
                     } else {
                         std::shared_ptr<domain::map::objects::defensive_building> defencive_building = std::make_shared<domain::map::objects::defensive_building>(
                             building_box,
-                            building_data["id"],
+                            id,
                             static_cast<int>(building_data["hitpoints"]),
                             static_cast<double>(building_data["health-regen"]),
-                            building_data["name"],
-                            costs, min_dmg, max_dmg, range);
-                        defencive_building->set_draw_settings("images/building-a.png");
+                            name, costs, min_dmg, max_dmg, range);
+
+                        defencive_building->set_draw_settings(std::string("images/buildings/") + id + ".png");
+                        defencive_building->set_max_row(4);
+                        defencive_building->set_max_column(2);
+
                         vec_building.push_back(defencive_building);
                     }
 
