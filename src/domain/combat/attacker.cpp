@@ -26,6 +26,14 @@ namespace domain {
             m_movement = other.m_movement;
         }
 
+        std::shared_ptr<domain::map::field> attacker::get_current_field() const {
+            return m_current_field;
+        }
+
+        void attacker::set_current_field(const std::shared_ptr<domain::map::field> &current_field) {
+            m_current_field = current_field;
+        }
+
         int attacker::get_damage() {
             std::random_device rd; // obtain a random number from hardware
             std::mt19937 rnd(rd()); // seed the generator

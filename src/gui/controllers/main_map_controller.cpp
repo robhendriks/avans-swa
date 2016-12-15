@@ -66,6 +66,8 @@ namespace gui {
                 enemy->update(m_engine.get_time_elapsed());
             }
 
+//            m_model.world->get_current_level().remove_placeable_object()
+
             m_model.world->get_current_level().set_enemies_in_lvl(current_enemies);
             //Updates building, calles method within the level
             if (m_engine.get_time_elapsed() > m_previous_time + 1500) {

@@ -7,6 +7,7 @@
 
 #include "../drawable/drawable_game_object.h"
 #include "ai_controlled.h"
+#include "../map/field.h"
 
 namespace domain {
     namespace combat {
@@ -26,6 +27,10 @@ namespace domain {
 
             int get_movement();
 
+            std::shared_ptr<domain::map::field> get_current_field() const;
+
+            void set_current_field(const std::shared_ptr<domain::map::field> &current_field);
+
             virtual ~attacker() {}
 
         private:
@@ -37,6 +42,8 @@ namespace domain {
             int m_range;
             //% of a tile per sec
             int m_movement;
+
+            std::shared_ptr<domain::map::field> m_current_field;
         };
     }
 }

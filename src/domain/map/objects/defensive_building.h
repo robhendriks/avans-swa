@@ -23,7 +23,7 @@ namespace domain {
 
                 defensive_building(const defensive_building &obj);
 
-                void update(domain::game_level::game_level game_level);
+                void update(domain::game_level::game_level game_level,unsigned int elapsed_time);
             };
 
         }

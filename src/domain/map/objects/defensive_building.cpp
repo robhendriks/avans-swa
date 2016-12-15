@@ -26,8 +26,10 @@ namespace domain {
             defensive_building::defensive_building(const defensive_building &obj)
                 : building{obj}, attacker{obj} {}
 
-            void defensive_building::update(domain::game_level::game_level game_level) {
-                //TODO
+            void defensive_building::update(domain::game_level::game_level game_level,unsigned int elapsed_time) {
+                    if(get_ai() != nullptr){
+                        get_ai()->update(elapsed_time);
+                    }
             }
 
         }
