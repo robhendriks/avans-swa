@@ -93,7 +93,7 @@ namespace domain {
 
             void set_resources(std::vector<std::shared_ptr<domain::resources::resource>> resources);
 
-            void update();
+            void update(bool no_resources = false);
 
             void decrement_building_cost(engine::draganddrop::dragable& building);
 
