@@ -858,13 +858,13 @@
       },
       {
         "id": "road-corner",
-        "x": 11,
+        "x": 10,
         "y": 12,
         "rotation": 1
       },
       {
         "id": "road-corner",
-        "x": 11,
+        "x": 10,
         "y": 13,
         "rotation": 3
       },
@@ -966,8 +966,8 @@
       },
       {
         "id": "road-straight",
-        "x": 10,
-        "y": 12,
+        "x": 11,
+        "y": 13,
         "rotation": 1
       },
       {
