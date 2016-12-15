@@ -95,7 +95,7 @@ namespace domain {
 
             void update();
 
-            void decrement_building_cost(domain::map::objects::dragable_field_object& building);
+            void decrement_building_cost(engine::draganddrop::dragable& building);
 
         private:
             void check_goals_reached();

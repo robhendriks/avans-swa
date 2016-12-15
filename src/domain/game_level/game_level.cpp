@@ -65,7 +65,8 @@ namespace domain {
             templist[4]->set_resource_type("uranium");
             m_resources = templist;
 
-
+            // Add a callback for the drag and drop
+            drag_and_drop.add_on_drop_callback(std::bind(&game_level::decrement_building_cost, this, std::placeholders::_1));
         }
 
         std::string game_level::get_name() {
@@ -250,41 +251,40 @@ namespace domain {
         void game_level::update() {
             m_map->update_objects(this);
 
-            //Check objects if they can be constucted regarding resources/
+            //Check objects if they can be constructed regarding resources
             for (unsigned int i = 0; i < m_placeable_objects.size(); i++) {
-                std::vector<std::shared_ptr<domain::resources::resource>> building_requirement = dynamic_cast<domain::map::objects::building *>(m_placeable_objects[i])->get_required_resources();;
+                std::vector<std::shared_ptr<domain::resources::resource>> building_requirement = dynamic_cast<domain::map::objects::building *>(m_placeable_objects[i])->get_required_resources();
                 bool meets_requirement = true;
                 for (unsigned int j = 0; j < building_requirement.size(); j++) {
-                    for (auto resource_bank: m_resources) {
+                    for (auto resource_bank : m_resources) {
                         if (resource_bank->get_resource_type() == building_requirement[j]->get_resource_type()) {
 
                             meets_requirement = resource_bank->check_resource(building_requirement[j]->get_count());
                             break;
                         }
                     }
-                    if (meets_requirement == false) {
+
+                    if (!meets_requirement) {
                         //One or more required resources don't meet the requirement amount; so remove from dragable.
                         m_drag_and_drop.remove_dragable(m_placeable_objects[i]);
                         get_placeable_objects()[i]->set_saturated(true);
                         break;
                     }
-                    if (j == building_requirement.size() - 1 && m_placeable_objects[i]->get_saturated()==true) {
+
+                    if (j == building_requirement.size() - 1 && m_placeable_objects[i]->get_saturated()) {
                         //Disallowed building now again meets the requirements. Set it back
                         m_drag_and_drop.add_dragable(*m_placeable_objects[i]);
                         get_placeable_objects()[i]->set_saturated(false);
                     }
-
                 }
             }
-
         }
 
-        void game_level::decrement_building_cost(domain::map::objects::dragable_field_object& building) {
-
+        void game_level::decrement_building_cost(engine::draganddrop::dragable& building) {
             //Decrement the resources the buildings needs.
             std::vector<std::shared_ptr<domain::resources::resource>> resources_to_decrement = dynamic_cast<domain::map::objects::building *>(&building)->get_required_resources();
-            for (auto resource_to_decrement:resources_to_decrement) {
-                for (auto resource_bank: m_resources) {
+            for (auto resource_to_decrement : resources_to_decrement) {
+                for (auto resource_bank : m_resources) {
                     if (resource_bank->get_resource_type() == resource_to_decrement->get_resource_type()) {
                         resource_bank->decrement_resource(resource_to_decrement->get_count());
                         break;
@@ -292,9 +292,8 @@ namespace domain {
                 }
             }
 
-            //Calls update an addional time apart form the main cycle so resources are updates instantly after placeing building.
+            //Calls update an additional time apart form the main cycle so resources are updates instantly after placeing building.
             update();
-
         }
 
         long game_level::get_max_duration() const {

@@ -112,6 +112,11 @@ namespace engine {
                                 // Let the object know it's dropped
                                 temp->on_drop(save_drop);
 
+                                // Call callbacks
+                                for (auto callback : m_callbacks) {
+                                    callback(*temp);
+                                }
+
                                 // Check for next dragging
                                 if (m_next_dragging != nullptr) {
                                     m_dragging = m_next_dragging;
@@ -147,6 +152,10 @@ namespace engine {
             if (m_started) {
                 m_started = false;
             }
+        }
+
+        void drag_and_drop::add_on_drop_callback(std::function<void(dragable&)> callback) {
+            m_callbacks.push_back(callback);
         }
     }
 }
