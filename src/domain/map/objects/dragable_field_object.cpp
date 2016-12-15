@@ -26,7 +26,7 @@ namespace domain {
              */
             dragable_field_object::dragable_field_object(const dragable_field_object &obj) : field_object(obj) {
                 m_start_box.reset(new engine::math::box2_t(*obj.m_start_box));
-                m_draw_box.reset(new engine::math::box2_t(*obj.m_draw_box));
+                m_draw_box.reset(new engine::math::box2_t(*obj.m_start_box));
             }
 
             void dragable_field_object::set_box(std::shared_ptr<engine::math::box2_t> box) {

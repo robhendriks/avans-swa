@@ -21,6 +21,7 @@ namespace domain {
 
                 building(std::shared_ptr<field> field1, int hitpoints = 0);
 
+                // Copy constructor
                 building(const building &obj);
 
                 dragable_field_object *clone() const;
@@ -41,7 +42,7 @@ namespace domain {
                 virtual void set_box(std::shared_ptr<engine::math::box2_t> box);
                 virtual engine::math::box2_t get_box() const;
             private:
-                std::string  id;
+                std::string id;
                 double health_ragen;
                 std::string name;
                 std::vector<std::shared_ptr<domain::resources::resource>> required_resources;
