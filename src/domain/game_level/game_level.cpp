@@ -3,17 +3,18 @@
 //
 
 #include "game_level.h"
-#include "../map/objects/building.h"
+
 #include "../map/objects/road.h"
 #include "../../events/goal_reached.h"
 
 namespace domain {
     namespace game_level {
-        game_level::game_level(std::string name, std::shared_ptr<domain::map::map> map, std::shared_ptr<game_stats> goal,
+        game_level::game_level(std::string name, std::shared_ptr<domain::map::map> map,
+                               std::shared_ptr<game_stats> goal,
                                std::shared_ptr<domain::nations::nation> _enemies,
                                engine::draganddrop::drag_and_drop &drag_and_drop, long duration) :
-            m_name(name), m_max_duration(duration), m_map(map), m_goal(goal), m_start_time(0),
-            m_drag_and_drop(drag_and_drop), m_paused(true) {
+                m_name(name), m_max_duration(duration), m_map(map), m_goal(goal), m_start_time(0),
+                m_drag_and_drop(drag_and_drop), m_paused(true) {
 
             m_stats = std::shared_ptr<game_stats>(new game_stats());
 
@@ -44,19 +45,19 @@ namespace domain {
 
             m_enemy = _enemies;
 
-                //Create resource objects and sets them to 0.
+            //Create resource objects and sets them to 0.
             auto templist = std::vector<std::shared_ptr<domain::resources::resource>>(5);
             templist[0] = std::make_shared<domain::resources::resource>(*new domain::resources::resource());
-            templist[1] =  std::make_shared<domain::resources::resource>(*new domain::resources::resource());
-            templist[2] =  std::make_shared<domain::resources::resource>(*new domain::resources::resource());
-            templist[3] =  std::make_shared<domain::resources::resource>(*new domain::resources::resource());
-            templist[4] =  std::make_shared<domain::resources::resource>(*new domain::resources::resource());
+            templist[1] = std::make_shared<domain::resources::resource>(*new domain::resources::resource());
+            templist[2] = std::make_shared<domain::resources::resource>(*new domain::resources::resource());
+            templist[3] = std::make_shared<domain::resources::resource>(*new domain::resources::resource());
+            templist[4] = std::make_shared<domain::resources::resource>(*new domain::resources::resource());
 
-            templist[0]->set_count(100);
+            templist[0]->set_count(50);
             templist[0]->set_resource_type("wood");
-            templist[1]->set_count(25);
+            templist[1]->set_count(500);
             templist[1]->set_resource_type("ore");
-            templist[2]->set_count(100);
+            templist[2]->set_count(500);
             templist[2]->set_resource_type("gold");
             templist[3]->set_count(0);
             templist[3]->set_resource_type("silicium");
@@ -88,11 +89,10 @@ namespace domain {
         }
 
         bool game_level::is_game_over(unsigned int current_duration) {
-            if(m_max_duration >= 0) {
+            if (m_max_duration >= 0) {
                 int playing_time = current_duration - m_start_time;
-                return  m_max_duration - playing_time < 0;
-            }
-            else {
+                return m_max_duration - playing_time < 0;
+            } else {
                 return false;
             }
         }
@@ -114,7 +114,8 @@ namespace domain {
 
         void game_level::remove_placeable_object(map::objects::dragable_field_object &obj) {
             // Erase from vector
-            m_placeable_objects.erase(std::remove(m_placeable_objects.begin(), m_placeable_objects.end(), &obj), m_placeable_objects.end());
+            m_placeable_objects.erase(std::remove(m_placeable_objects.begin(), m_placeable_objects.end(), &obj),
+                                      m_placeable_objects.end());
         };
 
 
@@ -139,7 +140,7 @@ namespace domain {
         void game_level::notify(domain::map::field *p_observee, std::string title) {
             if (title == "object-placed") {
                 // Check if it was a dragable
-                auto object = dynamic_cast<domain::map::objects::dragable_field_object*>(p_observee->get_object());
+                auto object = dynamic_cast<domain::map::objects::dragable_field_object *>(p_observee->get_object());
 
                 if (object) {
                     // Remove from placeable_objects
@@ -238,16 +239,62 @@ namespace domain {
             return m_spawn_bosses;
         }
 
-        std::vector<std::shared_ptr<domain::resources::resource>> game_level::get_resources(){
+        std::vector<std::shared_ptr<domain::resources::resource>> game_level::get_resources() {
             return m_resources;
         }
 
-        void game_level::set_resources(std::vector<std::shared_ptr<domain::resources::resource>> resources){
+        void game_level::set_resources(std::vector<std::shared_ptr<domain::resources::resource>> resources) {
             m_resources = resources;
         }
 
         void game_level::update() {
             m_map->update_objects(this);
+
+            //Check objects if they can be constucted regarding resources/
+            for (unsigned int i = 0; i < m_placeable_objects.size(); i++) {
+                std::vector<std::shared_ptr<domain::resources::resource>> building_requirement = dynamic_cast<domain::map::objects::building *>(m_placeable_objects[i])->get_required_resources();;
+                bool meets_requirement = true;
+                for (unsigned int j = 0; j < building_requirement.size(); j++) {
+                    for (auto resource_bank: m_resources) {
+                        if (resource_bank->get_resource_type() == building_requirement[j]->get_resource_type()) {
+
+                            meets_requirement = resource_bank->check_resource(building_requirement[j]->get_count());
+                            break;
+                        }
+                    }
+                    if (meets_requirement == false) {
+                        //One or more required resources don't meet the requirement amount; so remove from dragable.
+                        m_drag_and_drop.remove_dragable(m_placeable_objects[i]);
+                        get_placeable_objects()[i]->set_saturated(true);
+                        break;
+                    }
+                    if (j == building_requirement.size() - 1 && m_placeable_objects[i]->get_saturated()==true) {
+                        //Disallowed building now again meets the requirements. Set it back
+                        m_drag_and_drop.add_dragable(*m_placeable_objects[i]);
+                        get_placeable_objects()[i]->set_saturated(false);
+                    }
+
+                }
+            }
+
+        }
+
+        void game_level::decrement_building_cost(domain::map::objects::dragable_field_object& building) {
+
+            //Decrement the resources the buildings needs.
+            std::vector<std::shared_ptr<domain::resources::resource>> resources_to_decrement = dynamic_cast<domain::map::objects::building *>(&building)->get_required_resources();
+            for (auto resource_to_decrement:resources_to_decrement) {
+                for (auto resource_bank: m_resources) {
+                    if (resource_bank->get_resource_type() == resource_to_decrement->get_resource_type()) {
+                        resource_bank->decrement_resource(resource_to_decrement->get_count());
+                        break;
+                    }
+                }
+            }
+
+            //Calls update an addional time apart form the main cycle so resources are updates instantly after placeing building.
+            update();
+
         }
 
         long game_level::get_max_duration() const {
