@@ -21,9 +21,9 @@ namespace domain {
 
                 economic_building(const economic_building &obj);
 
+                dragable_field_object *clone() const;
 
                 std::shared_ptr<domain::resources::resource> get_produced_resources();
-
 
                 void set_produced_resource(std::shared_ptr<domain::resources::resource> resource);
 

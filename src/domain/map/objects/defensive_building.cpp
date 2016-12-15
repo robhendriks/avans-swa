@@ -50,7 +50,9 @@ namespace domain {
                 //TODO
             }
 
-
+            dragable_field_object *defensive_building::clone() const {
+                return new defensive_building(*this);
+            }
         }
     }
 }

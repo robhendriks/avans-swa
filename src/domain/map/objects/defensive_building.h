@@ -20,6 +20,8 @@ namespace domain {
 
                 defensive_building(const defensive_building &obj);
 
+                dragable_field_object *clone() const;
+
                 int get_min_dmg();
                 int get_max_dmg();
                 int get_range();
