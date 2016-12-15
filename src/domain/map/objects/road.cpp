@@ -15,7 +15,7 @@ namespace domain {
             /**
              * Copy constructor
              */
-            road::road(const road &obj) : dragable_field_object(obj) {
+            road::road(const road &obj) : drawable::drawable_game_object(obj), dragable_field_object(obj) {
             }
 
             dragable_field_object *road::clone() const {

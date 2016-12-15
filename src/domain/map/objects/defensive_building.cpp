@@ -28,7 +28,7 @@ namespace domain {
             }
 
             defensive_building::defensive_building(const defensive_building &obj)
-                : building(obj) {
+                : domain::drawable::drawable_game_object(obj), building(obj) {
                 range = obj.range;
                 min_dmg = obj.min_dmg;
                 max_dmg = obj.max_dmg;

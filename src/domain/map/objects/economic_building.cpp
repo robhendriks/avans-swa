@@ -25,7 +25,8 @@ namespace domain {
                 produced_resources = resource;
             }
 
-            economic_building::economic_building(const economic_building &obj) : building(obj) {
+            economic_building::economic_building(const economic_building &obj) :
+                domain::drawable::drawable_game_object(obj), building(obj) {
                 produced_resources = obj.produced_resources;
             }
 
