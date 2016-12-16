@@ -22,14 +22,14 @@ namespace domain {
                         return;
                     }
 
-                    // if the last time we attacked was 200 ms ago then don't saturate the building anymore
-                    if(m_current_target != nullptr && static_cast<int>(elapsed_time) - m_last_attack_time > 200){
+                    // if the last time we attacked was 2000 ms ago then don't saturate the building anymore
+                    if(m_current_target != nullptr && static_cast<int>(elapsed_time) - m_last_attack_time > 2000){
                         m_current_target->set_saturated(false);
                     }
 
                     // step 1: check if we have a target atm and if we can attack at all
                     if (static_cast<int>(elapsed_time) - m_last_attack_time >
-                        (1000/ai->get_unit()->get_attack_speed()) &&
+                        (ai->get_unit()->get_attack_speed()) &&
                         m_current_target != nullptr) {
                         if(m_current_target->get_hp() <= 0){
                             m_current_target->set_saturated(false);
