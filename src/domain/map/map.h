@@ -28,7 +28,9 @@ namespace domain {
             int range_from_origin;
         };
 
-        class map : public drawable::abstract_drawable_game_object, public engine::observer::observee<map>,
+        class map : public std::enable_shared_from_this<map>,
+                    public drawable::abstract_drawable_game_object,
+                    public engine::observer::observee<map>,
                     public engine::observer::observer<field> {
         public:
             map(engine::math::vec2_t size, engine::math::vec2_t tile_size);

@@ -7,16 +7,8 @@
 
 namespace domain {
     namespace combat {
-        attacker::attacker(int min_damage, int max_damage, double attackspeed, int range, int movement) : m_min_damage(
-            min_damage),
-                                                                                                          m_max_damage(
-                                                                                                              max_damage),
-                                                                                                          m_attack_speed(
-                                                                                                              attackspeed),
-                                                                                                          m_range(
-                                                                                                              range),
-                                                                                                          m_movement(
-                                                                                                              movement) {}
+        attacker::attacker(int min_damage, int max_damage, double attackspeed, int range, int movement) :
+            m_min_damage(min_damage), m_max_damage(max_damage), m_attack_speed(attackspeed), m_range(range), m_movement(movement) {}
 
         attacker::attacker(const attacker &other) {
             m_min_damage = other.m_min_damage;

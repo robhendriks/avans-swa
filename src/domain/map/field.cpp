@@ -7,11 +7,12 @@
 #include "objects/dragable_field_object.h"
 #include "../../engine/graphics/font_manager.h"
 #include "objects/defensive_building.h"
+#include "ai/states/search_and_destroy_state.h"
 
 namespace domain {
     namespace map {
 
-        field::field(map &map1, engine::math::vec2_t pos) : m_map(map1), m_pos(pos), m_object(nullptr), m_box(nullptr) {
+        field::field(map &map1, engine::math::vec2_t pos) : m_map(map1), m_pos(pos), m_object(nullptr), m_box(nullptr), m_flags(FLAG_NONE) {
             map1.add_field(std::shared_ptr<field>(this));
         }
 
@@ -31,11 +32,18 @@ namespace domain {
                 m_object->draw(draw_managers, time_elapsed);
             }
 
-            // Printing the weight on the fields
-            draw_managers.texture_manager.load_text(std::to_string(m_weight), {254, 12, 10},
-                                                    *draw_managers.font_manager.get_font("roboto", 32), "heatmap_weight");
-            draw_managers.texture_manager.draw("heatmap_weight", {0, 0}, this->get_box());
-            draw_managers.texture_manager.unload("heatmap_weight");
+            if ((m_flags & FLAG_WEIGHT) != 0) {
+                // Printing the weight on the fields
+                draw_managers.texture_manager.load_text(std::to_string(m_weight), {254, 12, 10},
+                                                        *draw_managers.font_manager.get_font("roboto", 32),
+                                                        "heatmap_weight");
+                draw_managers.texture_manager.draw("heatmap_weight", {0, 0}, get_box());
+                draw_managers.texture_manager.unload("heatmap_weight");
+            }
+
+            if ((m_flags & FLAG_TARGET) != 0) {
+                draw_managers.color_manager.draw({0xFF, 0x00, 0x00}, get_box());
+            }
         }
         /**
          * Get the box where the field is placed on the screen
@@ -58,13 +66,11 @@ namespace domain {
                 if (place_object(object)) {
                     // Remove this as dropable
                     m_drag_and_drop->remove_dropable(this);
-
                     object->set_max_column(2);
 
-                    auto defensive_building = dynamic_cast<domain::map::objects::defensive_building*>(object);
-                    if (defensive_building && defensive_building->get_ai()) {
-//                        defensive_building->get_ai()->set_map();
-//                        defensive_building->get_ai()->set_current_field();
+                    auto attacker = dynamic_cast<combat::attacker*>(m_object);
+                    if (attacker) {
+                        SDL_Log("YES COME HERE DADDY!\n");
                     }
                 }
 
@@ -150,6 +156,14 @@ namespace domain {
 
         void field::set_weight(long weight) {
             m_weight = weight;
+        }
+
+        unsigned int field::get_flags() const {
+            return m_flags;
+        }
+
+        void field::set_flags(unsigned int flags) {
+            m_flags = flags;
         }
     }
 }

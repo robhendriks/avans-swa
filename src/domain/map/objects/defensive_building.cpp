@@ -30,7 +30,6 @@ namespace domain {
                 if(get_ai()){
                     get_ai()->update(elapsed_time);
                 }
-                SDL_Log("De log is verplaatst\n");
             }
 
         }
