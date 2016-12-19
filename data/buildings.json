@@ -5,7 +5,7 @@
 	"name": "Skyscraper",
 	"type": 1,
 	"cost": {
-		"steel": 75,
+		"ore": 75,
 		"wood": 75
 	},
 	"properties": {

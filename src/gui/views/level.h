@@ -68,6 +68,16 @@ namespace gui {
 
             void navigate_right();
 
+            void reset_speed();
+
+            bool can_increase_speed();
+
+            void increase_speed();
+
+            bool can_decrease_speed();
+
+            void decrease_speed();
+
             in_game_menu &m_in_game_menu;
             level_goals &m_goals_view;
             engine::audio::music_manager &m_music_manager;
@@ -81,6 +91,8 @@ namespace gui {
             std::unique_ptr<engine::math::box2_t> m_arrow_right_box;
             std::unique_ptr<engine::math::box2_t> m_countdown_box;
             std::unique_ptr<engine::math::box2_t> m_pause_box;
+            std::unique_ptr<engine::math::box2_t> m_fast_forward_box;
+            std::unique_ptr<engine::math::box2_t> m_slow_down_box;
             std::unique_ptr<engine::math::box2_t> m_overlay_resume_box;
             std::unique_ptr<engine::math::box2_t> m_resources_header_box;
             std::unique_ptr<engine::math::box2_t> m_resources_header_text_box;
@@ -88,6 +100,7 @@ namespace gui {
             int m_pages;
             int m_current_page;
             int m_objects_per_page;
+            double m_speed_factor;
         };
     }
 }

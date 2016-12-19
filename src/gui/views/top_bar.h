@@ -28,7 +28,7 @@ namespace gui {
             friend class credits;
             friend class help;
         public:
-            top_bar(domain::drawable::draw_managers_wrapper &draw_managers);
+            top_bar(domain::drawable::draw_managers_wrapper &draw_managers, engine::engine &engine);
 
             void set_controller(std::shared_ptr<controllers::menu_controller> menu_controller);
 
@@ -44,6 +44,7 @@ namespace gui {
 
         private:
             domain::drawable::draw_managers_wrapper &m_draw_managers;
+            engine::engine &m_engine;
             engine::graphics::texture_manager &m_texture_manager;
             engine::graphics::color_manager &m_color_manager;
             engine::graphics::font_manager &m_font_manager;

@@ -31,6 +31,7 @@ namespace gui {
             m_level_goals_model.game_stats = lvl.get_stats();
 
             if (is_lvl_done()) {
+                m_engine.reset_speed();
                 m_model.paused = true;
 
                 m_trans_model.duration = m_engine.get_time_elapsed() - lvl.get_start_time();

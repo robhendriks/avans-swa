@@ -17,13 +17,13 @@ namespace domain {
                 std::shared_ptr<domain::map::ai::states::search_and_destroy_state> attack = std::make_shared<domain::map::ai::states::search_and_destroy_state>(domain::map::ai::states::search_and_destroy_state());
                 move->set_next_state(attack);
                 attack->set_next_state(move);
-                m_state = move;
+                m_state = attack;
             }
 
             void ai::update(unsigned int elapsed_time) {
                 // oke here is where the magic happens ladies.
                 m_state->update(this, elapsed_time);
-                // thats it aplause.
+                // thats it applause.
             }
 
             std::shared_ptr<field> ai::get_spawn_point() {

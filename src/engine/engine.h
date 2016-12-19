@@ -28,6 +28,10 @@ namespace engine {
 
         void run();
 
+        void reset_speed();
+
+        void change_game_speed(double factor);
+
         void pause();
 
         void resume();
@@ -76,6 +80,8 @@ namespace engine {
         unsigned int m_ticks_when_paused;
         unsigned int m_paused_ticks;
         unsigned int m_game_ticks;
+        double m_time_ticks;
+        double m_speed_factor;
     };
 }
 
