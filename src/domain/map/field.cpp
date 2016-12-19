@@ -6,7 +6,7 @@
 #include "../../events/object_not_dropped_on_field.h"
 #include "objects/dragable_field_object.h"
 #include "../../engine/graphics/font_manager.h"
-
+#include "objects/defensive_building.h"
 
 namespace domain {
     namespace map {
@@ -60,6 +60,12 @@ namespace domain {
                     m_drag_and_drop->remove_dropable(this);
 
                     object->set_max_column(2);
+
+                    auto defensive_building = dynamic_cast<domain::map::objects::defensive_building*>(object);
+                    if (defensive_building && defensive_building->get_ai()) {
+//                        defensive_building->get_ai()->set_map();
+//                        defensive_building->get_ai()->set_current_field();
+                    }
                 }
 
                 return true;

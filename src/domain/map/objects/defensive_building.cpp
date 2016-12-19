@@ -27,9 +27,10 @@ namespace domain {
                 : building{obj}, attacker{obj} {}
 
             void defensive_building::update(domain::game_level::game_level game_level,unsigned int elapsed_time) {
-                    if(get_ai() != nullptr){
-                        get_ai()->update(elapsed_time);
-                    }
+                if(get_ai()){
+                    get_ai()->update(elapsed_time);
+                }
+                SDL_Log("De log is verplaatst\n");
             }
 
         }

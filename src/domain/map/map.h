@@ -66,6 +66,10 @@ namespace domain {
             // get all fields in a certain range from the origin
             // range = fields. 1 = one neighbour away
             std::vector<field_with_range> get_fields_in_range(int range, field* origin);
+
+            domain::game_level::game_level* get_game_level();
+
+            void set_game_level(domain::game_level::game_level* game_level);
         private:
             engine::math::vec2_t index_to_position(unsigned int index) const;
 
@@ -74,6 +78,7 @@ namespace domain {
             engine::math::vec2_t m_tile_size;
             std::vector<std::shared_ptr<domain::map::field>> m_fields;
             std::unique_ptr<engine::math::box2_t> m_dest;
+            domain::game_level::game_level *m_game_level;
         };
     }
 }

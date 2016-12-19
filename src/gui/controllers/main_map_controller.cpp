@@ -66,6 +66,22 @@ namespace gui {
                 enemy->update(m_engine.get_time_elapsed());
             }
 
+            auto fields = m_model.world->get_current_level().get_map()->get_fields();
+
+            for (auto &field : fields) {
+                if (!field) {
+                    continue;
+                }
+
+                auto placeable_object = field->get_object();
+                if (placeable_object) {
+                    auto defensive_building = dynamic_cast<domain::map::objects::defensive_building*>(placeable_object);
+                    if (defensive_building) {
+                        defensive_building->update(m_model.world->get_current_level(), m_engine.get_time_elapsed());
+                    }
+                }
+            }
+
 //            m_model.world->get_current_level().remove_placeable_object()
 
             m_model.world->get_current_level().set_enemies_in_lvl(current_enemies);

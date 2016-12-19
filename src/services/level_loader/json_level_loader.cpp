@@ -323,22 +323,22 @@ namespace services {
 
                         auto building_ai = std::make_shared<domain::map::ai::ai>();
                         building_ai->set_state(std::make_shared<domain::map::ai::states::search_and_destroy_state>());
+                        building_ai->set_unit(defencive_building);
 
-//                        building_ai->set_new_target_func([](domain::map::field* origin, domain::map::ai::ai* ai1){
-//                            auto fields = ai1->get_map()->get_fields_in_range(1337, origin);
-//                        });
-
-                        /*domain::map::objects::building* target = nullptr;
-                        for (auto &field_with_range : ai1->get_map()->
-                            get_fields_in_range(ai1->get_unit()->get_range(), origin)) {
-//                                target = dynamic_cast<domain::map::objects::building*>(field_with_range.field->get_object());
-                            target = dynamic_cast<domain::nations::enemy*>(field_with_range.field_with_range(),range);
-                            if (target != nullptr) {
-                                break;
+                        building_ai->set_new_target_func([](domain::map::field* origin, domain::map::ai::ai* ai1){
+                            auto fields = ai1->get_map()->get_fields_in_range(2, origin);
+                            if(!fields.empty() || !ai1->get_map() || !ai1->get_map()->get_game_level()) {
+                                return nullptr;
                             }
-                        }
-                        return target;*/
 
+                            auto enemies = ai1->get_map()->get_game_level()->get_enemies_in_lvl();
+
+                            for (auto& field : fields) {
+
+                            }
+
+                            return nullptr;
+                        });
 
                         defencive_building->set_ai(building_ai);
                         vec_building.push_back(defencive_building);

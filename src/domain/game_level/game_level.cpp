@@ -17,6 +17,8 @@ namespace domain {
 
             m_stats = std::shared_ptr<game_stats>(new game_stats());
 
+            m_map->set_game_level(this);
+
             // Call pause to start the level....
             pause();
 

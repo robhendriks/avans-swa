@@ -48,7 +48,7 @@ namespace domain {
                 return m_map != nullptr && m_unit != nullptr;
             }
 
-            void ai::set_map(std::shared_ptr<map> map) {
+            void ai::set_map(domain::map::map *map) {
                 m_map = map;
                 m_current_field = get_spawn_point();
 
@@ -83,7 +83,7 @@ namespace domain {
                 m_state = state;
             }
 
-            std::shared_ptr<map> ai::get_map() {
+            domain::map::map *ai::get_map() {
                 return m_map;
             }
 
@@ -106,6 +106,7 @@ namespace domain {
             std::shared_ptr<states::state> ai::get_state() const {
                 return m_state;
             }
+
         }
     }
 }

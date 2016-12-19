@@ -13,7 +13,7 @@ namespace domain {
 
         map::map(engine::math::vec2_t size, engine::math::vec2_t tile_size) :
                 m_size(size), m_tile_size(tile_size), m_fields(std::vector<std::shared_ptr<field>>(number_of_fields())),
-                m_dest(nullptr) {
+                m_dest(nullptr), m_game_level(nullptr) {
         }
 
         /**
@@ -315,6 +315,15 @@ namespace domain {
                 }
             }
         }
+
+        domain::game_level::game_level *map::get_game_level() {
+            return m_game_level;
+        }
+
+        void map::set_game_level(domain::game_level::game_level* game_level) {
+            m_game_level = game_level;
+        }
+
     }
 }
 

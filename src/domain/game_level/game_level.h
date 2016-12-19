@@ -16,7 +16,7 @@
 
 namespace domain {
     namespace game_level {
-        class game_level : public engine::observer::observer<domain::map::field> {
+        class game_level : public engine::observer::observer<domain::map::field>, public std::enable_shared_from_this<game_level> {
         public:
             game_level(std::string name, std::shared_ptr<map::map> map, std::shared_ptr<game_stats> goal,
                        std::shared_ptr<domain::nations::nation> _enemies,
