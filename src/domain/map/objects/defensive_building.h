@@ -21,7 +21,7 @@ namespace domain {
                                    const std::vector<std::shared_ptr<resources::resource>> &required_resources,
                                    int range, int min_damage, int max_damage);
 
-                defensive_building(const defensive_building &obj);
+                dragable_field_object *clone() const;
 
                 void update(domain::game_level::game_level game_level,unsigned int elapsed_time);
             };

@@ -42,7 +42,7 @@ namespace domain {
             }
 
             if ((m_flags & FLAG_TARGET) != 0) {
-                draw_managers.color_manager.draw({0xFF, 0x00, 0x00}, get_box());
+                draw_managers.color_manager.stroke({255, 0, 0}, get_box());
             }
         }
         /**
@@ -68,9 +68,50 @@ namespace domain {
                     m_drag_and_drop->remove_dropable(this);
                     object->set_max_column(2);
 
-                    auto attacker = dynamic_cast<combat::attacker*>(m_object);
-                    if (attacker) {
-                        SDL_Log("YES COME HERE DADDY!\n");
+                    auto defensive_building = dynamic_cast<objects::defensive_building*>(m_object);
+                    if (defensive_building) {
+                        auto ai = std::make_shared<domain::map::ai::ai>();
+                        ai->set_new_target_func([](domain::map::field* origin, domain::map::ai::ai* ai1) -> domain::combat::defender* {
+                            if (!origin || !ai1->get_map() || !ai1->get_map()->get_game_level() || !ai1->get_current_field()) {
+                                SDL_Log("Precondition(s) not met\n");
+                                return nullptr;
+                            }
+
+//                            SDL_Log("Looking for tiles nearby %f:%f\n", origin->m_pos.x, origin->m_pos.y);
+
+                            auto fields = ai1->get_map()->get_fields_in_range(2, origin); // Replace 2 with "ai1->get_unit()->get_range()"
+                            if (fields.empty()) {
+                                SDL_Log("No fields nearby\n");
+                                return nullptr;
+                            }
+
+//                            SDL_Log("Found %i tile(s)\n", fields.size());
+
+                            auto enemies = ai1->get_map()->get_game_level()->get_enemies_in_lvl();
+                            if (enemies.empty()) {
+                                SDL_Log("No enemies available\n");
+                                return nullptr;
+                            }
+
+                            for (auto &enemy : enemies) {
+                                for (auto &field : fields) {
+                                    field.field->set_flags(domain::map::field::FLAG_TARGET | domain::map::field::FLAG_WEIGHT);
+
+                                    if (field.field == enemy->get_current_field()) {
+                                        return enemy.get();
+                                    }
+                                }
+                            }
+
+                            return nullptr;
+                        });
+
+                        ai->set_state(std::make_shared<ai::states::search_and_destroy_state>());
+//            ai->set_unit(std::dynamic_pointer_cast<domain::combat::attacker>(defensive_building->shared_from_this()));
+                        ai->set_map(m_map.shared_from_this());
+                        ai->set_current_field(shared_from_this());
+
+                        defensive_building->set_ai(ai);
                     }
                 }
 
