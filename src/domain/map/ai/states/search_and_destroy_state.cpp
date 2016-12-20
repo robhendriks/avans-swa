@@ -24,7 +24,7 @@ namespace domain {
 
                     // if the last time we attacked was 2000 ms ago then don't saturate the building anymore
                     if(m_current_target != nullptr && static_cast<int>(elapsed_time) - m_last_attack_time > 2000){
-                        m_current_target->set_saturated(false);
+                        m_current_target->set_saturated({255, 255, 255});
                     }
 
                     // step 1: check if we have a target atm and if we can attack at all
@@ -32,7 +32,7 @@ namespace domain {
                         (ai->get_unit()->get_attack_speed()) &&
                         m_current_target != nullptr) {
                         if(m_current_target->get_hp() <= 0){
-                            m_current_target->set_saturated(false);
+                            m_current_target->set_saturated({255, 255, 255});
                             m_current_target = nullptr;
                             if(ai->get_animation_transition_func() != NULL){
                                 engine::math::box2_t box = engine::math::box2_t{{0,0},{0,0}};
@@ -44,7 +44,7 @@ namespace domain {
                             // step 1.1 attack and unset if target is destroyed
                             SDL_Log("%s %d", "hp before   : ", m_current_target->get_hp());
                             SDL_Log("%s %d", "elapsed time: ", elapsed_time);
-                            m_current_target->set_saturated(true);
+                            m_current_target->set_saturated({255, 0, 0});
 
                             if(ai->get_animation_transition_func() != NULL){
                                 engine::math::box2_t box = calculate_difference_between_target_and_unit(ai);

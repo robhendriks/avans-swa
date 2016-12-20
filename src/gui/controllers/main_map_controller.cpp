@@ -69,7 +69,7 @@ namespace gui {
 
             m_model.world->get_current_level().set_enemies_in_lvl(current_enemies);
             //Updates building, calles method within the level
-            if (m_engine.get_time_elapsed() > m_previous_time + 1500) {
+            if (m_engine.get_time_elapsed() > m_previous_time + 500) {
 
                 //Update model with prev resource list
                 std::vector<std::shared_ptr<domain::resources::resource>> old_resources;
