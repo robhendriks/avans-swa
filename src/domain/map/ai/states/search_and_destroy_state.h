@@ -8,6 +8,7 @@
 #include "state.h"
 #include "../../objects/field_object.h"
 #include "../../../combat/defender.h"
+#include "dead_state.h"
 
 namespace domain {
     namespace map {

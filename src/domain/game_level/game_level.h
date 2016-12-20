@@ -6,6 +6,7 @@
 #define CITY_DEFENCE_GAME_LEVEL_H
 
 #include <memory>
+#include <algorithm>
 #include "string"
 #include "game_stats.h"
 #include "../map/map.h"
@@ -55,6 +56,8 @@ namespace domain {
             std::vector<std::shared_ptr<domain::nations::enemy>> get_enemies_in_lvl();
 
             void set_enemies_in_lvl(std::vector<std::shared_ptr<domain::nations::enemy>> enemies);
+
+            void remove_enemy_in_lvl(const std::shared_ptr<domain::nations::enemy> &enemy);
 
             void set_peace_period(long ms_period);
 

@@ -161,14 +161,18 @@ set(SOURCES src/main.cpp
     src/domain/map/ai/states/search_and_destroy_state.h
     src/domain/map/ai/states/move_state.cpp
     src/domain/map/ai/states/move_state.h
+    src/domain/map/ai/states/dead_state.h
+    src/domain/map/ai/states/dead_state.cpp
     src/domain/map/ai/states/state.cpp
     src/domain/map/ai/states/state.h
     src/domain/combat/attacker.cpp
     src/domain/combat/attacker.h
     src/domain/combat/defender.cpp
     src/domain/combat/defender.h
-    src/gui/views/help.cpp src/gui/views/help.h
-    src/domain/combat/ai_controlled.cpp src/domain/combat/ai_controlled.h
+    src/gui/views/help.cpp
+    src/gui/views/help.h
+    src/domain/combat/ai_controlled.cpp
+    src/domain/combat/ai_controlled.h
     )
 
 include_directories(third_party/json/src

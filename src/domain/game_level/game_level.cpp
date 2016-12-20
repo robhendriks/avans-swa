@@ -135,6 +135,13 @@ namespace domain {
             m_enemies_in_lvl = enemies;
         }
 
+        void game_level::remove_enemy_in_lvl(const std::shared_ptr<domain::nations::enemy> &enemy) {
+            auto it = std::find(m_enemies_in_lvl.begin(), m_enemies_in_lvl.end(), enemy);
+            if (it != m_enemies_in_lvl.end()) {
+                m_enemies_in_lvl.erase(it);
+            }
+        }
+
         /**
          * Notified when a dragable_field_object is dropped
          *
