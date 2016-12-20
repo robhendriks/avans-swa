@@ -6,6 +6,7 @@
 #include "../../events/object_not_dropped_on_field.h"
 #include "objects/dragable_field_object.h"
 #include "../../engine/graphics/font_manager.h"
+#include "objects/road.h"
 
 
 namespace domain {
@@ -81,6 +82,17 @@ namespace domain {
 
                 // notify local observers
                 notify_observers(this, "object-placed");
+                set_saturated({255,255,255});
+
+                // set saturation in case its a road to show that buildings can be placed on there exception when something is placed already
+                // on it
+                if(dynamic_cast<domain::map::objects::road*>(object) != nullptr){
+                    for(auto field : m_map.get_neighbors(m_pos)){
+                        if(field->get_object() == nullptr){
+                            field->set_saturated({0,160,0});
+                        }
+                    }
+                }
 
                 return true;
             } else if (has_object() && object == nullptr) {
@@ -90,6 +102,8 @@ namespace domain {
                 // Reset the field
                 m_object->set_field(nullptr);
                 m_object = nullptr;
+
+                set_saturated({0,160,0});
 
                 // The field is now dropable
                 m_drag_and_drop->add_dropable(*this);
