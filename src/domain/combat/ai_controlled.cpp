@@ -9,11 +9,9 @@ namespace domain {
         void ai_controlled::set_ai(std::shared_ptr<domain::map::ai::ai> ai) {
             m_ai = ai;
 
-            auto self = shared_from_this();
-            auto unit = std::dynamic_pointer_cast<domain::combat::attacker>(self);
-
-            if (unit) {
-                m_ai->set_unit(unit);
+            auto attacker = dynamic_cast<domain::combat::attacker*>(this);
+            if (attacker) {
+                m_ai->set_unit(std::shared_ptr<domain::combat::attacker>(attacker));
             }
         }
 

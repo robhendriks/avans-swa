@@ -111,11 +111,10 @@ namespace domain {
                         });
 
                         ai->set_state(std::make_shared<ai::states::search_and_destroy_state>());
-//            ai->set_unit(std::dynamic_pointer_cast<domain::combat::attacker>(defensive_building->shared_from_this()));
                         ai->set_map(std::shared_ptr<domain::map::map>(&m_map));
                         ai->set_current_field(shared_from_this());
 
-//                        defensive_building->set_ai(ai);
+                        defensive_building->set_ai(ai);
                     }
                 }
 
