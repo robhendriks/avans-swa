@@ -44,8 +44,9 @@ namespace domain {
                 void set_max_rows(int rows);
 
                 void set_max_cols(int cols);
-            private:
-                std::string  id;
+
+            protected:
+                std::string id;
                 double health_ragen;
                 std::string name;
                 std::vector<std::shared_ptr<domain::resources::resource>> required_resources;

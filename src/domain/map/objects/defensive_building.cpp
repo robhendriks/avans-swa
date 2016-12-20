@@ -30,7 +30,9 @@ namespace domain {
             }
 
             dragable_field_object* defensive_building::clone() const {
-                return new defensive_building(*this);
+                auto *result = new defensive_building(*this);
+
+                return result;
             }
 
         }
