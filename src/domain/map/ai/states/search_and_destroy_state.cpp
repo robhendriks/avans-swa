@@ -32,13 +32,13 @@ namespace domain {
                         else{
                             m_last_attack_time = elapsed_time;
                             // step 1.1 attack and unset if target is destroyed
-//                            SDL_Log("%s %d", "hp before   : ", m_current_target->get_hp());
-//                            SDL_Log("%s %d", "elapsed time: ", elapsed_time);
+                            SDL_Log("%s %d", "hp before   : ", m_current_target->get_hp());
+                            SDL_Log("%s %d", "elapsed time: ", elapsed_time);
                             m_current_target->set_saturated(true);
                             set_correct_animation(ai);
                             auto current_hp = m_current_target->lower_hitpoints(
                                     ai->get_unit()->get_damage());
-//                            SDL_Log("%s %d", "hp after   : ",current_hp);
+                            SDL_Log("%s %d", "hp after   : ",current_hp);
                         }
                     }
 

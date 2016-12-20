@@ -93,6 +93,10 @@ namespace domain {
                                 return nullptr;
                             }
 
+                            for (auto &field : fields) {
+                                field.field->set_flags(domain::map::field::FLAG_NONE);
+                            }
+
                             for (auto &enemy : enemies) {
                                 for (auto &field : fields) {
                                     field.field->set_flags(domain::map::field::FLAG_TARGET | domain::map::field::FLAG_WEIGHT);

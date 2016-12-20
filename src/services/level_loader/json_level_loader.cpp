@@ -316,7 +316,7 @@ namespace services {
                             id,
                             static_cast<int>(building_data["hitpoints"]),
                             static_cast<double>(building_data["health-regen"]),
-                            name, costs, range, 999, 999);
+                            name, costs, range, min_dmg, max_dmg);
 
                         defencive_building->set_draw_settings(std::string("images/buildings/") + id + ".png");
                         defencive_building->set_max_rows(4);
