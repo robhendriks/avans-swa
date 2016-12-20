@@ -50,9 +50,9 @@ namespace domain {
 
             float get_current_row();
 
-            void set_saturated(bool on);
+            void set_saturated(std::vector<Uint8> rgb_overlay);
 
-            bool get_saturated();
+            std::vector<Uint8> get_saturated();
 
         protected:
             SDL_Texture *m_texture;
@@ -78,7 +78,7 @@ namespace domain {
             float m_current_column = 0;
             float m_current_row = 0;
 
-            bool m_saturated = false;
+            std::vector<Uint8> m_rgb_overlay;
 
             virtual void animation(engine::graphics::texture_manager &texture_manager, unsigned int time_elapsed);
         };

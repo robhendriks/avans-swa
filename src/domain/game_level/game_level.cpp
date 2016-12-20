@@ -268,14 +268,14 @@ namespace domain {
                     if (!meets_requirement) {
                         //One or more required resources don't meet the requirement amount; so remove from dragable.
                         m_drag_and_drop.remove_dragable(m_placeable_objects[i]);
-                        get_placeable_objects()[i]->set_saturated(true);
+                        get_placeable_objects()[i]->set_saturated({255, 0, 0});
                         break;
                     }
 
-                    if (j == building_requirement.size() - 1 && m_placeable_objects[i]->get_saturated()) {
+                    if (j == building_requirement.size() - 1 && m_placeable_objects[i]->get_saturated()[2] != 255) {
                         //Disallowed building now again meets the requirements. Set it back
                         m_drag_and_drop.add_dragable(*m_placeable_objects[i]);
-                        get_placeable_objects()[i]->set_saturated(false);
+                        get_placeable_objects()[i]->set_saturated({255, 0, 0});
                     }
                 }
             }

@@ -6,7 +6,7 @@
 #include "drawable_game_object.h"
 namespace domain {
     namespace drawable {
-        drawable_game_object::drawable_game_object() : m_image_start_position(nullptr) {}
+        drawable_game_object::drawable_game_object() : m_image_start_position(nullptr), m_rgb_overlay({255, 255, 255}) {}
 
         /**
          * Copy constructor
@@ -29,7 +29,7 @@ namespace domain {
             m_last_transition_time = obj.m_last_transition_time;
             m_current_column = obj.m_current_column;
             m_current_row = obj.m_current_row;
-            m_saturated = obj.m_saturated;
+            m_rgb_overlay = obj.m_rgb_overlay;
         }
 
         void drawable_game_object::set_draw_settings(std::string file_loc,
@@ -65,15 +65,8 @@ namespace domain {
 
         void drawable_game_object::draw_object(engine::graphics::texture_manager &texture_manager) {
             if(m_texture != nullptr && m_image_start_position != nullptr){
-                if(m_saturated){
-                    SDL_SetTextureColorMod(m_texture,255, 0, 0);
-                }
-
+                SDL_SetTextureColorMod(m_texture, m_rgb_overlay[0], m_rgb_overlay[1], m_rgb_overlay[2]);
                 texture_manager.draw(m_texture, *m_image_start_position, get_box());
-
-                if(m_saturated){
-                    SDL_SetTextureColorMod(m_texture,255,255,255);
-                }
             }
         }
 
@@ -135,12 +128,14 @@ namespace domain {
             m_current_column = 0;
         }
 
-        void drawable_game_object::set_saturated(bool on) {
-            m_saturated = on;
+        void drawable_game_object::set_saturated(std::vector<Uint8> rgb_overlay) {
+            if(rgb_overlay.size() == 3){
+                m_rgb_overlay = rgb_overlay;
+            }
         }
 
-        bool drawable_game_object::get_saturated() {
-            return m_saturated;
+        std::vector<Uint8> drawable_game_object::get_saturated() {
+            return m_rgb_overlay;
         }
 
         float drawable_game_object::get_current_row() {
