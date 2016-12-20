@@ -20,7 +20,8 @@ namespace gui {
 namespace gui {
     namespace views {
         class top_bar : public base_view,
-                        engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>> {
+                        engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>,
+                        engine::eventbus::subscriber<engine::events::key_down> {
             friend class main_menu;
             friend class in_game_menu;
             friend class level;
@@ -42,6 +43,8 @@ namespace gui {
 
             void on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event);
 
+            void on_event(engine::events::key_down &event);
+
         private:
             domain::drawable::draw_managers_wrapper &m_draw_managers;
             engine::engine &m_engine;
@@ -51,6 +54,10 @@ namespace gui {
             std::unique_ptr<engine::math::box2_t> m_bar_box;
             std::unique_ptr<engine::math::box2_t> m_close_box;
             std::shared_ptr<controllers::menu_controller> m_menu_controller;
+
+            unsigned int m_previous_draw_time;
+            unsigned int m_fps;
+            bool m_fps_show;
         };
     }
 }

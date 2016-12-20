@@ -40,9 +40,13 @@ namespace engine {
 
         void cooldown();
 
+        unsigned int get_fps() const;
+
         unsigned int get_game_ticks() const;
 
         unsigned int get_paused_ticks() const;
+
+        unsigned int get_real_time_elapsed() const;
 
         unsigned int get_time_elapsed(float interpolation = 1) const;
 
@@ -82,6 +86,9 @@ namespace engine {
         unsigned int m_game_ticks;
         double m_time_ticks;
         double m_speed_factor;
+
+        unsigned int m_previous_draw_time;
+        unsigned int m_fps;
     };
 }
 

@@ -18,7 +18,7 @@ namespace engine {
                                             m_texture_manager(nullptr), m_color_manager(nullptr), m_config(config),
                                             m_state(CREATED), m_ticks_when_paused(0), m_paused_ticks(0),
                                             m_game_ticks(0), m_time_ticks(0),
-                                            m_speed_factor(1) {
+                                            m_speed_factor(1), m_previous_draw_time(0) {
     }
 
     /**
@@ -117,7 +117,11 @@ namespace engine {
             eventbus::eventbus::get_instance().fire(*clear_event);
             delete clear_event;
 
+            auto draw_time = SDL_GetTicks();
             m_window->present();
+
+            m_fps = 1000 / (draw_time - m_previous_draw_time);
+            m_previous_draw_time = draw_time;
         }
     }
 
@@ -349,5 +353,13 @@ namespace engine {
 
             m_state = state1;
         }
+    }
+
+    unsigned int engine::get_fps() const {
+        return m_fps;
+    }
+
+    unsigned int engine::get_real_time_elapsed() const {
+        return SDL_GetTicks();
     }
 }
