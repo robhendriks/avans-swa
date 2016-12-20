@@ -19,7 +19,7 @@ namespace gui {
               m_texture_manager(m_in_game_menu.m_help_view.m_top_bar.m_texture_manager),
               m_color_manager(m_in_game_menu.m_help_view.m_top_bar.m_color_manager),
               m_font_manager(m_in_game_menu.m_help_view.m_top_bar.m_font_manager),
-              m_current_page(1) {
+              m_current_page(1), m_speed_factor(1) {
         }
 
         void level::before() {
@@ -35,13 +35,15 @@ namespace gui {
 
             m_texture_manager.load("images/background-game.png", "background-game");
 
-            // Load arrow textures
+            // Load textures
             m_texture_manager.load("images/arrows.png", "arrows");
             m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 184},
                                                                    {1451, 229}}, 1.5, "l_red_box");
             m_texture_manager.load("images/pause.png", "l_pause");
             m_texture_manager.load("images/play.png", "l_play");
             m_texture_manager.load("images/play_large.png", "l_play_large");
+
+            m_texture_manager.load("images/speed_buttons.png", "l_speed_btns");
 
             // Load texts
             m_texture_manager.load_text("Resources", {255, 255, 255},
@@ -150,6 +152,16 @@ namespace gui {
             builder8.as_left_top(m_in_game_menu.m_question_mark_icon_box->right_top()).add_margin({5, 0});
             m_pause_box.reset(new engine::math::box2_t(builder8.build()));
 
+            // Set the slow down box
+            engine::graphics::box_builder builder9({32, 32});
+            builder9.as_left_top(m_pause_box->right_top()).add_margin({5, 0});
+            m_slow_down_box.reset(new engine::math::box2_t(builder9.build()));
+
+            // Set the fast forward box
+            engine::graphics::box_builder builder13({32, 32});
+            builder13.as_left_top(m_slow_down_box->right_top()).add_margin({5, 0});
+            m_fast_forward_box.reset(new engine::math::box2_t(builder13.build()));
+
             // Set the overlay resume box
             engine::graphics::box_builder builder10(
                 m_in_game_menu.m_help_view.m_top_bar.m_texture_manager.get_size("l_play_large"));
@@ -210,6 +222,24 @@ namespace gui {
 
             // With the pause or play btn
             m_texture_manager.draw(m_model.paused ? "l_play" : "l_pause", *m_pause_box);
+
+            // Draw the slow down and fast forward buttons
+            float sd_y_offset = can_decrease_speed() ? 0 : 32;
+            float ff_y_offset = can_increase_speed() ? 0 : 32;
+            m_texture_manager.draw("l_speed_btns", {32, sd_y_offset}, *m_slow_down_box);
+            m_texture_manager.draw("l_speed_btns", {0, ff_y_offset}, *m_fast_forward_box);
+
+            // Draw the speed text
+            std::string factor = std::to_string(m_speed_factor);
+            m_texture_manager.load_text(factor.substr(0, 5) + "x", {0, 255, 0},
+                                        *m_font_manager.get_font("roboto", 18), "l_speed");
+
+            engine::graphics::box_builder speed_builder(m_texture_manager.get_size("l_speed"));
+            speed_builder.as_left_top(m_fast_forward_box->right_top()).add_margin({5, 0})
+                .center_vertical(m_fast_forward_box->min.y, m_fast_forward_box->max.y);
+
+            m_texture_manager.draw("l_speed", speed_builder.build());
+            m_texture_manager.unload("l_speed");
 
             // Draw the goals
             m_goals_view.draw(time_elapsed, display_box);
@@ -350,6 +380,10 @@ namespace gui {
                     navigate_left();
                 } else if (m_arrow_right_box->contains(*position)) {
                     navigate_right();
+                } else if (m_slow_down_box->contains(*position)) {
+                    decrease_speed();
+                } else if (m_fast_forward_box->contains(*position)) {
+                    increase_speed();
                 }
             }
         }
@@ -364,8 +398,45 @@ namespace gui {
                         navigate_left();
                     } else if (event.get_keycode() == engine::input::keycodes::keycode::RIGHT) {
                         navigate_right();
+                    } else if (event.get_keycode() == engine::input::keycodes::keycode::PAGEUP) {
+                        increase_speed();
+                    } else if (event.get_keycode() == engine::input::keycodes::keycode::PAGEDOWN) {
+                        decrease_speed();
+                    } else if (event.get_keycode() == engine::input::keycodes::keycode::HOME) {
+                        reset_speed();
                     }
                 }
+            }
+        }
+
+        void level::reset_speed() {
+            if (m_speed_factor != 1) {
+                m_in_game_menu.m_help_view.m_top_bar.m_engine.reset_speed();
+                m_speed_factor = 1;
+            }
+        }
+
+        bool level::can_increase_speed() {
+            return m_speed_factor < (3 * 2);
+        }
+
+        void level::increase_speed() {
+            // Check if it can be increased more
+            if (can_increase_speed()) {
+                m_in_game_menu.m_help_view.m_top_bar.m_engine.change_game_speed(2);
+                m_speed_factor *= 2;
+            }
+        }
+
+        bool level::can_decrease_speed() {
+            return m_speed_factor > (0.5 * 0.5 * 0.5);
+        }
+
+        void level::decrease_speed() {
+            // Check if it can be decreased more
+            if (can_decrease_speed()) {
+                m_in_game_menu.m_help_view.m_top_bar.m_engine.change_game_speed(0.5);
+                m_speed_factor *= 0.5;
             }
         }
 
@@ -395,11 +466,12 @@ namespace gui {
 
             m_texture_manager.unload("background-game");
 
-            // Unload arrow textures
+            // Unload textures
             m_texture_manager.unload("arrows");
             m_texture_manager.unload("l_red_box");
             m_texture_manager.unload("l_pause");
             m_texture_manager.unload("l_play");
+            m_texture_manager.unload("l_speed_btns");
 
             // Unload texts
             m_texture_manager.unload("l_resources_header_text");
@@ -436,6 +508,8 @@ namespace gui {
             m_controller->pause(); // Will pause or resume the game
 
             if (m_model.paused) {
+                // Reset the speed factor
+                m_speed_factor = 1;
                 // Pause the music
                 m_music_manager.pause();
                 // Pause all sounds

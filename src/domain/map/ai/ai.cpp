@@ -17,13 +17,13 @@ namespace domain {
                 std::shared_ptr<domain::map::ai::states::search_and_destroy_state> attack = std::make_shared<domain::map::ai::states::search_and_destroy_state>(domain::map::ai::states::search_and_destroy_state());
                 move->set_next_state(attack);
                 attack->set_next_state(move);
-                m_state = move;
+                m_state = attack;
             }
 
             void ai::update(unsigned int elapsed_time) {
                 // oke here is where the magic happens ladies.
                 m_state->update(this, elapsed_time);
-                // thats it aplause.
+                // thats it applause.
             }
 
             std::shared_ptr<field> ai::get_spawn_point() {
@@ -79,6 +79,14 @@ namespace domain {
                 return m_new_target_func;
             }
 
+            std::function<void (std::string title, domain::map::ai::ai* ai, engine::math::box2_t& difference)>  ai::get_animation_transition_func(){
+                return m_animation_transition_func;
+            }
+
+            void ai::set_animation_transition_func(std::function<void(std::string title, domain::map::ai::ai *ai, engine::math::box2_t& difference)> func) {
+                m_animation_transition_func = func;
+            }
+
             void ai::set_state(std::shared_ptr<states::state> state) {
                 m_state = state;
             }
@@ -100,14 +108,13 @@ namespace domain {
                 result.set_unit(m_unit);
                 result.set_map(m_map);
                 result.set_new_target_func(m_new_target_func);
-                result.set_current_field(m_current_field);
+                result.set_animation_transition_func(m_animation_transition_func);
                 return result;
             }
 
             std::shared_ptr<states::state> ai::get_state() const {
                 return m_state;
             }
-
         }
     }
 }

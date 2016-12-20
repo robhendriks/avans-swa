@@ -21,6 +21,7 @@ namespace domain {
 
                 building(std::shared_ptr<field> field1, int hitpoints = 0);
 
+                // Copy constructor
                 building(const building &obj);
 
                 dragable_field_object *clone() const;
@@ -40,12 +41,7 @@ namespace domain {
                 virtual void set_draw_settings(std::string file_loc, engine::math::vec2_t image_start_position = {0, 0});
                 virtual void set_box(std::shared_ptr<engine::math::box2_t> box);
                 virtual engine::math::box2_t get_box() const;
-
-                void set_max_rows(int rows);
-
-                void set_max_cols(int cols);
-
-            protected:
+            private:
                 std::string id;
                 double health_ragen;
                 std::string name;

@@ -39,6 +39,9 @@ namespace engine {
                 ENTER,
                 PAUSE,
                 ESCAPE,
+                HOME,
+                PAGEUP,
+                PAGEDOWN,
             };
 
             inline keycode sdl_scancode_to_keycode(const SDL_Scancode &scancode) {
@@ -99,6 +102,13 @@ namespace engine {
                         return PAUSE;
                     case SDL_SCANCODE_ESCAPE:
                         return ESCAPE;
+                    case SDL_SCANCODE_HOME:
+                    case SDL_SCANCODE_AC_HOME:
+                        return HOME;
+                    case SDL_SCANCODE_PAGEUP:
+                        return PAGEUP;
+                    case SDL_SCANCODE_PAGEDOWN:
+                        return PAGEDOWN;
                     default:
                         return UNKNOWN;
                 }

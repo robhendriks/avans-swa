@@ -19,7 +19,7 @@ namespace domain {
 namespace domain {
     namespace map {
         namespace objects {
-            class field_object : public drawable::drawable_game_object {
+            class field_object : public virtual drawable::drawable_game_object {
             public:
                 field_object();
 

@@ -41,8 +41,9 @@ namespace domain {
                                 calculate_initial_state_with_difference(ai);
 
                                 // next up set the animation based on the difference
-                                set_correct_animation(ai);
-
+                                if(ai->get_animation_transition_func() != NULL){
+                                    ai->get_animation_transition_func()("next-field-set", ai, m_difference_box);
+                                }
                                 // now that move is complete lets switch to searching for targets
                                 pauze(elapsed_time);
                                 ai->set_state(get_next_state());
@@ -50,19 +51,25 @@ namespace domain {
                                 // in case it was a pauze then we need to make it so we don't insta jump to the other field
                                 // because elapsed time is invalid
                                 recalculate_time(elapsed_time);
-                                // animation logic
-                                set_correct_animation(ai);
+
                                 // move logic
                                 move(ai, elapsed_time);
+
+                                // animation logic
+                                if(ai->get_animation_transition_func() != NULL){
+                                    ai->get_animation_transition_func()("move", ai, m_difference_box);
+                                }
                             }
                         } else {
                             m_next_field = get_next_field(ai);
                             calculate_initial_state_with_difference(ai);
-                            set_correct_animation(ai);
+                            // animation logic
+                            if(ai->get_animation_transition_func() != NULL){
+                                ai->get_animation_transition_func()("next-field-set", ai, m_difference_box);
+                            }
                         }
                     }
                 }
-
 
                 std::shared_ptr<field> move_state::get_next_field(domain::map::ai::ai *ai) {
                     if (ai->get_current_field() == nullptr)
@@ -128,36 +135,6 @@ namespace domain {
                             {static_cast<float>(static_cast<double>(f_box.max.x - u_box.max.x)  / 100),
                                     static_cast<float>(static_cast<double>(f_box.max.y - u_box.max.y) / 100)}
                     };
-                }
-
-                void move_state::set_correct_animation(domain::map::ai::ai *ai) {
-                    // set speed of animation
-                    ai->get_unit()->set_transition(
-                            static_cast<long>(ai->get_unit()->get_movement() / ai->get_unit()->get_max_column()));
-
-                    // set correct animation (in case its not set yet to avoid resetting it
-                    auto current_row = ai->get_unit()->get_current_row();
-
-                    if(m_difference_box.min.x > 0){ // to right
-                        if( current_row != 2){
-                            ai->get_unit()->set_current_row(2);
-                        }
-                    }
-                    else if(m_difference_box.min.x < 0){ // to left
-                        if( current_row != 1){
-                            ai->get_unit()->set_current_row(1);
-                        }
-                    }
-                    else if(m_difference_box.min.y < 0){ // to top
-                        if( current_row != 3){
-                            ai->get_unit()->set_current_row(3);
-                        }
-                    }
-                    else{ // to bottom
-                        if( current_row != 0){
-                            ai->get_unit()->set_current_row(0);
-                        }
-                    }
                 }
 
                 void move_state::recalculate_time(unsigned int time) {

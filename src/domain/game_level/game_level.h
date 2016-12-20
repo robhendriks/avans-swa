@@ -12,6 +12,7 @@
 #include "../nations/enemy.h"
 #include "../resources/resource.h"
 #include "../map/objects/dragable_field_object.h"
+#include "../map/objects/building.h"
 
 
 namespace domain {
@@ -92,7 +93,9 @@ namespace domain {
 
             void set_resources(std::vector<std::shared_ptr<domain::resources::resource>> resources);
 
-            void update();
+            void update(bool no_resources = false);
+
+            void decrement_building_cost(engine::draganddrop::dragable& building);
 
         private:
             void check_goals_reached();

@@ -23,6 +23,9 @@ namespace gui {
             m_goals_view.before();
 
             // Load textures
+
+            m_texture_manager.load("images/background-game.png", "background-game");
+
             m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 124}, {1451, 169}}, 2, "w_green_box");
             m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 184}, {1451, 229}}, 1.5, "w_red_box");
             m_texture_manager.load_from_svg("images/ui-pack.svg", {{1080, 630}, {1119, 661}}, 0.8, "red_slider_right");
@@ -126,6 +129,8 @@ namespace gui {
         }
 
         void win_game_over::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
+            m_texture_manager.draw("background-game", display_box);
+
             m_goals_view.draw(time_elapsed, display_box);
 
             m_texture_manager.draw("w_title", *m_title_box);
@@ -175,6 +180,7 @@ namespace gui {
             m_texture_manager.unload("w_green_box");
             m_texture_manager.unload("w_red_box");
             m_texture_manager.unload("red_slider_right");
+            m_texture_manager.unload("background-game");
 
             // Unload texts
             m_texture_manager.unload("w_title");

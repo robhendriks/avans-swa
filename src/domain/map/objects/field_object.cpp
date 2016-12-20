@@ -15,7 +15,7 @@ namespace domain {
              *
              * @param obj
              */
-            field_object::field_object(const field_object &obj) : drawable_game_object(obj) {
+            field_object::field_object(const field_object &obj) {
                 m_rotation = obj.get_rotation();
                 m_field = nullptr;
             }

@@ -23,7 +23,7 @@ namespace domain {
 
                 dragable_field_object *clone() const;
 
-                void update(domain::game_level::game_level game_level,unsigned int elapsed_time);
+                void update(domain::game_level::game_level game_level, unsigned int elapsed_time);
             };
 
         }

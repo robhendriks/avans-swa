@@ -115,7 +115,7 @@ namespace domain {
                         ai->set_map(std::shared_ptr<domain::map::map>(&m_map));
                         ai->set_current_field(shared_from_this());
 
-                        defensive_building->set_ai(ai);
+//                        defensive_building->set_ai(ai);
                     }
                 }
 

@@ -23,6 +23,72 @@ namespace services {
                 }
                 return target;
             });
+
+            m_ai->set_animation_transition_func([&](std::string title, domain::map::ai::ai* ai1, engine::math::box2_t& difference_between_you_and_target){
+                if(title == "attack"){
+                    // set speed of animation
+                    ai1->get_unit()->set_transition(
+                            static_cast<long>(ai1->get_unit()->get_attack_speed() / ai1->get_unit()->get_max_column()));
+
+                    // set correct animation (in case its not set yet to avoid resetting it
+                    auto current_row = ai1->get_unit()->get_current_row();
+                    // lets just go towards whats furthest away for simplicity horizontal or vertical?
+                    if(std::abs(difference_between_you_and_target.min.y) > std::abs(difference_between_you_and_target.min.x)){
+                        // guess its vertical
+                        if(difference_between_you_and_target.min.y > 0){ // then to the bottom
+                            if( current_row != 4){
+                                ai1->get_unit()->set_current_row(4);
+                            }
+                        }
+                        else{ // to top
+                            if( current_row != 7){
+                                ai1->get_unit()->set_current_row(7);
+                            }
+                        }
+                    }
+                    else{
+                        // guess horizontal
+                        if(difference_between_you_and_target.min.x > 0){ // to right
+                            if( current_row != 6){
+                                ai1->get_unit()->set_current_row(6);
+                            }
+                        }
+                        else{ // to left
+                            if( current_row != 5){
+                                ai1->get_unit()->set_current_row(5);
+                            }
+                        }
+                    }
+                }
+                else if(title == "next-field-set" || title == "move"){
+                    // set speed of animation
+                    ai1->get_unit()->set_transition(
+                            static_cast<long>(ai1->get_unit()->get_movement() / ai1->get_unit()->get_max_column()));
+                    // set correct animation (in case its not set yet to avoid resetting it
+                    auto current_row = ai1->get_unit()->get_current_row();
+
+                    if(difference_between_you_and_target.min.x > 0){ // to right
+                        if( current_row != 2){
+                            ai1->get_unit()->set_current_row(2);
+                        }
+                    }
+                    else if(difference_between_you_and_target.min.x < 0){ // to left
+                        if( current_row != 1){
+                            ai1->get_unit()->set_current_row(1);
+                        }
+                    }
+                    else if(difference_between_you_and_target.min.y < 0){ // to top
+                        if( current_row != 3){
+                            ai1->get_unit()->set_current_row(3);
+                        }
+                    }
+                    else{ // to bottom
+                        if( current_row != 0){
+                            ai1->get_unit()->set_current_row(0);
+                        }
+                    }
+                }
+            });
         }
 
         std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> wavegenerator::generateEnemies(int _time,

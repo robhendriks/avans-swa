@@ -23,16 +23,14 @@ namespace domain {
                 : building(box, id, hitpoints, health_ragen, name, required_resources),
                   attacker(min_damage, max_damage, 2.0, range, 0) {}
 
-            void defensive_building::update(domain::game_level::game_level game_level,unsigned int elapsed_time) {
+            void defensive_building::update(domain::game_level::game_level game_level, unsigned int elapsed_time) {
                 if(get_ai()){
                     get_ai()->update(elapsed_time);
                 }
             }
 
             dragable_field_object* defensive_building::clone() const {
-                auto *result = new defensive_building(*this);
-
-                return result;
+                return new defensive_building(*this);
             }
 
         }

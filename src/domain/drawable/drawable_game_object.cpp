@@ -83,6 +83,7 @@ namespace domain {
                 if(static_cast<int>(time_elapsed) - static_cast<int>(m_last_transition_time) > m_transition) {
                     m_current_column++;
                     m_last_transition_time = time_elapsed;
+
                     //- 1 because you want to start at pixel 0 instead of imagesize*1(= 32)
                     if(m_current_column > m_max_column - 1){
                         m_current_column = 0;

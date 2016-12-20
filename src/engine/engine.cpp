@@ -17,7 +17,8 @@ namespace engine {
     engine::engine(engine_config &config) : m_window(nullptr), m_sound_manager(nullptr), m_music_manager(nullptr),
                                             m_texture_manager(nullptr), m_color_manager(nullptr), m_config(config),
                                             m_state(CREATED), m_ticks_when_paused(0), m_paused_ticks(0),
-                                            m_game_ticks(0) {
+                                            m_game_ticks(0), m_time_ticks(0),
+                                            m_speed_factor(1) {
     }
 
     /**
@@ -53,6 +54,8 @@ namespace engine {
      */
     void engine::pause() {
         if (m_state == RUNNING) {
+            // Always pause on "normal" speed
+            reset_speed();
             set_state(PAUSED);
             m_ticks_when_paused = m_game_ticks;
         }
@@ -68,6 +71,20 @@ namespace engine {
             set_state(RUNNING);
             m_paused_ticks += (m_game_ticks - m_ticks_when_paused);
         }
+    }
+
+    /**
+     * Reset the config speed
+     */
+    void engine::reset_speed() {
+        m_speed_factor = 1;
+    }
+
+    /**
+     * Increase the game speed
+     */
+    void engine::change_game_speed(double factor) {
+        m_speed_factor *= factor;
     }
 
     /**
@@ -87,6 +104,7 @@ namespace engine {
                 next_game_tick += m_config.get_skip_ticks();
                 loops++;
                 m_game_ticks++;
+                m_time_ticks += m_speed_factor;
             }
 
             m_window->clear();
@@ -275,7 +293,7 @@ namespace engine {
      */
     unsigned int engine::get_time_elapsed(float interpolation) const {
         if (m_state == RUNNING || m_state == PAUSED) {
-            float game_ticks = m_game_ticks - get_paused_ticks() + interpolation - 1;
+            double game_ticks = m_time_ticks - get_paused_ticks() + interpolation - 1;
             return game_ticks * m_config.get_skip_ticks();
         }
 

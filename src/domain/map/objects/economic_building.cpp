@@ -25,8 +25,13 @@ namespace domain {
                 produced_resources = resource;
             }
 
-            economic_building::economic_building(const economic_building &obj) : building(obj) {
+            economic_building::economic_building(const economic_building &obj) :
+                domain::drawable::drawable_game_object(obj), building(obj) {
                 produced_resources = obj.produced_resources;
+            }
+
+            dragable_field_object *economic_building::clone() const {
+                return new economic_building(*this);
             }
 
             std::shared_ptr<domain::resources::resource> economic_building::get_produced_resources() {
@@ -52,8 +57,6 @@ namespace domain {
                     counter++;
                 }
             }
-
-
         }
     }
 }

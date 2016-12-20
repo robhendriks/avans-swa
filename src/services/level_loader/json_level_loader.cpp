@@ -255,12 +255,12 @@ namespace services {
 
 
                     auto data_building_cost = building_data["cost"];
-                    auto it = data_building_cost.begin();
-                    for (json::iterator building_costs_item = data_building_cost.begin();
-                         it != data_building_cost.end(); ++it) {
 
-                        costs.push_back(std::make_shared<domain::resources::resource>(building_costs_item.key(),
-                                                                                      building_costs_item.value()));
+                    for (auto it = data_building_cost.begin();it != data_building_cost.end(); ++it)
+                          {
+
+                        costs.push_back(std::make_shared<domain::resources::resource>(it.key(),
+                                                                                      it.value()));
                     }
 
 
@@ -306,8 +306,6 @@ namespace services {
 
 
                         economic_building->set_draw_settings(std::string("images/buildings/") + id + ".png");
-                        economic_building->set_max_rows(4);
-                        economic_building->set_max_cols(2);
 
                         vec_building.push_back(economic_building);
                     } else {
@@ -319,8 +317,6 @@ namespace services {
                             name, costs, range, min_dmg, max_dmg);
 
                         defencive_building->set_draw_settings(std::string("images/buildings/") + id + ".png");
-                        defencive_building->set_max_rows(4);
-                        defencive_building->set_max_cols(2);
 
                         vec_building.push_back(defencive_building);
                     }

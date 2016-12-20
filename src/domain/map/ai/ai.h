@@ -30,6 +30,10 @@ namespace domain {
                 std::shared_ptr<domain::combat::attacker> get_unit();
                 void set_new_target_func(std::function<domain::combat::defender* (domain::map::field* origin, domain::map::ai::ai* ai)>  target);
                 std::function<domain::combat::defender* (domain::map::field* origin, domain::map::ai::ai* ai)>  get_new_target_func();
+
+                void set_animation_transition_func(std::function<void (std::string title, domain::map::ai::ai* ai, engine::math::box2_t& difference_between_you_and_target)> func);
+                std::function<void (std::string title, domain::map::ai::ai* ai, engine::math::box2_t& difference_between_you_and_target)>  get_animation_transition_func();
+
                 bool is_initialised() const;
                 void set_state(std::shared_ptr<states::state> state);
                 std::shared_ptr<states::state> get_state() const ;
@@ -41,6 +45,7 @@ namespace domain {
                 std::shared_ptr<map> m_map;
                 std::shared_ptr<domain::combat::attacker> m_unit;
                 std::function<domain::combat::defender* (domain::map::field* origin, domain::map::ai::ai* ai)> m_new_target_func;
+                std::function<void (std::string title, domain::map::ai::ai* ai, engine::math::box2_t& difference_between_you_and_target)> m_animation_transition_func;
                 std::shared_ptr<states::state> m_state;
                 std::shared_ptr<field> get_spawn_point();
             };

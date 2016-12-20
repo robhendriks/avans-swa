@@ -12,7 +12,13 @@ namespace domain {
 
             building::building(std::shared_ptr<field> field1, int hitpoints) : dragable_field_object(field1), domain::combat::defender(hitpoints, 0) {}
 
-            building::building(const building &obj) : dragable_field_object(obj), domain::combat::defender(obj) {}
+            // Copy constructor
+            building::building(const building &obj) : dragable_field_object(obj), domain::combat::defender(obj) {
+                id = obj.id;
+                health_ragen = obj.health_ragen;
+                name = obj.name;
+                required_resources = obj.required_resources;
+            }
 
             /**
              * Make sure a building can only be placed next to a road object
@@ -84,14 +90,6 @@ namespace domain {
 
             engine::math::box2_t building::get_box() const {
                 return dragable_field_object::get_box();
-            }
-
-            void building::set_max_rows(int rows) {
-                dragable_field_object::set_max_row(rows);
-            }
-
-            void building::set_max_cols(int cols) {
-                dragable_field_object::set_max_column(cols);
             }
         }
 

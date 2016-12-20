@@ -61,6 +61,8 @@ namespace engine {
 
             void stop();
 
+            void add_on_drop_callback(std::function<void(dragable&)> callback);
+
         private:
             std::vector<dragable*> m_dragables;
             dragable* m_dragging;
@@ -70,6 +72,8 @@ namespace engine {
             bool m_select_and_drop;
             bool m_started;
             math::vec2_t *m_mouse_position_on_select;
+
+            std::vector<std::function<void(dragable&)>> m_callbacks;
         };
     }
 }
