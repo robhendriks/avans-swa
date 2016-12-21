@@ -42,6 +42,9 @@ namespace domain {
         }
 
         int defender::get_current_hp_percentage_relative_to_max() {
+            if(m_current_hp == 0)
+                return 0;
+
            return m_current_hp / m_max_hp * 100;
         }
     }
