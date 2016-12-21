@@ -29,7 +29,7 @@ namespace domain{
         mayor();
         mayor(std::string name, std::vector<std::string> hobbies, std::vector<std::string> behavior);
 
-        // should be called each time a mayor gets added to a new stat to avoid overflowing the queue with events that have been
+        // should be called each time a mayor_view gets added to a new stat to avoid overflowing the queue with events that have been
         // reached at the start
         void init(game_level::game_stats* init);
 

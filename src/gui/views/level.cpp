@@ -12,19 +12,19 @@
 namespace gui {
     namespace views {
 
-        level::level(in_game_menu &in_game_menu1, level_goals &goals_view, engine::audio::music_manager &music_manager,
+        level::level(in_game_menu &in_game_menu1, level_goals &goals_view, mayor_view &mayor_view1, engine::audio::music_manager &music_manager,
                      models::main_map_model &model, engine::audio::sound_manager &sound_manager)
-            : m_in_game_menu(in_game_menu1), m_goals_view(goals_view), m_music_manager(music_manager),
+            : m_in_game_menu(in_game_menu1), m_goals_view(goals_view), m_mayor_view(mayor_view1), m_music_manager(music_manager),
               m_model(model), m_sound_manager(sound_manager),
               m_texture_manager(m_in_game_menu.m_help_view.m_top_bar.m_texture_manager),
               m_color_manager(m_in_game_menu.m_help_view.m_top_bar.m_color_manager),
               m_font_manager(m_in_game_menu.m_help_view.m_top_bar.m_font_manager),
-              m_current_page(1), m_speed_factor(1) {
-        }
+              m_current_page(1), m_speed_factor(1) {}
 
         void level::before() {
             m_in_game_menu.before();
             m_goals_view.before();
+            m_mayor_view.before();
 
             // Add callback on menu show
             m_in_game_menu.call_on_show_change([&](bool show) {
@@ -245,6 +245,9 @@ namespace gui {
 
             // Draw the map
             current_level.get_map()->draw(m_in_game_menu.m_help_view.m_top_bar.m_draw_managers, time_elapsed);
+
+            // Draw the mayor_view
+            m_mayor_view.draw(time_elapsed, display_box);
 
             // Draw the arrows
             float left_arrow_y = (m_current_page == 1 ? 128 : 0);

@@ -2,12 +2,12 @@
 // Created by Bert on 21-12-2016.
 //
 
-#include "mayor.h"
+#include "mayor_view.h"
 #include "../../engine/graphics/box_builder.h"
 
-gui::views::mayor::mayor(domain::drawable::draw_managers_wrapper &draw_managers) : m_draw_managers(draw_managers){}
+gui::views::mayor_view::mayor_view(domain::drawable::draw_managers_wrapper &draw_managers) : m_draw_managers(draw_managers){}
 
-void gui::views::mayor::before() {
+void gui::views::mayor_view::before() {
     m_show = true;
 
     // Load textures
@@ -18,13 +18,13 @@ void gui::views::mayor::before() {
                                               *m_draw_managers.font_manager.get_font("roboto", 25), "mayor_text");
 }
 
-void gui::views::mayor::on_display_change(engine::math::box2_t display_box) {
-    // Create mayor box on the right
+void gui::views::mayor_view::on_display_change(engine::math::box2_t display_box) {
+    // Create mayor_view box on the right
     engine::graphics::box_builder builder1(m_draw_managers.texture_manager.get_size("img_mayor_bart"));
     m_mayor_box.reset(new engine::math::box2_t(builder1.build()));
 }
 
-void gui::views::mayor::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
+void gui::views::mayor_view::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
     if (m_show){
         m_draw_managers.texture_manager.draw("img_mayor_bart", *m_mayor_box);
 
@@ -35,11 +35,11 @@ void gui::views::mayor::draw(unsigned int time_elapsed, engine::math::box2_t dis
 
 }
 
-void gui::views::mayor::after() {
+void gui::views::mayor_view::after() {
     m_draw_managers.texture_manager.unload("img_mayor_bart");
     m_draw_managers.texture_manager.unload("mayor_text");
 }
 
-void gui::views::mayor::change_show() {
+void gui::views::mayor_view::change_show() {
     m_show = !m_show;
 }

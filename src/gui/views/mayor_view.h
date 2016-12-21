@@ -11,9 +11,9 @@
 
 namespace gui {
     namespace views {
-        class mayor : public base_view {
+        class mayor_view : public base_view {
         public:
-            mayor(domain::drawable::draw_managers_wrapper &draw_managers);
+            mayor_view(domain::drawable::draw_managers_wrapper &draw_managers);
 
             void before();
 
