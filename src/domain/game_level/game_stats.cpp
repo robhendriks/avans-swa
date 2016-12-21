@@ -17,6 +17,8 @@ namespace domain {
                 // Set a new count
                 m_stats[counter] = 1;
             }
+
+            notify_observers(this, counter);
         }
 
         void game_stats::decrease(std::string counter) {
@@ -27,6 +29,8 @@ namespace domain {
                 // Set a new count
                 m_stats[counter] = -1;
             }
+
+            notify_observers(this, counter);
         }
 
         void game_stats::set_counter(std::string counter, int value) {

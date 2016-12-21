@@ -169,7 +169,7 @@ set(SOURCES src/main.cpp
     src/domain/combat/defender.h
     src/gui/views/help.cpp src/gui/views/help.h
     src/domain/combat/ai_controlled.cpp src/domain/combat/ai_controlled.h
-    )
+        src/domain/mayor/mayor.cpp src/domain/mayor/mayor.h)
 
 include_directories(third_party/json/src
     third_party/di-cpp14/include

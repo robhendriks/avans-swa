@@ -8,10 +8,11 @@
 #include <memory>
 #include <vector>
 #include <map>
+#include "../../engine/observer/observee.h"
 
 namespace domain {
     namespace game_level {
-        class game_stats {
+        class game_stats : engine::observer::observee<game_stats>{
         public:
 
             /**
