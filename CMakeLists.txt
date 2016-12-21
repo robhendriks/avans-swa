@@ -8,7 +8,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -std=c++14")
 
 if (NOT APPLE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
-endif()
+endif ()
 
 add_subdirectory(third_party)
 
@@ -169,7 +169,8 @@ set(SOURCES src/main.cpp
     src/domain/combat/defender.h
     src/gui/views/help.cpp src/gui/views/help.h
     src/domain/combat/ai_controlled.cpp src/domain/combat/ai_controlled.h
-        src/domain/mayor/mayor.cpp src/domain/mayor/mayor.h)
+    src/domain/mayor/mayor.cpp src/domain/mayor/mayor.h
+    src/gui/views/reclame.cpp src/gui/views/reclame.h)
 
 include_directories(third_party/json/src
     third_party/di-cpp14/include
