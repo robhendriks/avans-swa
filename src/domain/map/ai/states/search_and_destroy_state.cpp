@@ -31,7 +31,7 @@ namespace domain {
                     if (static_cast<int>(elapsed_time) - m_last_attack_time >
                         (ai->get_unit()->get_attack_speed()) &&
                         m_current_target != nullptr) {
-                        if(m_current_target->get_hp() <= 0){
+                        if(m_current_target->get_current_hp() <= 0){
                             m_current_target->set_saturated({255, 255, 255});
                             m_current_target = nullptr;
                             if(ai->get_animation_transition_func() != NULL){
@@ -42,7 +42,7 @@ namespace domain {
                         else{
                             m_last_attack_time = elapsed_time;
                             // step 1.1 attack and unset if target is destroyed
-                            SDL_Log("%s %d", "hp before   : ", m_current_target->get_hp());
+                            SDL_Log("%s %d", "hp before   : ", m_current_target->get_current_hp());
                             SDL_Log("%s %d", "elapsed time: ", elapsed_time);
                             m_current_target->set_saturated({255, 0, 0});
 
