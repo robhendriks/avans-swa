@@ -2,8 +2,8 @@
 // Created by Bert on 21-12-2016.
 //
 
-#ifndef CITY_DEFENCE_MAYOR_H
-#define CITY_DEFENCE_MAYOR_H
+#ifndef CITY_DEFENCE_MAYOR_VIEW_H
+#define CITY_DEFENCE_MAYOR_VIEW_H
 
 #include <memory>
 #include "base_view.h"
@@ -37,4 +37,4 @@ namespace gui {
 }
 
 
-#endif //CITY_DEFENCE_MAYOR_H
+#endif //CITY_DEFENCE_MAYOR_VIEW_H

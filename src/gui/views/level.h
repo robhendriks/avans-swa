@@ -20,6 +20,7 @@
 #include "level_goals.h"
 #include "../../events/goal_reached.h"
 #include "in_game_menu.h"
+#include "mayor_view.h"
 
 namespace gui {
     namespace controllers {
@@ -32,8 +33,6 @@ namespace gui {
         class in_game_menu;
     }
 }
-
-class mayor_view;
 
 namespace gui {
     namespace views {
