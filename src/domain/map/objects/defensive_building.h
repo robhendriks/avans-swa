@@ -28,6 +28,8 @@ namespace domain {
 
                 void update(domain::game_level::game_level game_level);
 
+                void draw(drawable::draw_managers_wrapper &draw_managers, unsigned int time_elapsed);
+
             private:
                 int min_dmg;
                 int max_dmg;
