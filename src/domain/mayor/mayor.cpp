@@ -18,7 +18,7 @@ namespace domain{
         update(p_observee, title);
 
         /** EXAMPLE
-        mayor ravanna = mayor("Ravanna", {"Playing god"}, {"Aggresive", "Conquest orientated"});
+        mayor ravanna = mayor("Ravanna", {"Playing dictator"}, {"Aggresive", "Conquest orientated"});
         milestone milestone1 = milestone();
         milestone1.min = 4;
         milestone1.max = 4;

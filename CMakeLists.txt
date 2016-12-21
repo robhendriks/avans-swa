@@ -180,7 +180,7 @@ include_directories(third_party/json/src
     ${SDL2_TTF_INCLUDE_DIRS}
     ${SDL2_MIXER_INCLUDE_DIR})
 
-add_executable(city_defence ${SOURCES})
+add_executable(city_defence ${SOURCES} src/gui/views/mayor.cpp src/gui/views/mayor.h)
 add_library(city_defence_sources STATIC ${SOURCES})
 
 target_link_libraries(city_defence
