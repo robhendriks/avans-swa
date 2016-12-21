@@ -86,6 +86,7 @@ namespace gui {
         void level::on_display_change(engine::math::box2_t display_box) {
             m_in_game_menu.on_display_change(display_box);
             m_goals_view.on_display_change(display_box);
+            m_mayor_view.on_display_change(display_box);
 
             // Create the box for the placeable objects
             float height = 128;
@@ -442,6 +443,7 @@ namespace gui {
         void level::after() {
             m_in_game_menu.after();
             m_goals_view.after();
+            m_mayor_view.after();
 
             m_texture_manager.unload("background-game");
 
