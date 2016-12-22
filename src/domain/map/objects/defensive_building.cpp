@@ -64,7 +64,7 @@ namespace domain {
 
                     draw_managers.texture_manager.load_text("Damage:", {0, 0, 0}, font, "d_d_title");
                     engine::graphics::box_builder builder(draw_managers.texture_manager.get_size("d_d_title"));
-                    builder.as_right_bottom(get_box().left_top()).add_margin({0, 0});
+                    builder.as_right_bottom(get_box().left_top());
                     auto title_box = builder.build();
                     draw_managers.texture_manager.draw("d_d_title", title_box);
                     draw_managers.texture_manager.unload("d_d_title");
@@ -74,7 +74,7 @@ namespace domain {
                     draw_managers.texture_manager.load_text(text, {0, 0, 0}, font, "hover");
                     // Draw
                     engine::graphics::box_builder builder1(draw_managers.texture_manager.get_size("hover"));
-                    builder1.as_left_top(title_box.left_bottom()).add_margin({0, 2});
+                    builder1.as_left_top(title_box.left_bottom()).add_margin({0, 0});
                     draw_managers.texture_manager.draw("hover", builder1.build());
 
                     // Unload the text

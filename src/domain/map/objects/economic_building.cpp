@@ -80,7 +80,7 @@ namespace domain {
                     draw_managers.texture_manager.load_text(text, {0, 0, 0}, font, "hover");
                     // Draw
                     engine::graphics::box_builder builder1(draw_managers.texture_manager.get_size("hover"));
-                    builder1.as_left_top(title_box.left_bottom()).add_margin({0, 2});
+                    builder1.as_left_top(title_box.left_bottom());
                     draw_managers.texture_manager.draw("hover", builder1.build());
 
                     // Unload the text
