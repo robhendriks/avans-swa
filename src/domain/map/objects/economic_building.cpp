@@ -87,11 +87,25 @@ namespace domain {
                     draw_managers.texture_manager.unload("hover");
 
                     if (m_field != nullptr) {
-                        engine::graphics::box_builder builder2({30, 10});
-                        builder2.as_left_top(builder1.build().left_bottom()).add_margin({0, 2});
+                        auto hp = get_current_hp_percentage_relative_to_max();
 
-                        draw_managers.color_manager.draw({0, 0, 0}, builder2.build());
-                        draw_managers.color_manager.draw({0, 127, 14}, builder2.build());
+                        // The whole box
+                        engine::graphics::box_builder box_builder({32, 12});
+                        box_builder.as_left_top(builder1.build().left_bottom()).add_margin({0, 2});
+                        auto whole_box = box_builder.build();
+                        draw_managers.color_manager.draw({255, 255, 255}, whole_box);
+
+                        // The green box
+                        engine::graphics::box_builder green_builder({static_cast<float>(hp * 30 / 100), 10});
+                        green_builder.as_left_top(whole_box.left_top()).add_margin({1, 1});
+                        auto green_box = green_builder.build();
+                        draw_managers.color_manager.draw({0, 127, 14}, green_box);
+
+                        // The red box
+                        engine::graphics::box_builder red_builder({whole_box.width() - green_box.width() - 2, 10});
+                        red_builder.as_left_top(green_box.right_top());
+                        auto red_box = red_builder.build();
+                        draw_managers.color_manager.draw({255, 0, 0}, red_box);
                     }
                 }
             }
