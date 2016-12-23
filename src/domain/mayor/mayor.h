@@ -32,7 +32,6 @@ namespace domain{
         // should be called each time a mayor_view gets added to a new stat to avoid overflowing the queue with events that have been
         // reached at the start
         void init(game_level::game_stats* init);
-
         void notify(game_level::game_stats *p_observee, std::string title);
         std::string get_name() const;
         std::vector<std::string> get_behavior() const;
@@ -44,6 +43,8 @@ namespace domain{
         void add_milestone_groups(std::vector<milestone_group> groups);
         // returns a milestone_group with NA as countername in case none are found
         const milestone_group get_milestone_group(std::string counter_name);
+        // get the milestone that was first reached
+        std::string get_fifo_milestone_response();
     private:
         // properties
         std::string m_name;
@@ -54,19 +55,16 @@ namespace domain{
         std::map <std::string, milestone_group> m_milestone_groups;
         std::queue<milestone> m_queue;
 
-        // for display
-        milestone m_current_shown_milestone;
-        int m_current_shown_response = -1;
-        long last_time_current_milestone_shown = -1;
-
         // update gets called every notify
         void update(game_level::game_stats *p_observee, std::string title);
 
         // to avoid having the queue filled when first init
         void setup(game_level::game_stats* init);
+        void reset();
+
         // get the new reached milestones (also sets them automatically to reached = true
         std::vector<milestone> get_new_reached_milestones(game_level::game_stats* game_stats, std::string counter_name = "");
-        int get_response_index(milestone mile_stone);
+        std::string get_random_response(milestone mile_stone);
     };
 }
 
