@@ -49,8 +49,7 @@ namespace domain {
                     if (resource->get_resource_type() == produced_resources->get_resource_type()) {
 
                         //Update gamelevel
-                        resourcelist[counter]->set_count(
-                            resourcelist[counter]->get_count() + produced_resources->get_count());
+                        resourcelist[counter]->increment_resource( produced_resources->get_count());
                         game_level.set_resources(resourcelist);
                         break;
                     }

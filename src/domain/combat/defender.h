@@ -16,7 +16,10 @@ namespace domain {
             // Copy constructor
             defender(const defender& other);
 
-            int get_hp();
+
+            int get_max_hp();
+            int get_current_hp();
+            int get_current_hp_percentage_relative_to_max();
 
             //Lowers hitpoints with the amount within the parameter; limited to minimum 0
             virtual int lower_hitpoints(int points);
@@ -25,7 +28,8 @@ namespace domain {
 
         private:
             // health points
-            int m_hp;
+            int m_max_hp;
+            int m_current_hp;
             int m_granted_xp;
         };
     }
