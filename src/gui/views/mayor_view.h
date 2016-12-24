@@ -8,6 +8,7 @@
 #include <memory>
 #include "base_view.h"
 #include "../../domain/drawable/draw_managers_wrapper.h"
+#include "../../domain/mayor/mayor.h"
 
 namespace gui {
     namespace views {
@@ -23,15 +24,19 @@ namespace gui {
 
             void after();
 
+            void set_mayor(std::shared_ptr<domain::mayor> _mayor);
+
         private:
             void change_show();
 
             bool m_show;
+            std::shared_ptr<domain::mayor> m_mayor;
 
             std::unique_ptr<engine::math::box2_t> m_mayor_box;
             std::unique_ptr<engine::math::box2_t> m_mayor_text_box;
 
             domain::drawable::draw_managers_wrapper &m_draw_managers;
+            unsigned int m_last_transition_time = 0;
         };
     }
 }
