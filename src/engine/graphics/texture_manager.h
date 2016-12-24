@@ -47,6 +47,8 @@ namespace engine {
 
             SDL_Texture* load_text(std::string text, graphics::color4_t color, TTF_Font &font, std::string id);
 
+            SDL_Texture* load_text(std::string text, graphics::color4_t color, TTF_Font &font, std::string id, int pixels);
+
             math::vec2_t get_size(std::string id) const;
 
             void unload(std::string id);

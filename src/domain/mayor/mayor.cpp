@@ -62,7 +62,8 @@ namespace domain{
     }
 
     void mayor::reset() {
-        m_queue = {};
+        std::queue<domain::milestone> empty;
+        std::swap(m_queue, empty );
     }
 
     void mayor::setup(game_level::game_stats* init) {

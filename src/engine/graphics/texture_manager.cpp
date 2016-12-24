@@ -62,6 +62,12 @@ namespace engine {
             return load(*text_surface, id);
         }
 
+        SDL_Texture *
+        texture_manager::load_text(std::string text, graphics::color4_t color, TTF_Font &font, std::string id, int pixels) {
+            SDL_Surface *text_surface = TTF_RenderText_Blended_Wrapped(&font, text.c_str(), (SDL_Color) color, pixels);
+            return load(*text_surface, id);
+        }
+
         void texture_manager::unload(std::string id) {
             if (_texture_map.find(id) != _texture_map.end()) {
                 auto tuple = _texture_map[id];
