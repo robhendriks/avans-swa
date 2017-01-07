@@ -30,6 +30,7 @@ namespace gui {
             auto mayor = m_model.world->get_mayor();
             mayor->init(m_model.world->get_current_level().get_stats().get());
             m_mayor_view.set_mayor(mayor);
+            m_mayor_view.set_current_response(mayor->get_fifo_milestone_response());
 
             // Add callback on menu show
             m_in_game_menu.call_on_show_change([&](bool show) {

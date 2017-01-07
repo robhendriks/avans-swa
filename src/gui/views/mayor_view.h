@@ -28,6 +28,8 @@ namespace gui {
 
             void set_mayor(std::shared_ptr<domain::mayor> _mayor);
 
+            void set_current_response(const std::string &response);
+
         private:
             void change_show();
 

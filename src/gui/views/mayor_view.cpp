@@ -6,9 +6,7 @@
 #include "../../engine/graphics/box_builder.h"
 
 gui::views::mayor_view::mayor_view(domain::drawable::draw_managers_wrapper &draw_managers) : m_draw_managers(
-        draw_managers) {
-    m_current_response = m_mayor->get_fifo_milestone_response();
-}
+        draw_managers) {}
 
 void gui::views::mayor_view::before() {
     m_show = true;
@@ -134,4 +132,8 @@ void gui::views::mayor_view::set_boxes(const engine::math::box2_t display_box) {
                                      {display_box.max.x,                                        display_box.max.y -
                                                                                                 mayor_text_size.y -
                                                                                                 mayor_img_size.y}});
+}
+
+void gui::views::mayor_view::set_current_response(const std::string &response) {
+    m_current_response = response;
 }
