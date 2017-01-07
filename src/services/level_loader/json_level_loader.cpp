@@ -42,7 +42,7 @@ namespace services {
             }
 
             //load lvl src's if not loaded yet
-            if(vec_levels.empty()){
+            if (vec_levels.empty()) {
                 json lvls = m_root["lvls"];
                 if (lvls.is_array()) {
                     vec_levels.push_back(load_all_levels(lvls[0]));
@@ -205,13 +205,6 @@ namespace services {
                         // Create the object
                         object = new domain::map::objects::road(field);
                         object->set_max_column(1);
-                    } else {
-                        object = new domain::map::objects::building(field);
-
-                        image_location = "images/";
-                        image_location += "building-a";
-                        image_location += ".png";
-                        object->set_max_column(2);
                     }
 
                     // Calculate the image start position
@@ -250,14 +243,13 @@ namespace services {
                     int type = building_data["type"];
                     auto output_sources = std::shared_ptr<domain::resources::resource>();
                     auto costs = std::vector<std::shared_ptr<domain::resources::resource>>();
-                    engine::math::box2_t building_box{{0, 0},
+                    engine::math::box2_t building_box{{0,  0},
                                                       {64, 64}};
 
 
                     auto data_building_cost = building_data["cost"];
 
-                    for (auto it = data_building_cost.begin();it != data_building_cost.end(); ++it)
-                          {
+                    for (auto it = data_building_cost.begin(); it != data_building_cost.end(); ++it) {
 
                         costs.push_back(std::make_shared<domain::resources::resource>(it.key(),
                                                                                       it.value()));
@@ -360,7 +352,7 @@ namespace services {
         }
 
         int json_level_loader::get_level_count() {
-            if(vec_levels.empty()){
+            if (vec_levels.empty()) {
                 json lvls = m_root["lvls"];
             }
 

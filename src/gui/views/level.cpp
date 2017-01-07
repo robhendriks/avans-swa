@@ -180,7 +180,7 @@ namespace gui {
         }
 
         void level::update_placeable_objects_page() {
-            engine::math::box2_t box_for_hidden_object({-1, -1}, {-1, -1});
+            engine::math::box2_t box_for_hidden_object({-100, -100}, {-100, -100});
 
             // Set the boxes for the placeable objects
             engine::graphics::box_builder builder4(m_model.world->get_current_level().get_map()->get_tile_size());
