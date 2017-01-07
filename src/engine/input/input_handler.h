@@ -17,6 +17,7 @@ namespace engine {
     namespace input {
         class input_handler : public observer::observee<input_handler> {
         public:
+            // Singleton
             static input_handler *get_instance();
 
             void clean();
@@ -40,6 +41,7 @@ namespace engine {
             void operator=(input_handler const &) = delete;
 
         private:
+            // Private constructor because the input handler is an singleton
             input_handler();
 
             static input_handler *m_instance;

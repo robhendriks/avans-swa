@@ -12,6 +12,7 @@ namespace engine {
         public:
             virtual ~observer() = default;
 
+            // Method that is called whenever the observee changes
             virtual void notify(T *p_observee, std::string type) = 0;
         };
     }

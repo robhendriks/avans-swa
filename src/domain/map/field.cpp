@@ -16,8 +16,7 @@ namespace domain {
             map1.add_field(std::shared_ptr<field>(this));
         }
 
-        field::~field() {
-        }
+        field::~field() {}
 
         /**
          * Draw a field and the object that is placed
