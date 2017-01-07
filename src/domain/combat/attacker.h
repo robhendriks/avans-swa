@@ -7,6 +7,7 @@
 
 #include "../drawable/drawable_game_object.h"
 #include "ai_controlled.h"
+#include "../map/field.h"
 
 namespace domain {
     namespace combat {
@@ -18,13 +19,21 @@ namespace domain {
             attacker(const attacker& other);
 
             //Returns a random number within the range of min & max damage
-            int get_damage();
+            int get_damage() const;
 
-            double get_attack_speed();
+            double get_attack_speed() const;
 
-            int get_range();
+            int get_range() const;
 
-            int get_movement();
+            int get_movement() const;
+
+            int get_max_damage() const;
+
+            int get_min_damage() const;
+
+            std::shared_ptr<domain::map::field> get_current_field() const;
+
+            void set_current_field(const std::shared_ptr<domain::map::field> &current_field);
 
             virtual ~attacker() {}
 
@@ -37,6 +46,8 @@ namespace domain {
             int m_range;
             //% of a tile per sec
             int m_movement;
+
+            std::shared_ptr<domain::map::field> m_current_field;
         };
     }
 }

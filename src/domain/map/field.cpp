@@ -7,12 +7,13 @@
 #include "objects/dragable_field_object.h"
 #include "../../engine/graphics/font_manager.h"
 #include "objects/road.h"
-
+#include "objects/defensive_building.h"
+#include "ai/states/search_and_destroy_state.h"
 
 namespace domain {
     namespace map {
 
-        field::field(map &map1, engine::math::vec2_t pos) : m_map(map1), m_pos(pos), m_object(nullptr), m_box(nullptr) {
+        field::field(map &map1, engine::math::vec2_t pos) : m_map(map1), m_pos(pos), m_object(nullptr), m_box(nullptr), m_flags(FLAG_NONE) {
             map1.add_field(std::shared_ptr<field>(this));
         }
 
@@ -29,6 +30,19 @@ namespace domain {
             if (m_object) {
                 // Let the object draw
                 m_object->draw(draw_managers, time_elapsed);
+            }
+
+            if ((m_flags & FLAG_WEIGHT) != 0) {
+                // Printing the weight on the fields
+                draw_managers.texture_manager.load_text(std::to_string(m_weight), {254, 12, 10},
+                                                        *draw_managers.font_manager.get_font("roboto", 32),
+                                                        "heatmap_weight");
+                draw_managers.texture_manager.draw("heatmap_weight", {0, 0}, get_box());
+                draw_managers.texture_manager.unload("heatmap_weight");
+            }
+
+            if ((m_flags & FLAG_TARGET) != 0) {
+                draw_managers.color_manager.stroke({255, 0, 0}, get_box());
             }
         }
         /**
@@ -52,6 +66,56 @@ namespace domain {
                 if (place_object(object)) {
                     // Remove this as dropable
                     m_drag_and_drop->remove_dropable(this);
+                    object->set_max_column(2);
+
+                    auto defensive_building = dynamic_cast<objects::defensive_building*>(m_object);
+                    if (defensive_building) {
+                        auto ai = std::make_shared<domain::map::ai::ai>();
+                        ai->set_new_target_func([](domain::map::field* origin, domain::map::ai::ai* ai1) -> domain::combat::defender* {
+                            if (!origin || !ai1->get_map() || !ai1->get_map()->get_game_level() || !ai1->get_current_field()) {
+                                SDL_Log("Precondition(s) not met\n");
+                                return nullptr;
+                            }
+
+//                            SDL_Log("Looking for tiles nearby %f:%f\n", origin->m_pos.x, origin->m_pos.y);
+
+                            auto fields = ai1->get_map()->get_fields_in_range(2, origin); // Replace 2 with "ai1->get_unit()->get_range()"
+                            if (fields.empty()) {
+                                SDL_Log("No fields nearby\n");
+                                return nullptr;
+                            }
+
+//                            SDL_Log("Found %i tile(s)\n", fields.size());
+
+                            auto enemies = ai1->get_map()->get_game_level()->get_enemies_in_lvl();
+                            if (enemies.empty()) {
+                                SDL_Log("No enemies available\n");
+                                return nullptr;
+                            }
+
+                            for (auto &field : fields) {
+                                field.field->set_flags(domain::map::field::FLAG_NONE);
+                            }
+
+                            for (auto &enemy : enemies) {
+                                for (auto &field : fields) {
+                                    field.field->set_flags(domain::map::field::FLAG_TARGET | domain::map::field::FLAG_WEIGHT);
+
+                                    if (field.field == enemy->get_current_field()) {
+                                        return enemy.get();
+                                    }
+                                }
+                            }
+
+                            return nullptr;
+                        });
+
+                        ai->set_state(std::make_shared<ai::states::search_and_destroy_state>());
+                        ai->set_map(std::shared_ptr<domain::map::map>(&m_map));
+                        ai->set_current_field(shared_from_this());
+
+                        defensive_building->set_ai(ai);
+                    }
                 }
 
                 return true;
@@ -149,6 +213,14 @@ namespace domain {
 
         void field::set_weight(long weight) {
             m_weight = weight;
+        }
+
+        unsigned int field::get_flags() const {
+            return m_flags;
+        }
+
+        void field::set_flags(unsigned int flags) {
+            m_flags = flags;
         }
     }
 }

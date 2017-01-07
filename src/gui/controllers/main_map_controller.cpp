@@ -62,10 +62,36 @@ namespace gui {
                 current_enemies.push_back(enemy);
             }
 
+            std::vector<std::shared_ptr<domain::nations::enemy>> disposed;
 
             for (auto enemy : current_enemies) {
                 enemy->update(m_engine.get_time_elapsed());
+                if (enemy->is_disposed()) {
+                    disposed.push_back(enemy);
+                }
             }
+
+            for (auto &dispose : disposed) {
+                m_model.world->get_current_level().remove_enemy_in_lvl(dispose);
+            }
+
+            auto fields = m_model.world->get_current_level().get_map()->get_fields();
+
+            for (auto &field : fields) {
+                if (!field) {
+                    continue;
+                }
+
+                auto placeable_object = field->get_object();
+                if (placeable_object) {
+                    auto defensive_building = dynamic_cast<domain::map::objects::defensive_building*>(placeable_object);
+                    if (defensive_building) {
+                        defensive_building->update(m_model.world->get_current_level(), m_engine.get_time_elapsed());
+                    }
+                }
+            }
+
+//            m_model.world->get_current_level().remove_placeable_object()
 
             m_model.world->get_current_level().set_enemies_in_lvl(current_enemies);
             //Updates building, calles method within the level

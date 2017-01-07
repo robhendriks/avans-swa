@@ -27,6 +27,11 @@ namespace domain {
                                 m_last_field = ai->get_current_field();
                                 // same for this
                                 ai->set_current_field(m_next_field);
+
+                                if (ai->get_unit()) {
+                                    ai->get_unit()->set_current_field(m_next_field);
+                                }
+
                                 // now that we have moved set the current time we are on that field equal to the elapsed time.
                                 m_time_moved_on_current_field = elapsed_time;
                                 // and set our next location to this

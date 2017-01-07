@@ -6,9 +6,9 @@ option(BuildTests "Builds the tests." OFF)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -std=c++14")
 
-if (NOT APPLE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
-endif()
+#if (NOT APPLE)
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+#endif()
 
 add_subdirectory(third_party)
 
@@ -161,6 +161,8 @@ set(SOURCES src/main.cpp
     src/domain/map/ai/states/search_and_destroy_state.h
     src/domain/map/ai/states/move_state.cpp
     src/domain/map/ai/states/move_state.h
+    src/domain/map/ai/states/dead_state.h
+    src/domain/map/ai/states/dead_state.cpp
     src/domain/map/ai/states/state.cpp
     src/domain/map/ai/states/state.h
     src/domain/combat/attacker.cpp
@@ -169,7 +171,8 @@ set(SOURCES src/main.cpp
     src/domain/combat/defender.h
     src/gui/views/help.cpp src/gui/views/help.h
     src/domain/combat/ai_controlled.cpp src/domain/combat/ai_controlled.h
-        src/domain/mayor/mayor.cpp src/domain/mayor/mayor.h)
+    src/domain/mayor/mayor.cpp src/domain/mayor/mayor.h)
+
 
 include_directories(third_party/json/src
     third_party/di-cpp14/include

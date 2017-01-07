@@ -9,6 +9,7 @@
 #include "states/state.h"
 #include "../../combat/attacker.h"
 #include "../../combat/defender.h"
+#include <memory>
 
 
 namespace domain {
@@ -23,8 +24,8 @@ namespace domain {
                 ai();
                 void update(unsigned int elapsed_time);
 
-                void set_map(std::shared_ptr<map> map);
-                std::shared_ptr<map> get_map();
+                void set_map(std::shared_ptr<map> m_map);
+                std::shared_ptr<map> get_map() const;
                 void set_unit(std::shared_ptr<domain::combat::attacker> unit);
                 std::shared_ptr<domain::combat::attacker> get_unit();
                 void set_new_target_func(std::function<domain::combat::defender* (domain::map::field* origin, domain::map::ai::ai* ai)>  target);
@@ -41,7 +42,7 @@ namespace domain {
                 ai clone();
             private:
                 std::shared_ptr<field> m_current_field;
-                std::shared_ptr<domain::map::map> m_map;
+                std::shared_ptr<map> m_map;
                 std::shared_ptr<domain::combat::attacker> m_unit;
                 std::function<domain::combat::defender* (domain::map::field* origin, domain::map::ai::ai* ai)> m_new_target_func;
                 std::function<void (std::string title, domain::map::ai::ai* ai, engine::math::box2_t& difference_between_you_and_target)> m_animation_transition_func;

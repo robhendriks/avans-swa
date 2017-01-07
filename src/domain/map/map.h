@@ -28,7 +28,9 @@ namespace domain {
             int range_from_origin;
         };
 
-        class map : public drawable::abstract_drawable_game_object, public engine::observer::observee<map>,
+        class map : public std::enable_shared_from_this<map>,
+                    public drawable::abstract_drawable_game_object,
+                    public engine::observer::observee<map>,
                     public engine::observer::observer<field> {
         public:
             map(engine::math::vec2_t size, engine::math::vec2_t tile_size);
@@ -66,6 +68,10 @@ namespace domain {
             // get all fields in a certain range from the origin
             // range = fields. 1 = one neighbour away
             std::vector<field_with_range> get_fields_in_range(int range, field* origin);
+
+            domain::game_level::game_level* get_game_level();
+
+            void set_game_level(domain::game_level::game_level* game_level);
         private:
             engine::math::vec2_t index_to_position(unsigned int index) const;
 
@@ -74,6 +80,7 @@ namespace domain {
             engine::math::vec2_t m_tile_size;
             std::vector<std::shared_ptr<domain::map::field>> m_fields;
             std::unique_ptr<engine::math::box2_t> m_dest;
+            domain::game_level::game_level *m_game_level;
         };
     }
 }

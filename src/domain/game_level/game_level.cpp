@@ -18,6 +18,8 @@ namespace domain {
 
             m_stats = std::shared_ptr<game_stats>(new game_stats());
 
+            m_map->set_game_level(this);
+
             // Call pause to start the level....
             pause();
 
@@ -132,6 +134,13 @@ namespace domain {
 
         void game_level::set_enemies_in_lvl(std::vector<std::shared_ptr<domain::nations::enemy>> enemies) {
             m_enemies_in_lvl = enemies;
+        }
+
+        void game_level::remove_enemy_in_lvl(const std::shared_ptr<domain::nations::enemy> &enemy) {
+            auto it = std::find(m_enemies_in_lvl.begin(), m_enemies_in_lvl.end(), enemy);
+            if (it != m_enemies_in_lvl.end()) {
+                m_enemies_in_lvl.erase(it);
+            }
         }
 
         /**

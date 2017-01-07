@@ -117,6 +117,7 @@ namespace gui {
                 m_current_page = m_pages;
             }
 
+
             // Set the draw boxes for the placeable objects
             update_placeable_objects_page();
             // Create the box for the map
@@ -322,10 +323,33 @@ namespace gui {
                 m_texture_manager.unload("l_countdown");
             }
 
+            std::map<std::shared_ptr<domain::map::field>, unsigned int> fields;
+
             // Draw enemies
             for (auto &enemy : current_level.get_enemies_in_lvl()) {
                 enemy->draw(m_in_game_menu.m_help_view.m_top_bar.m_draw_managers, time_elapsed);
+
+                if (enemy->get_current_field() == nullptr) continue;
+
+                if (fields.find(enemy->get_current_field()) != fields.end()) {
+                    fields[enemy->get_current_field()]++;
+                } else {
+                    fields.insert(std::make_pair<std::shared_ptr<domain::map::field>, unsigned int>(enemy->get_current_field(), 1));
+                }
             }
+
+            // Draw enemy count
+            auto font = m_font_manager.get_font("roboto", 32);
+
+            if (!fields.empty()) {
+                auto it = fields.begin();
+                for (; it != fields.end(); ++it) {
+                    m_texture_manager.load_text(std::to_string(it->second), {255, 255, 255}, *font, "enemy_count");
+                    m_texture_manager.draw("enemy_count", {0, 0}, it->first->get_box());
+                    m_texture_manager.unload("enemy_count");
+                }
+            }
+
 
             // Draw overflow on pause
             if (m_model.paused && !m_in_game_menu.m_show && !m_in_game_menu.m_help_view.m_show) {

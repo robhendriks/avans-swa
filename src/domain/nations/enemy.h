@@ -24,12 +24,16 @@ namespace domain {
             // Copy constructor
             enemy(const enemy& other);
 
+            void dispose();
+
             //Returns nationname + unitname
             std::string get_name();
 
             int get_oppertunity_cost() const;
 
-            bool is_boss();
+            bool is_boss() const;
+
+            bool is_disposed() const;
 
             virtual void set_box(std::shared_ptr<engine::math::box2_t> destination);
 
@@ -45,6 +49,7 @@ namespace domain {
             //Cost for using this enemy; to generate proper waves.
             int m_oppertunity_cost;
             bool m_boss;
+            bool m_disposed;
             std::shared_ptr<nation> m_nation;
         };
 

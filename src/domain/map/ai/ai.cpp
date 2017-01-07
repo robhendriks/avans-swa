@@ -91,7 +91,7 @@ namespace domain {
                 m_state = state;
             }
 
-            std::shared_ptr<map> ai::get_map() {
+            std::shared_ptr<map> ai::get_map() const {
                 return m_map;
             }
 

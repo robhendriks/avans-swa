@@ -28,6 +28,9 @@ namespace domain {
         class field : public drawable::drawable_game_object, public engine::draganddrop::dropable,
                       public engine::observer::observee<field>, public std::enable_shared_from_this<field> {
         public:
+            const static unsigned int FLAG_NONE = 0x00;
+            const static unsigned int FLAG_WEIGHT = 0x01;
+            const static unsigned int FLAG_TARGET = 0x02;
 
             field(map &map1, engine::math::vec2_t pos);
 
@@ -55,7 +58,12 @@ namespace domain {
 
             void set_weight(long weight);
 
+            unsigned int get_flags() const;
+
+            void set_flags(unsigned int flags);
+
         private:
+            unsigned int m_flags;
             map &m_map;
             engine::math::vec2_t m_pos;
             objects::field_object *m_object;

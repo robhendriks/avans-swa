@@ -7,6 +7,7 @@
 #include "../../objects/building.h"
 #include "../../../nations/enemy.h"
 #include <cmath>
+
 namespace domain {
     namespace map {
         namespace ai {
@@ -39,7 +40,7 @@ namespace domain {
                                 ai->get_animation_transition_func()("target-destroyed", ai, box);
                             }
                         }
-                        else{
+                        else {
                             m_last_attack_time = elapsed_time;
                             // step 1.1 attack and unset if target is destroyed
                             SDL_Log("%s %d", "hp before   : ", m_current_target->get_current_hp());
@@ -54,6 +55,14 @@ namespace domain {
                             auto current_hp = m_current_target->lower_hitpoints(
                                     ai->get_unit()->get_damage());
                             SDL_Log("%s %d", "hp after   : ",current_hp);
+
+                            if (current_hp <= 0) {
+                                auto enemy = dynamic_cast<domain::nations::enemy*>(m_current_target);
+                                if (enemy) {
+                                    enemy->get_ai()->set_state(std::make_shared<dead_state>()); // Not sure about this yet
+                                    enemy->dispose();
+                                }
+                            }
                         }
                     }
 

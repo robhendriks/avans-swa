@@ -17,6 +17,7 @@
 #include "menu_controller.h"
 #include "../../services/wave/wave_management.h"
 #include "../../services/level_loader/base_level_loader.h"
+#include "../../domain/map/objects/defensive_building.h"
 
 namespace gui {
     namespace views {

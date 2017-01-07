@@ -6,7 +6,7 @@ namespace domain {
                      int range, int movement, bool boss, std::shared_ptr<nation> nation, int oppertunity_costs)
                 :  domain::combat::attacker(min_damage, max_damage, attacks_per_second, range, movement),
                    domain::combat::defender(hitpoints, granted_xp),
-                   m_destination(std::make_shared<engine::math::box2_t>(engine::math::box2_t({0,0},{0,0}))), m_name(name), m_oppertunity_cost(oppertunity_costs), m_boss(boss), m_nation(nation){}
+                   m_destination(std::make_shared<engine::math::box2_t>(engine::math::box2_t({0,0},{0,0}))), m_name(name), m_oppertunity_cost(oppertunity_costs), m_boss(boss), m_nation(nation), m_disposed(false){}
 
         // Copy constructor
         enemy::enemy(const enemy &other) : domain::drawable::drawable_game_object(other), domain::combat::attacker::attacker(other), domain::combat::defender::defender(other) {
@@ -17,15 +17,24 @@ namespace domain {
             m_nation = other.m_nation;
         }
 
+        void enemy::dispose() {
+            m_disposed = true;
+        }
+
         std::string enemy::get_name() {
             return m_nation.get()->get_prefix_name()+" - "+m_name;
         }
+
         int enemy::get_oppertunity_cost() const {
             return m_oppertunity_cost;
         }
 
-        bool enemy::is_boss(){
+        bool enemy::is_boss() const {
             return m_boss;
+        }
+
+        bool enemy::is_disposed() const {
+            return m_disposed;
         }
 
         engine::math::box2_t enemy::get_box() const {

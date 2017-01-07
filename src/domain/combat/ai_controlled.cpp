@@ -8,9 +8,10 @@ namespace domain {
     namespace combat {
         void ai_controlled::set_ai(std::shared_ptr<domain::map::ai::ai> ai) {
             m_ai = ai;
-            if(dynamic_cast<domain::combat::attacker*>(this) != nullptr){
-                auto attacker = std::dynamic_pointer_cast<domain::combat::attacker>(shared_from_this());
-                m_ai->set_unit(attacker);
+
+            auto attacker = dynamic_cast<domain::combat::attacker*>(this);
+            if (attacker) {
+                m_ai->set_unit(std::shared_ptr<domain::combat::attacker>(attacker));
             }
         }
 
