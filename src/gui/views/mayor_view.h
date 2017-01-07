@@ -49,7 +49,7 @@ namespace gui {
             unsigned int m_max_animation_time = 1000;
             unsigned int m_time_moved = 0;
             view_state m_state = animating;
-            view_state m_previous_state = visible;
+            view_state m_previous_state = hidden;
 
         };
     }

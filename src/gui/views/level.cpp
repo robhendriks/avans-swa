@@ -26,8 +26,10 @@ namespace gui {
             m_goals_view.before();
             m_mayor_view.before();
 
-            // Set mayor in mayor_view
-            m_mayor_view.set_mayor(m_model.world->get_mayor());
+            // Set mayor in mayor_view, but first init it
+            auto mayor = m_model.world->get_mayor();
+            mayor->init(m_model.world->get_current_level().get_stats().get());
+            m_mayor_view.set_mayor(mayor);
 
             // Add callback on menu show
             m_in_game_menu.call_on_show_change([&](bool show) {
