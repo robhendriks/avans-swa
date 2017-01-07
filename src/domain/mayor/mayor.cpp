@@ -144,7 +144,7 @@ namespace domain{
     }
 
     std::string mayor::get_fifo_milestone_response() {
-        if (m_queue.empty())
+        if (!m_queue.empty())
         {
             auto r = m_queue.front();
             m_queue.pop();
