@@ -29,6 +29,8 @@ namespace domain {
 
                 void update(domain::game_level::game_level game_level);
 
+                void draw(drawable::draw_managers_wrapper &draw_managers, unsigned int time_elapsed);
+
             private:
                 std::shared_ptr<domain::resources::resource> produced_resources;
 

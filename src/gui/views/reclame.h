@@ -51,7 +51,7 @@ namespace gui {
 
             help &m_help_view;
             engine::graphics::texture_manager &m_texture_manager;
-            std::string m_image;
+            std::string m_reclame_image;
             bool m_show;
             std::unique_ptr<engine::math::box2_t> m_overlay_box;
             std::unique_ptr<engine::math::box2_t> m_reclame_box;

@@ -64,6 +64,7 @@ namespace domain {
             templist[4]->set_count(0);
             templist[4]->set_resource_type("uranium");
             m_resources = templist;
+            m_has_cheated = false;
 
             // Add a callback for the drag and drop
             drag_and_drop.add_on_drop_callback(
@@ -275,7 +276,7 @@ namespace domain {
                     if (j == building_requirement.size() - 1 && m_placeable_objects[i]->get_saturated()[2] != 255) {
                         //Disallowed building now again meets the requirements. Set it back
                         m_drag_and_drop.add_dragable(*m_placeable_objects[i]);
-                        get_placeable_objects()[i]->set_saturated({255, 0, 0});
+                        get_placeable_objects()[i]->set_saturated({255, 255, 255});
                     }
                 }
             }
@@ -329,6 +330,14 @@ namespace domain {
 
         void game_level::set_id(int id) {
             m_id = id;
+        }
+
+        void game_level::execute_cheat(){
+            m_has_cheated =true;
+            for(auto resource_bank : m_resources){
+                resource_bank->max_out_resource();
+            }
+            update(true);
         }
     }
 }

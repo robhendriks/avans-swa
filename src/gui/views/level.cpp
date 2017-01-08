@@ -19,7 +19,7 @@ namespace gui {
               m_texture_manager(m_in_game_menu.m_help_view.m_top_bar.m_texture_manager),
               m_color_manager(m_in_game_menu.m_help_view.m_top_bar.m_color_manager),
               m_font_manager(m_in_game_menu.m_help_view.m_top_bar.m_font_manager),
-              m_current_page(1), m_speed_factor(1) {
+              m_current_page(1), m_speed_factor(1), x_margin_placeable_objects(200) {
         }
 
         void level::before() {
@@ -96,20 +96,20 @@ namespace gui {
             auto arrow_image_size = engine::math::vec2_t(128, 128);
             // Create the arrow left image box
             engine::graphics::box_builder builder2(arrow_image_size);
-            builder2.as_left_top(m_placeable_objects_box->left_top()).add_margin({50, 0})
+            builder2.as_left_top(m_placeable_objects_box->left_top()).add_margin({x_margin_placeable_objects, 0})
                 .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
             m_arrow_left_box.reset(new engine::math::box2_t(builder2.build()));
 
             // Create the arrow right image box
             engine::graphics::box_builder builder3(arrow_image_size);
-            builder3.as_right_top(m_placeable_objects_box->right_top()).add_margin({-50, 0})
+            builder3.as_right_top(m_placeable_objects_box->right_top()).add_margin({-x_margin_placeable_objects, 0})
                 .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
             m_arrow_right_box.reset(new engine::math::box2_t(builder3.build()));
 
             // Calculate the pages
-            float x_per_object = m_model.world->get_current_level().get_map()->get_tile_size().x + 50;
+            float x_per_object = m_model.world->get_current_level().get_map()->get_tile_size().x + x_margin_placeable_objects;
             float x_space = m_placeable_objects_box->width() - m_arrow_left_box->max.x -
-                            (m_placeable_objects_box->max.x - m_arrow_right_box->min.x) - 50;
+                            (m_placeable_objects_box->max.x - m_arrow_right_box->min.x) - x_margin_placeable_objects;
             m_objects_per_page = static_cast<int>(floor(x_space / x_per_object));
             int total_objects = m_model.world->get_current_level().get_placeable_objects().size();
             m_pages = static_cast<int>(ceil(static_cast<float>(total_objects) / m_objects_per_page));
@@ -197,7 +197,7 @@ namespace gui {
 
                 // Set the object box
                 if (page_counter == m_current_page) {
-                    builder4.add_margin({50, 0});
+                    builder4.add_margin({x_margin_placeable_objects, 0});
                     obj->set_box(std::make_shared<engine::math::box2_t>(builder4.build()));
                     builder4.add_margin({m_model.world->get_current_level().get_map()->get_tile_size().x, 0});
                 } else {
@@ -380,6 +380,8 @@ namespace gui {
                         decrease_speed();
                     } else if (event.get_keycode() == engine::input::keycodes::keycode::HOME) {
                         reset_speed();
+                    } else if(event.get_keycode() == engine::input::keycodes::keycode::F){
+                        m_model.world->get_current_level().execute_cheat();
                     }
                 }
             }

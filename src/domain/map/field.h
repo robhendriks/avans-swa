@@ -8,6 +8,7 @@
 #include "../drawable/drawable_game_object.h"
 #include "../../engine/draganddrop/dropable.h"
 
+// Forward declarations
 namespace domain {
     namespace map {
         namespace objects {
