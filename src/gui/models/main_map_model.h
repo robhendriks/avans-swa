@@ -14,7 +14,6 @@ namespace gui {
         struct main_map_model {
             domain::gameworld::game_world *world;
             bool paused = false;
-            std::vector<domain::resources::resource*> previous_resource;
         };
     }
 }
