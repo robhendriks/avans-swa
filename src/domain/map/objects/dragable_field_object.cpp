@@ -15,8 +15,8 @@ namespace domain {
 
             }
 
-            dragable_field_object::dragable_field_object(std::shared_ptr<field> field1) : m_start_box(nullptr), m_draw_box(nullptr) {
-                set_field(field1);
+            dragable_field_object::dragable_field_object(field &field1) : m_start_box(nullptr), m_draw_box(nullptr) {
+                set_field(&field1);
             }
 
             /**
@@ -29,9 +29,9 @@ namespace domain {
                 m_draw_box.reset(new engine::math::box2_t(*obj.m_start_box));
             }
 
-            void dragable_field_object::set_box(std::shared_ptr<engine::math::box2_t> box) {
-                m_start_box.reset(new engine::math::box2_t(*box));
-                m_draw_box.reset(new engine::math::box2_t(*box));
+            void dragable_field_object::set_box(engine::math::box2_t box) {
+                m_start_box.reset(new engine::math::box2_t(box));
+                m_draw_box.reset(new engine::math::box2_t(box));
             }
 
             engine::math::box2_t dragable_field_object::get_box() const {

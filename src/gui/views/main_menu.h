@@ -46,7 +46,7 @@ namespace gui {
 
             void on_event(engine::events::key_down &event);
 
-            void set_controller(std::shared_ptr<controllers::menu_controller> menu_controller);
+            void set_controller(controllers::menu_controller &menu_controller);
 
         private:
             void set_sliders(unsigned int pos, bool force = false);

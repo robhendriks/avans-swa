@@ -244,7 +244,7 @@ namespace gui {
             eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::key_down>*> (this));
         }
 
-        void main_menu::set_controller(std::shared_ptr<controllers::menu_controller> menu_controller) {
+        void main_menu::set_controller(controllers::menu_controller &menu_controller) {
             m_help_view.m_top_bar.set_controller(menu_controller);
         }
     }

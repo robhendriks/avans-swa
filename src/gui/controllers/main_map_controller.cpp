@@ -27,8 +27,8 @@ namespace gui {
                 lvl.set_start_time(m_engine.get_time_elapsed());
             }
 
-            m_level_goals_model.game_goals = lvl.get_goal();
-            m_level_goals_model.game_stats = lvl.get_stats();
+            m_level_goals_model.game_goals = &lvl.get_goal();
+            m_level_goals_model.game_stats = &lvl.get_stats();
 
             if (is_lvl_done()) {
                 m_engine.reset_speed();
@@ -62,9 +62,9 @@ namespace gui {
                 current_enemies.push_back(enemy);
             }
 
-            std::vector<std::shared_ptr<domain::nations::enemy>> disposed;
+            std::vector<domain::nations::enemy*> disposed;
 
-            for (auto enemy : current_enemies) {
+            for (auto &enemy : current_enemies) {
                 enemy->update(m_engine.get_time_elapsed());
                 if (enemy->is_disposed()) {
                     disposed.push_back(enemy);
@@ -72,10 +72,10 @@ namespace gui {
             }
 
             for (auto &dispose : disposed) {
-                m_model.world->get_current_level().remove_enemy_in_lvl(dispose);
+                m_model.world->get_current_level().remove_enemy_in_lvl(*dispose);
             }
 
-            auto fields = m_model.world->get_current_level().get_map()->get_fields();
+            auto fields = m_model.world->get_current_level().get_map().get_fields();
 
             for (auto &field : fields) {
                 if (!field) {
@@ -98,10 +98,9 @@ namespace gui {
             if (m_engine.get_time_elapsed() > m_previous_time + 500) {
 
                 //Update model with prev resource list
-                std::vector<std::shared_ptr<domain::resources::resource>> old_resources;
+                std::vector<domain::resources::resource*> old_resources;
                 for (auto resource:m_model.world->get_current_level().get_resources()) {
-                    old_resources.push_back(std::make_shared<domain::resources::resource>(
-                            *resource));
+                    old_resources.push_back(resource);
                 }
                 m_model.previous_resource = old_resources;
                 //Updating
@@ -110,12 +109,11 @@ namespace gui {
             }
         }
 
-        void main_map_controller::set_game_world(std::unique_ptr<domain::gameworld::game_world> &&game_world) {
-            m_model.world = std::move(game_world);
+        void main_map_controller::set_game_world(domain::gameworld::game_world &game_world) {
+            m_model.world = &game_world;
 
-            auto lvl = m_model.world->get_current_level();
             // set wave service values to first lvl
-            set_settings_wave_management_service(lvl);
+            set_settings_wave_management_service(m_model.world->get_current_level());
         }
 
         void main_map_controller::next_lvl() {
@@ -124,14 +122,14 @@ namespace gui {
             auto current_level_id = m_model.world->get_current_level().get_id();
             // count = from 1 and id = from 0 so + 1
             if (m_level_loader.get_level_count() > current_level_id + 1) {
-                m_model.world->set_current_level(m_level_loader.load(current_level_id + 1));
+                m_model.world->set_current_level(*m_level_loader.load(current_level_id + 1));
 
                 // set wave service values to next lvl
                 set_settings_wave_management_service(m_model.world->get_current_level());
                 show();
             } else {
                 // this saves the stats of the last lvl and sets current to nullptr
-                m_model.world->set_current_level(nullptr);
+                //m_model.world->set_current_level(nullptr);
 
                 m_menu_controller->show();
             }
@@ -139,7 +137,7 @@ namespace gui {
 
         void main_map_controller::pause() {
             // Let the level know
-            m_model.world.get()->get_current_level().pause();
+            m_model.world->get_current_level().pause();
 
             // Pause or resume the engine
             if (m_engine.get_state() == engine::PAUSED) {
@@ -160,12 +158,11 @@ namespace gui {
             }
         }
 
-        void
-        main_map_controller::set_menu_controller(std::shared_ptr<gui::controllers::menu_controller> menu_controller) {
-            m_menu_controller = menu_controller;
+        void main_map_controller::set_menu_controller(gui::controllers::menu_controller &menu_controller) {
+            m_menu_controller = &menu_controller;
         }
 
-        void main_map_controller::set_settings_wave_management_service(domain::game_level::game_level lvl) {
+        void main_map_controller::set_settings_wave_management_service(domain::game_level::game_level &lvl) {
             m_wave_management_service.set_peace_period(lvl.get_peace_period());
             m_wave_management_service.set_base_wave_opportunity(lvl.get_base_wave_base_opportunity());
             m_wave_management_service.set_wave_opportunity_increase(lvl.get_wave_opportunity_increase());
@@ -173,7 +170,7 @@ namespace gui {
             m_wave_management_service.set_waves_interval(lvl.get_waves_interval());
             m_wave_management_service.set_spawn_bosses(lvl.get_spawn_bosses());
             m_wave_management_service.set_spawnable_nation(lvl.get_enemy_nation());
-            m_wave_management_service.get_wave_generator()->get_ai()->set_map(lvl.get_map());
+            m_wave_management_service.get_wave_generator().get_ai().set_map(lvl.get_map());
         }
     }
 }

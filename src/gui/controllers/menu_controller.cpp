@@ -15,8 +15,8 @@ namespace gui {
               m_main_map_controller(main_map_controller), m_credits_controller(credits_controller),
               m_level_loader(level_loader) {
 
-            main_map_controller.set_menu_controller(std::shared_ptr<menu_controller>(this));
-            m_main_menu.set_controller(std::shared_ptr<menu_controller>(this));
+            main_map_controller.set_menu_controller(*this);
+            m_main_menu.set_controller(*this);
         }
 
         void menu_controller::show() {
@@ -25,7 +25,10 @@ namespace gui {
 
         void menu_controller::play() {
             auto first_level = m_level_loader.load(0);
-            m_main_map_controller.set_game_world(std::unique_ptr<domain::gameworld::game_world>(new domain::gameworld::game_world(std::move(first_level))));
+
+            auto *world = new domain::gameworld::game_world(*first_level);
+
+            m_main_map_controller.set_game_world(*world);
             m_main_map_controller.show();
         }
 

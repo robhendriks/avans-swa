@@ -9,10 +9,10 @@
 
 namespace domain {
     namespace map {
-        field_with_range::field_with_range(std::shared_ptr<domain::map::field> field, int range) : field(field), range_from_origin(range) {}
+        field_with_range::field_with_range(domain::map::field &field1, int range) : field(field1), range_from_origin(range) {}
 
         map::map(engine::math::vec2_t size, engine::math::vec2_t tile_size) :
-                m_size(size), m_tile_size(tile_size), m_fields(std::vector<std::shared_ptr<field>>(number_of_fields())),
+                m_size(size), m_tile_size(tile_size), m_fields(std::vector<field*>(number_of_fields())),
                 m_dest(nullptr), m_game_level(nullptr) {
         }
 
@@ -22,11 +22,11 @@ namespace domain {
          * @param index
          * @return
          */
-        std::shared_ptr<domain::map::field> map::get_field(unsigned int index) const {
-            return m_fields[index];
+        domain::map::field *map::get_field(unsigned int index) const {
+            return get_field(index_to_position(index));
         }
 
-        std::shared_ptr<domain::map::field> map::get_field(engine::math::vec2_t position) const {
+        domain::map::field *map::get_field(engine::math::vec2_t position) const {
             unsigned int pos = position_to_index(position);
             if (pos < number_of_fields()) {
                 return m_fields[position_to_index(position)];
@@ -40,9 +40,9 @@ namespace domain {
          *
          * @param field1
          */
-        void map::add_field(std::shared_ptr<field> field1) {
-            m_fields[position_to_index(field1->get_position())] = field1;
-            field1->add_observer(this);
+        void map::add_field(field &field1) {
+            m_fields[position_to_index(field1.get_position())] = &field1;
+            field1.add_observer(this);
         }
 
         /**
@@ -76,7 +76,7 @@ namespace domain {
                     auto fields = get_fields_in_range(range, p_observee);
                     for(auto& field_with_range : fields)
                     {
-                        field_with_range.field->set_weight(field_with_range.field->get_weight() + field_with_range.range_from_origin);
+                        field_with_range.field.set_weight(field_with_range.field.get_weight() + field_with_range.range_from_origin);
                     }
                 }
             }
@@ -89,7 +89,7 @@ namespace domain {
                 auto fields = get_fields_in_range(range, p_observee);
                 for(auto& field_with_range : fields)
                 {
-                    field_with_range.field->set_weight(field_with_range.field->get_weight() - field_with_range.range_from_origin);
+                    field_with_range.field.set_weight(field_with_range.field.get_weight() - field_with_range.range_from_origin);
                 }
             }
             notify_observers(this, title);
@@ -99,13 +99,13 @@ namespace domain {
             // what will be returned
             std::vector<field_with_range> result;
             // queue that still needs to be visisted
-            std::vector<std::shared_ptr<field>> queue;
+            std::vector<field*> queue;
 
             // in case range is 0 or smaller return a empty list
             if(range > 0){
                 // fill queue with all the neighbours from origin to make it the start point
                 // for every neighbour add it to the list
-                for(auto& neighbour : origin->get_neighbors()){
+                for(auto &neighbour : origin->get_neighbors()){
                     queue.push_back(neighbour);
                 }
 
@@ -113,7 +113,7 @@ namespace domain {
                 // lets do this as many times as the range and each time we go a layer deeeper!
                 for(;range > 0; --range){
                     // store neighbours after the queue has been finished
-                    std::vector<std::shared_ptr<field>> next_queue;
+                    std::vector<field*> next_queue;
 
                     // now go down the queue from the layer we are in now
                     for(auto& Qfield : queue){
@@ -121,8 +121,8 @@ namespace domain {
                         // to avoid going from id 1 to id 2 to id 1 again if they are neighbours
                         // also don't add origin.
                         bool found = false;
-                        for(auto& Rfield : result){
-                            if(Rfield.field == Qfield || origin == Qfield.get()){
+                        for(auto& Rfield : result) {
+                            if(&Rfield.field == Qfield || origin == Qfield){
                                 found = true;
                                 break;
                             }
@@ -132,10 +132,10 @@ namespace domain {
                         // it has already been done.
                         if(!found){
                             // add to result
-                            result.push_back(field_with_range(Qfield, range));
+                            result.push_back(field_with_range(*Qfield, range));
 
                             // add its neighbour neighbours to the next queue
-                            for(auto& neigbour : Qfield->get_neighbors()){
+                            for(auto &neigbour : Qfield->get_neighbors()){
                                 next_queue.push_back(neigbour);
                             }
                         }
@@ -165,7 +165,7 @@ namespace domain {
                     float x = m_dest->min.x + (tile_width * pos.x);
                     float y = m_dest->min.y + (tile_height * pos.y);
                     engine::math::box2_t box = {{x, y},{x + tile_width, y + tile_height}};
-                    field->set_box(std::make_shared<engine::math::box2_t>(box));
+                    field->set_box(box);
                     field->draw(draw_managers, time_elapsed);
                 }
             }
@@ -197,8 +197,8 @@ namespace domain {
          * @param position
          * @return
          */
-        std::vector<std::shared_ptr<field>> map::get_neighbors(engine::math::vec2_t position) const {
-            std::vector<std::shared_ptr<field>> neighbors;
+        std::vector<field*> map::get_neighbors(engine::math::vec2_t position) const {
+            std::vector<field*> neighbors;
             // Check if the position is on the map
             if (position_to_index(position) < number_of_fields()) {
                 // North neighbor
@@ -272,8 +272,8 @@ namespace domain {
          *
          * @return
          */
-        std::vector<std::shared_ptr<field>> map::get_fields_with_objects() const {
-            std::vector<std::shared_ptr<field>> fields;
+        std::vector<field*> map::get_fields_with_objects() const {
+            std::vector<field*> fields;
             for (auto &field1 : m_fields) {
                 if (field1 && field1->has_object()) {
                     fields.push_back(field1);
@@ -288,8 +288,8 @@ namespace domain {
          *
          * @return
          */
-        std::vector<std::shared_ptr<field>> map::get_empty_fields() const {
-            std::vector<std::shared_ptr<field>> fields;
+        std::vector<field*> map::get_empty_fields() const {
+            std::vector<field*> fields;
             for (auto &field1 : m_fields) {
                 if (field1 && !field1->has_object()) {
                     fields.push_back(field1);
@@ -299,7 +299,7 @@ namespace domain {
             return fields;
         }
 
-        std::vector<std::shared_ptr<field>> map::get_fields() const {
+        std::vector<field*> map::get_fields() const {
             return m_fields;
         }
 

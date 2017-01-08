@@ -6,12 +6,9 @@
 #include "wave_management.h"
 namespace services {
     namespace wave {
-        wave_management::wave_management(std::shared_ptr<wavegenerator> wave_gen) : m_wave_gen(wave_gen)
-        {
-            m_current_list = {};
-        }
+        wave_management::wave_management(wavegenerator &wave_gen) : m_wave_gen(wave_gen) {}
 
-        std::vector<std::shared_ptr<domain::nations::enemy>> wave_management::get_enemies(unsigned int time) {
+        std::vector<domain::nations::enemy*> wave_management::get_enemies(unsigned int time) {
 
             // set start time and the end of peace time in case its the first call
             if(start_time == 0){
@@ -20,7 +17,7 @@ namespace services {
             }
 
             // set values we are going to use
-            auto return_list = std::vector<std::shared_ptr<domain::nations::enemy>>();
+            auto return_list = std::vector<domain::nations::enemy*>();
 
             // in case there is still peace time just do nothing
             if(m_peace_including_start_time > static_cast<int>(time)){
@@ -31,24 +28,22 @@ namespace services {
                 spawn_logic(time);
 
                 // make subset
-                for(auto pair : m_current_list){
-                    bool result = pair->first <= static_cast<int>(time);
-                    if(result){
-                        return_list.push_back(pair->second);
+                for(auto &pair : m_current_list){
+                    bool result = pair.first <= static_cast<int>(time);
+                    if(result) {
+                        return_list.push_back(pair.second);
                     };
                 }
 
                 // now remove them from the list of the enemies that haven't been given back yet.
                 auto new_end = std::remove_if(m_current_list.begin(), m_current_list.end(),
-                                              [time](const std::shared_ptr<std::pair<int, std::shared_ptr<domain::nations::enemy>>>& pair)
-                                              { return pair->first <= static_cast<int>(time);});
+                                              [time](const std::pair<int, domain::nations::enemy*> &pair)
+                                              { return pair.first <= static_cast<int>(time);});
 
                 m_current_list.erase(new_end, m_current_list.end());
                 return return_list;
             }
         }
-
-
 
         void wave_management::spawn_logic(unsigned int time) {
 
@@ -65,14 +60,13 @@ namespace services {
             if(m_last_spawned_wave_time == -1 || static_cast<int>(time) -  m_last_spawned_wave_time  >= m_waves_interval){
                 m_last_spawned_wave_time = time;
 
-
                 // generate wave
-                auto new_enemies = m_wave_gen->generateEnemies(m_wave_spawn_time_range, static_cast<int>(m_wave_opportunity), *m_spawnable_nation.get(), false ,0, m_spawn_bosses);
+                auto new_enemies = m_wave_gen.generateEnemies(m_wave_spawn_time_range, static_cast<int>(m_wave_opportunity), *m_spawnable_nation, false, 0, m_spawn_bosses);
 
                 for(auto& pair : new_enemies){
                     // update the time so current time gets attached
                    pair.first += time;
-                   m_current_list.push_back(std::make_shared<std::pair<int, std::shared_ptr<domain::nations::enemy>>>(pair));
+                   m_current_list.push_back(std::pair<int, domain::nations::enemy*>(pair));
                }
 
                 // increasing opportunity logic for next wave.
@@ -124,11 +118,11 @@ namespace services {
             return m_wave_spawn_time_range;
         }
 
-        void wave_management::set_spawnable_nation(std::shared_ptr<domain::nations::nation> nation) {
-            m_spawnable_nation = nation;
+        void wave_management::set_spawnable_nation(domain::nations::nation &nation) {
+            m_spawnable_nation = &nation;
         }
 
-        std::shared_ptr<domain::nations::nation> wave_management::get_spawnable_nation() {
+        domain::nations::nation *wave_management::get_spawnable_nation() {
             return m_spawnable_nation;
         }
 
@@ -146,7 +140,7 @@ namespace services {
             start_time = 0;
         }
 
-        std::shared_ptr<wavegenerator> wave_management::get_wave_generator() {
+        wavegenerator &wave_management::get_wave_generator() {
             return m_wave_gen;
         }
     }

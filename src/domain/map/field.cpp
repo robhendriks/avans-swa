@@ -13,8 +13,9 @@
 namespace domain {
     namespace map {
 
-        field::field(map &map1, engine::math::vec2_t pos) : m_map(map1), m_pos(pos), m_object(nullptr), m_box(nullptr), m_flags(FLAG_NONE) {
-            map1.add_field(std::shared_ptr<field>(this));
+        field::field(map &map1, engine::math::vec2_t pos) : m_map(map1), m_pos(pos), m_object(nullptr), m_box(nullptr),
+                                                            m_flags(FLAG_NONE) {
+            map1.add_field(*this);
         }
 
         field::~field() {}
@@ -70,16 +71,16 @@ namespace domain {
 
                     auto defensive_building = dynamic_cast<objects::defensive_building*>(m_object);
                     if (defensive_building) {
-                        auto ai = std::make_shared<domain::map::ai::ai>();
+                        auto ai = new domain::map::ai::ai();
                         ai->set_new_target_func([](domain::map::field* origin, domain::map::ai::ai* ai1) -> domain::combat::defender* {
-                            if (!origin || !ai1->get_map() || !ai1->get_map()->get_game_level() || !ai1->get_current_field()) {
+                            if (!origin || !ai1->get_map().get_game_level() || !ai1->get_current_field()) {
                                 SDL_Log("Precondition(s) not met\n");
                                 return nullptr;
                             }
 
 //                            SDL_Log("Looking for tiles nearby %f:%f\n", origin->m_pos.x, origin->m_pos.y);
 
-                            auto fields = ai1->get_map()->get_fields_in_range(2, origin); // Replace 2 with "ai1->get_unit()->get_range()"
+                            auto fields = ai1->get_map().get_fields_in_range(2, origin); // Replace 2 with "ai1->get_unit()->get_range()"
                             if (fields.empty()) {
                                 SDL_Log("No fields nearby\n");
                                 return nullptr;
@@ -87,22 +88,22 @@ namespace domain {
 
 //                            SDL_Log("Found %i tile(s)\n", fields.size());
 
-                            auto enemies = ai1->get_map()->get_game_level()->get_enemies_in_lvl();
+                            auto enemies = ai1->get_map().get_game_level()->get_enemies_in_lvl();
                             if (enemies.empty()) {
                                 SDL_Log("No enemies available\n");
                                 return nullptr;
                             }
 
                             for (auto &field : fields) {
-                                field.field->set_flags(domain::map::field::FLAG_NONE);
+                                field.field.set_flags(domain::map::field::FLAG_NONE);
                             }
 
                             for (auto &enemy : enemies) {
                                 for (auto &field : fields) {
-                                    field.field->set_flags(domain::map::field::FLAG_TARGET | domain::map::field::FLAG_WEIGHT);
+                                    field.field.set_flags(domain::map::field::FLAG_TARGET | domain::map::field::FLAG_WEIGHT);
 
-                                    if (field.field == enemy->get_current_field()) {
-                                        return enemy.get();
+                                    if (&field.field == enemy->get_current_field()) {
+                                        return enemy;
                                     }
                                 }
                             }
@@ -110,11 +111,11 @@ namespace domain {
                             return nullptr;
                         });
 
-                        ai->set_state(std::make_shared<ai::states::search_and_destroy_state>());
-                        ai->set_map(std::shared_ptr<domain::map::map>(&m_map));
-                        ai->set_current_field(shared_from_this());
+                        ai->set_state(ai::SEARCH_AND_DESTROY);
+                        ai->set_map(m_map);
+                        ai->set_current_field(*this);
 
-                        defensive_building->set_ai(ai);
+                        defensive_building->set_ai(*ai);
                     }
                 }
 
@@ -129,8 +130,8 @@ namespace domain {
          *
          * @param box
          */
-        void field::set_box(std::shared_ptr<engine::math::box2_t> box) {
-            m_box = box;
+        void field::set_box(engine::math::box2_t box) {
+            m_box.reset(new engine::math::box2_t(box));
         }
 
         /**
@@ -141,7 +142,7 @@ namespace domain {
         bool field::place_object(objects::field_object* object) {
             if (!has_object() && object != nullptr) {
                 m_object = object;
-                m_object->set_field(shared_from_this());
+                m_object->set_field(this);
 
                 // notify local observers
                 notify_observers(this, "object-placed");
@@ -194,7 +195,7 @@ namespace domain {
          *
          * @return std::vector<field&>
          */
-        std::vector<std::shared_ptr<field>> field::get_neighbors() const {
+        std::vector<field*> field::get_neighbors() const {
             return m_map.get_neighbors(get_position());
         }
 

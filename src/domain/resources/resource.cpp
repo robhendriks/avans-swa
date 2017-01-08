@@ -24,11 +24,7 @@ namespace domain {
         }
 
         bool resource::check_resource(int amount) {
-            if (_count >= amount) {
-                return true;
-            } else {
-                return false;
-            }
+            return _count >= amount;
         }
 
         void resource::decrement_resource(int amount) {

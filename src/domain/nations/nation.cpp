@@ -11,7 +11,7 @@ namespace domain {
             m_prefix_name = _prefix_name;
         }
 
-        void nation::set_available_enemies(std::vector<std::shared_ptr<enemy>> _enemies) {
+        void nation::set_available_enemies(std::vector<enemy*> _enemies) {
             m_enemies = _enemies;
         }
 
@@ -23,7 +23,7 @@ namespace domain {
             return m_prefix_name;
         }
 
-        std::vector<std::shared_ptr<enemy>> nation::get_available_enemies() {
+        std::vector<enemy*> nation::get_available_enemies() {
             return m_enemies;
         }
 

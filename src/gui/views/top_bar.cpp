@@ -16,8 +16,8 @@ namespace gui {
 
         }
 
-        void top_bar::set_controller(std::shared_ptr<controllers::menu_controller> menu_controller) {
-            m_menu_controller = menu_controller;
+        void top_bar::set_controller(controllers::menu_controller &menu_controller) {
+            m_menu_controller = &menu_controller;
         }
 
         void top_bar::before() {

@@ -14,26 +14,26 @@ namespace domain {
             public:
                 economic_building(engine::math::box2_t box, const std::string &id, int hitpoints,
                                   double health_ragen, const std::string &name,
-                                  const std::vector<std::shared_ptr<resources::resource>> &required_resources,
-                                  std::shared_ptr<domain::resources::resource> resource);
+                                  const std::vector<resources::resource*> &required_resources,
+                                  domain::resources::resource &resource);
 
-                economic_building(std::shared_ptr<field> field1, std::shared_ptr<domain::resources::resource> resource);
+                economic_building(field &field1, const std::string &id, int hitpoints,
+                                  double health_ragen, const std::string &name,
+                                  const std::vector<resources::resource*> &required_resources,
+                                  domain::resources::resource &resource);
 
                 economic_building(const economic_building &obj);
 
                 dragable_field_object *clone() const;
 
-                std::shared_ptr<domain::resources::resource> get_produced_resources();
+                domain::resources::resource &get_produced_resources();
 
-                void set_produced_resource(std::shared_ptr<domain::resources::resource> resource);
-
-                void update(domain::game_level::game_level game_level);
+                void update(domain::game_level::game_level &game_level);
 
                 void draw(drawable::draw_managers_wrapper &draw_managers, unsigned int time_elapsed);
 
             private:
-                std::shared_ptr<domain::resources::resource> produced_resources;
-
+                domain::resources::resource &produced_resources;
             };
         }
     }

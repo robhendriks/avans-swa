@@ -4,6 +4,7 @@
 
 #include <random>
 #include "attacker.h"
+#include "../map/ai/ai.h"
 
 namespace domain {
     namespace combat {
@@ -18,12 +19,12 @@ namespace domain {
             m_movement = other.m_movement;
         }
 
-        std::shared_ptr<domain::map::field> attacker::get_current_field() const {
+        domain::map::field *attacker::get_current_field() const {
             return m_current_field;
         }
 
-        void attacker::set_current_field(const std::shared_ptr<domain::map::field> &current_field) {
-            m_current_field = current_field;
+        void attacker::set_current_field(domain::map::field &current_field) {
+            m_current_field = &current_field;
         }
 
         int attacker::get_damage() const {
@@ -51,6 +52,11 @@ namespace domain {
 
         int attacker::get_min_damage() const {
             return m_min_damage;
+        }
+
+        void attacker::set_ai(domain::map::ai::ai &ai1) {
+            ai1.set_unit(*this);
+            ai_controlled::set_ai(ai1);
         }
     }
 }

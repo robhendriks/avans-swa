@@ -10,7 +10,7 @@ namespace domain {
 
             road::road(engine::math::box2_t box) : dragable_field_object(box) {}
 
-            road::road(std::shared_ptr<field> field1) : dragable_field_object(field1) {}
+            road::road(field &field1) : dragable_field_object(field1) {}
 
             /**
              * Copy constructor

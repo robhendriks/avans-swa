@@ -29,9 +29,9 @@ namespace domain {
 
                 int get_rotation() const;
 
-                void set_field(std::shared_ptr<field> field1);
+                void set_field(field *field1);
 
-                std::shared_ptr<field> get_field() const;
+                field *get_field() const;
 
                 virtual void update_game_stats(domain::game_level::game_stats &game_stats1, std::string action) = 0;
 
@@ -39,7 +39,7 @@ namespace domain {
 
             protected:
                 int m_rotation;
-                std::shared_ptr<field> m_field;
+                field *m_field;
             };
         }
     }

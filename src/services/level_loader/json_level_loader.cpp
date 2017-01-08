@@ -16,8 +16,7 @@ namespace services {
 
         }
 
-
-        std::unique_ptr<domain::game_level::game_level> json_level_loader::load(int id) {
+        domain::game_level::game_level *json_level_loader::load(int id) {
             //load_level needs te change in the future
             id = 0;
 
@@ -51,12 +50,12 @@ namespace services {
 
             // Create the level
             auto *d_a_d = new engine::draganddrop::drag_and_drop();
-            auto goal = std::make_shared<domain::game_level::game_stats>(domain::game_level::game_stats());
+            auto *goal = new domain::game_level::game_stats();
             goal->set_counter("buildings", 5);
-            auto game_level = std::unique_ptr<domain::game_level::game_level>(
-                new domain::game_level::game_level("level", vec_levels[0], goal, vec_nations.front(),
+            auto game_level =
+                new domain::game_level::game_level("level", *vec_levels[0], *goal, *vec_nations.front(),
                                                    *d_a_d,
-                                                   125000));
+                                                   125000);
             for (auto building : vec_building) {
                 game_level->add_placeable_object(*building);
             }
@@ -65,10 +64,10 @@ namespace services {
         }
 
 
-        std::vector<std::shared_ptr<domain::nations::nation>>
+        std::vector<domain::nations::nation*>
         json_level_loader::load_nations(std::string nation_url) {
 
-            std::vector<std::shared_ptr<domain::nations::nation>> pre_nation_list;
+            std::vector<domain::nations::nation*> pre_nation_list;
 
             std::ifstream file(nation_url);
             if (!file.is_open()) {
@@ -80,14 +79,13 @@ namespace services {
                 nation_root << file;
 
                 for (json &elem : nation_root) {
-                    auto current_nation = std::make_shared<domain::nations::nation>(
-                        domain::nations::nation(elem["id"], "_"));
+                    auto *current_nation = new domain::nations::nation(elem["id"], "_");
 
                     json data = elem["units"];
                     if (!data.is_array()) {
                         return pre_nation_list;
                     }
-                    std::vector<std::shared_ptr<domain::nations::enemy>> pre_vec_enemies;
+                    std::vector<domain::nations::enemy*> pre_vec_enemies;
                     for (json &enemy : data) {
                         std::string enemy_name = enemy["name"];
                         double enemey_movement_speed = static_cast<double>(enemy["movement-speed"]);
@@ -97,15 +95,14 @@ namespace services {
                         std::string enemy_type = enemy["type"];
                         int enemey_oppertunity_cost = static_cast<int>(enemy["oppertunity-cost"]);
 
-
                         bool boss = false;
                         if (enemy_type == "boss") { boss = true; };
                         //TODO: not 100 dynamic
-                        std::shared_ptr<domain::nations::enemy> curren_enemy =
-                            std::make_shared<domain::nations::enemy>(
+                        domain::nations::enemy *curren_enemy =
+                            new
                                 domain::nations::enemy(enemy_name, enemey_min_damage, enemey_max_damage, 1000,
                                                        enemey_hitpoints, 100, 1, enemey_movement_speed, boss,
-                                                       current_nation, enemey_oppertunity_cost));
+                                                       *current_nation, enemey_oppertunity_cost);
                         curren_enemy->set_draw_settings("images/Fisher.png");
                         curren_enemy->set_max_row(8);
                         curren_enemy->set_max_column(3);
@@ -203,7 +200,7 @@ namespace services {
                         }
 
                         // Create the object
-                        object = new domain::map::objects::road(field);
+                        object = new domain::map::objects::road(*field);
                         object->set_max_column(1);
                     }
 
@@ -224,8 +221,8 @@ namespace services {
             }
         }
 
-        std::shared_ptr<domain::map::objects::building> json_level_loader::load_buildings(std::string url) {
-            std::shared_ptr<domain::map::objects::building> building;
+        domain::map::objects::building *json_level_loader::load_buildings(std::string url) {
+            domain::map::objects::building* building;
             std::ifstream file(url);
             if (!file.is_open()) {
                 throw std::runtime_error(std::string("Unable to open file: ") + url);
@@ -241,23 +238,18 @@ namespace services {
                     int max_dmg = 0;
                     int range = 0;
                     int type = building_data["type"];
-                    auto output_sources = std::shared_ptr<domain::resources::resource>();
-                    auto costs = std::vector<std::shared_ptr<domain::resources::resource>>();
+                    domain::resources::resource *output_sources = nullptr;
+                    auto costs = std::vector<domain::resources::resource*>();
                     engine::math::box2_t building_box{{0,  0},
                                                       {64, 64}};
-
 
                     auto data_building_cost = building_data["cost"];
 
                     for (auto it = data_building_cost.begin(); it != data_building_cost.end(); ++it) {
-
-                        costs.push_back(std::make_shared<domain::resources::resource>(it.key(),
-                                                                                      it.value()));
+                        costs.push_back(new domain::resources::resource(it.key(), it.value()));
                     }
 
-
                     for (json &building_properties : building_data["properties"]) {
-
                         auto current_prop = building_properties.begin();
                         for (json::iterator building_property_item = building_properties.begin();
                              current_prop != building_properties.end(); ++current_prop) {
@@ -271,17 +263,15 @@ namespace services {
                                 } else if (building_property_item.key() == "range") {
                                     range = static_cast<int>(building_property_item.value());
                                 }
-
-
                             } else {
-
-                                output_sources = std::make_shared<domain::resources::resource>(
-                                    building_property_item.key(),
-                                    building_property_item.value());
-
+                                output_sources = new domain::resources::resource(building_property_item.key(),
+                                                                                 building_property_item.value());
                             }
-
                         }
+                    }
+
+                    if (output_sources == nullptr) {
+                        output_sources = new domain::resources::resource();
                     }
 
                     std::string id, name;
@@ -289,19 +279,18 @@ namespace services {
                     name = building_data.value("name", "");
 
                     if (type == 1) {
-                        std::shared_ptr<domain::map::objects::economic_building> economic_building = std::make_shared<domain::map::objects::economic_building>(
+                        auto *economic_building = new domain::map::objects::economic_building(
                             building_box,
                             id,
                             static_cast<int>(building_data["hitpoints"]),
                             static_cast<double>(building_data["health-regen"]),
-                            name, costs, output_sources);
-
+                            name, costs, *output_sources);
 
                         economic_building->set_draw_settings(std::string("images/buildings/") + id + ".png");
 
                         vec_building.push_back(economic_building);
                     } else {
-                        std::shared_ptr<domain::map::objects::defensive_building> defencive_building = std::make_shared<domain::map::objects::defensive_building>(
+                        auto *defencive_building = new domain::map::objects::defensive_building (
                             building_box,
                             id,
                             static_cast<int>(building_data["hitpoints"]),
@@ -312,8 +301,6 @@ namespace services {
 
                         vec_building.push_back(defencive_building);
                     }
-
-
                 }
             } catch (std::exception &e) {
                 // TODO: proper error handling
@@ -324,13 +311,12 @@ namespace services {
             return building;
         }
 
-        std::shared_ptr<domain::map::map> json_level_loader::load_all_levels(std::string url) {
+        domain::map::map *json_level_loader::load_all_levels(std::string url) {
+            domain::map::map *map = nullptr;
 
-            std::shared_ptr<domain::map::map> map;
             std::ifstream file(url);
             if (!file.is_open()) {
                 throw std::runtime_error(std::string("Unable to open file: ") + url);
-
             }
 
             json map_root;
@@ -339,7 +325,7 @@ namespace services {
 
                 float width = map_root["width"];
                 float height = map_root["height"];
-                map = std::shared_ptr<domain::map::map>(new domain::map::map({width - 1, height - 1}, {32, 32}));
+                map = new domain::map::map({width - 1, height - 1}, {32, 32});
                 load_fields(map_root, *map);
                 load_objects(map_root, *map);
             } catch (std::exception &e) {
@@ -358,6 +344,5 @@ namespace services {
 
             return vec_levels.size();
         }
-
     }
 }

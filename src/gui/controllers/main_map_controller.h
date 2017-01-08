@@ -43,9 +43,9 @@ namespace gui {
 
             void show();
 
-            void set_game_world(std::unique_ptr<domain::gameworld::game_world> &&game_world);
+            void set_game_world(domain::gameworld::game_world &game_world);
 
-            void set_menu_controller(std::shared_ptr<gui::controllers::menu_controller> menu_controller);
+            void set_menu_controller(gui::controllers::menu_controller &menu_controller);
 
             void next_lvl();
 
@@ -58,7 +58,7 @@ namespace gui {
             void resume_engine_if();
 
         private:
-            std::shared_ptr<gui::controllers::menu_controller> m_menu_controller;
+            gui::controllers::menu_controller *m_menu_controller;
             views::level &m_view;
             views::win_game_over &m_trans_view;
             engine::engine &m_engine;
@@ -70,7 +70,7 @@ namespace gui {
             unsigned int m_previous_time;
 
             // set values of the wave_management_service
-            void set_settings_wave_management_service(domain::game_level::game_level lvl);
+            void set_settings_wave_management_service(domain::game_level::game_level &lvl);
         };
     }
 }

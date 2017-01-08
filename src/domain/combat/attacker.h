@@ -31,9 +31,11 @@ namespace domain {
 
             int get_min_damage() const;
 
-            std::shared_ptr<domain::map::field> get_current_field() const;
+            domain::map::field *get_current_field() const;
 
-            void set_current_field(const std::shared_ptr<domain::map::field> &current_field);
+            void set_current_field(domain::map::field &current_field);
+
+            virtual void set_ai(domain::map::ai::ai &ai1);
 
             virtual ~attacker() {}
 
@@ -47,7 +49,7 @@ namespace domain {
             //% of a tile per sec
             int m_movement;
 
-            std::shared_ptr<domain::map::field> m_current_field;
+            domain::map::field *m_current_field;
         };
     }
 }

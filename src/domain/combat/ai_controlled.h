@@ -8,19 +8,22 @@
 #include <memory>
 
 namespace domain {
-    namespace map{
-        namespace ai{
+    namespace map {
+        namespace ai {
             class ai;
         }
     }
     namespace combat {
-        class ai_controlled : public std::enable_shared_from_this<ai_controlled>{
+        class ai_controlled {
         public:
-            void set_ai(std::shared_ptr<domain::map::ai::ai> ai);
-            std::shared_ptr<domain::map::ai::ai> get_ai();
-            virtual ~ai_controlled();
+            virtual void set_ai(domain::map::ai::ai &ai);
+
+            domain::map::ai::ai *get_ai();
+
+            ~ai_controlled();
+
         private:
-            std::shared_ptr<domain::map::ai::ai> m_ai;
+            domain::map::ai::ai *m_ai;
         };
     }
 }

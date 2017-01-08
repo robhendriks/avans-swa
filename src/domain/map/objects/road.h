@@ -17,7 +17,7 @@ namespace domain {
 
                 road(engine::math::box2_t box);
 
-                road(std::shared_ptr<field> field1);
+                road(field &field1);
 
                 road(const road &obj);
 

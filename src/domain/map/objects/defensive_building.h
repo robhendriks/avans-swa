@@ -18,14 +18,14 @@ namespace domain {
                                    int hitpoints,
                                    double health_ragen,
                                    const std::string &name,
-                                   const std::vector<std::shared_ptr<resources::resource>> &required_resources,
+                                   const std::vector<resources::resource*> &required_resources,
                                    int range, int min_damage, int max_damage);
 
                 dragable_field_object *clone() const;
 
                 void draw(drawable::draw_managers_wrapper &draw_managers, unsigned int time_elapsed);
 
-                void update(domain::game_level::game_level game_level, unsigned int elapsed_time);
+                void update(domain::game_level::game_level &game_level, unsigned int elapsed_time);
             };
 
         }

@@ -13,44 +13,74 @@
 
 
 namespace domain {
-    namespace nations{
+    namespace nations {
         class enemy;
     }
 
     namespace map {
-        namespace ai{
+        namespace ai {
+
+            enum state {
+                DEAD, MOVE, SEARCH_AND_DESTROY
+            };
+
             class ai {
             public:
                 ai();
+
+                ~ai();
+
                 void update(unsigned int elapsed_time);
 
-                void set_map(std::shared_ptr<map> m_map);
-                std::shared_ptr<map> get_map() const;
-                void set_unit(std::shared_ptr<domain::combat::attacker> unit);
-                std::shared_ptr<domain::combat::attacker> get_unit();
-                void set_new_target_func(std::function<domain::combat::defender* (domain::map::field* origin, domain::map::ai::ai* ai)>  target);
-                std::function<domain::combat::defender* (domain::map::field* origin, domain::map::ai::ai* ai)>  get_new_target_func();
+                void set_map(map &m_map);
 
-                void set_animation_transition_func(std::function<void (std::string title, domain::map::ai::ai* ai, engine::math::box2_t& difference_between_you_and_target)> func);
-                std::function<void (std::string title, domain::map::ai::ai* ai, engine::math::box2_t& difference_between_you_and_target)>  get_animation_transition_func();
+                map &get_map() const;
+
+                void set_unit(domain::combat::attacker &unit);
+
+                domain::combat::attacker &get_unit();
+
+                void set_new_target_func(std::function<domain::combat::defender *(domain::map::field *origin,
+                                                                                  domain::map::ai::ai *ai)> target);
+
+                std::function<domain::combat::defender *(domain::map::field *origin, domain::map::ai::ai *ai)>
+                get_new_target_func();
+
+                void set_animation_transition_func(std::function<void(std::string title, domain::map::ai::ai *ai,
+                                                                      engine::math::box2_t &difference_between_you_and_target)> func);
+
+                std::function<void(std::string title, domain::map::ai::ai *ai,
+                                   engine::math::box2_t &difference_between_you_and_target)>
+                get_animation_transition_func();
 
                 bool is_initialised() const;
-                void set_state(std::shared_ptr<states::state> state);
-                std::shared_ptr<states::state> get_state() const ;
-                std::shared_ptr<field> get_current_field();
-                void set_current_field(std::shared_ptr<field> field);
-                ai clone();
+
+                void set_state(state state1);
+
+                state get_current_state() const;
+
+                field *get_current_field();
+
+                void set_current_field(field &field);
+
+                ai *clone();
+
             private:
-                std::shared_ptr<field> m_current_field;
-                std::shared_ptr<map> m_map;
-                std::shared_ptr<domain::combat::attacker> m_unit;
-                std::function<domain::combat::defender* (domain::map::field* origin, domain::map::ai::ai* ai)> m_new_target_func;
-                std::function<void (std::string title, domain::map::ai::ai* ai, engine::math::box2_t& difference_between_you_and_target)> m_animation_transition_func;
-                std::shared_ptr<states::state> m_state;
-                std::shared_ptr<field> get_spawn_point();
+                field *m_current_field;
+                map *m_map;
+                domain::combat::attacker *m_unit;
+                std::function<domain::combat::defender *(domain::map::field *origin,
+                                                         domain::map::ai::ai *ai)> m_new_target_func;
+                std::function<void(std::string title, domain::map::ai::ai *ai,
+                                   engine::math::box2_t &difference_between_you_and_target)> m_animation_transition_func;
+                state m_state;
+
+                field *get_spawn_point();
+
+                std::map<state, states::state *> m_states;
             };
+        }
     }
-}
 }
 
 #endif //CITY_DEFENCE_AI_H
