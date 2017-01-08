@@ -90,9 +90,9 @@ set(SOURCES src/main.cpp
     src/domain/drawable/drawable_game_object.cpp
     src/domain/drawable/drawable_game_object.h
     src/domain/drawable/abstract_drawable_game_object.h
-    src/services/level_loader/base_level_loader.h
-    src/services/level_loader/json_level_loader.cpp
-    src/services/level_loader/json_level_loader.h
+    src/services/world_loader/base_world_loader.h
+    src/services/world_loader/json_world_loader.cpp
+    src/services/world_loader/json_world_loader.h
     src/gui/controllers/credits_controller.cpp
     src/gui/controllers/credits_controller.h
     src/gui/views/credits.cpp

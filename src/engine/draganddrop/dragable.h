@@ -25,6 +25,10 @@ namespace engine {
     namespace draganddrop {
         class dragable {
         public:
+            dragable();
+
+            dragable (const dragable& other);
+
             virtual math::box2_t get_box() const = 0;
 
             virtual void on_drag(math::vec2_t position) = 0;

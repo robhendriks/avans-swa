@@ -13,15 +13,12 @@ namespace domain {
                                game_stats &goal,
                                domain::nations::nation &_enemies,
                                engine::draganddrop::drag_and_drop &drag_and_drop, long duration) :
-                m_name(name), m_max_duration(duration), m_map(map), m_goal(goal), m_start_time(0),
+                m_name(name), m_max_duration(duration), m_map(map), m_goal(goal), m_start_time(0), m_end_time(-1),
                 m_drag_and_drop(drag_and_drop), m_enemy(_enemies), m_paused(true) {
 
             m_stats = new game_stats();
 
             m_map.set_game_level(this);
-
-            // Call pause to start the level....
-            pause();
 
             // Observe all fields, update the stats, add the drag and drop instance and make the empty fields dropable
             for (auto &field : m_map.get_fields()) {
@@ -30,6 +27,12 @@ namespace domain {
 
                     if (field->has_object()) {
                         field->set_drag_and_drop(&m_drag_and_drop);
+
+                        auto *dragable = dynamic_cast<map::objects::dragable_field_object*>(field->get_object());
+                        if (dragable) {
+                            dragable->set_drag_and_drop(&m_drag_and_drop);
+                        }
+
                         field->get_object()->update_game_stats(*m_stats, "object-placed");
                     } else {
                         m_drag_and_drop.add_dropable(*field);
@@ -45,25 +48,6 @@ namespace domain {
             // Check if there are already some goals reached
             check_goals_reached();
 
-            //Create resource objects and sets them to 0.
-            auto templist = std::vector<domain::resources::resource*>(5);
-            templist[0] = new domain::resources::resource();
-            templist[1] = new domain::resources::resource();
-            templist[2] = new domain::resources::resource();
-            templist[3] = new domain::resources::resource();
-            templist[4] = new domain::resources::resource();
-
-            templist[0]->set_count(50);
-            templist[0]->set_resource_type("wood");
-            templist[1]->set_count(500);
-            templist[1]->set_resource_type("ore");
-            templist[2]->set_count(500);
-            templist[2]->set_resource_type("gold");
-            templist[3]->set_count(0);
-            templist[3]->set_resource_type("silicium");
-            templist[4]->set_count(0);
-            templist[4]->set_resource_type("uranium");
-            m_resources = templist;
             m_has_cheated = false;
 
             // Add a callback for the drag and drop
@@ -72,8 +56,14 @@ namespace domain {
         }
 
         game_level::~game_level() {
+
+            if (!m_paused) {
+                pause();
+            }
+
             clean_resources();
 
+            delete &m_drag_and_drop;
             delete m_stats;
         }
 
@@ -123,7 +113,7 @@ namespace domain {
             m_end_time = time;
         }
 
-        unsigned int game_level::get_duration() const {
+        int game_level::get_duration() const {
             return m_end_time - m_start_time;
         }
 
@@ -178,6 +168,13 @@ namespace domain {
                     // Create a copy of the placed field
                     auto *copy = object->clone();
                     add_placeable_object(*copy);
+
+                    // Add the event if it is a building
+                    auto *building = dynamic_cast<domain::map::objects::building*>(copy);
+                    if (building) {
+                        engine::eventbus::eventbus::get_instance().subscribe(
+                            dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_motion>*>(building));
+                    }
 
                     // Immediately start with dragging
                     //m_drag_and_drop.set_next_dragging(*copy);
@@ -331,11 +328,13 @@ namespace domain {
             if (m_paused) {
                 // Resume
                 m_drag_and_drop.start();
+                subscribe_buildings_to_event();
 
                 m_paused = false;
             } else {
                 // Pause
                 m_drag_and_drop.stop();
+                unsubscribe_buildings_to_event();
 
                 m_paused = true;
             }
@@ -360,6 +359,52 @@ namespace domain {
         void game_level::clean_resources() {
             for (auto &resource : m_resources) {
                 delete resource;
+            }
+        }
+
+        void game_level::subscribe_buildings_to_event() const {
+            for (auto &obj : m_placeable_objects) {
+                auto *building = dynamic_cast<domain::map::objects::building*>(obj);
+                if (building) {
+                    engine::eventbus::eventbus::get_instance().subscribe(
+                        dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_motion>*>(building));
+                }
+            }
+
+            for (auto &field : m_map.get_fields()) {
+                if (field != nullptr) {
+                    auto *obj = field->get_object();
+                    if (obj != nullptr) {
+                        auto *building = dynamic_cast<domain::map::objects::building*>(obj);
+                        if (building) {
+                            engine::eventbus::eventbus::get_instance().subscribe(
+                                dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_motion>*>(building));
+                        }
+                    }
+                }
+            }
+        }
+
+        void game_level::unsubscribe_buildings_to_event() const {
+            for (auto &obj : m_placeable_objects) {
+                auto *building = dynamic_cast<domain::map::objects::building*>(obj);
+                if (building) {
+                    engine::eventbus::eventbus::get_instance().unsubscribe(
+                        dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_motion>*>(building));
+                }
+            }
+
+            for (auto &field : m_map.get_fields()) {
+                if (field != nullptr) {
+                    auto *obj = field->get_object();
+                    if (obj != nullptr) {
+                        auto *building = dynamic_cast<domain::map::objects::building*>(obj);
+                        if (building) {
+                            engine::eventbus::eventbus::get_instance().unsubscribe(
+                                dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_motion>*>(building));
+                        }
+                    }
+                }
             }
         }
     }

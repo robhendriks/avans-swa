@@ -18,6 +18,8 @@ namespace domain {
         public:
             nation(std::string _name, std::string _prefix_name);
 
+            nation (const nation &other);
+
             void set_available_enemies(std::vector<enemy*> _enemies);
 
             std::string get_name();
@@ -25,6 +27,8 @@ namespace domain {
             std::string get_prefix_name();
 
             std::vector<enemy*> get_available_enemies();
+
+            nation *clone() const;
 
             ~nation();
         private:

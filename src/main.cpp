@@ -3,9 +3,9 @@
 #include "boost/di.hpp"
 #include "config/json_config.h"
 #include "utils/string_utils.h"
-#include "services/level_loader/json_level_loader.h"
 #include "domain/map/ai/states/move_state.h"
 #include "domain/map/ai/states/search_and_destroy_state.h"
+#include "services/world_loader/json_world_loader.h"
 
 int main(int argc, char *argv[]) {
     /**
@@ -40,20 +40,7 @@ int main(int argc, char *argv[]) {
     // Create the ioc container
     auto *game1 = new game(*engine1->get_window());
 
-    std::ifstream file("scenarios.json");
-    if (!file.is_open()) {
-        throw std::runtime_error(std::string("Unable to open file: ") + "scenarios.json");
-    }
-
-    json root;
-    try {
-        root << file;
-    } catch (std::exception &e) {
-        // TODO: proper error handling
-        throw;
-    }
-
-    services::level_loader::json_level_loader *level_loader = new services::level_loader::json_level_loader(root);
+    services::world_loader::json_world_loader *world_loader = new services::world_loader::json_world_loader();
 
     auto di_config = [&]() {
         return boost::di::make_injector(
@@ -65,7 +52,7 @@ int main(int argc, char *argv[]) {
                 boost::di::bind<>.to(*engine1->get_music_manager()),
                 boost::di::bind<>.to(*engine1->get_window()),
                 boost::di::bind<>.to(*font_manager),
-                boost::di::bind<services::level_loader::base_level_loader>.to(*level_loader)
+                boost::di::bind<services::world_loader::base_world_loader>.to(*world_loader)
         );
     };
 
@@ -98,7 +85,6 @@ int main(int argc, char *argv[]) {
     delete menu_controller;
     delete json_config;
     delete engine1;
-    delete level_loader;
 
     return 0;
 }

@@ -51,7 +51,7 @@ namespace domain {
 
             void set_end_time(unsigned int time);
 
-            unsigned int get_duration() const;
+            int get_duration() const;
 
             long get_max_duration() const;
 
@@ -109,6 +109,10 @@ namespace domain {
             void execute_cheat();
 
         private:
+            void subscribe_buildings_to_event() const;
+
+            void unsubscribe_buildings_to_event() const;
+
             void clean_resources();
 
             void check_goals_reached();
@@ -123,7 +127,7 @@ namespace domain {
             game_stats &m_goal;
             game_stats *m_stats;
             unsigned int m_start_time;
-            unsigned int m_end_time;
+            int m_end_time;
             std::vector<std::pair<int, domain::nations::enemy*>> enemies;
             std::vector<map::objects::dragable_field_object *> m_placeable_objects;
             engine::draganddrop::drag_and_drop &m_drag_and_drop;

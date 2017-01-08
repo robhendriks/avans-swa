@@ -8,7 +8,7 @@
 
 #include <fstream>
 #include <json.hpp>
-#include "base_level_loader.h"
+#include "base_world_loader.h"
 #include "../../config/json_config.h"
 #include "../../domain/map/map.h"
 #include "../../engine/math/vec2.hpp"
@@ -19,17 +19,16 @@ using json = nlohmann::json;
 using namespace engine::math;
 
 namespace services {
-    namespace level_loader {
-        class json_level_loader : public base_level_loader {
+    namespace world_loader {
+        class json_world_loader : public base_world_loader {
         public:
-            json_level_loader(json root);
 
-            int get_level_count();
+            domain::gameworld::game_world* load(std::string file);
 
-            domain::game_level::game_level *load(int id);
+            ~json_world_loader();
 
         private:
-            domain::map::map *load_all_levels(std::string url);
+            domain::game_level::game_level* load_level(std::string url);
 
             void load_fields(json &root, domain::map::map &map1);
 
@@ -40,7 +39,7 @@ namespace services {
             json m_root;
             std::vector<domain::map::objects::building*> vec_building;
             std::vector<domain::nations::nation*> vec_nations;
-            std::vector<domain::map::map*> vec_levels;
+            std::vector<domain::game_level::game_level*> vec_levels;
 
             domain::map::objects::building* load_buildings(std::string url);
         };

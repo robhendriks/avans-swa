@@ -11,9 +11,9 @@ namespace domain {
         public:
             game_world(std::vector<game_level::game_level*> game_levels);
 
-            game_level::game_level &get_current_level();
+            game_level::game_level *get_current_level();
 
-            void set_current_level(unsigned int number);
+            void set_current_level(int number);
 
             void go_to_next_level();
 
@@ -25,7 +25,7 @@ namespace domain {
 
         private:
             std::vector<game_level::game_level*> m_levels;
-            unsigned int m_current_level;
+            int m_current_level;
         };
     }
 }

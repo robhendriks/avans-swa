@@ -136,6 +136,7 @@ namespace services {
 
         void wave_management::reset() {
             m_wave_opportunity = m_base_wave_opportunity;
+            m_last_spawned_wave_time = -1;
             m_current_list.clear();
             start_time = 0;
         }

@@ -1,6 +1,35 @@
 {
   "width": 16,
   "height": 16,
+  "time": 125000,
+  "goals": [
+    {
+      "type" : "buildings",
+      "number" : 5
+    }
+  ],
+  "resources" : [
+    {
+      "type" : "wood",
+      "amount" : 500
+    },
+    {
+      "type" : "gold",
+      "amount" : 500
+    },
+    {
+      "type" : "ore",
+      "amount" : 100
+    },
+    {
+      "type" : "silicium",
+      "amount" : 10
+    },
+    {
+      "type" : "uranium",
+      "amount" : 300
+    }
+  ],
   "tiles": {
     "count": 155,
     "data": [

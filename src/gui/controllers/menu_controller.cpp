@@ -10,10 +10,10 @@ namespace gui {
         menu_controller::menu_controller(views::main_menu &main_menu, engine::engine &engine,
                                          controllers::main_map_controller &main_map_controller,
                                          controllers::credits_controller &credits_controller, game &game1,
-                                         services::level_loader::base_level_loader &level_loader)
+                                         services::world_loader::base_world_loader &world_loader)
             : base_controller(game1), m_engine(engine), m_main_menu(main_menu),
               m_main_map_controller(main_map_controller), m_credits_controller(credits_controller),
-              m_level_loader(level_loader) {
+              m_world_loader(world_loader) {
 
             main_map_controller.set_menu_controller(*this);
             m_main_menu.set_controller(*this);
@@ -24,12 +24,8 @@ namespace gui {
         }
 
         void menu_controller::play() {
-            auto first_level = m_level_loader.load(0);
-
-            std::vector<domain::game_level::game_level*> levels;
-            levels.push_back(first_level);
-            auto *world = new domain::gameworld::game_world(levels);
-
+            auto *world = m_world_loader.load("scenarios.json");
+            world->go_to_next_level(); // Start first level
             m_main_map_controller.set_game_world(*world);
             m_main_map_controller.show();
         }

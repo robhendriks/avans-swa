@@ -13,7 +13,7 @@ namespace gui {
             transition_level_model() {};
             bool result;
             bool next_lvl_exists;
-            unsigned int duration;
+            int duration;
             std::vector<domain::gameworld::highscore*> highscores;
 
             void reset() {

@@ -24,6 +24,8 @@ namespace domain {
             // Copy constructor
             enemy(const enemy& other);
 
+            void set_nation(nation &nation1);
+
             void dispose();
 
             //Returns nationname + unitname
@@ -41,6 +43,8 @@ namespace domain {
 
             void update(unsigned int elapsed_time);
 
+            enemy *clone() const;
+
             ~enemy();
 
         private:
@@ -50,7 +54,7 @@ namespace domain {
             int m_oppertunity_cost;
             bool m_boss;
             bool m_disposed;
-            nation &m_nation;
+            nation *m_nation;
         };
 
         bool operator<(const enemy &s1, const enemy &s2);

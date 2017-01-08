@@ -52,7 +52,11 @@ namespace domain {
          * @return
          */
         engine::math::box2_t field::get_box() const {
-            return *m_box;
+            if (m_box) {
+                return *m_box;
+            }
+
+            return {{-1, -1}, {-1, -1}};
         }
 
         /**
@@ -151,7 +155,7 @@ namespace domain {
                 // set saturation in case its a road to show that buildings can be placed on there exception when something is placed already
                 // on it
                 if(dynamic_cast<domain::map::objects::road*>(object) != nullptr){
-                    for(auto field : m_map.get_neighbors(m_pos)){
+                    for(auto &field : m_map.get_neighbors(m_pos)){
                         if(field->get_object() == nullptr){
                             field->set_saturated({0,160,0});
                         }

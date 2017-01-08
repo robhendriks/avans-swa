@@ -3,22 +3,25 @@
 //
 
 #include <fstream>
-#include "json_level_loader.h"
+#include "json_world_loader.h"
 #include "../../domain/map/objects/road.h"
 #include "../../domain/map/ai/states/search_and_destroy_state.h"
 #include "../../domain/map/objects/defensive_building.h"
 #include "../../domain/map/objects/economic_building.h"
 
 namespace services {
-    namespace level_loader {
+    namespace world_loader {
 
-        json_level_loader::json_level_loader(json root) : m_root(root) {
+        domain::gameworld::game_world* json_world_loader::load(std::string file1) {
 
-        }
+            // Set values
+            std::ifstream file(file1);
+            if (!file.is_open()) {
+                throw std::runtime_error(std::string("Unable to open file: ") + file1);
+            }
 
-        domain::game_level::game_level *json_level_loader::load(int id) {
-            //load_level needs te change in the future
-            id = 0;
+            m_root << file;
+            vec_levels.clear();
 
             //load nations if not loaded yet.
             if (this->vec_nations.empty()) {
@@ -31,6 +34,7 @@ namespace services {
                 std::string buildings = m_root["building-url"];
                 load_buildings(buildings);
             }
+
             if (this->vec_building.empty()) {
                 json buildings = m_root["buildings"];
                 if (buildings.is_array()) {
@@ -41,31 +45,17 @@ namespace services {
             }
 
             //load lvl src's if not loaded yet
-            if (vec_levels.empty()) {
-                json lvls = m_root["lvls"];
-                if (lvls.is_array()) {
-                    vec_levels.push_back(load_all_levels(lvls[0]));
+            json lvls = m_root["lvls"];
+            if (lvls.is_array()) {
+                for (auto &l : lvls) {
+                    vec_levels.push_back(load_level(l));
                 }
             }
 
-            // Create the level
-            auto *d_a_d = new engine::draganddrop::drag_and_drop();
-            auto *goal = new domain::game_level::game_stats();
-            goal->set_counter("buildings", 5);
-            auto game_level =
-                new domain::game_level::game_level("level", *vec_levels[0], *goal, *vec_nations.front(),
-                                                   *d_a_d,
-                                                   125000);
-            for (auto building : vec_building) {
-                game_level->add_placeable_object(*building);
-            }
-
-            return game_level;
+            return new domain::gameworld::game_world(vec_levels);
         }
 
-
-        std::vector<domain::nations::nation*>
-        json_level_loader::load_nations(std::string nation_url) {
+        std::vector<domain::nations::nation*> json_world_loader::load_nations(std::string nation_url) {
 
             std::vector<domain::nations::nation*> pre_nation_list;
 
@@ -121,7 +111,7 @@ namespace services {
             return pre_nation_list;
         }
 
-        void json_level_loader::load_fields(json &root, domain::map::map &map1) {
+        void json_world_loader::load_fields(json &root, domain::map::map &map1) {
             if (root.find("tiles") == root.end()) {
                 return;
             }
@@ -152,7 +142,7 @@ namespace services {
             }
         }
 
-        void json_level_loader::load_objects(json &root, domain::map::map &map1) {
+        void json_world_loader::load_objects(json &root, domain::map::map &map1) {
             if (root.find("objects") == root.end()) {
                 return;
             }
@@ -182,11 +172,10 @@ namespace services {
                 if (field) {
                     domain::map::objects::field_object *object = nullptr;
 
-                    std::string image_location;
-
                     std::string building_str = "road";
                     if (std::mismatch(building_str.begin(), building_str.end(), id.begin()).first ==
                         building_str.end()) {
+                        std::string image_location;
                         if (id == "road-straight") {
                             image_location = "images/road-straight.png";
                         } else if (id == "road-junction") {
@@ -202,26 +191,40 @@ namespace services {
                         // Create the object
                         object = new domain::map::objects::road(*field);
                         object->set_max_column(1);
+
+                        // Calculate the image start position
+                        //TODO: rotation with row
+                        float image_start_y = map1.get_tile_size().y * rotation;
+
+                        object->set_draw_settings(image_location, {0, image_start_y});
+                    } else {
+                        // Find the building for this id
+                        for (auto &building : vec_building) {
+                            if (building->get_id() == id) {
+                                object = building->clone();
+                                object->set_field(field);
+                                object->set_max_column(2);
+
+                                break;
+                            }
+                        }
                     }
 
-                    // Calculate the image start position
-                    //TODO: rotation with row
-                    float image_start_y = map1.get_tile_size().y * rotation;
+                    if (object != nullptr) {
+                        // Place the (created) object on the field
+                        object->set_rotation(rotation);
 
-                    // Place the (created) object on the field
-                    object->set_draw_settings(image_location, {0, image_start_y});
-                    object->set_rotation(rotation);
-
-                    object->set_current_column(column);
-                    field->place_object(object);
-                    column = column + 1 <= object->get_max_column() ? column + 1 : 1;
+                        object->set_current_column(column);
+                        field->place_object(object);
+                        column = column + 1 <= object->get_max_column() ? column + 1 : 1;
+                    }
                 }
 
                 SDL_Log("%d %d %d", x, y, rotation);
             }
         }
 
-        domain::map::objects::building *json_level_loader::load_buildings(std::string url) {
+        domain::map::objects::building *json_world_loader::load_buildings(std::string url) {
             domain::map::objects::building* building;
             std::ifstream file(url);
             if (!file.is_open()) {
@@ -311,7 +314,7 @@ namespace services {
             return building;
         }
 
-        domain::map::map *json_level_loader::load_all_levels(std::string url) {
+        domain::game_level::game_level* json_world_loader::load_level(std::string url) {
             domain::map::map *map = nullptr;
 
             std::ifstream file(url);
@@ -334,15 +337,44 @@ namespace services {
                 std::cout << d;
                 throw;
             }
-            return map;
-        }
 
-        int json_level_loader::get_level_count() {
-            if (vec_levels.empty()) {
-                json lvls = m_root["lvls"];
+            // Create the level
+            auto *d_a_d = new engine::draganddrop::drag_and_drop();
+            auto *goals = new domain::game_level::game_stats();
+
+            // Load the goals
+            for (json &goal : map_root["goals"]) {
+                goals->set_counter(goal["type"], goal["number"]);
             }
 
-            return vec_levels.size();
+            auto *game_level =
+                new domain::game_level::game_level("level", *map, *goals, *vec_nations.front()->clone(),
+                                                   *d_a_d,
+                                                   map_root["time"]);
+            for (auto &building : vec_building) {
+                game_level->add_placeable_object(*building->clone());
+            }
+
+            // Load the resources
+            std::vector<domain::resources::resource*> resources;
+
+            for (json &resource : map_root["resources"]) {
+                resources.push_back(new domain::resources::resource(resource["type"], resource["amount"]));
+            }
+
+            game_level->set_resources(resources);
+
+            return game_level;
+        }
+
+        json_world_loader::~json_world_loader() {
+            for (auto &building : vec_building) {
+                delete building;
+            }
+
+            for (auto &nation : vec_nations) {
+                delete nation;
+            }
         }
     }
 }

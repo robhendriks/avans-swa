@@ -20,6 +20,7 @@ namespace gui {
                     delete world;
                     world = nullptr;
                 }
+                paused = false;
             }
 
             ~main_map_model() {

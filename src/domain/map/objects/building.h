@@ -12,7 +12,7 @@ namespace domain {
     namespace map {
         namespace objects {
             class building : public dragable_field_object, public domain::combat::defender,
-                             engine::eventbus::subscriber<engine::events::mouse_motion> {
+                             public engine::eventbus::subscriber<engine::events::mouse_motion> {
             public:
                 building(const engine::math::box2_t &box, const std::string &id, int hitpoints, double health_ragen,
                          const std::string &name,
@@ -48,6 +48,8 @@ namespace domain {
                 virtual engine::math::box2_t get_box() const;
 
                 void on_event(engine::events::mouse_motion &event);
+
+                std::string get_id() const;
 
             protected:
                 std::string id;

@@ -14,25 +14,16 @@ namespace domain {
                                const std::vector<resources::resource*> &required_resources) :
                 dragable_field_object(field1), domain::combat::defender(hitpoints, 0), id(id), health_ragen(health_ragen), name(name),
                 required_resources(required_resources), show_hover_info(false)
-            {
-                // Subscribe to event
-                engine::eventbus::eventbus::get_instance().subscribe(this);
-            }
+            {}
 
             building::building(const engine::math::box2_t &box, const std::string &id, int hitpoints,
                                double health_ragen, const std::string &name,
                                const std::vector<resources::resource*> &required_resources
             )
                 : dragable_field_object(box), domain::combat::defender(hitpoints, 0), id(id), health_ragen(health_ragen), name(name),
-                  required_resources(required_resources), show_hover_info(false) {
-                // Subscribe to event
-                engine::eventbus::eventbus::get_instance().subscribe(this);
-            }
+                  required_resources(required_resources), show_hover_info(false) {}
 
-            building::~building() {
-                // Unsubscribe to event
-                engine::eventbus::eventbus::get_instance().unsubscribe(this);
-            }
+            building::~building() {}
 
             // Copy constructor
             building::building(const building &obj) : dragable_field_object(obj), domain::combat::defender(obj) {
@@ -41,9 +32,6 @@ namespace domain {
                 name = obj.name;
                 required_resources = obj.required_resources;
                 show_hover_info = false;
-
-                // Subscribe to event
-                engine::eventbus::eventbus::get_instance().subscribe(this);
             }
 
             /**
@@ -103,7 +91,7 @@ namespace domain {
             }
 
             void building::on_event(engine::events::mouse_motion &event) {
-                if (id != "" && !m_drag_and_drop->is_dragging()) {
+                if (!m_drag_and_drop->is_dragging()) {
                     if (get_box().contains(event.get_mouse_position())) {
                         show_hover_info = true;
                         return;
@@ -147,6 +135,10 @@ namespace domain {
                         draw_managers.texture_manager.unload("hover");
                     }
                 }
+            }
+
+            std::string building::get_id() const {
+                return id;
             }
         }
     }

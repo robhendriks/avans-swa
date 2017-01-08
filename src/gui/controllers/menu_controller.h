@@ -10,7 +10,7 @@
 #include "base_controller.h"
 #include "main_map_controller.h"
 #include "credits_controller.h"
-#include "../../services/level_loader/base_level_loader.h"
+#include "../../services/world_loader/base_world_loader.h"
 #include <memory>
 
 namespace gui {
@@ -31,7 +31,7 @@ namespace gui {
             menu_controller(views::main_menu &main_menu, engine::engine &engine,
                             controllers::main_map_controller &main_map_controller,
                             controllers::credits_controller &credits_controller, game &game1,
-                            services::level_loader::base_level_loader &map_loader);
+                            services::world_loader::base_world_loader &world_loader);
 
             void show();
 
@@ -48,7 +48,7 @@ namespace gui {
             views::main_menu &m_main_menu;
             controllers::main_map_controller &m_main_map_controller;
             controllers::credits_controller &m_credits_controller;
-            services::level_loader::base_level_loader &m_level_loader;
+            services::world_loader::base_world_loader &m_world_loader;
         };
     }
 }

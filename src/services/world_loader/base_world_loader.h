@@ -9,14 +9,12 @@
 #include "../../domain/gameworld/game_world.h"
 
 namespace services {
-    namespace level_loader {
-        class base_level_loader {
+    namespace world_loader {
+        class base_world_loader {
         public:
-            virtual domain::game_level::game_level *load(int id) = 0;
+            virtual domain::gameworld::game_world* load(std::string file) = 0;
 
-            virtual int get_level_count() = 0;
-
-            virtual ~base_level_loader() = default;
+            virtual ~base_world_loader() = default;
         };
     };
 };

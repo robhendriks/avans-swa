@@ -45,7 +45,7 @@ namespace gui {
                 int counter = 0;
                 auto &font = *m_font_manager.get_font("roboto", 12);
                 for (auto &highscore : m_model.highscores) {
-                    if (counter >= 4) {
+                    if (counter > 4) {
                         break;
                     }
 
@@ -83,6 +83,8 @@ namespace gui {
         }
 
         void win_game_over::on_display_change(engine::math::box2_t display_box) {
+            m_highscore_boxes.clear();
+
             m_in_game_menu.on_display_change(display_box);
             m_goals_view.on_display_change(display_box);
 
@@ -262,6 +264,10 @@ namespace gui {
 
                 int counter = 0;
                 for (auto &highscore : m_model.highscores) {
+                    if (counter > 4) {
+                        break;
+                    }
+
                     std::string counter_string = std::to_string(counter + 1);
 
                     m_texture_manager.draw("wh_n_" + counter_string, *std::get<0>(m_highscore_boxes[counter]));

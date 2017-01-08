@@ -24,7 +24,8 @@ namespace domain {
              *
              * @param obj
              */
-            dragable_field_object::dragable_field_object(const dragable_field_object &obj) : field_object(obj) {
+            dragable_field_object::dragable_field_object(const dragable_field_object &obj) :
+                field_object(obj), engine::draganddrop::dragable(obj) {
                 m_start_box.reset(new engine::math::box2_t(*obj.m_start_box));
                 m_draw_box.reset(new engine::math::box2_t(*obj.m_start_box));
             }

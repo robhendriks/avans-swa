@@ -3,12 +3,25 @@
 //
 
 #include "nation.h"
+#include "enemy.h"
 
 namespace domain {
     namespace nations {
         nation::nation(std::string _name, std::string _prefix_name) {
             m_name = _name;
             m_prefix_name = _prefix_name;
+        }
+
+        nation::nation(const nation &other) {
+            m_name = other.m_name;
+            m_prefix_name = other.m_prefix_name;
+            std::vector<enemy*> enemies;
+            for (auto &e : other.m_enemies) {
+                auto *clone = e->clone();
+                clone->set_nation(*this);
+                enemies.push_back(clone);
+            }
+            m_enemies = enemies;
         }
 
         void nation::set_available_enemies(std::vector<enemy*> _enemies) {
@@ -27,8 +40,10 @@ namespace domain {
             return m_enemies;
         }
 
-        nation::~nation() {
-        }
+        nation::~nation() {}
 
+        nation *nation::clone() const {
+            return new nation(*this);
+        }
     }
 }
