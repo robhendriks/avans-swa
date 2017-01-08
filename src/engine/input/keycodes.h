@@ -43,6 +43,7 @@ namespace engine {
                 PAGEUP,
                 PAGEDOWN,
                 F1,
+                F,
             };
 
             inline keycode sdl_scancode_to_keycode(const SDL_Scancode &scancode) {
@@ -112,6 +113,8 @@ namespace engine {
                         return PAGEDOWN;
                     case SDL_SCANCODE_F1:
                         return F1;
+                    case SDL_SCANCODE_F:
+                        return F;
                     default:
                         return UNKNOWN;
                 }

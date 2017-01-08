@@ -43,6 +43,7 @@ namespace gui {
         }
 
         void help::on_display_change(engine::math::box2_t display_box) {
+
             m_top_bar.on_display_change(display_box);
 
             // Create the overlay box

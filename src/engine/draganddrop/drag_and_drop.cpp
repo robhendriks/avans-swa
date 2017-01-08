@@ -157,5 +157,13 @@ namespace engine {
         void drag_and_drop::add_on_drop_callback(std::function<void(dragable&)> callback) {
             m_callbacks.push_back(callback);
         }
+
+        bool drag_and_drop::is_dragging() const {
+            return m_dragging != nullptr;
+        }
+
+        bool drag_and_drop::is_dragging(const dragable *dragable1) const {
+            return m_dragging == dragable1;
+        }
     }
 }

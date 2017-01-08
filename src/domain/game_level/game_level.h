@@ -97,6 +97,8 @@ namespace domain {
 
             void decrement_building_cost(engine::draganddrop::dragable& building);
 
+            void execute_cheat();
+
         private:
             void check_goals_reached();
             int m_id = 0;
@@ -134,6 +136,8 @@ namespace domain {
             bool m_spawn_bosses = true;
 
             bool m_paused;
+
+            bool m_has_cheated;
         };
     }
 }

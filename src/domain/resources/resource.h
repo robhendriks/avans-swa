@@ -30,11 +30,14 @@ namespace domain {
             //Increment the resource with the given amount.
             void increment_resource(int amount);
 
+            void max_out_resource();
+
             ~resource();
 
         private:
             std::string resourcename;
             int _count;
+            bool max_out;
         };
     }
 }
