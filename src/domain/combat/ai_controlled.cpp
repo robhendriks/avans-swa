@@ -6,6 +6,9 @@
 #include "../map/ai/ai.h"
 namespace domain {
     namespace combat {
+
+        ai_controlled::ai_controlled() : m_ai(nullptr) {}
+
         void ai_controlled::set_ai(domain::map::ai::ai &ai) {
             m_ai = &ai;
         }
@@ -15,7 +18,9 @@ namespace domain {
         }
 
         ai_controlled::~ai_controlled() {
-            delete m_ai;
+            if (m_ai != nullptr) {
+                delete m_ai;
+            }
         }
     }
 }

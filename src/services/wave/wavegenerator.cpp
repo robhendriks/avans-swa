@@ -133,7 +133,8 @@ namespace services {
                 temp_oppertunity = temp_oppertunity / 2;
                 int amount = temp_oppertunity / (_nation.get_available_enemies()[i]->get_oppertunity_cost());
                 for (int j = 0; j < amount; j++) {
-                    domain::nations::enemy *e = _nation.get_available_enemies()[i];
+                    domain::nations::enemy copy_e = *_nation.get_available_enemies()[i];
+                    domain::nations::enemy *e = new domain::nations::enemy(copy_e);
 
                     auto *clone = m_ai.clone();
                     e->set_ai(*clone);

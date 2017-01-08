@@ -58,7 +58,7 @@ namespace gui {
         void main_map_controller::update() {
 
             auto current_enemies = m_model.world->get_current_level().get_enemies_in_lvl();
-            for (auto enemy : m_wave_management_service.get_enemies(m_engine.get_time_elapsed())) {
+            for (auto &enemy : m_wave_management_service.get_enemies(m_engine.get_time_elapsed())) {
                 current_enemies.push_back(enemy);
             }
 

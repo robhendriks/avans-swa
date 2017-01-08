@@ -16,6 +16,8 @@ namespace domain {
     namespace combat {
         class ai_controlled {
         public:
+            ai_controlled();
+
             virtual void set_ai(domain::map::ai::ai &ai);
 
             domain::map::ai::ai *get_ai();
