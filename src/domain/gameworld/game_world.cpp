@@ -5,32 +5,43 @@
 namespace domain {
     namespace gameworld{
 
-        lvl_id_and_game_stats::lvl_id_and_game_stats(game_level::game_stats &stat1) : stat(stat1) {
+        game_world::game_world(std::vector<game_level::game_level*> game_levels) :
+            m_levels(game_levels), m_current_level(0) {}
 
+        game_world::~game_world() {
+            // Remove all levels
+            for (auto &level : m_levels) {
+                delete level;
+            }
         }
-
-        game_world::game_world(game_level::game_level &game_level) : m_level(&game_level) {}
-
-        game_world::~game_world() {}
 
         game_level::game_level &game_world::get_current_level()  {
-            return *m_level;
+            return *m_levels[m_current_level];
         }
 
-        void game_world::set_current_level(game_level::game_level &game_lvl, bool tranfer_stats) {
-            if(tranfer_stats) {
-                lvl_id_and_game_stats s(m_level->get_stats());
-                s.id = m_level->get_id();
-                s.name = m_level->get_name();
+        void game_world::set_current_level(unsigned int number) {
+            if (number < m_levels.size()) {
+                m_current_level = number;
+            }
+        }
 
-                m_all_stats.push_back(std::make_unique<lvl_id_and_game_stats>(s));
+        unsigned int game_world::calculate_score() const {
+            unsigned int score = 0;
+            for (auto &level : m_levels) {
+                score += level->get_max_duration() - level->get_duration();
             }
 
-            m_level = &game_lvl;
+            return score;
         }
 
-        std::vector<std::unique_ptr<lvl_id_and_game_stats>> const& game_world::get_stats_of_previous_lvls() {
-            return m_all_stats;
+        bool game_world::has_next_level() const {
+            return m_current_level + 1 < m_levels.size();
+        }
+
+        void game_world::go_to_next_level() {
+            if (has_next_level()) {
+                m_current_level++;
+            }
         }
     }
 }

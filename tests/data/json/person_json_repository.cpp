@@ -5,7 +5,7 @@
 #include "person_json_repository.h"
 #include "json.hpp"
 
-size_t& person_json_repository::get_key(person& obj) const {
+size_t person_json_repository::get_key(person& obj) const {
     return obj.get_id();
 }
 

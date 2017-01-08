@@ -18,6 +18,7 @@
 #include "../../services/wave/wave_management.h"
 #include "../../services/level_loader/base_level_loader.h"
 #include "../../domain/map/objects/defensive_building.h"
+#include "../../data/json/highscore_json_repository.h"
 
 namespace gui {
     namespace views {
@@ -39,7 +40,8 @@ namespace gui {
                                 models::main_map_model &model, models::transition_level_model &transition_model,
                                 models::level_goals_model &level_goals_model,
                                 game &game1, services::wave::wave_management &wave_management,
-                                services::level_loader::base_level_loader &level_loader);
+                                services::level_loader::base_level_loader &level_loader,
+                                data::json::highscore_json_repository &highscore_repository);
 
             void show();
 
@@ -68,6 +70,7 @@ namespace gui {
             services::wave::wave_management &m_wave_management_service;
             services::level_loader::base_level_loader& m_level_loader;
             unsigned int m_previous_time;
+            data::json::highscore_json_repository &m_highscore_repository;
 
             // set values of the wave_management_service
             void set_settings_wave_management_service(domain::game_level::game_level &lvl);

@@ -26,7 +26,9 @@ namespace gui {
         void menu_controller::play() {
             auto first_level = m_level_loader.load(0);
 
-            auto *world = new domain::gameworld::game_world(*first_level);
+            std::vector<domain::game_level::game_level*> levels;
+            levels.push_back(first_level);
+            auto *world = new domain::gameworld::game_world(levels);
 
             m_main_map_controller.set_game_world(*world);
             m_main_map_controller.show();

@@ -171,7 +171,7 @@ set(SOURCES src/main.cpp
     src/gui/views/help.cpp src/gui/views/help.h
     src/domain/combat/ai_controlled.cpp src/domain/combat/ai_controlled.h
     src/domain/mayor/mayor.cpp src/domain/mayor/mayor.h
-    )
+    src/domain/gameworld/highscore.cpp src/domain/gameworld/highscore.h src/data/json/highscore_json_repository.cpp src/data/json/highscore_json_repository.h)
 
 
 include_directories(third_party/json/src

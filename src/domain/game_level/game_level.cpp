@@ -114,6 +114,19 @@ namespace domain {
             m_start_time = time;
         }
 
+        void game_level::set_end_time(unsigned int time) {
+            int duration = static_cast<int>(time) - static_cast<int>(m_start_time);
+            if (duration > m_max_duration) {
+                time = m_start_time + m_max_duration;
+            }
+
+            m_end_time = time;
+        }
+
+        unsigned int game_level::get_duration() const {
+            return m_end_time - m_start_time;
+        }
+
         void game_level::add_placeable_object(map::objects::dragable_field_object &obj) {
             // Add as dragable
             m_drag_and_drop.add_dragable(obj);

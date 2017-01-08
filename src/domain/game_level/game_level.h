@@ -49,6 +49,10 @@ namespace domain {
 
             void set_start_time(unsigned int time);
 
+            void set_end_time(unsigned int time);
+
+            unsigned int get_duration() const;
+
             long get_max_duration() const;
 
             void add_placeable_object(map::objects::dragable_field_object &obj);
@@ -119,6 +123,7 @@ namespace domain {
             game_stats &m_goal;
             game_stats *m_stats;
             unsigned int m_start_time;
+            unsigned int m_end_time;
             std::vector<std::pair<int, domain::nations::enemy*>> enemies;
             std::vector<map::objects::dragable_field_object *> m_placeable_objects;
             engine::draganddrop::drag_and_drop &m_drag_and_drop;

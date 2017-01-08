@@ -14,6 +14,17 @@ namespace gui {
         struct main_map_model {
             domain::gameworld::game_world *world;
             bool paused = false;
+
+            void reset() {
+                if (world != nullptr) {
+                    delete world;
+                    world = nullptr;
+                }
+            }
+
+            ~main_map_model() {
+                reset();
+            }
         };
     }
 }

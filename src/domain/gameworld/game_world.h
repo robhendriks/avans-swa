@@ -7,29 +7,25 @@
 
 namespace domain {
     namespace gameworld {
-        struct lvl_id_and_game_stats {
-            lvl_id_and_game_stats(game_level::game_stats &stat1);
-            game_level::game_stats &stat;
-            int id;
-            std::string name;
-        };
-
         class game_world {
         public:
-            game_world(game_level::game_level &game_level);
+            game_world(std::vector<game_level::game_level*> game_levels);
 
             game_level::game_level &get_current_level();
 
-            // tranfer_stats of current lvl to m_all_stats before setting new current lvl
-            void set_current_level(game_level::game_level &game_lvl, bool tranfer_stats = true);
+            void set_current_level(unsigned int number);
 
-            std::vector<std::unique_ptr<lvl_id_and_game_stats>> const &get_stats_of_previous_lvls();
+            void go_to_next_level();
+
+            bool has_next_level() const;
+
+            unsigned int calculate_score() const;
 
             ~game_world();
 
         private:
-            game_level::game_level *m_level;
-            std::vector<std::unique_ptr<lvl_id_and_game_stats>> m_all_stats;
+            std::vector<game_level::game_level*> m_levels;
+            unsigned int m_current_level;
         };
     }
 }
