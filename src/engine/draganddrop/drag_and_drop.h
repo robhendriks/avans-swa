@@ -53,6 +53,10 @@ namespace engine {
 
             void on_event(events::mouse_button_up<input::mouse_buttons::LEFT> &event);
 
+            bool is_dragging() const;
+
+            bool is_dragging(const dragable *dragable1) const;
+
             bool set_dragging(dragable &dragable1, bool force = false);
 
             void set_next_dragging(dragable &dragable1);

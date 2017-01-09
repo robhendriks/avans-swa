@@ -120,7 +120,10 @@ namespace engine {
             auto draw_time = SDL_GetTicks();
             m_window->present();
 
-            m_fps = 1000 / (draw_time - m_previous_draw_time);
+            if (draw_time - m_previous_draw_time != 0) {
+                m_fps = 1000 / (draw_time - m_previous_draw_time);
+            }
+
             m_previous_draw_time = draw_time;
         }
     }

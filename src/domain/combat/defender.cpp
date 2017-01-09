@@ -2,6 +2,7 @@
 // Created by te on 08-Dec-16.
 //
 
+#include <iostream>
 #include "defender.h"
 
 namespace domain {
@@ -44,8 +45,7 @@ namespace domain {
         int defender::get_current_hp_percentage_relative_to_max() {
             if(m_current_hp == 0)
                 return 0;
-
-           return m_current_hp / m_max_hp * 100;
+           return static_cast<int>((static_cast<double>(m_current_hp) / m_max_hp) * 100);
         }
     }
 }

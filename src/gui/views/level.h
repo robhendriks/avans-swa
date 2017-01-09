@@ -7,6 +7,7 @@
 
 #include "../../engine/graphics/texture_manager.h"
 #include "../../engine/events/mouse_button_down.h"
+#include "../../engine/events/mouse_motion.h"
 #include "../../engine/eventbus/subscriber.h"
 #include "../../domain/gameworld/game_world.h"
 #include "../../engine/window.h"
@@ -103,6 +104,7 @@ namespace gui {
             int m_current_page;
             int m_objects_per_page;
             double m_speed_factor;
+            float x_margin_placeable_objects;
         };
     }
 }
