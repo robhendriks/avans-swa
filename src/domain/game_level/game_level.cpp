@@ -445,6 +445,10 @@ namespace domain {
             pause();
         }
 
+        void game_level::transition() {
+            m_state = TRANSITION;
+        }
+
         int game_level::get_played_time() const {
             return m_played_time;
         }

@@ -17,7 +17,7 @@ namespace services {
 
             void save(domain::gameworld::game_world &world);
 
-            nlohmann::json level_to_json(domain::game_level::game_level &level, bool played);
+            nlohmann::json level_to_json(domain::game_level::game_level &level);
 
         private:
             data::json::save_games_json_repository &m_save_games_json_repository;

@@ -40,7 +40,7 @@ namespace domain {
         unsigned int game_world::calculate_score() const {
             unsigned int score = 0;
             for (auto &level : m_levels) {
-                if (level->get_state() != game_level::TO_PLAY) {
+                if (level->get_state() == game_level::DONE || level->get_state() == game_level::TRANSITION) {
                     score += level->get_max_duration() - level->get_duration();
                 }
             }

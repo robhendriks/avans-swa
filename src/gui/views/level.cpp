@@ -301,7 +301,8 @@ namespace gui {
             // Draw the countdown when needed
             if (current_level->get_max_duration() > 0) {
                 // Calculate time left
-                int level_time = time_elapsed - current_level->get_start_time();
+                int level_time = time_elapsed - current_level->get_start_time() +
+                    (current_level->get_played_time() > 0 ? current_level->get_played_time() : 0);
                 unsigned int time_left = static_cast<unsigned int>(current_level->get_max_duration() - level_time);
 
                 engine::graphics::color4_t color{0, 0, 0};

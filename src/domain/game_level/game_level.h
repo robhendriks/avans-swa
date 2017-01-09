@@ -20,7 +20,7 @@ namespace domain {
     namespace game_level {
 
         enum state {
-            DONE, PLAYING, TO_PLAY
+            DONE, PLAYING, TRANSITION, TO_PLAY
         };
 
         class game_level
@@ -55,6 +55,8 @@ namespace domain {
             void start();
 
             void stop();
+
+            void transition();
 
             int get_played_time() const;
 

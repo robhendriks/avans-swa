@@ -27,13 +27,13 @@ namespace services {
             // The scenario json
             nlohmann::json j = {{"nations-url", "nations.json"},
                                 {"building-url", "buildings.json"},
-                                {"lvls", {}}
+                                {"lvls", {}},
+                                {"start_level", 1}
             };
 
             // Create the level files
             std::vector<std::string> filenames;
             int counter = 1;
-            bool played = true;
             for (auto &level : world.get_levels()) {
                 std::string filename = "level_" + std::to_string(counter) + "_" + id;
 
@@ -42,19 +42,24 @@ namespace services {
                 file.open (filename);
 
                 // Write to the file
-                file << level_to_json(*level, played).dump();
+                file << level_to_json(*level).dump();
 
                 // Close the file
                 file.close();
 
                 filenames.push_back(filename);
                 j["lvls"].push_back(filename);
-                counter++;
 
-                // Check played
-                if (level == world.get_current_level()) {
-                    played = false;
+                // Set start level
+                if (world.get_current_level() == level) {
+                    if (level->get_state() == domain::game_level::TRANSITION) {
+                        j["start_level"] = counter + 1;
+                    } else {
+                        j["start_level"] = counter;
+                    }
                 }
+
+                counter++;
             }
 
             // Create the scenarios file
@@ -71,7 +76,7 @@ namespace services {
             m_save_games_json_repository.commit();
         }
 
-        nlohmann::json json_world_saver::level_to_json(domain::game_level::game_level &level, bool played) {
+        nlohmann::json json_world_saver::level_to_json(domain::game_level::game_level &level) {
             nlohmann::json j = {
                 {"width", level.get_map().get_size().x + 1},
                 {"height", level.get_map().get_size().y + 1},
@@ -83,7 +88,9 @@ namespace services {
             };
 
             // Set played time
-            if (played) {
+            if (level.get_state() == domain::game_level::DONE || level.get_state() == domain::game_level::TRANSITION) {
+                j["played_time"] = level.get_duration();
+            } else if (level.get_state() == domain::game_level::PLAYING) {
                 j["played_time"] = level.get_played_time();
             }
 

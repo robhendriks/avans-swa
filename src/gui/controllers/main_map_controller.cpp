@@ -35,6 +35,8 @@ namespace gui {
             }
 
             if (is_lvl_done()) {
+                lvl->transition();
+
                 m_engine.reset_speed();
                 m_model.paused = true;
 
