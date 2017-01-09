@@ -357,8 +357,28 @@ namespace services {
                 goals->set_counter(goal["type"], goal["number"]);
             }
 
+            // Get the level nation
+            domain::nations::nation *level_nation = nullptr;
+
+            json nation = map_root["nation"];
+            if (nation.is_string()) {
+                std::string nation_id = nation;
+                // Find the nation
+                for (auto &n : vec_nations) {
+                    if (n->get_name() == nation_id) {
+                        level_nation = n->clone();
+                        break;
+                    }
+                }
+            }
+
+            // Just normal nation
+            if (level_nation == nullptr) {
+                level_nation = vec_nations.front()->clone();
+            }
+
             auto *game_level =
-                new domain::game_level::game_level("level", *map, *goals, *vec_nations.front()->clone(),
+                new domain::game_level::game_level("level", *map, *goals, *level_nation,
                                                    *d_a_d,
                                                    map_root["time"]);
             for (auto &building : vec_building) {
@@ -378,6 +398,31 @@ namespace services {
             if (played_time.is_number_unsigned()) {
                 int p_time = played_time;
                 game_level->set_played_time(p_time);
+            }
+
+            // Set the enemies if a custom nation was set
+            if (nation.is_string()) {
+                // Set the enemies
+                json enemies = map_root["enemies"];
+                if (enemies.is_array()) {
+                    std::vector<domain::nations::enemy*> enemies_for_level;
+                    for (json &enemy : map_root["enemies"]) {
+                        auto *new_enemy = new domain::nations::enemy(
+                            enemy["name"], enemy["min_damage"], enemy["max_damage"], enemy["attacks_per_second"],
+                            enemy["hitpoints"], enemy["granted_xp"], enemy["range"], enemy["movement"],
+                            enemy["boss"], *level_nation, enemy["oppertunity_costs"]);
+
+                        new_enemy->set_box({{enemy["min_x"], enemy["min_y"]}, {enemy["max_x"], enemy["max_y"]}});
+                        new_enemy->set_draw_settings("images/Fisher.png");
+                        new_enemy->set_max_row(8);
+                        new_enemy->set_max_column(3);
+                        new_enemy->set_current_field(*game_level->get_map().get_field({enemy["field_x"], enemy["field_y"]}));
+
+                        enemies_for_level.push_back(new_enemy);
+                    }
+
+                    game_level->set_enemies_in_lvl(enemies_for_level);
+                }
             }
 
             return game_level;

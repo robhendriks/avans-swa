@@ -4,6 +4,7 @@
 
 #include "main_map_controller.h"
 #include "../../domain/gameworld/highscore.h"
+#include "../../domain/map/objects/road.h"
 
 namespace gui {
     namespace controllers {
@@ -194,6 +195,14 @@ namespace gui {
             m_wave_management_service.set_spawn_bosses(lvl.get_spawn_bosses());
             m_wave_management_service.set_spawnable_nation(lvl.get_enemy_nation());
             m_wave_management_service.get_wave_generator().get_ai().set_map(lvl.get_map());
+
+            // Set ai for enemies
+            for (auto &e : lvl.get_enemies_in_lvl()) {
+                engine::math::box2_t box_copy = e->get_box();
+                e->set_ai(*m_wave_management_service.get_wave_generator().get_ai().clone());
+                e->set_box(box_copy);
+                e->get_ai()->set_current_field(*e->get_current_field());
+            }
         }
     }
 }

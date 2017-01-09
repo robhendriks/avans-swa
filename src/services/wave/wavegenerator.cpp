@@ -92,7 +92,7 @@ namespace services {
 
         std::vector<std::pair<int, domain::nations::enemy*>> wavegenerator::generateEnemies(int _time,
                                                                                                             int _oppertunity,
-                                                                                                            domain::nations::nation _nation,
+                                                                                                            domain::nations::nation &_nation,
                                                                                                             bool _spread,
                                                                                                             int capoppertunity,
                                                                                                             bool _noboss) {
