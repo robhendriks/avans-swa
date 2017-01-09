@@ -84,7 +84,7 @@ namespace services {
 
             // Set played time
             if (played) {
-                j["played_time"] = level.get_duration();
+                j["played_time"] = level.get_played_time();
             }
 
             // Add the goals

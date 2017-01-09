@@ -18,6 +18,11 @@
 
 namespace domain {
     namespace game_level {
+
+        enum state {
+            DONE, PLAYING, TO_PLAY
+        };
+
         class game_level
             : public engine::observer::observer<domain::map::field> {
         public:
@@ -35,15 +40,23 @@ namespace domain {
 
             virtual bool is_goal_reached();
 
-            virtual bool is_game_over(unsigned int current_duration);
+            virtual bool is_game_over(unsigned int current_time);
 
             int get_id();
 
             void set_id(int id);
 
+            state get_state() const;
+
             game_stats &get_goal();
 
             game_stats &get_stats();
+
+            void start();
+
+            void stop();
+
+            int get_played_time() const;
 
             int get_start_time() const;
 
@@ -51,9 +64,7 @@ namespace domain {
 
             void set_end_time(unsigned int time);
 
-            void set_end_time_force(int time);
-
-            int get_end_time() const;
+            void set_played_time(int played_time);
 
             int get_duration() const;
 
@@ -132,6 +143,7 @@ namespace domain {
             game_stats *m_stats;
             int m_start_time;
             int m_end_time;
+            int m_played_time;
             std::vector<std::pair<int, domain::nations::enemy*>> enemies;
             std::vector<map::objects::dragable_field_object *> m_placeable_objects;
             engine::draganddrop::drag_and_drop &m_drag_and_drop;
@@ -159,6 +171,8 @@ namespace domain {
             bool m_paused;
 
             bool m_has_cheated;
+
+            state m_state;
         };
     }
 }

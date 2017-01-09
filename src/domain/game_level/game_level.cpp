@@ -14,7 +14,8 @@ namespace domain {
                                domain::nations::nation &_enemies,
                                engine::draganddrop::drag_and_drop &drag_and_drop, long duration) :
                 m_name(name), m_max_duration(duration), m_map(map), m_goal(goal), m_start_time(0), m_end_time(-1),
-                m_drag_and_drop(drag_and_drop), m_enemy(_enemies), m_paused(true) {
+                m_played_time(-1),
+                m_drag_and_drop(drag_and_drop), m_enemy(_enemies), m_paused(true), m_state(TO_PLAY) {
 
             m_stats = new game_stats();
 
@@ -87,13 +88,22 @@ namespace domain {
             return *m_stats >= m_goal;
         }
 
-        bool game_level::is_game_over(unsigned int current_duration) {
+        bool game_level::is_game_over(unsigned int current_time) {
             if (m_max_duration >= 0) {
-                int playing_time = current_duration - m_start_time;
+                int playing_time = current_time - m_start_time;
+
+                if (m_played_time > 0) {
+                    playing_time += m_played_time;
+                }
+
                 return m_max_duration - playing_time < 0;
-            } else {
-                return false;
             }
+
+            return false;
+        }
+
+        void game_level::set_played_time(int played_time) {
+            m_played_time = played_time;
         }
 
         int game_level::get_start_time() const {
@@ -106,23 +116,20 @@ namespace domain {
 
         void game_level::set_end_time(unsigned int time) {
             int duration = static_cast<int>(time) - m_start_time;
+
+            if (m_played_time > 0) {
+                duration += m_played_time;
+            }
+
             if (duration > m_max_duration) {
-                time = static_cast<unsigned int>(m_start_time) + m_max_duration;
+                time = static_cast<unsigned int>(m_start_time) + (m_max_duration - (m_played_time > 0 ? m_played_time : 0));
             }
 
             m_end_time = time;
         }
 
-        void game_level::set_end_time_force(int time) {
-            m_end_time = time;
-        }
-
-        int game_level::get_end_time() const {
-            return m_end_time;
-        }
-
         int game_level::get_duration() const {
-            return m_end_time - m_start_time;
+            return m_end_time - m_start_time + (m_played_time > 0 ? m_played_time : 0);
         }
 
         void game_level::add_placeable_object(map::objects::dragable_field_object &obj) {
@@ -414,6 +421,32 @@ namespace domain {
                     }
                 }
             }
+        }
+
+        state game_level::get_state() const {
+            return m_state;
+        }
+
+        void game_level::start() {
+            m_state = PLAYING;
+
+            // Pause to start the new level
+            pause();
+        }
+
+        void game_level::stop() {
+            m_state = DONE;
+
+            // Set the end time for a loaded game
+            if (m_end_time == -1 && m_played_time && m_start_time == 0) {
+                m_end_time = m_played_time;
+            }
+
+            pause();
+        }
+
+        int game_level::get_played_time() const {
+            return m_played_time;
         }
     }
 }

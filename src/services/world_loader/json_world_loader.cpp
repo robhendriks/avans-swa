@@ -58,14 +58,6 @@ namespace services {
             json start_level = m_root["start_level"];
             if (start_level.is_number_unsigned()) {
                 for (int i = 1; i < start_level; i++) {
-                    // Set the correct time for the played level
-                    auto *current_level = world->get_current_level();
-                    if (current_level != nullptr) {
-                        unsigned int end_time = static_cast<unsigned int>(current_level->get_start_time() * -1);
-                        current_level->set_start_time(0);
-                        current_level->set_end_time(end_time);
-                    }
-
                     world->go_to_next_level();
                 }
             }
@@ -385,7 +377,7 @@ namespace services {
             json played_time = map_root["played_time"];
             if (played_time.is_number_unsigned()) {
                 int p_time = played_time;
-                game_level->set_start_time(p_time * -1);
+                game_level->set_played_time(p_time);
             }
 
             return game_level;

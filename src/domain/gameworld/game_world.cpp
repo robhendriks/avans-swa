@@ -27,21 +27,20 @@ namespace domain {
             if (number < m_levels.size()) {
 
                 if (m_current_level >= 0) {
-                    // Pause/stop the previous level
-                    get_current_level()->pause();
+                    // Stop the previous level
+                    get_current_level()->stop();
                 }
 
                 m_current_level = number;
 
-                // Pause to start the new level
-                get_current_level()->pause();
+                get_current_level()->start();
             }
         }
 
         unsigned int game_world::calculate_score() const {
             unsigned int score = 0;
             for (auto &level : m_levels) {
-                if (level->get_duration() > 0) {
+                if (level->get_state() != game_level::TO_PLAY) {
                     score += level->get_max_duration() - level->get_duration();
                 }
             }

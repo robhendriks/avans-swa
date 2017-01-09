@@ -30,6 +30,10 @@ namespace gui {
             m_level_goals_model.game_goals = &lvl->get_goal();
             m_level_goals_model.game_stats = &lvl->get_stats();
 
+            if (lvl->get_start_time() == 0) {
+                lvl->set_start_time(m_engine.get_time_elapsed());
+            }
+
             if (is_lvl_done()) {
                 m_engine.reset_speed();
                 m_model.paused = true;
@@ -49,14 +53,11 @@ namespace gui {
 
                     // Set the highscores in the model
                     m_highscore_repository.load(); // Load again because highscore1 gets out of scope
-                    m_trans_model.highscores = m_highscore_repository.all();
-                    std::sort(m_trans_model.highscores.begin(), m_trans_model.highscores.end());
-                    std::reverse(m_trans_model.highscores.begin(), m_trans_model.highscores.end());
+                    m_trans_model.set_highscores(m_highscore_repository.all());
                 }
 
                 view(m_trans_view);
             } else {
-                lvl->set_start_time(lvl->get_start_time() + m_engine.get_time_elapsed());
                 m_model.paused = false;
                 view(m_view);
             }
@@ -158,15 +159,15 @@ namespace gui {
         };
 
         void main_map_controller::save() {
-            // Set end time for saving
+            // Set played time for saving
             auto *current_level = m_model.world->get_current_level();
-            int temp_end_time = current_level->get_end_time();
-            current_level->set_end_time(m_engine.get_time_elapsed());
+            int temp_played_time = current_level->get_played_time();
+            current_level->set_played_time(m_engine.get_time_elapsed() - current_level->get_start_time());
 
             m_world_saver.save(*m_model.world);
 
-            // Put back normal end time
-            current_level->set_end_time_force(temp_end_time);
+            // Put back normal played time
+            current_level->set_played_time(temp_played_time);
         }
 
         /**

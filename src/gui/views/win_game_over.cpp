@@ -53,7 +53,7 @@ namespace gui {
                     m_texture_manager.load_text(counter_string + ".", {0, 0, 0}, font, "wh_n_" + counter_string);
 
                     char buff[20];
-                    time_t time = highscore->get_time();
+                    time_t time = highscore.get_time();
                     strftime(buff, 20, "%Y-%m-%d %H:%M:%S", std::localtime(&time));
 //                    m_texture_manager.load_text(std::to_string(ltm->tm_year) + "-" + std::to_string(ltm->tm_mon) +
 //                                                    "-" + std::to_string(ltm->tm_mday) + " " +
@@ -62,7 +62,7 @@ namespace gui {
 //                                                "wh_d_" + counter_string);
 
                     m_texture_manager.load_text(buff, {0, 0, 0}, font, "wh_d_" + counter_string);
-                    m_texture_manager.load_text(std::to_string(highscore->get_score()), {0, 0, 0}, font,
+                    m_texture_manager.load_text(std::to_string(highscore.get_score()), {0, 0, 0}, font,
                                                 "wh_s_" + counter_string);
 
                     counter++;
@@ -101,7 +101,7 @@ namespace gui {
             float largest_width_3 = -1;
             float height = 0;
             for (auto &highscore : m_model.highscores) {
-                if (counter >= 4) {
+                if (counter > 4) {
                     break;
                 }
 
@@ -317,7 +317,7 @@ namespace gui {
                 // Unload texts highscores
                 int counter = 0;
                 for (auto &highscore : m_model.highscores) {
-                    if (counter >= 4) {
+                    if (counter > 4) {
                         break;
                     }
 
