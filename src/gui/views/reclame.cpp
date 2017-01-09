@@ -10,7 +10,8 @@ namespace gui {
 
         reclame::reclame(help &help_view) : m_help_view(help_view),
                                             m_texture_manager(m_help_view.m_top_bar.m_texture_manager),
-                                            m_reclame_image("images/reclame.png"), m_show(false) {
+                                            m_reclame_image("images/reclame.png"), m_show(false),
+                                            m_reclame_loaded(false) {
 
         }
 
@@ -23,15 +24,7 @@ namespace gui {
             m_help_view.before();
             // Make sure it's not shown
             m_show = false;
-
-            // Load the texture
-            int random_reclame = rand()%10;
-            std::string random_image_result;
-            random_image_result = "images/reclame" + std::to_string(random_reclame) +".png";
-            //set random img
-            m_reclame_image = random_image_result;
-            m_help_view.m_top_bar.m_texture_manager.load(m_reclame_image, "h_image");
-
+            m_reclame_loaded = false;
             // Calculate the grey_panel scale factor
             auto image_size = m_texture_manager.get_size("h_image");
             float x_scale = image_size.x / 92;
@@ -85,6 +78,16 @@ namespace gui {
             m_help_view.draw(time_elapsed, display_box);
 
             if (m_show) {
+                if (!m_reclame_loaded) {
+                    // Load the texture
+                    int random_reclame = rand() % 9 + 1;
+                    std::string random_image_result;
+                    random_image_result = "images/reclame" + std::to_string(random_reclame) + ".png";
+                    //set random img
+                    m_reclame_image = random_image_result;
+                    m_help_view.m_top_bar.m_texture_manager.load(m_reclame_image, "h_image");
+                    m_reclame_loaded = true;
+                }
                 // Draw the overlay
                 m_help_view.m_top_bar.m_color_manager.draw({0, 0, 0, 180}, *m_overlay_box);
 
