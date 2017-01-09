@@ -58,6 +58,10 @@ namespace domain {
                 set_current_level(m_current_level + 1);
             }
         }
+
+        std::vector<game_level::game_level *> game_world::get_levels() const {
+            return m_levels;
+        }
     }
 }
 #endif //CITY_DEFENCE_GAME_WORLD_CPP

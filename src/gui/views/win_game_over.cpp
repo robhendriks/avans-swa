@@ -292,6 +292,7 @@ namespace gui {
 
         void win_game_over::set_controller(gui::controllers::main_map_controller &controller) {
             m_controller = &controller;
+            m_in_game_menu.set_controller(controller);
         }
 
         void win_game_over::after() {

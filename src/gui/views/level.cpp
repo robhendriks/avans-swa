@@ -507,6 +507,7 @@ namespace gui {
 
         void level::set_controller(controllers::main_map_controller &controller) {
             m_controller = &controller;
+            m_in_game_menu.set_controller(controller);
         }
 
         void level::on_pause() {

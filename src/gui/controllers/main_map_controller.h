@@ -18,6 +18,7 @@
 #include "../../services/wave/wave_management.h"
 #include "../../domain/map/objects/defensive_building.h"
 #include "../../data/json/highscore_json_repository.h"
+#include "../../services/world_saver/base_world_saver.h"
 
 namespace gui {
     namespace views {
@@ -39,7 +40,8 @@ namespace gui {
                                 models::main_map_model &model, models::transition_level_model &transition_model,
                                 models::level_goals_model &level_goals_model,
                                 game &game1, services::wave::wave_management &wave_management,
-                                data::json::highscore_json_repository &highscore_repository);
+                                data::json::highscore_json_repository &highscore_repository,
+                                services::world_saver::base_world_saver &world_saver);
 
             void show();
 
@@ -57,6 +59,8 @@ namespace gui {
 
             void resume_engine_if();
 
+            void save();
+
         private:
             gui::controllers::menu_controller *m_menu_controller;
             views::level &m_view;
@@ -68,6 +72,7 @@ namespace gui {
             services::wave::wave_management &m_wave_management_service;
             unsigned int m_previous_time;
             data::json::highscore_json_repository &m_highscore_repository;
+            services::world_saver::base_world_saver &m_world_saver;
 
             // set values of the wave_management_service
             void set_settings_wave_management_service(domain::game_level::game_level &lvl);

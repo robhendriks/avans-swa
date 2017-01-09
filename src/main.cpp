@@ -6,6 +6,7 @@
 #include "domain/map/ai/states/move_state.h"
 #include "domain/map/ai/states/search_and_destroy_state.h"
 #include "services/world_loader/json_world_loader.h"
+#include "services/world_saver/json_world_saver.h"
 
 int main(int argc, char *argv[]) {
     /**
@@ -40,7 +41,9 @@ int main(int argc, char *argv[]) {
     // Create the ioc container
     auto *game1 = new game(*engine1->get_window());
 
+    data::json::save_games_json_repository *save_games_json_repository = new data::json::save_games_json_repository();
     services::world_loader::json_world_loader *world_loader = new services::world_loader::json_world_loader();
+    services::world_saver::json_world_saver *world_saver = new services::world_saver::json_world_saver(*save_games_json_repository);
 
     auto di_config = [&]() {
         return boost::di::make_injector(
@@ -52,7 +55,9 @@ int main(int argc, char *argv[]) {
                 boost::di::bind<>.to(*engine1->get_music_manager()),
                 boost::di::bind<>.to(*engine1->get_window()),
                 boost::di::bind<>.to(*font_manager),
-                boost::di::bind<services::world_loader::base_world_loader>.to(*world_loader)
+                boost::di::bind<services::world_loader::base_world_loader>.to(*world_loader),
+                boost::di::bind<services::world_saver::base_world_saver>.to(*world_saver),
+                boost::di::bind<data::json::save_games_json_repository>.to(*save_games_json_repository)
         );
     };
 
@@ -85,6 +90,9 @@ int main(int argc, char *argv[]) {
     delete menu_controller;
     delete json_config;
     delete engine1;
+    delete save_games_json_repository;
+    delete world_loader;
+    delete world_saver;
 
     return 0;
 }

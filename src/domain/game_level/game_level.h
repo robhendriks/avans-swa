@@ -45,11 +45,15 @@ namespace domain {
 
             game_stats &get_stats();
 
-            unsigned int get_start_time();
+            int get_start_time() const;
 
-            void set_start_time(unsigned int time);
+            void set_start_time(int time);
 
             void set_end_time(unsigned int time);
+
+            void set_end_time_force(int time);
+
+            int get_end_time() const;
 
             int get_duration() const;
 
@@ -126,7 +130,7 @@ namespace domain {
             domain::map::map &m_map;
             game_stats &m_goal;
             game_stats *m_stats;
-            unsigned int m_start_time;
+            int m_start_time;
             int m_end_time;
             std::vector<std::pair<int, domain::nations::enemy*>> enemies;
             std::vector<map::objects::dragable_field_object *> m_placeable_objects;

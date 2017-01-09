@@ -164,7 +164,7 @@ namespace gui {
                 } else if (m_help_btn_box->contains(*position)) {
                     m_help_view.toggle_show();
                 } else if (m_save_btn_box->contains(*position)) {
-
+                    m_main_map_controller->save();
                 } else if (m_cross_circle_box->contains(*position)) {
                     change_show();
                 }
@@ -214,6 +214,10 @@ namespace gui {
 
             // Clear callbacks
             m_callbacks.clear();
+        }
+
+        void in_game_menu::set_controller(controllers::main_map_controller &main_map_controller) {
+            m_main_map_controller = &main_map_controller;
         }
     }
 }

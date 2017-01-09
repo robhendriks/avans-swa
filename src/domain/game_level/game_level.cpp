@@ -96,21 +96,29 @@ namespace domain {
             }
         }
 
-        unsigned int game_level::get_start_time() {
+        int game_level::get_start_time() const {
             return m_start_time;
         }
 
-        void game_level::set_start_time(unsigned int time) {
+        void game_level::set_start_time(int time) {
             m_start_time = time;
         }
 
         void game_level::set_end_time(unsigned int time) {
-            int duration = static_cast<int>(time) - static_cast<int>(m_start_time);
+            int duration = static_cast<int>(time) - m_start_time;
             if (duration > m_max_duration) {
-                time = m_start_time + m_max_duration;
+                time = static_cast<unsigned int>(m_start_time) + m_max_duration;
             }
 
             m_end_time = time;
+        }
+
+        void game_level::set_end_time_force(int time) {
+            m_end_time = time;
+        }
+
+        int game_level::get_end_time() const {
+            return m_end_time;
         }
 
         int game_level::get_duration() const {
@@ -387,10 +395,10 @@ namespace domain {
 
         void game_level::unsubscribe_buildings_to_event() const {
             for (auto &obj : m_placeable_objects) {
-                auto *building = dynamic_cast<domain::map::objects::building*>(obj);
+                auto *building = dynamic_cast<domain::map::objects::building *>(obj);
                 if (building) {
                     engine::eventbus::eventbus::get_instance().unsubscribe(
-                        dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_motion>*>(building));
+                        dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_motion> *>(building));
                 }
             }
 
@@ -398,10 +406,10 @@ namespace domain {
                 if (field != nullptr) {
                     auto *obj = field->get_object();
                     if (obj != nullptr) {
-                        auto *building = dynamic_cast<domain::map::objects::building*>(obj);
+                        auto *building = dynamic_cast<domain::map::objects::building *>(obj);
                         if (building) {
                             engine::eventbus::eventbus::get_instance().unsubscribe(
-                                dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_motion>*>(building));
+                                dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_motion> *>(building));
                         }
                     }
                 }

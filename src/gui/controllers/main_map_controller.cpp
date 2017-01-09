@@ -12,11 +12,12 @@ namespace gui {
                                                  models::transition_level_model &transition_model,
                                                  models::level_goals_model &level_goals_model, game &game1,
                                                  services::wave::wave_management &wave_management,
-                                                 data::json::highscore_json_repository &highscore_repository) :
+                                                 data::json::highscore_json_repository &highscore_repository,
+                                                 services::world_saver::base_world_saver &world_saver) :
                 base_controller(game1), m_view(view), m_trans_view(transition_view), m_engine(engine), m_model(model),
                 m_trans_model(transition_model), m_level_goals_model(level_goals_model),
                 m_wave_management_service(wave_management),
-                m_highscore_repository(highscore_repository) {
+                m_highscore_repository(highscore_repository), m_world_saver(world_saver) {
             m_view.set_controller(*this);
             m_trans_view.set_controller(*this);
 
@@ -25,9 +26,6 @@ namespace gui {
 
         void main_map_controller::show() {
             auto *lvl = m_model.world->get_current_level();
-            if (lvl->get_start_time() == 0) {
-                lvl->set_start_time(m_engine.get_time_elapsed());
-            }
 
             m_level_goals_model.game_goals = &lvl->get_goal();
             m_level_goals_model.game_stats = &lvl->get_stats();
@@ -58,6 +56,7 @@ namespace gui {
 
                 view(m_trans_view);
             } else {
+                lvl->set_start_time(lvl->get_start_time() + m_engine.get_time_elapsed());
                 m_model.paused = false;
                 view(m_view);
             }
@@ -119,6 +118,7 @@ namespace gui {
         }
 
         void main_map_controller::set_game_world(domain::gameworld::game_world &game_world) {
+            m_model.reset();
             m_model.world = &game_world;
 
             // set wave service values to first lvl
@@ -156,6 +156,18 @@ namespace gui {
                 m_model.paused = true;
             }
         };
+
+        void main_map_controller::save() {
+            // Set end time for saving
+            auto *current_level = m_model.world->get_current_level();
+            int temp_end_time = current_level->get_end_time();
+            current_level->set_end_time(m_engine.get_time_elapsed());
+
+            m_world_saver.save(*m_model.world);
+
+            // Put back normal end time
+            current_level->set_end_time_force(temp_end_time);
+        }
 
         /**
          * Called after a level is done or stopped

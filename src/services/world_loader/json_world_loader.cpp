@@ -52,7 +52,25 @@ namespace services {
                 }
             }
 
-            return new domain::gameworld::game_world(vec_levels);
+            auto *world = new domain::gameworld::game_world(vec_levels);
+
+            // Start on correct level
+            json start_level = m_root["start_level"];
+            if (start_level.is_number_unsigned()) {
+                for (int i = 1; i < start_level; i++) {
+                    // Set the correct time for the played level
+                    auto *current_level = world->get_current_level();
+                    if (current_level != nullptr) {
+                        unsigned int end_time = static_cast<unsigned int>(current_level->get_start_time() * -1);
+                        current_level->set_start_time(0);
+                        current_level->set_end_time(end_time);
+                    }
+
+                    world->go_to_next_level();
+                }
+            }
+
+            return world;
         }
 
         std::vector<domain::nations::nation*> json_world_loader::load_nations(std::string nation_url) {
@@ -189,7 +207,7 @@ namespace services {
                         }
 
                         // Create the object
-                        object = new domain::map::objects::road(*field);
+                        object = new domain::map::objects::road(*field, id);
                         object->set_max_column(1);
 
                         // Calculate the image start position
@@ -363,6 +381,12 @@ namespace services {
             }
 
             game_level->set_resources(resources);
+
+            json played_time = map_root["played_time"];
+            if (played_time.is_number_unsigned()) {
+                int p_time = played_time;
+                game_level->set_start_time(p_time * -1);
+            }
 
             return game_level;
         }

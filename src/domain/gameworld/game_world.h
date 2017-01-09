@@ -21,6 +21,8 @@ namespace domain {
 
             unsigned int calculate_score() const;
 
+            std::vector<game_level::game_level*> get_levels() const;
+
             ~game_world();
 
         private:
