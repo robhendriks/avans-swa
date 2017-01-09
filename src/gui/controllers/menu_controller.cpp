@@ -29,6 +29,7 @@ namespace gui {
             auto *world = m_world_loader.load("scenarios.json");
             world->go_to_next_level(); // Start first level
             m_main_map_controller.set_game_world(*world);
+
             m_main_map_controller.show();
         }
 

@@ -28,6 +28,7 @@ namespace gui {
             friend class win_game_over;
             friend class credits;
             friend class help;
+            friend class reclame;
         public:
             top_bar(domain::drawable::draw_managers_wrapper &draw_managers, engine::engine &engine);
 
