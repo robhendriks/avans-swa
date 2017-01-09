@@ -12,6 +12,12 @@
 #include <memory>
 
 namespace gui {
+    namespace controllers {
+        class main_map_controller;
+    }
+}
+
+namespace gui {
     namespace views {
         class help;
     }
@@ -26,6 +32,8 @@ namespace gui {
             friend class win_game_over;
         public:
             in_game_menu(help &help_view);
+
+            void set_controller(controllers::main_map_controller &main_map_controller);
 
             void before();
 
@@ -59,6 +67,7 @@ namespace gui {
             std::unique_ptr<engine::math::box2_t> m_cross_circle_box;
             std::unique_ptr<engine::math::box2_t> m_cross_box;
             std::vector<std::function<void(bool)>> m_callbacks;
+            controllers::main_map_controller *m_main_map_controller;
         };
     }
 }

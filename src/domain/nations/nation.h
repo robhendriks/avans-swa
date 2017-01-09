@@ -18,19 +18,23 @@ namespace domain {
         public:
             nation(std::string _name, std::string _prefix_name);
 
-            void set_available_enemies(std::vector<std::shared_ptr<enemy>> _enemies);
+            nation (const nation &other);
+
+            void set_available_enemies(std::vector<enemy*> _enemies);
 
             std::string get_name();
 
             std::string get_prefix_name();
 
-            std::vector<std::shared_ptr<enemy>> get_available_enemies();
+            std::vector<enemy*> get_available_enemies();
+
+            nation *clone() const;
 
             ~nation();
         private:
             std::string m_name;
             std::string m_prefix_name;
-            std::vector<std::shared_ptr<enemy>> m_enemies;
+            std::vector<enemy*> m_enemies;
         };
     }
 }

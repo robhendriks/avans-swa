@@ -156,6 +156,24 @@ namespace engine {
                 }
             }
 
+            template<class T>
+            bool is_subscribed(subscriber<T> *subscriber1) {
+                std::string type_name = typeid(T).name();
+
+                // Loop for "normal" m_subscribers
+                size_t original_size = m_subscribers[type_name].size();
+                for (size_t i = 0; i < original_size; i++) {
+                    auto &sub = m_subscribers[type_name][i];
+                    auto *p_subscriber = sub.as<subscriber<T>*>();
+
+                    if (subscriber1 == p_subscriber) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
             eventbus(eventbus const &) = delete;
 
             void operator=(eventbus const &) = delete;

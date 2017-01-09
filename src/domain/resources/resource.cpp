@@ -5,44 +5,45 @@
 
 namespace domain {
     namespace resources {
-        resource::resource() {
-            max_out = false;
-        }
 
-        int resource::get_count() {
-            return this->_count;
+        resource::resource(const std::string &resourcename, int _count) : resourcename(resourcename), _count(_count),
+            m_previous_count(-1) {}
+
+        resource::resource() : _count(-1), max_out(false), m_previous_count(-1) {}
+
+        int resource::get_count() const {
+            return _count;
         }
 
         void resource::set_count(int count) {
-
-            this->_count = count;
-
+            m_previous_count = _count;
+            _count = count;
         }
 
-        std::string resource::get_resource_type() {
+        int resource::get_previous_count() const {
+            return m_previous_count;
+        }
+
+        std::string resource::get_resource_type() const {
             return resourcename;
         }
 
         bool resource::check_resource(int amount) {
-            if (_count >= amount) {
-                return true;
-            } else {
-                return false;
-            }
+            return _count >= amount;
         }
 
         void resource::decrement_resource(int amount) {
             if (!max_out) {
+                m_previous_count = _count;
                 _count = _count - amount;
             }
         }
 
         void resource::increment_resource(int amount) {
-
             if (!max_out) {
+                m_previous_count = _count;
                 _count = _count + amount;
             }
-
         }
 
         void resource::set_resource_type(std::string _resourcename) {
@@ -56,8 +57,6 @@ namespace domain {
 
         resource::~resource() {
         }
-
-        resource::resource(const std::string &resourcename, int _count) : resourcename(resourcename), _count(_count) {}
     }
 }
 #endif //CITY_DEFENCE_RESOURCE_CPP

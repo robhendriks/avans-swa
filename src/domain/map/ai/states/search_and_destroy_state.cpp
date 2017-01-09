@@ -7,6 +7,7 @@
 #include "../../objects/building.h"
 #include "../../../nations/enemy.h"
 #include <cmath>
+
 namespace domain {
     namespace map {
         namespace ai {
@@ -18,7 +19,7 @@ namespace domain {
                 void search_and_destroy_state::update(ai *ai, unsigned int elapsed_time) {
                     // in case no target function is not defined go to next state
                     if(ai->get_new_target_func() == NULL){
-                        ai->set_state(this->get_next_state());
+                        ai->set_state(MOVE);
                         return;
                     }
 
@@ -29,7 +30,7 @@ namespace domain {
 
                     // step 1: check if we have a target atm and if we can attack at all
                     if (static_cast<int>(elapsed_time) - m_last_attack_time >
-                        (ai->get_unit()->get_attack_speed()) &&
+                        (ai->get_unit().get_attack_speed()) &&
                         m_current_target != nullptr) {
                         if(m_current_target->get_current_hp() <= 0){
                             m_current_target->set_saturated({255, 255, 255});
@@ -39,7 +40,7 @@ namespace domain {
                                 ai->get_animation_transition_func()("target-destroyed", ai, box);
                             }
                         }
-                        else{
+                        else {
                             m_last_attack_time = elapsed_time;
                             // step 1.1 attack and unset if target is destroyed
                             SDL_Log("%s %d", "hp before   : ", m_current_target->get_current_hp());
@@ -52,26 +53,34 @@ namespace domain {
                             }
 
                             auto current_hp = m_current_target->lower_hitpoints(
-                                    ai->get_unit()->get_damage());
+                                    ai->get_unit().get_damage());
                             SDL_Log("%s %d", "hp after   : ",current_hp);
+
+                            if (current_hp <= 0) {
+                                auto enemy = dynamic_cast<domain::nations::enemy*>(m_current_target);
+                                if (enemy) {
+                                    enemy->get_ai()->set_state(DEAD); // Not sure about this yet
+                                    enemy->dispose();
+                                }
+                            }
                         }
                     }
 
                     // step 2 check if we already have a target or not in case we killed the target then try to find another
                     if (m_current_target == nullptr) {
                         // step 2.1 check if there is a target and then add it to the target
-                        m_current_target = ai->get_new_target_func()(ai->get_current_field().get(), ai);
+                        m_current_target = ai->get_new_target_func()(ai->get_current_field(), ai);
                     }
 
                     // if there is no target and it can move go to next state
-                    if(m_current_target == nullptr && ai->get_unit()->get_movement() != 0){
-                        ai->set_state(this->get_next_state());
+                    if(m_current_target == nullptr && ai->get_unit().get_movement() != 0){
+                        ai->set_state(MOVE);
                     }
                 }
 
                 engine::math::box2_t search_and_destroy_state::calculate_difference_between_target_and_unit(domain::map::ai::ai *ai) {
                     auto f_box = m_current_target->get_box();
-                    auto u_box = ai->get_unit()->get_box();
+                    auto u_box = ai->get_unit().get_box();
 
                     return engine::math::box2_t {
                             {static_cast<float>(static_cast<double>(f_box.min.x - u_box.min.x) / 100),

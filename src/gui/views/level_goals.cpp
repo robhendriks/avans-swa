@@ -59,17 +59,19 @@ namespace gui {
                 int goal_stat = m_model.game_stats->get_count(goals.first);
                 std::string text = goals.first + ": " + std::to_string(goal_stat) + "/" + std::to_string(goals.second);
                 text[0] = toupper(text[0]);
+                engine::graphics::color4_t color = {255, 0, 0};
                 if (goal_stat >= goals.second) {
                     // Goal is reached
                     m_draw_managers.texture_manager.draw("g_green_box", stat_box);
                     m_draw_managers.texture_manager.draw("g_check", image_box);
+                    color.r = 0;
                 } else {
                     // Goal not reached
                     m_draw_managers.texture_manager.draw("g_box", stat_box);
                     m_draw_managers.texture_manager.draw("g_cross", image_box);
                 }
 
-                m_draw_managers.texture_manager.load_text(text, {255, 0, 0},
+                m_draw_managers.texture_manager.load_text(text, color,
                                                           *m_draw_managers.font_manager.get_font("roboto", 18), "g_text");
 
                 // Draw the text

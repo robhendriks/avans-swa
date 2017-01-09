@@ -214,8 +214,8 @@
 	}
 }, {
 	"id": "ultimate-death-laser",
-	"hitpoints": 3600,
-	"health-regen": 6,
+	"hitpoints": 999999999,
+	"health-regen": 999999999,
 	"name": "Ultimate Death Laser",
 	"type": 2,
 	"cost": {
@@ -225,8 +225,8 @@
 	},
 	"properties": {
 		"output": {
-			"min-damage": 1,
-			"max-damage": 600,
+			"min-damage": 250,
+			"max-damage": 500,
 			"range": 2
 		}
 	}

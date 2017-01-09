@@ -6,9 +6,9 @@ option(BuildTests "Builds the tests." OFF)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -std=c++14")
 
-if (NOT APPLE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
-endif ()
+#if (NOT APPLE)
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+#endif()
 
 add_subdirectory(third_party)
 
@@ -90,9 +90,9 @@ set(SOURCES src/main.cpp
     src/domain/drawable/drawable_game_object.cpp
     src/domain/drawable/drawable_game_object.h
     src/domain/drawable/abstract_drawable_game_object.h
-    src/services/level_loader/base_level_loader.h
-    src/services/level_loader/json_level_loader.cpp
-    src/services/level_loader/json_level_loader.h
+    src/services/world_loader/base_world_loader.h
+    src/services/world_loader/json_world_loader.cpp
+    src/services/world_loader/json_world_loader.h
     src/gui/controllers/credits_controller.cpp
     src/gui/controllers/credits_controller.h
     src/gui/views/credits.cpp
@@ -161,7 +161,8 @@ set(SOURCES src/main.cpp
     src/domain/map/ai/states/search_and_destroy_state.h
     src/domain/map/ai/states/move_state.cpp
     src/domain/map/ai/states/move_state.h
-    src/domain/map/ai/states/state.cpp
+    src/domain/map/ai/states/dead_state.h
+    src/domain/map/ai/states/dead_state.cpp
     src/domain/map/ai/states/state.h
     src/domain/combat/attacker.cpp
     src/domain/combat/attacker.h
@@ -170,7 +171,9 @@ set(SOURCES src/main.cpp
     src/gui/views/help.cpp src/gui/views/help.h
     src/domain/combat/ai_controlled.cpp src/domain/combat/ai_controlled.h
     src/domain/mayor/mayor.cpp src/domain/mayor/mayor.h
-    src/gui/views/reclame.cpp src/gui/views/reclame.h)
+    src/gui/views/reclame.cpp src/gui/views/reclame.h
+    src/domain/gameworld/highscore.cpp src/domain/gameworld/highscore.h src/data/json/highscore_json_repository.cpp src/data/json/highscore_json_repository.h
+    src/services/world_saver/base_world_saver.h src/services/world_saver/json_world_saver.cpp src/services/world_saver/json_world_saver.h src/gui/controllers/load_controller.cpp src/gui/controllers/load_controller.h src/gui/views/load.cpp src/gui/views/load.h src/data/json/save_games_json_repository.cpp src/data/json/save_games_json_repository.h src/gui/models/load_model.h)
 
 include_directories(third_party/json/src
     third_party/di-cpp14/include

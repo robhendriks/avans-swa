@@ -26,6 +26,10 @@ namespace gui {
             m_in_game_menu.before();
             m_goals_view.before();
 
+            m_current_page = 1;
+            m_speed_factor = 1;
+            x_margin_placeable_objects = 200;
+
             // Add callback on menu show
             m_in_game_menu.call_on_show_change([&](bool show) {
                 if ((show && !m_model.paused) || (!show && m_model.paused)) {
@@ -107,15 +111,16 @@ namespace gui {
             m_arrow_right_box.reset(new engine::math::box2_t(builder3.build()));
 
             // Calculate the pages
-            float x_per_object = m_model.world->get_current_level().get_map()->get_tile_size().x + x_margin_placeable_objects;
+            float x_per_object = m_model.world->get_current_level()->get_map().get_tile_size().x + x_margin_placeable_objects;
             float x_space = m_placeable_objects_box->width() - m_arrow_left_box->max.x -
                             (m_placeable_objects_box->max.x - m_arrow_right_box->min.x) - x_margin_placeable_objects;
             m_objects_per_page = static_cast<int>(floor(x_space / x_per_object));
-            int total_objects = m_model.world->get_current_level().get_placeable_objects().size();
+            int total_objects = m_model.world->get_current_level()->get_placeable_objects().size();
             m_pages = static_cast<int>(ceil(static_cast<float>(total_objects) / m_objects_per_page));
             if (m_current_page > m_pages) {
                 m_current_page = m_pages;
             }
+
 
             // Set the draw boxes for the placeable objects
             update_placeable_objects_page();
@@ -125,7 +130,7 @@ namespace gui {
                                                     m_in_game_menu.m_help_view.m_top_bar.m_bar_box->height() -
                                                     m_placeable_objects_box->height()});
             builder5.as_left_top(m_in_game_menu.m_help_view.m_top_bar.m_bar_box->left_top());
-            m_model.world->get_current_level().get_map()->set_display_box(builder5.build());
+            m_model.world->get_current_level()->get_map().set_display_box(builder5.build());
 
             // Reposition the goals box
             engine::graphics::box_builder builder6(m_goals_view.m_stats_header_box->size());
@@ -138,7 +143,7 @@ namespace gui {
             builder7.as_left_top(m_in_game_menu.m_help_view.m_top_bar.m_bar_box->left_bottom()).add_margin(
                 {80, 80});
 
-            if (m_model.world->get_current_level().get_max_duration() > 0) {
+            if (m_model.world->get_current_level()->get_max_duration() > 0) {
                 m_countdown_box.reset(new engine::math::box2_t(builder7.build()));
             } else {
                 builder7.add_margin({-m_goals_view.m_stats_header_box->width(),
@@ -179,16 +184,16 @@ namespace gui {
         }
 
         void level::update_placeable_objects_page() {
-            engine::math::box2_t box_for_hidden_object({-1, -1}, {-1, -1});
+            engine::math::box2_t box_for_hidden_object({-100, -100}, {-100, -100});
 
             // Set the boxes for the placeable objects
-            engine::graphics::box_builder builder4(m_model.world->get_current_level().get_map()->get_tile_size());
+            engine::graphics::box_builder builder4(m_model.world->get_current_level()->get_map().get_tile_size());
             builder4.as_left_top(m_arrow_left_box->right_top())
                 .center_vertical(m_placeable_objects_box->min.y, m_placeable_objects_box->max.y);
 
             int object_counter = 0;
             int page_counter = 1;
-            for (auto &obj : m_model.world->get_current_level().get_placeable_objects()) {
+            for (auto &obj : m_model.world->get_current_level()->get_placeable_objects()) {
                 // Page check
                 if (object_counter == m_objects_per_page) {
                     object_counter = 0;
@@ -198,10 +203,10 @@ namespace gui {
                 // Set the object box
                 if (page_counter == m_current_page) {
                     builder4.add_margin({x_margin_placeable_objects, 0});
-                    obj->set_box(std::make_shared<engine::math::box2_t>(builder4.build()));
-                    builder4.add_margin({m_model.world->get_current_level().get_map()->get_tile_size().x, 0});
+                    obj->set_box(builder4.build());
+                    builder4.add_margin({m_model.world->get_current_level()->get_map().get_tile_size().x, 0});
                 } else {
-                    obj->set_box(std::make_shared<engine::math::box2_t>(box_for_hidden_object));
+                    obj->set_box(box_for_hidden_object);
                 }
 
                 // Count the objects (for the page)
@@ -210,10 +215,10 @@ namespace gui {
         }
 
         void level::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
-            auto current_level = m_model.world->get_current_level();
+            auto *current_level = m_model.world->get_current_level();
 
-            if (current_level.is_game_over(time_elapsed) ||
-                current_level.is_goal_reached()) {
+            if (current_level->is_game_over(time_elapsed) ||
+                current_level->is_goal_reached()) {
                 m_controller->show();
             }
 
@@ -244,7 +249,7 @@ namespace gui {
             m_goals_view.draw(time_elapsed, display_box);
 
             // Draw the map
-            current_level.get_map()->draw(m_in_game_menu.m_help_view.m_top_bar.m_draw_managers, time_elapsed);
+            current_level->get_map().draw(m_in_game_menu.m_help_view.m_top_bar.m_draw_managers, time_elapsed);
 
             // Draw the arrows
             float left_arrow_y = (m_current_page == 1 ? 128 : 0);
@@ -253,7 +258,7 @@ namespace gui {
             m_texture_manager.draw("arrows", {128, right_arrow_y}, *m_arrow_right_box);
 
             // Draw the placeable objects
-            for (auto &obj : current_level.get_placeable_objects()) {
+            for (auto &obj : current_level->get_placeable_objects()) {
                 obj->draw(m_in_game_menu.m_help_view.m_top_bar.m_draw_managers, time_elapsed);
             }
 
@@ -265,23 +270,22 @@ namespace gui {
             engine::graphics::box_builder builder1(m_resources_header_box->size());
             builder1.as_left_top(m_resources_header_box->left_bottom());
             int resource_counter =0;
-            for (auto resource : m_model.world->get_current_level().get_resources()) {
+            for (auto &resource : m_model.world->get_current_level()->get_resources()) {
                 builder1.add_margin({0, 20});
                 m_texture_manager.draw("g_box", builder1.build());
 
                 // Load the resource text
-                std::string resource_type =resource->get_resource_type();
+                std::string resource_type = resource->get_resource_type();
                 resource_type[0] = toupper(resource_type[0]);
                 //Build second part of the string
-                std::string optional_increment ="";
+                std::string optional_increment = "";
 
-                if(m_model.previous_resource.size() != 0 && m_model.previous_resource[resource_counter]->get_count() < resource->get_count()){
-                    optional_increment =" (+ "+std::to_string(resource->get_count() - m_model.previous_resource[resource_counter]->get_count())+")";
-
+                if (resource->get_previous_count() != -1 && resource->get_previous_count() < resource->get_count()) {
+                    optional_increment =" (+ "+std::to_string(resource->get_count() - resource->get_previous_count())+")";
                 }
+
                 m_texture_manager.load_text(resource_type + ": " + std::to_string(resource->get_count())+optional_increment, {0, 0, 0},
                     *m_font_manager.get_font("roboto", 25), "l_resource");
-
 
                 engine::graphics::box_builder builder2(m_texture_manager.get_size("l_resource"));
                 builder2.to_center(builder1.build());
@@ -295,10 +299,10 @@ namespace gui {
             }
 
             // Draw the countdown when needed
-            if (current_level.get_max_duration() > 0) {
+            if (current_level->get_max_duration() > 0) {
                 // Calculate time left
-                int level_time = time_elapsed - current_level.get_start_time();
-                unsigned int time_left = static_cast<unsigned int>(current_level.get_max_duration() - level_time);
+                int level_time = time_elapsed - current_level->get_start_time();
+                unsigned int time_left = static_cast<unsigned int>(current_level->get_max_duration() - level_time);
 
                 engine::graphics::color4_t color{0, 0, 0};
                 if (time_left <= 53200) {
@@ -322,10 +326,33 @@ namespace gui {
                 m_texture_manager.unload("l_countdown");
             }
 
+            std::map<domain::map::field*, unsigned int> fields;
+
             // Draw enemies
-            for (auto &enemy : current_level.get_enemies_in_lvl()) {
+            for (auto &enemy : current_level->get_enemies_in_lvl()) {
                 enemy->draw(m_in_game_menu.m_help_view.m_top_bar.m_draw_managers, time_elapsed);
+
+                if (enemy->get_current_field() == nullptr) continue;
+
+                if (fields.find(enemy->get_current_field()) != fields.end()) {
+                    fields[enemy->get_current_field()]++;
+                } else {
+                    fields.insert(std::make_pair<domain::map::field*, unsigned int>(enemy->get_current_field(), 1));
+                }
             }
+
+            // Draw enemy count
+            auto font = m_font_manager.get_font("roboto", 32);
+
+            if (!fields.empty()) {
+                auto it = fields.begin();
+                for (; it != fields.end(); ++it) {
+                    m_texture_manager.load_text(std::to_string(it->second), {255, 255, 255}, *font, "enemy_count");
+                    //m_texture_manager.draw("enemy_count", {0, 0}, it->first->get_box());
+                    m_texture_manager.unload("enemy_count");
+                }
+            }
+
 
             // Draw overflow on pause
             if (m_model.paused && !m_in_game_menu.m_show && !m_in_game_menu.m_help_view.m_show) {
@@ -381,7 +408,7 @@ namespace gui {
                     } else if (event.get_keycode() == engine::input::keycodes::keycode::HOME) {
                         reset_speed();
                     } else if(event.get_keycode() == engine::input::keycodes::keycode::F){
-                        m_model.world->get_current_level().execute_cheat();
+                        m_model.world->get_current_level()->execute_cheat();
                     }
                 }
             }
@@ -480,6 +507,7 @@ namespace gui {
 
         void level::set_controller(controllers::main_map_controller &controller) {
             m_controller = &controller;
+            m_in_game_menu.set_controller(controller);
         }
 
         void level::on_pause() {

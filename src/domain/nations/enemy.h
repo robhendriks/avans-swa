@@ -19,36 +19,45 @@ namespace domain {
         public:
             enemy(std::string name, int min_damage, int max_damage,
                   double attacks_per_second, int hitpoints, int granted_xp, int range,
-                  int movement, bool boss, std::shared_ptr<nation> nation, int oppertunity_costs);
+                  int movement, bool boss, nation &nation1, int oppertunity_costs);
 
             // Copy constructor
             enemy(const enemy& other);
+
+            void set_nation(nation &nation1);
+
+            void dispose();
 
             //Returns nationname + unitname
             std::string get_name();
 
             int get_oppertunity_cost() const;
 
-            bool is_boss();
+            bool is_boss() const;
 
-            virtual void set_box(std::shared_ptr<engine::math::box2_t> destination);
+            bool is_disposed() const;
+
+            virtual void set_box(engine::math::box2_t destination);
 
             virtual engine::math::box2_t get_box() const;
 
             void update(unsigned int elapsed_time);
 
+            enemy *clone() const;
+
             ~enemy();
 
         private:
-            std::shared_ptr<engine::math::box2_t> m_destination;
+            engine::math::box2_t m_destination;
             std::string m_name;
             //Cost for using this enemy; to generate proper waves.
             int m_oppertunity_cost;
             bool m_boss;
-            std::shared_ptr<nation> m_nation;
+            bool m_disposed;
+            nation *m_nation;
         };
 
-        bool operator<(const std::shared_ptr<enemy> &s1, const std::shared_ptr<enemy> &s2);
+        bool operator<(const enemy &s1, const enemy &s2);
     }
 }
 

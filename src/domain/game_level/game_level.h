@@ -6,6 +6,7 @@
 #define CITY_DEFENCE_GAME_LEVEL_H
 
 #include <memory>
+#include <algorithm>
 #include "string"
 #include "game_stats.h"
 #include "../map/map.h"
@@ -17,15 +18,18 @@
 
 namespace domain {
     namespace game_level {
-        class game_level : public engine::observer::observer<domain::map::field> {
+        class game_level
+            : public engine::observer::observer<domain::map::field> {
         public:
-            game_level(std::string name, std::shared_ptr<map::map> map, std::shared_ptr<game_stats> goal,
-                       std::shared_ptr<domain::nations::nation> _enemies,
+            game_level(std::string name, map::map &map1, game_stats &goal,
+                       domain::nations::nation &_enemies,
                        engine::draganddrop::drag_and_drop &drag_and_drop, long duration);
+
+            ~game_level();
 
             std::string get_name();
 
-            std::shared_ptr<domain::map::map> get_map();
+            domain::map::map &get_map();
 
             virtual void notify(domain::map::field *p_observee, std::string title);
 
@@ -34,15 +38,24 @@ namespace domain {
             virtual bool is_game_over(unsigned int current_duration);
 
             int get_id();
+
             void set_id(int id);
 
-            std::shared_ptr<game_stats> get_goal();
+            game_stats &get_goal();
 
-            std::shared_ptr<game_stats> get_stats();
+            game_stats &get_stats();
 
-            unsigned int get_start_time();
+            int get_start_time() const;
 
-            void set_start_time(unsigned int time);
+            void set_start_time(int time);
+
+            void set_end_time(unsigned int time);
+
+            void set_end_time_force(int time);
+
+            int get_end_time() const;
+
+            int get_duration() const;
 
             long get_max_duration() const;
 
@@ -52,9 +65,11 @@ namespace domain {
 
             std::vector<map::objects::dragable_field_object *> get_placeable_objects() const;
 
-            std::vector<std::shared_ptr<domain::nations::enemy>> get_enemies_in_lvl();
+            std::vector<domain::nations::enemy*> get_enemies_in_lvl();
 
-            void set_enemies_in_lvl(std::vector<std::shared_ptr<domain::nations::enemy>> enemies);
+            void set_enemies_in_lvl(std::vector<domain::nations::enemy*> enemies);
+
+            void remove_enemy_in_lvl(const domain::nations::enemy &enemy);
 
             void set_peace_period(long ms_period);
 
@@ -76,9 +91,7 @@ namespace domain {
 
             long get_wave_spawn_time_range();
 
-            void set_enemy_nation(std::shared_ptr<domain::nations::nation> enemy);
-
-            std::shared_ptr<domain::nations::nation> get_enemy_nation();
+            domain::nations::nation &get_enemy_nation();
 
             void set_spawn_bosses(bool bosses);
 
@@ -89,36 +102,44 @@ namespace domain {
              */
             void pause();
 
-            std::vector<std::shared_ptr<domain::resources::resource>> get_resources();
+            std::vector<domain::resources::resource*> get_resources();
 
-            void set_resources(std::vector<std::shared_ptr<domain::resources::resource>> resources);
+            void set_resources(std::vector<domain::resources::resource*> resources);
 
             void update(bool no_resources = false);
 
-            void decrement_building_cost(engine::draganddrop::dragable& building);
+            void decrement_building_cost(engine::draganddrop::dragable &building);
 
             void execute_cheat();
 
         private:
+            void subscribe_buildings_to_event() const;
+
+            void unsubscribe_buildings_to_event() const;
+
+            void clean_resources();
+
             void check_goals_reached();
+
             int m_id = 0;
 
             std::map<std::string, bool> m_reached_goals;
 
             std::string m_name;
             long m_max_duration;
-            std::shared_ptr<domain::map::map> m_map;
-            std::shared_ptr<game_stats> m_goal;
-            std::shared_ptr<game_stats> m_stats;
-            unsigned int m_start_time;
-            std::vector<std::pair<int, std::shared_ptr<domain::nations::enemy>>> enemies;
+            domain::map::map &m_map;
+            game_stats &m_goal;
+            game_stats *m_stats;
+            int m_start_time;
+            int m_end_time;
+            std::vector<std::pair<int, domain::nations::enemy*>> enemies;
             std::vector<map::objects::dragable_field_object *> m_placeable_objects;
             engine::draganddrop::drag_and_drop &m_drag_and_drop;
 
-            std::vector<std::shared_ptr<domain::nations::enemy>> m_enemies_in_lvl;
+            std::vector<domain::nations::enemy*> m_enemies_in_lvl;
 
             //List of the resources
-            std::vector<std::shared_ptr<domain::resources::resource>> m_resources;
+            std::vector<domain::resources::resource*> m_resources;
 
             //(initial periode where no waves spawn in ms)
             long m_peace_period = 0;
@@ -131,7 +152,7 @@ namespace domain {
             // the time range in ms where all units of a single wave spawns. 1000 = all units of a wave spawn in a range of 1 sec
             long m_wave_spawn_time_range = 3000;
             // nation where enemies get spawned from
-            std::shared_ptr<domain::nations::nation> m_enemy;
+            domain::nations::nation &m_enemy;
             // spawn boss units
             bool m_spawn_bosses = true;
 

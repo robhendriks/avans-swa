@@ -9,25 +9,30 @@
 
 namespace domain {
     namespace game_level {
-        game_level::game_level(std::string name, std::shared_ptr<domain::map::map> map,
-                               std::shared_ptr<game_stats> goal,
-                               std::shared_ptr<domain::nations::nation> _enemies,
+        game_level::game_level(std::string name, domain::map::map &map,
+                               game_stats &goal,
+                               domain::nations::nation &_enemies,
                                engine::draganddrop::drag_and_drop &drag_and_drop, long duration) :
-                m_name(name), m_max_duration(duration), m_map(map), m_goal(goal), m_start_time(0),
-                m_drag_and_drop(drag_and_drop), m_paused(true) {
+                m_name(name), m_max_duration(duration), m_map(map), m_goal(goal), m_start_time(0), m_end_time(-1),
+                m_drag_and_drop(drag_and_drop), m_enemy(_enemies), m_paused(true) {
 
-            m_stats = std::shared_ptr<game_stats>(new game_stats());
+            m_stats = new game_stats();
 
-            // Call pause to start the level....
-            pause();
+            m_map.set_game_level(this);
 
             // Observe all fields, update the stats, add the drag and drop instance and make the empty fields dropable
-            for (auto &field : m_map->get_fields()) {
+            for (auto &field : m_map.get_fields()) {
                 if (field) {
                     field->add_observer(this);
 
                     if (field->has_object()) {
                         field->set_drag_and_drop(&m_drag_and_drop);
+
+                        auto *dragable = dynamic_cast<map::objects::dragable_field_object*>(field->get_object());
+                        if (dragable) {
+                            dragable->set_drag_and_drop(&m_drag_and_drop);
+                        }
+
                         field->get_object()->update_game_stats(*m_stats, "object-placed");
                     } else {
                         m_drag_and_drop.add_dropable(*field);
@@ -36,34 +41,13 @@ namespace domain {
             }
 
             // Set all goals as not reached
-            for (auto &g : m_goal->get()) {
+            for (auto &g : m_goal.get()) {
                 m_reached_goals[g.first] = false;
             }
 
             // Check if there are already some goals reached
             check_goals_reached();
 
-            m_enemy = _enemies;
-
-            //Create resource objects and sets them to 0.
-            auto templist = std::vector<std::shared_ptr<domain::resources::resource>>(5);
-            templist[0] = std::make_shared<domain::resources::resource>(*new domain::resources::resource());
-            templist[1] = std::make_shared<domain::resources::resource>(*new domain::resources::resource());
-            templist[2] = std::make_shared<domain::resources::resource>(*new domain::resources::resource());
-            templist[3] = std::make_shared<domain::resources::resource>(*new domain::resources::resource());
-            templist[4] = std::make_shared<domain::resources::resource>(*new domain::resources::resource());
-
-            templist[0]->set_count(50);
-            templist[0]->set_resource_type("wood");
-            templist[1]->set_count(500);
-            templist[1]->set_resource_type("ore");
-            templist[2]->set_count(500);
-            templist[2]->set_resource_type("gold");
-            templist[3]->set_count(0);
-            templist[3]->set_resource_type("silicium");
-            templist[4]->set_count(0);
-            templist[4]->set_resource_type("uranium");
-            m_resources = templist;
             m_has_cheated = false;
 
             // Add a callback for the drag and drop
@@ -71,24 +55,36 @@ namespace domain {
                     std::bind(&game_level::decrement_building_cost, this, std::placeholders::_1));
         }
 
+        game_level::~game_level() {
+
+            if (!m_paused) {
+                pause();
+            }
+
+            clean_resources();
+
+            delete &m_drag_and_drop;
+            delete m_stats;
+        }
+
         std::string game_level::get_name() {
             return m_name;
         }
 
-        std::shared_ptr<domain::map::map> game_level::get_map() {
+        domain::map::map &game_level::get_map() {
             return m_map;
         }
 
-        std::shared_ptr<game_stats> game_level::get_goal() {
+        game_stats &game_level::get_goal() {
             return m_goal;
         }
 
-        std::shared_ptr<game_stats> game_level::get_stats() {
-            return m_stats;
+        game_stats &game_level::get_stats() {
+            return *m_stats;
         }
 
         bool game_level::is_goal_reached() {
-            return *m_stats.get() >= *m_goal.get();
+            return *m_stats >= m_goal;
         }
 
         bool game_level::is_game_over(unsigned int current_duration) {
@@ -100,12 +96,33 @@ namespace domain {
             }
         }
 
-        unsigned int game_level::get_start_time() {
+        int game_level::get_start_time() const {
             return m_start_time;
         }
 
-        void game_level::set_start_time(unsigned int time) {
+        void game_level::set_start_time(int time) {
             m_start_time = time;
+        }
+
+        void game_level::set_end_time(unsigned int time) {
+            int duration = static_cast<int>(time) - m_start_time;
+            if (duration > m_max_duration) {
+                time = static_cast<unsigned int>(m_start_time) + m_max_duration;
+            }
+
+            m_end_time = time;
+        }
+
+        void game_level::set_end_time_force(int time) {
+            m_end_time = time;
+        }
+
+        int game_level::get_end_time() const {
+            return m_end_time;
+        }
+
+        int game_level::get_duration() const {
+            return m_end_time - m_start_time;
         }
 
         void game_level::add_placeable_object(map::objects::dragable_field_object &obj) {
@@ -126,12 +143,19 @@ namespace domain {
             return m_placeable_objects;
         }
 
-        std::vector<std::shared_ptr<domain::nations::enemy>> game_level::get_enemies_in_lvl() {
+        std::vector<domain::nations::enemy*> game_level::get_enemies_in_lvl() {
             return m_enemies_in_lvl;
         }
 
-        void game_level::set_enemies_in_lvl(std::vector<std::shared_ptr<domain::nations::enemy>> enemies) {
+        void game_level::set_enemies_in_lvl(std::vector<domain::nations::enemy*> enemies) {
             m_enemies_in_lvl = enemies;
+        }
+
+        void game_level::remove_enemy_in_lvl(const domain::nations::enemy &enemy) {
+            auto it = std::find(m_enemies_in_lvl.begin(), m_enemies_in_lvl.end(), &enemy);
+            if (it != m_enemies_in_lvl.end()) {
+                m_enemies_in_lvl.erase(it);
+            }
         }
 
         /**
@@ -153,6 +177,13 @@ namespace domain {
                     auto *copy = object->clone();
                     add_placeable_object(*copy);
 
+                    // Add the event if it is a building
+                    auto *building = dynamic_cast<domain::map::objects::building*>(copy);
+                    if (building) {
+                        engine::eventbus::eventbus::get_instance().subscribe(
+                            dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_motion>*>(building));
+                    }
+
                     // Immediately start with dragging
                     //m_drag_and_drop.set_next_dragging(*copy);
                 }
@@ -167,7 +198,7 @@ namespace domain {
         void game_level::check_goals_reached() {
             for (auto it = m_reached_goals.begin(); it != m_reached_goals.end(); it++) {
                 // Check if the goal is reached
-                if (m_stats->get_count(it->first) >= m_goal->get_count(it->first)) {
+                if (m_stats->get_count(it->first) >= m_goal.get_count(it->first)) {
                     // Reached
                     if (it->second) {
                         // First time reached, fire the event
@@ -226,11 +257,7 @@ namespace domain {
             return m_wave_spawn_time_range;
         }
 
-        void game_level::set_enemy_nation(std::shared_ptr<domain::nations::nation> enemy) {
-            m_enemy = enemy;
-        }
-
-        std::shared_ptr<domain::nations::nation> game_level::get_enemy_nation() {
+        domain::nations::nation &game_level::get_enemy_nation() {
             return m_enemy;
         }
 
@@ -242,20 +269,20 @@ namespace domain {
             return m_spawn_bosses;
         }
 
-        std::vector<std::shared_ptr<domain::resources::resource>> game_level::get_resources() {
+        std::vector<domain::resources::resource*> game_level::get_resources() {
             return m_resources;
         }
 
-        void game_level::set_resources(std::vector<std::shared_ptr<domain::resources::resource>> resources) {
+        void game_level::set_resources(std::vector<domain::resources::resource*> resources) {
+            clean_resources();
+
             m_resources = resources;
         }
 
         void game_level::update(bool no_resources) {
-
-
             //Check objects if they can be constructed regarding resources
             for (unsigned int i = 0; i < m_placeable_objects.size(); i++) {
-                std::vector<std::shared_ptr<domain::resources::resource>> building_requirement = dynamic_cast<domain::map::objects::building *>(m_placeable_objects[i])->get_required_resources();
+                std::vector<domain::resources::resource*> building_requirement = dynamic_cast<domain::map::objects::building *>(m_placeable_objects[i])->get_required_resources();
                 bool meets_requirement = true;
                 for (unsigned int j = 0; j < building_requirement.size(); j++) {
                     for (auto resource_bank : m_resources) {
@@ -281,24 +308,19 @@ namespace domain {
                 }
             }
             if (no_resources) return;
-            m_map->update_objects(this);
+            m_map.update_objects(this);
         }
 
         void game_level::decrement_building_cost(engine::draganddrop::dragable &building) {
 
-
             //Decrement the resources the buildings needs.
-            std::vector<std::shared_ptr<domain::resources::resource>> resources_to_decrement = dynamic_cast<domain::map::objects::building *>(&building)->get_required_resources();
+            std::vector<domain::resources::resource*> resources_to_decrement = dynamic_cast<domain::map::objects::building *>(&building)->get_required_resources();
             for (auto resource_to_decrement : resources_to_decrement) {
-
                 for (auto resource_bank : m_resources) {
-
                     if (resource_bank->get_resource_type() == resource_to_decrement->get_resource_type()) {
                         resource_bank->decrement_resource(resource_to_decrement->get_count());
                         break;
-
                     }
-
                 }
             }
 
@@ -314,11 +336,13 @@ namespace domain {
             if (m_paused) {
                 // Resume
                 m_drag_and_drop.start();
+                subscribe_buildings_to_event();
 
                 m_paused = false;
             } else {
                 // Pause
                 m_drag_and_drop.stop();
+                unsubscribe_buildings_to_event();
 
                 m_paused = true;
             }
@@ -338,6 +362,58 @@ namespace domain {
                 resource_bank->max_out_resource();
             }
             update(true);
+        }
+
+        void game_level::clean_resources() {
+            for (auto &resource : m_resources) {
+                delete resource;
+            }
+        }
+
+        void game_level::subscribe_buildings_to_event() const {
+            for (auto &obj : m_placeable_objects) {
+                auto *building = dynamic_cast<domain::map::objects::building*>(obj);
+                if (building) {
+                    engine::eventbus::eventbus::get_instance().subscribe(
+                        dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_motion>*>(building));
+                }
+            }
+
+            for (auto &field : m_map.get_fields()) {
+                if (field != nullptr) {
+                    auto *obj = field->get_object();
+                    if (obj != nullptr) {
+                        auto *building = dynamic_cast<domain::map::objects::building*>(obj);
+                        if (building) {
+                            engine::eventbus::eventbus::get_instance().subscribe(
+                                dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_motion>*>(building));
+                        }
+                    }
+                }
+            }
+        }
+
+        void game_level::unsubscribe_buildings_to_event() const {
+            for (auto &obj : m_placeable_objects) {
+                auto *building = dynamic_cast<domain::map::objects::building *>(obj);
+                if (building) {
+                    engine::eventbus::eventbus::get_instance().unsubscribe(
+                        dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_motion> *>(building));
+                }
+            }
+
+            for (auto &field : m_map.get_fields()) {
+                if (field != nullptr) {
+                    auto *obj = field->get_object();
+                    if (obj != nullptr) {
+                        auto *building = dynamic_cast<domain::map::objects::building *>(obj);
+                        if (building) {
+                            engine::eventbus::eventbus::get_instance().unsubscribe(
+                                dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_motion> *>(building));
+                        }
+                    }
+                }
+            }
         }
     }
 }

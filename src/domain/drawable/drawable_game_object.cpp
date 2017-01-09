@@ -58,7 +58,7 @@ namespace domain {
                     if (result != nullptr)
                         m_texture = result;
                     else // in case its not loaded in then throw a exception that loading the texture in is impossible.
-                        throw std::exception();
+                        throw std::runtime_error(std::string("Could not locate texture \"" + m_file_loc + "\""));
                 }
             }
         }

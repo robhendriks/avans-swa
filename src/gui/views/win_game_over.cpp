@@ -23,7 +23,6 @@ namespace gui {
             m_goals_view.before();
 
             // Load textures
-
             m_texture_manager.load("images/background-game.png", "background-game");
 
             m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 124}, {1451, 169}}, 2, "w_green_box");
@@ -39,6 +38,37 @@ namespace gui {
             m_texture_manager.load_text(utils::string_utils::ms_to_hms(m_model.duration), {0, 0, 0}, *m_font_manager.get_font("roboto", 25), "w_time_played");
             m_texture_manager.load_text("Continue", {255, 255, 255}, *m_font_manager.get_font("roboto", 25), "w_continue");
 
+            if (!m_model.next_lvl_exists || !m_model.result) {
+                m_texture_manager.load_text("Highscores", {255, 255, 255}, *m_font_manager.get_font("roboto", 25), "w_h_title");
+
+                // Load texts highscores
+                int counter = 0;
+                auto &font = *m_font_manager.get_font("roboto", 12);
+                for (auto &highscore : m_model.highscores) {
+                    if (counter > 4) {
+                        break;
+                    }
+
+                    std::string counter_string = std::to_string(counter + 1);
+                    m_texture_manager.load_text(counter_string + ".", {0, 0, 0}, font, "wh_n_" + counter_string);
+
+                    char buff[20];
+                    time_t time = highscore->get_time();
+                    strftime(buff, 20, "%Y-%m-%d %H:%M:%S", std::localtime(&time));
+//                    m_texture_manager.load_text(std::to_string(ltm->tm_year) + "-" + std::to_string(ltm->tm_mon) +
+//                                                    "-" + std::to_string(ltm->tm_mday) + " " +
+//                                                    std::to_string(ltm->tm_hour) + ":" + std::to_string(ltm->tm_min) +
+//                                                    ":" + std::to_string(ltm->tm_sec), {0, 0, 0}, font,
+//                                                "wh_d_" + counter_string);
+
+                    m_texture_manager.load_text(buff, {0, 0, 0}, font, "wh_d_" + counter_string);
+                    m_texture_manager.load_text(std::to_string(highscore->get_score()), {0, 0, 0}, font,
+                                                "wh_s_" + counter_string);
+
+                    counter++;
+                }
+            }
+
             // Load and play sound effect
             if (m_model.result) {
                 m_sound_manager.load("sounds/winner.wav", "w_sound");
@@ -53,6 +83,8 @@ namespace gui {
         }
 
         void win_game_over::on_display_change(engine::math::box2_t display_box) {
+            m_highscore_boxes.clear();
+
             m_in_game_menu.on_display_change(display_box);
             m_goals_view.on_display_change(display_box);
 
@@ -61,6 +93,76 @@ namespace gui {
             builder1.as_left_top(m_in_game_menu.m_help_view.m_top_bar.m_bar_box->left_bottom()).add_margin({0, 40})
                 .center_horizontal(m_in_game_menu.m_help_view.m_top_bar.m_bar_box->min.x, m_in_game_menu.m_help_view.m_top_bar.m_bar_box->max.x);
             m_title_box.reset(new engine::math::box2_t(builder1.build()));
+
+            // Create the highscore boxes
+            int counter = 0;
+            float largest_width_1 = -1;
+            float largest_width_2 = -1;
+            float largest_width_3 = -1;
+            float height = 0;
+            for (auto &highscore : m_model.highscores) {
+                if (counter >= 4) {
+                    break;
+                }
+
+                std::string counter_string = std::to_string(counter + 1);
+                engine::graphics::box_builder h_builder1(m_texture_manager.get_size("wh_n_" + counter_string));
+                engine::graphics::box_builder h_builder2(m_texture_manager.get_size("wh_d_" + counter_string));
+                engine::graphics::box_builder h_builder3(m_texture_manager.get_size("wh_s_" + counter_string));
+
+                m_highscore_boxes.push_back(std::make_tuple(
+                    std::unique_ptr<engine::math::box2_t>(new engine::math::box2_t(h_builder1.build())),
+                    std::unique_ptr<engine::math::box2_t>(new engine::math::box2_t(h_builder2.build())),
+                    std::unique_ptr<engine::math::box2_t>(new engine::math::box2_t(h_builder3.build()))
+                ));
+
+                if (largest_width_1 == -1 || h_builder1.build().width() > largest_width_1) {
+                    largest_width_1 = h_builder1.build().width();
+                }
+
+                if (largest_width_2 == -1 || h_builder2.build().width() > largest_width_2) {
+                    largest_width_2 = h_builder2.build().width();
+                }
+
+                if (largest_width_3 == -1 || h_builder3.build().width() > largest_width_3) {
+                    largest_width_3 = h_builder3.build().width();
+                }
+
+                height += 20;
+                counter++;
+            }
+
+            engine::graphics::box_builder highscores_wrapper_box_builder({largest_width_1 + largest_width_2 + largest_width_3 + 60, height});
+            highscores_wrapper_box_builder.as_left_top(m_title_box->left_bottom())
+                .center_horizontal(display_box.min.x, display_box.max.x);
+            engine::math::box2_t highscores_wrapper_box = highscores_wrapper_box_builder.build();
+
+            engine::graphics::box_builder highscore_title_box_builder(m_texture_manager.get_size("w_h_title"));
+            highscore_title_box_builder.as_left_top(highscores_wrapper_box.left_top())
+                .add_margin({0, 20}).center_horizontal(display_box.min.x, display_box.max.x);
+            m_highscores_title_box.reset(new engine::math::box2_t(highscore_title_box_builder.build()));
+
+            highscores_wrapper_box_builder.as_left_top(m_highscores_title_box->left_bottom())
+                .center_horizontal(display_box.min.x, display_box.max.x);
+            highscores_wrapper_box = highscores_wrapper_box_builder.build();
+
+            float h_margin = 0;
+            for (auto &h_b : m_highscore_boxes) {
+                engine::graphics::box_builder temp_box_1(std::get<0>(h_b)->size());
+                temp_box_1.as_left_top(highscores_wrapper_box.left_top()).add_margin({0, h_margin});
+
+                engine::graphics::box_builder temp_box_2(std::get<1>(h_b)->size());
+                temp_box_2.as_left_top(highscores_wrapper_box.left_top()).add_margin({largest_width_1 + 30, h_margin});
+
+                engine::graphics::box_builder temp_box_3(std::get<2>(h_b)->size());
+                temp_box_3.as_left_top(highscores_wrapper_box.left_top()).add_margin({largest_width_2 + largest_width_1 + 60, h_margin});
+
+                std::get<0>(h_b).reset(new engine::math::box2_t(temp_box_1.build()));
+                std::get<1>(h_b).reset(new engine::math::box2_t(temp_box_2.build()));
+                std::get<2>(h_b).reset(new engine::math::box2_t(temp_box_3.build()));
+
+                h_margin += 20;
+            }
 
             // Create the continue box
             engine::graphics::box_builder builder2(m_texture_manager.get_size("w_green_box"));
@@ -97,9 +199,9 @@ namespace gui {
 
             // Stats wrapper box
             engine::graphics::box_builder builder11(time_header_size + stats_header_size + 50);
-            builder11.as_left_top(m_title_box->left_bottom())
+            builder11.as_left_top(highscores_wrapper_box.left_bottom())
                 .center_horizontal(m_title_box->min.x, m_title_box->max.x)
-                .center_vertical(m_title_box->max.y, m_continue_box->min.y).add_margin({0, -70});
+                .center_vertical(highscores_wrapper_box.max.y, m_continue_box->min.y).add_margin({0, -70});
             auto wrapper_box = builder11.build();
 
             // Create the time header box
@@ -156,6 +258,26 @@ namespace gui {
                 }
             }
 
+            if (!m_model.next_lvl_exists || !m_model.result) {
+                // Draw the highscores
+                m_texture_manager.draw("w_h_title", *m_highscores_title_box);
+
+                int counter = 0;
+                for (auto &highscore : m_model.highscores) {
+                    if (counter > 4) {
+                        break;
+                    }
+
+                    std::string counter_string = std::to_string(counter + 1);
+
+                    m_texture_manager.draw("wh_n_" + counter_string, *std::get<0>(m_highscore_boxes[counter]));
+                    m_texture_manager.draw("wh_d_" + counter_string, *std::get<1>(m_highscore_boxes[counter]));
+                    m_texture_manager.draw("wh_s_" + counter_string, *std::get<2>(m_highscore_boxes[counter]));
+
+                    counter++;
+                }
+            }
+
             // Draw at last because of the overlay
             m_in_game_menu.draw(time_elapsed, display_box);
         }
@@ -170,6 +292,7 @@ namespace gui {
 
         void win_game_over::set_controller(gui::controllers::main_map_controller &controller) {
             m_controller = &controller;
+            m_in_game_menu.set_controller(controller);
         }
 
         void win_game_over::after() {
@@ -187,6 +310,25 @@ namespace gui {
             m_texture_manager.unload("w_time");
             m_texture_manager.unload("w_time_played");
             m_texture_manager.unload("w_continue");
+
+            if (!m_model.next_lvl_exists || !m_model.result) {
+                m_texture_manager.unload("w_h_title");
+
+                // Unload texts highscores
+                int counter = 0;
+                for (auto &highscore : m_model.highscores) {
+                    if (counter >= 4) {
+                        break;
+                    }
+
+                    std::string counter_string = std::to_string(counter + 1);
+                    m_texture_manager.unload("wh_n_" + counter_string);
+                    m_texture_manager.unload("wh_d_" + counter_string);
+                    m_texture_manager.unload("wh_s_" + counter_string);
+
+                    counter++;
+                }
+            }
 
             // Unload sounds
             m_sound_manager.unload("w_sound");

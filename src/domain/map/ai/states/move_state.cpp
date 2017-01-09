@@ -16,17 +16,20 @@ namespace domain {
 
                 void move_state::update(domain::map::ai::ai *ai, unsigned int elapsed_time) {
                     // in case the unit can never get to the location it wants to go to then move to next state
-                    if(ai->get_unit()->get_movement() == 0)
-                        ai->set_state(get_next_state());
+                    if(ai->get_unit().get_movement() == 0)
+                        ai->set_state(SEARCH_AND_DESTROY);
                     else{
                         // step 3.1 check if we are in transition
                         if (m_next_field != nullptr) {
                             // step 3.1.1 check if we arrived at the target location or we have to choose a new target
-                            if (m_next_field->get_box() == ai->get_unit()->get_box()) {
+                            if (m_next_field->get_box() == ai->get_unit().get_box()) {
                                 // first last set the last field to the current because we reached our destination
                                 m_last_field = ai->get_current_field();
                                 // same for this
-                                ai->set_current_field(m_next_field);
+                                ai->set_current_field(*m_next_field);
+
+                                ai->get_unit().set_current_field(*m_next_field);
+
                                 // now that we have moved set the current time we are on that field equal to the elapsed time.
                                 m_time_moved_on_current_field = elapsed_time;
                                 // and set our next location to this
@@ -41,7 +44,7 @@ namespace domain {
                                 }
                                 // now that move is complete lets switch to searching for targets
                                 pauze(elapsed_time);
-                                ai->set_state(get_next_state());
+                                ai->set_state(SEARCH_AND_DESTROY);
                             } else {
                                 // in case it was a pauze then we need to make it so we don't insta jump to the other field
                                 // because elapsed time is invalid
@@ -66,12 +69,12 @@ namespace domain {
                     }
                 }
 
-                std::shared_ptr<field> move_state::get_next_field(domain::map::ai::ai *ai) {
+                field *move_state::get_next_field(domain::map::ai::ai *ai) {
                     if (ai->get_current_field() == nullptr)
                         return nullptr;
                     else {
                         // not going backwards currently
-                        std::shared_ptr<field> best_neighbour = nullptr;
+                        field *best_neighbour = nullptr;
                         for (auto &neighbour : ai->get_current_field()->get_neighbors()) {
                             // in case its the field we came from ignore it.
                             if (m_last_field == nullptr || m_last_field != neighbour) {
@@ -100,7 +103,7 @@ namespace domain {
                     // time on field
                     auto current_time_on_field = elapsed_time - m_time_moved_on_current_field;
                     // % of total time
-                    double percentage = static_cast<double>(current_time_on_field) / static_cast<double>(ai->get_unit()->get_movement()) * 100;
+                    double percentage = static_cast<double>(current_time_on_field) / static_cast<double>(ai->get_unit().get_movement()) * 100;
 
                     // if its called not on the precise time reset it to 100 to avoid issues like 102%
                     if(percentage > 100)
@@ -115,13 +118,13 @@ namespace domain {
                     };
 
 
-                     ai->get_unit()->set_box(std::make_shared<engine::math::box2_t>(new_box));
+                     ai->get_unit().set_box(new_box);
                 }
 
                 void move_state::calculate_initial_state_with_difference(domain::map::ai::ai *ai) {
 
                     auto f_box = m_next_field->get_box();
-                    auto u_box = ai->get_unit()->get_box();
+                    auto u_box = ai->get_unit().get_box();
 
                     m_init_unit_box = u_box;
                     m_difference_box = {
