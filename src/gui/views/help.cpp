@@ -22,6 +22,9 @@ namespace gui {
             // Make sure it's not shown
             m_show = false;
 
+            //set flag if texture is loaded
+            m_help_loaded = true;
+
             // Load the texture
             m_top_bar.m_texture_manager.load(m_image, "h_image");
 
@@ -75,6 +78,12 @@ namespace gui {
             m_top_bar.draw(time_elapsed, display_box);
 
             if (m_show) {
+                if (!m_help_loaded) {
+                    // Load the texture
+                    m_image = "images/help.png";
+                    m_top_bar.m_texture_manager.load(m_image, "h_image");
+                    m_help_loaded =true;}
+
                 // Draw the overlay
                 m_top_bar.m_color_manager.draw({0, 0, 0, 180}, *m_overlay_box);
 
