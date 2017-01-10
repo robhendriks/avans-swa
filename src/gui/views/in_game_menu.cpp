@@ -8,20 +8,21 @@
 namespace gui {
     namespace views {
 
-        in_game_menu::in_game_menu(help &help_view) : m_help_view(help_view), m_show(false),
-                                                      m_help_just_disappeared(false) {
+        in_game_menu::in_game_menu(help &help_view, cli &cli_view)
+            : m_help_view(help_view), m_cli_view(cli_view), m_show_help(false), m_show_cli(false), m_help_just_disappeared(false) {
 
         }
 
         void in_game_menu::before() {
             m_help_view.before();
+            m_cli_view.before();
 
             // Make sure it's not shown
-            m_show = false;
+            m_show_help = m_show_cli = false;
 
             // Add callback on help show
             m_help_view.call_on_show_change([&](bool show) {
-                if (!m_show) {
+                if (!m_show_help) {
                     for (auto &callback : m_callbacks) {
                         callback(show);
                     }
@@ -57,6 +58,7 @@ namespace gui {
 
         void in_game_menu::on_display_change(engine::math::box2_t display_box) {
             m_help_view.on_display_change(display_box);
+            m_cli_view.on_display_change(display_box);
 
             // Create the menu icon box
             engine::graphics::box_builder builder1(m_help_view.m_top_bar.m_texture_manager.get_size("igm_icon"));
@@ -111,6 +113,7 @@ namespace gui {
 
         void in_game_menu::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
             m_help_view.draw(time_elapsed, display_box);
+            m_cli_view.draw(time_elapsed, display_box);
 
             // Draw the menu icon
             m_help_view.m_top_bar.m_texture_manager.draw("igm_icon", *m_menu_icon_box);
@@ -119,7 +122,7 @@ namespace gui {
             m_help_view.m_top_bar.m_texture_manager.draw("igm_question_mark", *m_question_mark_icon_box);
 
             // Draw the menu and overlay on show
-            if (m_show && !m_help_view.m_show) {
+            if (m_show_help && !m_help_view.m_show) {
                 m_help_view.m_top_bar.m_color_manager.draw({0, 0, 0, 180}, *m_help_view.m_overlay_box);
 
                 // Menu (wrapper)
@@ -149,7 +152,7 @@ namespace gui {
             auto *position = engine::input::input_handler::get_instance()->get_mouse_position();
 
             if (m_menu_icon_box->contains(*position)) {
-                change_show();
+                change_show_help();
 
                 if (m_help_view.m_show) {
                     m_help_view.m_show = false;
@@ -158,7 +161,7 @@ namespace gui {
                 m_help_view.toggle_show();
             }
 
-            if (m_show && !m_help_view.m_show && !m_help_just_disappeared) {
+            if (m_show_help && !m_help_view.m_show && !m_help_just_disappeared) {
                 if (m_quit_btn_box->contains(*position)) {
                     m_help_view.m_top_bar.m_menu_controller->show();
                 } else if (m_help_btn_box->contains(*position)) {
@@ -166,7 +169,7 @@ namespace gui {
                 } else if (m_save_btn_box->contains(*position)) {
                     m_main_map_controller->save();
                 } else if (m_cross_circle_box->contains(*position)) {
-                    change_show();
+                    change_show_help();
                 }
             }
 
@@ -175,23 +178,32 @@ namespace gui {
 
         void in_game_menu::on_event(engine::events::key_down &event) {
             if (!m_help_view.m_show && !m_help_just_disappeared && event.get_keycode() == engine::input::keycodes::keycode::ESCAPE) {
-                change_show();
+                change_show_help();
+            }
+
+            if (event.get_keycode() == engine::input::keycodes::keycode::GRAVE) {
+                m_cli_view.toggle_show();
             }
 
             m_help_just_disappeared = false;
         }
 
-        void in_game_menu::change_show() {
-            m_show = !m_show;
+        void in_game_menu::change_show_help() {
+            m_show_help = !m_show_help;
 
             // Call callbacks
             for (auto &callback : m_callbacks) {
-                callback(m_show);
+                callback(m_show_help);
             }
+        }
+
+        void in_game_menu::change_show_console() {
+            m_show_cli = !m_show_cli;
         }
 
         void in_game_menu::after() {
             m_help_view.after();
+            m_cli_view.after();
 
             // Unload textures
             m_help_view.m_top_bar.m_texture_manager.unload("igm_icon");

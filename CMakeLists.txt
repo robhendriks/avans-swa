@@ -169,6 +169,7 @@ set(SOURCES src/main.cpp
     src/domain/combat/defender.cpp
     src/domain/combat/defender.h
     src/gui/views/help.cpp src/gui/views/help.h
+    src/gui/views/cli.cpp src/gui/views/cli.h
     src/domain/combat/ai_controlled.cpp src/domain/combat/ai_controlled.h
     src/domain/mayor/mayor.cpp src/domain/mayor/mayor.h
     src/gui/views/reclame.cpp src/gui/views/reclame.h

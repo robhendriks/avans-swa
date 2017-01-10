@@ -57,7 +57,9 @@ namespace services {
             // Start on correct level
             json start_level = m_root["start_level"];
             if (start_level.is_number_unsigned()) {
-                for (int i = 1; i < start_level; i++) {
+                size_t level_idx = start_level.get<size_t>();
+
+                for (int i = 1; i < level_idx; i++) {
                     world->go_to_next_level();
                 }
             }
