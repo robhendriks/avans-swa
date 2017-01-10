@@ -8,28 +8,60 @@
 namespace gui {
     namespace views {
 
-        cli::cli(top_bar &top_bar1) : m_top_bar(top_bar1), m_show(false), m_font(nullptr), m_texture(nullptr) {}
+        cli_item::cli_item(std::string &text, SDL_Texture *texture, engine::math::vec2_t &size) : m_text(text), m_texture(texture), m_size(size) {}
+
+        std::string cli_item::get_text() const {
+            return m_text;
+        }
+
+        SDL_Texture *cli_item::get_texture() const {
+            return m_texture;
+        }
+
+        engine::math::vec2_t cli_item::get_size() const {
+            return m_size;
+        }
+
+        cli::cli(top_bar &top_bar1) : m_top_bar(top_bar1), m_show(false), m_input_font(nullptr), m_input_texture(nullptr), m_input_size(0, 0) {}
 
         void cli::before() {
             m_show = false;
 
-            m_font = m_top_bar.m_font_manager.get_font("roboto", 12);
+            m_input_font = m_top_bar.m_font_manager.get_font("roboto", 12);
+            m_input_height = TTF_FontHeight(m_input_font);
 
             auto &eventbus = engine::eventbus::eventbus::get_instance();
             eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>*>(this));
             eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::key_down>*>(this));
         }
 
-        void cli::on_display_change(engine::math::box2_t display_box) {
-            engine::graphics::box_builder builder1(engine::math::vec2_t{display_box.size().x, 128});
-            builder1.as_left_top(m_top_bar.m_bar_box->left_bottom());
-            m_box.reset(new engine::math::box2_t(builder1.build()));
-        }
+        void cli::on_display_change(engine::math::box2_t display_box) {}
 
         void cli::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
             if (m_show) {
-                m_top_bar.m_color_manager.draw({0, 0, 0, 128}, *m_box);
-                m_top_bar.m_texture_manager.draw(m_texture, *m_box);
+                size_t count = m_items.size() + 1;
+                size_t i = 0;
+
+                engine::graphics::box_builder builder(engine::math::vec2_t{display_box.size().x, static_cast<float>(count * m_input_height)});
+                builder.as_left_top(m_top_bar.m_bar_box->left_bottom());
+                m_box.reset(new engine::math::box2_t(builder.build()));
+
+                m_top_bar.m_color_manager.draw({0, 0, 0, 80}, *m_box);
+
+                engine::math::box2_t item_box{0, 0, 0, 0};
+
+                for (auto &item : m_items) {
+                    item_box.min = m_box->min + engine::math::vec2_t{0, static_cast<float>(i * m_input_height)};
+                    item_box.max = item_box.min + item.get_size();
+
+                    m_top_bar.m_texture_manager.draw(item.get_texture(), item_box);
+                    i++;
+                }
+
+                item_box.min = m_box->min + engine::math::vec2_t{0, static_cast<float>(i * m_input_height)};
+                item_box.max = item_box.min + m_input_size;
+
+                m_top_bar.m_texture_manager.draw(m_input_texture, item_box);
             }
         }
 
@@ -47,8 +79,9 @@ namespace gui {
             auto kc = event.get_keycode();
 
             if (kc == engine::input::keycodes::keycode::ESCAPE) {
-                toggle_show();
-            } else if (engine::input::keycodes::is_input_keycode(kc)) {
+                m_input = "";
+                input_changed();
+            } else if (engine::input::keycodes::is_input_keycode(kc) && m_input.size() < 100) {
                 char c = engine::input::keycodes::keycode_to_char(kc);
 
                 if (c != '\0') {
@@ -56,17 +89,24 @@ namespace gui {
                     input_changed();
                 }
             } else if (kc == engine::input::keycodes::BACKSPACE && m_input.size() > 0) {
-                m_input = m_input.substr(0, m_input.size() - 1);
-                input_changed();
+                input_backspace();
+            } else if (kc == engine::input::keycodes::ENTER) {
+                submit();
             }
         }
 
         void cli::after() {
-            SDL_DestroyTexture(m_texture);
-            TTF_CloseFont(m_font);
+            if (m_input_texture) {
+                SDL_DestroyTexture(m_input_texture);
+                m_input_texture = nullptr;
+            }
+            if (m_input_font) {
+                TTF_CloseFont(m_input_font);
+                m_input_font = nullptr;
+            }
 
-            m_texture = nullptr;
-            m_font = nullptr;
+            input_reset();
+            m_items.clear();
 
             auto &eventbus = engine::eventbus::eventbus::get_instance();
             eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>*>(this));
@@ -77,10 +117,63 @@ namespace gui {
             m_show = !m_show;
         }
 
-        void cli::input_changed() {
-            m_texture = m_top_bar.m_texture_manager.load_text(m_input, {255, 255, 255, 255}, *m_font, "cli_input");
+        SDL_Texture *cli::input_metrics(const std::string &text, engine::math::vec2_t &size) {
+            int w, h;
+            TTF_SizeText(m_input_font, text.c_str(), &w, &h);
 
-            SDL_Log("%s\n", m_input.c_str());
+            size.x = static_cast<float>(w);
+            size.y = static_cast<float>(h);
+
+            return m_top_bar.m_texture_manager.load_text(text, {200, 200, 200, 255}, *m_input_font, "cli_input");
+        }
+
+        void cli::input_changed() {
+            m_input_texture = input_metrics(m_input, m_input_size);
+        }
+
+        void cli::input_reset() {
+            m_input = "";
+            input_changed();
+        }
+
+        void cli::input_backspace() {
+            if (m_input.size() > 0) {
+                m_input = m_input.substr(0, m_input.size() - 1);
+                input_changed();
+            }
+        }
+
+        void cli::submit() {
+            if (m_items.size() >= 10) {
+                m_items.pop_front();
+            }
+
+            input_parse();
+
+            m_items.emplace_back(m_input, m_input_texture, m_input_size);
+            input_reset();
+        }
+
+        void cli::input_parse() {
+            auto line = m_input;
+            auto parts = utils::string_utils::tokenize(line, " ");
+
+            size_t i = 0;
+            for (auto part : parts) {
+                SDL_Log("%d -> %s\n", ++i, part.c_str());
+            }
+
+            message("Unknown command \"command\". Type \"help\" for help.");
+        }
+
+        void cli::message(std::string message) {
+            engine::math::vec2_t size{0, 0};
+            SDL_Texture *texture = input_metrics(message, size);
+
+            if (m_items.size() >= 10) {
+                m_items.pop_front();
+            }
+            m_items.emplace_back(message, texture, size);
         }
     }
 }

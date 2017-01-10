@@ -50,7 +50,7 @@ namespace engine {
             };
 
             inline bool is_numeric_keycode(const keycode &kc) {
-                return kc >= D0 && kc <= D9;
+                return (kc >= D0 && kc <= D9);
             }
 
             inline bool is_alpha_keycode(const keycode &kc) {
@@ -58,11 +58,11 @@ namespace engine {
             }
 
             inline bool is_alpha_numeric_keycode(const keycode &kc) {
-                return is_numeric_keycode(kc) && is_alpha_keycode(kc);
+                return is_numeric_keycode(kc) || is_alpha_keycode(kc);
             }
 
             inline bool is_input_keycode(const keycode &kc) {
-                return is_alpha_keycode(kc) || kc == SPACEBAR;
+                return is_alpha_numeric_keycode(kc) || kc == SPACEBAR;
             }
 
             inline char keycode_to_char(const keycode &kc) {
@@ -119,6 +119,8 @@ namespace engine {
                         return 'y';
                     case Z:
                         return 'z';
+                    case D0:
+                        return '0';
                     case D1:
                         return '1';
                     case D2:

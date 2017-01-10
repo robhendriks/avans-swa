@@ -5,6 +5,8 @@
 #ifndef CITY_DEFENCE_CLI_H
 #define CITY_DEFENCE_CLI_H
 
+#include <deque>
+
 #include "../../domain/drawable/draw_managers_wrapper.h"
 #include "base_view.h"
 #include "../../engine/input/mouse_buttons.h"
@@ -12,6 +14,7 @@
 #include "../../engine/events/key_down.h"
 #include "../../engine/input/input_handler.h"
 #include "top_bar.h"
+#include "../../utils/string_utils.h"
 
 namespace gui {
     namespace views {
@@ -21,6 +24,22 @@ namespace gui {
 
 namespace gui {
     namespace views {
+        class cli_item {
+        public:
+            cli_item(std::string &text, SDL_Texture *texture, engine::math::vec2_t &size);
+
+            std::string get_text() const;
+
+            SDL_Texture *get_texture() const;
+
+            engine::math::vec2_t get_size() const;
+
+        private:
+            std::string m_text;
+            SDL_Texture *m_texture;
+            engine::math::vec2_t m_size;
+        };
+
         class cli : public base_view,
                      engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>,
                      engine::eventbus::subscriber<engine::events::key_down> {
@@ -43,15 +62,30 @@ namespace gui {
             void on_event(engine::events::key_down &event);
 
         private:
+            SDL_Texture *input_metrics(const std::string &text, engine::math::vec2_t &size);
+
+            void input_reset();
+
+            void input_backspace();
+
             void input_changed();
 
-            TTF_Font *m_font;
-            SDL_Texture *m_texture;
+            void input_parse();
 
-            std::string m_input;
+            void submit();
+
+            void message(std::string message);
+
             top_bar &m_top_bar;
             bool m_show;
             std::unique_ptr<engine::math::box2_t> m_box;
+
+            std::string m_input;
+            TTF_Font *m_input_font;
+            int m_input_height;
+            SDL_Texture *m_input_texture;
+            engine::math::vec2_t m_input_size;
+            std::deque<cli_item> m_items;
         };
     }
 }
