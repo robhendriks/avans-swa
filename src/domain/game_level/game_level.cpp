@@ -155,7 +155,6 @@ namespace domain {
         }
 
         void game_level::set_enemies_in_lvl(std::vector<domain::nations::enemy*> enemies) {
-            SDL_Log(std::to_string(enemies.size()).c_str());
             m_enemies_in_lvl = enemies;
         }
 
