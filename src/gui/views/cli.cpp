@@ -10,6 +10,12 @@ namespace gui {
 
         cli_item::cli_item(std::string &text, SDL_Texture *texture, engine::math::vec2_t &size) : m_text(text), m_texture(texture), m_size(size) {}
 
+        cli_item::~cli_item() {
+            if (m_texture) {
+                SDL_DestroyTexture(m_texture);
+            }
+        }
+
         std::string cli_item::get_text() const {
             return m_text;
         }
@@ -115,6 +121,11 @@ namespace gui {
 
         void cli::toggle_show() {
             m_show = !m_show;
+
+            if (!m_show) {
+                m_items.clear();
+                input_reset();
+            }
         }
 
         SDL_Texture *cli::input_metrics(const std::string &text, engine::math::vec2_t &size) {
@@ -147,10 +158,9 @@ namespace gui {
             if (m_items.size() >= 10) {
                 m_items.pop_front();
             }
+            m_items.emplace_back(m_input, m_input_texture, m_input_size);
 
             input_parse();
-
-            m_items.emplace_back(m_input, m_input_texture, m_input_size);
             input_reset();
         }
 
@@ -158,12 +168,19 @@ namespace gui {
             auto line = m_input;
             auto parts = utils::string_utils::tokenize(line, " ");
 
-            size_t i = 0;
-            for (auto part : parts) {
-                SDL_Log("%d -> %s\n", ++i, part.c_str());
+            if (parts.size() == 0) {
+                message("Unknown command.");
+                return;
             }
 
-            message("Unknown command \"command\". Type \"help\" for help.");
+            std::string command = parts[0];
+            if (command == "foo") {
+                message("BIEM");
+            } else {
+                std::stringstream ss;
+                ss << "Unknown command \"" << command << "\".";
+                message(ss.str());
+            }
         }
 
         void cli::message(std::string message) {

@@ -28,6 +28,8 @@ namespace gui {
         public:
             cli_item(std::string &text, SDL_Texture *texture, engine::math::vec2_t &size);
 
+            ~cli_item();
+
             std::string get_text() const;
 
             SDL_Texture *get_texture() const;
