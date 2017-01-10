@@ -71,7 +71,7 @@ namespace domain {
 
             domain::game_level::game_level *get_game_level();
 
-            void set_game_level(domain::game_level::game_level *game_level);
+            void set_game_level(domain::game_level::game_level &game_level);
 
         private:
             engine::math::vec2_t index_to_position(unsigned int index) const;

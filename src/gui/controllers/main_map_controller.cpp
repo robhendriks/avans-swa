@@ -92,9 +92,15 @@ namespace gui {
                 }
             }
 
-            for (auto &dispose : disposed) {
-                m_model.world->get_current_level()->remove_enemy_in_lvl(*dispose);
-            }
+            // Remove disposed enemies from current_enemies
+            auto q = std::remove_if(current_enemies.begin(), current_enemies.end(), [](domain::nations::enemy *enemy) {
+                return enemy->is_disposed();
+            });
+            current_enemies.erase(q, current_enemies.end());
+
+//            for (auto &dispose : disposed) {
+//                m_model.world->get_current_level()->remove_enemy_in_lvl(*dispose);
+//            }
 
             auto fields = m_model.world->get_current_level()->get_map().get_fields();
 

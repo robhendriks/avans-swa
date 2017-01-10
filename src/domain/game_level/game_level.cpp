@@ -19,7 +19,7 @@ namespace domain {
 
             m_stats = new game_stats();
 
-            m_map.set_game_level(this);
+            m_map.set_game_level(*this);
 
             // Observe all fields, update the stats, add the drag and drop instance and make the empty fields dropable
             for (auto &field : m_map.get_fields()) {
@@ -155,6 +155,7 @@ namespace domain {
         }
 
         void game_level::set_enemies_in_lvl(std::vector<domain::nations::enemy*> enemies) {
+            SDL_Log(std::to_string(enemies.size()).c_str());
             m_enemies_in_lvl = enemies;
         }
 

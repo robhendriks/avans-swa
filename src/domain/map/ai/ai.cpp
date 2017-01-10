@@ -71,7 +71,7 @@ namespace domain {
                 m_unit = &unit;
 
                 // start pos if possible
-                if (m_map != nullptr){
+                if (m_map != nullptr) {
                     m_unit->set_box(m_current_field->get_box());
                 }
             }
