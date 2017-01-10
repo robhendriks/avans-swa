@@ -168,13 +168,31 @@ set(SOURCES src/main.cpp
     src/domain/combat/attacker.h
     src/domain/combat/defender.cpp
     src/domain/combat/defender.h
-    src/gui/views/help.cpp src/gui/views/help.h
-    src/gui/views/cli.cpp src/gui/views/cli.h
-    src/domain/combat/ai_controlled.cpp src/domain/combat/ai_controlled.h
-    src/domain/mayor/mayor.cpp src/domain/mayor/mayor.h
-    src/gui/views/reclame.cpp src/gui/views/reclame.h
-    src/domain/gameworld/highscore.cpp src/domain/gameworld/highscore.h src/data/json/highscore_json_repository.cpp src/data/json/highscore_json_repository.h
-    src/services/world_saver/base_world_saver.h src/services/world_saver/json_world_saver.cpp src/services/world_saver/json_world_saver.h src/gui/controllers/load_controller.cpp src/gui/controllers/load_controller.h src/gui/views/load.cpp src/gui/views/load.h src/data/json/save_games_json_repository.cpp src/data/json/save_games_json_repository.h src/gui/models/load_model.h)
+    src/gui/views/help.cpp
+    src/gui/views/help.h
+    src/gui/views/cli.cpp
+    src/gui/views/cli.h
+    src/domain/combat/ai_controlled.cpp
+    src/domain/combat/ai_controlled.h
+    src/domain/mayor/mayor.cpp
+    src/domain/mayor/mayor.h
+    src/gui/views/reclame.cpp
+    src/gui/views/reclame.h
+    src/domain/gameworld/highscore.cpp
+    src/domain/gameworld/highscore.h
+    src/data/json/highscore_json_repository.cpp
+    src/data/json/highscore_json_repository.h
+    src/services/world_saver/base_world_saver.h
+    src/services/world_saver/json_world_saver.cpp
+    src/services/world_saver/json_world_saver.h
+    src/gui/controllers/load_controller.cpp
+    src/gui/controllers/load_controller.h
+    src/gui/views/load.cpp src/gui/views/load.h
+    src/data/json/save_games_json_repository.cpp
+    src/data/json/save_games_json_repository.h
+    src/gui/models/load_model.h
+    src/utils/command_manager.h
+    src/utils/command_manager.cpp)
 
 include_directories(third_party/json/src
     third_party/di-cpp14/include

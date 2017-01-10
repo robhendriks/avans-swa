@@ -15,6 +15,7 @@
 #include "../../engine/input/input_handler.h"
 #include "top_bar.h"
 #include "../../utils/string_utils.h"
+#include "../../utils/command_manager.h"
 
 namespace gui {
     namespace views {
@@ -81,6 +82,7 @@ namespace gui {
             top_bar &m_top_bar;
             bool m_show;
             std::unique_ptr<engine::math::box2_t> m_box;
+            std::unique_ptr<utils::command_manager> m_command_manager;
 
             std::string m_input;
             TTF_Font *m_input_font;

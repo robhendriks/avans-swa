@@ -28,12 +28,25 @@ namespace gui {
             return m_size;
         }
 
-        cli::cli(top_bar &top_bar1) : m_top_bar(top_bar1), m_show(false), m_input_font(nullptr), m_input_texture(nullptr), m_input_size(0, 0) {}
+        cli::cli(top_bar &top_bar1)
+            : m_top_bar(top_bar1), m_show(false), m_input_font(nullptr), m_input_texture(nullptr), m_input_size(0, 0),
+                m_command_manager(new utils::command_manager) {
+
+            m_command_manager->add("foo", "foo <arg0> [arg1]", [](const utils::params &params) -> bool {
+                SDL_Log("Foo");
+                return false;
+            });
+
+            m_command_manager->add("bar", "bar <arg0>", [](const utils::params &params) -> bool {
+               SDL_Log("Bar");
+                return false;
+            });
+        }
 
         void cli::before() {
             m_show = false;
 
-            m_input_font = m_top_bar.m_font_manager.get_font("roboto", 12);
+            m_input_font = m_top_bar.m_font_manager.get_font("roboto", 14);
             m_input_height = TTF_FontHeight(m_input_font);
 
             auto &eventbus = engine::eventbus::eventbus::get_instance();
@@ -165,21 +178,10 @@ namespace gui {
         }
 
         void cli::input_parse() {
-            auto line = m_input;
-            auto parts = utils::string_utils::tokenize(line, " ");
-
-            if (parts.size() == 0) {
-                message("Unknown command.");
-                return;
-            }
-
-            std::string command = parts[0];
-            if (command == "foo") {
-                message("BIEM");
-            } else {
-                std::stringstream ss;
-                ss << "Unknown command \"" << command << "\".";
-                message(ss.str());
+            try {
+                m_command_manager->execute(utils::string_utils::tokenize(m_input, " "));
+            } catch (std::exception &e) {
+                message(std::string(e.what()));
             }
         }
 
