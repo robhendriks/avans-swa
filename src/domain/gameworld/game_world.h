@@ -22,14 +22,14 @@ namespace domain {
 
             std::vector<std::unique_ptr<lvl_id_and_game_stats>> const& get_stats_of_previous_lvls();
 
-            std::shared_ptr<mayor> get_mayor() const;
-            void set_mayor(const std::shared_ptr<mayor> mayor);
+            mayor * get_mayor() const;
+            void set_mayor(mayor * mayor);
             ~game_world();
 
         private:
             std::unique_ptr<game_level::game_level> m_level;
             std::vector<std::unique_ptr<lvl_id_and_game_stats>> m_all_stats;
-            std::shared_ptr<mayor> m_mayor;
+            mayor* m_mayor;
         };
     }
 }

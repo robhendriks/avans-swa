@@ -25,12 +25,13 @@ namespace gui {
         void level::before() {
             m_in_game_menu.before();
             m_goals_view.before();
-            m_mayor_view.before();
 
-            // Set mayor in mayor_view, but first init it
+            // Set mayor in mayor_view
             auto mayor = m_model.world->get_mayor();
-            mayor->init(m_model.world->get_current_level().get_stats().get());
             m_mayor_view.set_mayor(mayor);
+            mayor->init(m_model.world->get_current_level().get_stats().get());
+
+            m_mayor_view.before();
             m_mayor_view.set_current_response(mayor->get_fifo_milestone_response());
 
             // Add callback on menu show

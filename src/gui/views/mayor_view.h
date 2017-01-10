@@ -26,7 +26,7 @@ namespace gui {
 
             void after();
 
-            void set_mayor(std::shared_ptr<domain::mayor> _mayor);
+            void set_mayor(domain::mayor* _mayor);
 
             void set_current_response(const std::string &response);
 
@@ -36,7 +36,7 @@ namespace gui {
             void set_boxes(const engine::math::box2_t display_box);
 
             bool m_show;
-            std::shared_ptr<domain::mayor> m_mayor;
+            domain::mayor* m_mayor;
 
             std::unique_ptr<engine::math::box2_t> m_mayor_box;
             std::unique_ptr<engine::math::box2_t> m_mayor_text_box;

@@ -113,7 +113,7 @@ void gui::views::mayor_view::change_show() {
     m_show = !m_show;
 }
 
-void gui::views::mayor_view::set_mayor(std::shared_ptr<domain::mayor> _mayor) {
+void gui::views::mayor_view::set_mayor(domain::mayor* _mayor) {
     m_mayor = _mayor;
 }
 

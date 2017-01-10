@@ -30,14 +30,14 @@ namespace domain {
             return m_all_stats;
         }
 
-        std::shared_ptr<mayor> game_world::get_mayor() const {
+        mayor * game_world::get_mayor() const {
             return m_mayor;
         }
 
-        void game_world::set_mayor(const std::shared_ptr<mayor> _mayor) {
+        void game_world::set_mayor(mayor *_mayor) {
             if(_mayor == nullptr)
             {
-                mayor ravanna = mayor("Ravanna", {"Playing dictator"}, {"Aggresive", "Conquest orientated"});
+                mayor* ravanna = new mayor("Ravanna", {"Playing dictator"}, {"Aggresive", "Conquest orientated"});
                 milestone milestone1 = milestone();
                 milestone1.min = 4;
                 milestone1.max = 4;
@@ -46,7 +46,8 @@ namespace domain {
                 group1.display_name = "Buildings";
                 group1.counter_name = "buildings";
                 group1.milestones = {milestone1};
-                ravanna.add_milestone_group(group1);
+                ravanna->add_milestone_group(group1);
+                m_mayor = ravanna;
             }
             else{
                 m_mayor = _mayor;
