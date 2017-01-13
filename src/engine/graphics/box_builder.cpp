@@ -168,5 +168,14 @@ namespace engine {
         math::box2_t box_builder::build() {
             return m_box;
         }
+
+        /**
+         * Set box location
+         *
+         * @return
+         */
+        void box_builder::set_box(math::box2_t * box) {
+            m_box = *box;
+        }
     }
 }

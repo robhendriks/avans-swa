@@ -45,8 +45,8 @@ void gui::views::mayor_view::draw(unsigned int time_elapsed, engine::math::box2_
         m_current_display_time = time_elapsed - m_last_transition_time;
 
         if (m_current_display_time > m_max_display_time) {
-            builder.add_margin({-mayor_text_size.x - mayor_img_size.x, 0});
-            builder1.add_margin({-mayor_text_size.x - 100, 0});
+//            builder.add_margin({-mayor_text_size.x - mayor_img_size.x, 0});
+//            builder1.add_margin({-mayor_text_size.x - 100, 0});
 
             m_previous_state = m_state;
             m_state = animating;
@@ -63,33 +63,40 @@ void gui::views::mayor_view::draw(unsigned int time_elapsed, engine::math::box2_
         // % of total time
         double percentage = static_cast<double>(current_time_moved) / speed * 100;
 
+        //pointer to new location
+        engine::math::box2_t * new_box = nullptr;
+
         // if completely moved set state
         if (percentage >= 100) {
             if (m_previous_state == hidden) {
                 m_state = visible;
+                new_box = m_dest_box.get();
             } else {
                 m_state = hidden;
+                new_box = m_init_box.get();
             }
         } else {
+
             if (m_previous_state == hidden) {
-//                engine::math::vec2_t vec_min = {static_cast<float>(m_init_box->min.x - (speed * percentage)),
-//                                                static_cast<float>(0)};
-//                engine::math::vec2_t vec_max = {static_cast<float>(m_init_box->max.x - (speed * percentage)),
-//                                                static_cast<float>(0)};
-//
-//                // Pointer to new position of the box, draw on screen
-//                //std::unique_ptr<engine::math::box2_t> new_box = new engine::math::box2_t{vec_min, vec_max};
-//                // draw
+                engine::math::vec2_t vec_min = {static_cast<float>(m_init_box->min.x - (speed * percentage)),
+                                                static_cast<float>(0)};
+                engine::math::vec2_t vec_max = {static_cast<float>(m_init_box->max.x - (speed * percentage)),
+                                                static_cast<float>(0)};
+
+                // Pointer to new position of the box, draw on screen
+                new_box = new engine::math::box2_t{vec_min, vec_max};
             } else {
-//                engine::math::vec2_t vec_min = {static_cast<float>(m_init_box->min.x + (speed * percentage)),
-//                                                static_cast<float>(0)};
-//                engine::math::vec2_t vec_max = {static_cast<float>(m_init_box->max.x + (speed * percentage)),
-//                                                static_cast<float>(0)};
-//                // Pointer to new position of the box, draw on screen
-//                //std::unique_ptr<engine::math::box2_t> new_box = new engine::math::box2_t{vec_min, vec_max};
-//                // draw
+                engine::math::vec2_t vec_min = {static_cast<float>(m_dest_box->min.x + (speed * percentage)),
+                                                static_cast<float>(0)};
+                engine::math::vec2_t vec_max = {static_cast<float>(m_dest_box->max.x + (speed * percentage)),
+                                                static_cast<float>(0)};
+                // Pointer to new position of the box, draw on screen
+                new_box = new engine::math::box2_t{vec_min, vec_max};
+                // draw
             }
         }
+        builder.set_box(new_box);
+        builder1.set_box(new_box);
     } else {
         // go to hidden state
         // todo uitwerken
