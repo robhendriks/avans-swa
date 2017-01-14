@@ -132,17 +132,30 @@ namespace domain {
             return m_end_time - m_start_time + (m_played_time > 0 ? m_played_time : 0);
         }
 
-        void game_level::add_placeable_object(map::objects::dragable_field_object &obj) {
+        void game_level::add_placeable_object(map::objects::dragable_field_object &obj, int index) {
             // Add as dragable
             m_drag_and_drop.add_dragable(obj);
 
-            m_placeable_objects.push_back(&obj);
+            if (index < 0 || index >= m_placeable_objects.size()) {
+                m_placeable_objects.push_back(&obj);
+            } else {
+                m_placeable_objects.insert(m_placeable_objects.begin() + index, &obj);
+            }
         }
 
-        void game_level::remove_placeable_object(map::objects::dragable_field_object &obj) {
-            // Erase from vector
-            m_placeable_objects.erase(std::remove(m_placeable_objects.begin(), m_placeable_objects.end(), &obj),
-                                      m_placeable_objects.end());
+        int game_level::remove_placeable_object(map::objects::dragable_field_object &obj) {
+            // Find the object
+            auto found = std::find(m_placeable_objects.begin(), m_placeable_objects.end(), &obj);
+
+            if (found != m_placeable_objects.end()) {
+                int index = found - m_placeable_objects.begin();
+                // Remove from vector
+                m_placeable_objects.erase(found);
+
+                return index;
+            }
+
+            return -1;
         };
 
 
@@ -178,11 +191,11 @@ namespace domain {
 
                 if (object) {
                     // Remove from placeable_objects
-                    remove_placeable_object(*object);
+                    int index = remove_placeable_object(*object);
 
                     // Create a copy of the placed field
                     auto *copy = object->clone();
-                    add_placeable_object(*copy);
+                    add_placeable_object(*copy, index);
 
                     // Add the event if it is a building
                     auto *building = dynamic_cast<domain::map::objects::building*>(copy);

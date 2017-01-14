@@ -72,9 +72,9 @@ namespace domain {
 
             long get_max_duration() const;
 
-            void add_placeable_object(map::objects::dragable_field_object &obj);
+            void add_placeable_object(map::objects::dragable_field_object &obj, int index = -1);
 
-            void remove_placeable_object(map::objects::dragable_field_object &obj);
+            int remove_placeable_object(map::objects::dragable_field_object &obj);
 
             std::vector<map::objects::dragable_field_object *> get_placeable_objects() const;
 
