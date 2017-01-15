@@ -41,6 +41,8 @@ namespace gui {
             if (!m_model.next_lvl_exists || !m_model.result) {
                 m_texture_manager.load_text("Highscores", {255, 255, 255}, *m_font_manager.get_font("roboto", 25), "w_h_title");
 
+                m_texture_manager.load_text("Your score: " + std::to_string(m_model.score->get_score()), {0, 0, 0}, *m_font_manager.get_font("roboto", 30), "w_h_score");
+
                 // Load texts highscores
                 int counter = 0;
                 auto &font = *m_font_manager.get_font("roboto", 12);
@@ -49,8 +51,13 @@ namespace gui {
                         break;
                     }
 
+                    engine::graphics::color4_t color{0, 0, 0};
+                    if (highscore.get_time() == m_model.score->get_time()) {
+                        color.g = 255;
+                    }
+
                     std::string counter_string = std::to_string(counter + 1);
-                    m_texture_manager.load_text(counter_string + ".", {0, 0, 0}, font, "wh_n_" + counter_string);
+                    m_texture_manager.load_text(counter_string + ".", color, font, "wh_n_" + counter_string);
 
                     char buff[20];
                     time_t time = highscore.get_time();
@@ -61,8 +68,8 @@ namespace gui {
 //                                                    ":" + std::to_string(ltm->tm_sec), {0, 0, 0}, font,
 //                                                "wh_d_" + counter_string);
 
-                    m_texture_manager.load_text(buff, {0, 0, 0}, font, "wh_d_" + counter_string);
-                    m_texture_manager.load_text(std::to_string(highscore.get_score()), {0, 0, 0}, font,
+                    m_texture_manager.load_text(buff, color, font, "wh_d_" + counter_string);
+                    m_texture_manager.load_text(std::to_string(highscore.get_score()), color, font,
                                                 "wh_s_" + counter_string);
 
                     counter++;
@@ -137,12 +144,17 @@ namespace gui {
                 .center_horizontal(display_box.min.x, display_box.max.x);
             engine::math::box2_t highscores_wrapper_box = highscores_wrapper_box_builder.build();
 
+            engine::graphics::box_builder score_box_builder(m_texture_manager.get_size("w_h_score"));
+            score_box_builder.as_left_top(highscores_wrapper_box.left_top()).add_margin({0, 20})
+                .center_horizontal(display_box.min.x, display_box.max.x);
+            m_own_score_box.reset(new engine::math::box2_t(score_box_builder.build()));
+
             engine::graphics::box_builder highscore_title_box_builder(m_texture_manager.get_size("w_h_title"));
-            highscore_title_box_builder.as_left_top(highscores_wrapper_box.left_top())
-                .add_margin({0, 20}).center_horizontal(display_box.min.x, display_box.max.x);
+            highscore_title_box_builder.as_left_top(m_own_score_box->left_bottom())
+                .add_margin({0, 25}).center_horizontal(display_box.min.x, display_box.max.x);
             m_highscores_title_box.reset(new engine::math::box2_t(highscore_title_box_builder.build()));
 
-            highscores_wrapper_box_builder.as_left_top(m_highscores_title_box->left_bottom())
+            highscores_wrapper_box_builder.as_left_top(m_highscores_title_box->left_bottom()).add_margin({0, 5})
                 .center_horizontal(display_box.min.x, display_box.max.x);
             highscores_wrapper_box = highscores_wrapper_box_builder.build();
 
@@ -206,7 +218,7 @@ namespace gui {
 
             // Create the time header box
             engine::graphics::box_builder builder7(time_header_size);
-            builder7.as_left_top(wrapper_box.left_top());
+            builder7.as_right_top(wrapper_box.right_top());
             m_time_header_box.reset(new engine::math::box2_t(builder7.build()));
 
             // Create the time header text box
@@ -226,7 +238,7 @@ namespace gui {
 
             // Reposition the goals box
             engine::graphics::box_builder builder6(stats_header_size);
-            builder6.as_right_top(wrapper_box.right_top());
+            builder6.as_left_top(wrapper_box.left_top());
             m_goals_view.m_stats_header_box.reset(new engine::math::box2_t(builder6.build()));
         }
 
@@ -262,6 +274,10 @@ namespace gui {
                 // Draw the highscores
                 m_texture_manager.draw("w_h_title", *m_highscores_title_box);
 
+                // Draw the own score
+                m_texture_manager.draw("w_h_score", *m_own_score_box);
+
+                // Draw the top 5
                 int counter = 0;
                 for (auto &highscore : m_model.highscores) {
                     if (counter > 4) {
@@ -313,6 +329,8 @@ namespace gui {
 
             if (!m_model.next_lvl_exists || !m_model.result) {
                 m_texture_manager.unload("w_h_title");
+
+                m_texture_manager.unload("w_h_score");
 
                 // Unload texts highscores
                 int counter = 0;

@@ -92,6 +92,28 @@ namespace services {
                 j["played_time"] = level.get_duration();
             } else if (level.get_state() == domain::game_level::PLAYING) {
                 j["played_time"] = level.get_played_time();
+
+                // Add the nation
+                j["nation"] = level.get_enemy_nation().get_name();
+                j["enemies"] = {};
+
+                // Add the enemies
+                for (auto &enemy : level.get_enemies_in_lvl()) {
+                    auto box = enemy->get_box();
+
+                    j["enemies"].push_back({{"name", enemy->get_name()}, {"min_damage", enemy->get_min_damage()},
+                                            {"max_damage", enemy->get_max_damage()},
+                                            {"attacks_per_second", enemy->get_attack_speed()},
+                                            {"hitpoints", enemy->get_current_hp()},
+                                            {"granted_xp", enemy->get_granted_xp()},
+                                            {"range", enemy->get_range()}, {"movement", enemy->get_movement()},
+                                            {"boss", enemy->is_boss()},
+                                            {"oppertunity_costs", enemy->get_oppertunity_cost()},
+                                            {"field_x", enemy->get_current_field()->get_position().x},
+                                            {"field_y", enemy->get_current_field()->get_position().y},
+                                            {"min_x", box.min.x}, {"min_y", box.min.y},
+                                            {"max_x", box.max.x}, {"max_y", box.max.y}});
+                }
             }
 
             // Add the goals

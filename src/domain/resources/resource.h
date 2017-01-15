@@ -20,6 +20,8 @@ namespace domain {
 
             int get_count() const;
 
+            void set_previous_count(int amount);
+
             int get_previous_count() const;
 
             //Check if amount of resources exceeds the required amount.

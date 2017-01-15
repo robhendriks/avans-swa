@@ -33,7 +33,7 @@ namespace domain {
 
                 std::vector<domain::resources::resource*> get_required_resources();
 
-                void update_game_stats(domain::game_level::game_stats &game_stats1, std::string action);
+                virtual void update_game_stats(domain::game_level::game_stats &game_stats1, std::string action);
 
                 virtual void update(domain::game_level::game_level &game_level);
 

@@ -4,6 +4,7 @@
 
 #include "main_map_controller.h"
 #include "../../domain/gameworld/highscore.h"
+#include "../../domain/map/objects/road.h"
 
 namespace gui {
     namespace controllers {
@@ -77,23 +78,31 @@ namespace gui {
         // this needs to be handled by eventbus
         void main_map_controller::update() {
 
+            // Update the enemies
             auto current_enemies = m_model.world->get_current_level()->get_enemies_in_lvl();
             for (auto &enemy : m_wave_management_service.get_enemies(m_engine.get_time_elapsed())) {
                 current_enemies.push_back(enemy);
             }
 
-            std::vector<domain::nations::enemy*> disposed;
-
             for (auto &enemy : current_enemies) {
                 enemy->update(m_engine.get_time_elapsed());
-                if (enemy->is_disposed()) {
-                    disposed.push_back(enemy);
-                }
             }
 
-            for (auto &dispose : disposed) {
-                m_model.world->get_current_level()->remove_enemy_in_lvl(*dispose);
+            // Remove disposed enemies from current_enemies
+            auto q = std::remove_if(current_enemies.begin(), current_enemies.end(), [](domain::nations::enemy *enemy) {
+                return enemy->is_disposed();
+            });
+
+            // Update the enemies stats
+            for (auto it = q; it != current_enemies.end(); it++) {
+                m_model.world->get_current_level()->get_stats().increase("enemies defeated");
             }
+
+            current_enemies.erase(q, current_enemies.end());
+
+//            for (auto &dispose : disposed) {
+//                m_model.world->get_current_level()->remove_enemy_in_lvl(*dispose);
+//            }
 
             auto fields = m_model.world->get_current_level()->get_map().get_fields();
 
@@ -194,6 +203,14 @@ namespace gui {
             m_wave_management_service.set_spawn_bosses(lvl.get_spawn_bosses());
             m_wave_management_service.set_spawnable_nation(lvl.get_enemy_nation());
             m_wave_management_service.get_wave_generator().get_ai().set_map(lvl.get_map());
+
+            // Set ai for enemies
+            for (auto &e : lvl.get_enemies_in_lvl()) {
+                engine::math::box2_t box_copy = e->get_box();
+                e->set_ai(*m_wave_management_service.get_wave_generator().get_ai().clone());
+                e->set_box(box_copy);
+                e->get_ai()->set_current_field(*e->get_current_field());
+            }
         }
     }
 }

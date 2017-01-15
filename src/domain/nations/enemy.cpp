@@ -16,6 +16,7 @@ namespace domain {
             m_name = other.m_name;
             m_oppertunity_cost = other.m_oppertunity_cost;
             m_boss = other.m_boss;
+            m_disposed = false;
         }
 
         void enemy::dispose() {

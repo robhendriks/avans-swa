@@ -59,6 +59,7 @@ namespace gui {
             std::unique_ptr<engine::math::box2_t> m_continue_slider_box;
             std::unique_ptr<engine::graphics::moveable_box> m_moveable_slider_box;
             std::unique_ptr<engine::math::box2_t> m_highscores_title_box;
+            std::unique_ptr<engine::math::box2_t> m_own_score_box;
             std::vector<std::tuple<std::unique_ptr<engine::math::box2_t>, std::unique_ptr<engine::math::box2_t>, std::unique_ptr<engine::math::box2_t>>> m_highscore_boxes;
         };
     }

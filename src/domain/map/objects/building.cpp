@@ -65,8 +65,10 @@ namespace domain {
             void building::update_game_stats(domain::game_level::game_stats &game_stats1, std::string action) {
                 if (action == "object-placed") {
                     game_stats1.increase("buildings");
+                    game_stats1.increase(name);
                 } else if (action == "object-destroyed") {
                     game_stats1.decrease("buildings");
+                    game_stats1.decrease(name);
                 }
             }
 

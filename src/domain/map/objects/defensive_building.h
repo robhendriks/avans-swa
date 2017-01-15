@@ -26,6 +26,9 @@ namespace domain {
                 void draw(drawable::draw_managers_wrapper &draw_managers, unsigned int time_elapsed);
 
                 void update(domain::game_level::game_level &game_level, unsigned int elapsed_time);
+
+                virtual void update_game_stats(domain::game_level::game_stats &game_stats1, std::string action);
+
             };
 
         }

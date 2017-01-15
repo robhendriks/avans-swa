@@ -11,11 +11,12 @@ namespace gui {
     namespace models {
         struct transition_level_model {
         public:
-            transition_level_model() {};
+            transition_level_model() : score(nullptr) {};
             bool result;
             bool next_lvl_exists;
             int duration;
 
+            domain::gameworld::highscore *score;
             std::vector<domain::gameworld::highscore> highscores;
 
             void set_highscores(std::vector<domain::gameworld::highscore*> highscores1) {
@@ -24,6 +25,9 @@ namespace gui {
                 for (auto &h : highscores1) {
                     highscores.push_back(*h);
                 }
+
+                // The last added is the current score
+                score = highscores1.back();
 
                 std::sort(highscores.begin(), highscores.end());
                 std::reverse(highscores.begin(), highscores.end());
@@ -36,6 +40,7 @@ namespace gui {
 
                 highscores_ptrs.clear();
                 highscores.clear();
+                score = nullptr;
             }
 
             ~transition_level_model() {

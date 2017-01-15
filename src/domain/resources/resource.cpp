@@ -16,8 +16,11 @@ namespace domain {
         }
 
         void resource::set_count(int count) {
-            m_previous_count = _count;
             _count = count;
+        }
+
+        void resource::set_previous_count(int amount) {
+            m_previous_count = amount;
         }
 
         int resource::get_previous_count() const {
@@ -34,14 +37,12 @@ namespace domain {
 
         void resource::decrement_resource(int amount) {
             if (!max_out) {
-                m_previous_count = _count;
                 _count = _count - amount;
             }
         }
 
         void resource::increment_resource(int amount) {
             if (!max_out) {
-                m_previous_count = _count;
                 _count = _count + amount;
             }
         }

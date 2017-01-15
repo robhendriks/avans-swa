@@ -320,8 +320,8 @@ namespace domain {
             return m_game_level;
         }
 
-        void map::set_game_level(domain::game_level::game_level* game_level) {
-            m_game_level = game_level;
+        void map::set_game_level(domain::game_level::game_level &game_level) {
+            m_game_level = &game_level;
         }
 
     }
