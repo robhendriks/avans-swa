@@ -134,6 +134,8 @@ namespace domain {
 
             void check_goals_reached();
 
+            void update_game_resources_stats();
+
             int m_id = 0;
 
             std::map<std::string, bool> m_reached_goals;

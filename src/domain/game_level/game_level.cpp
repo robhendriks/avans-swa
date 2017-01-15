@@ -297,6 +297,9 @@ namespace domain {
             clean_resources();
 
             m_resources = resources;
+
+            // Update the resources stats
+            update_game_resources_stats();
         }
 
         void game_level::update(bool no_resources) {
@@ -305,7 +308,7 @@ namespace domain {
                 std::vector<domain::resources::resource*> building_requirement = dynamic_cast<domain::map::objects::building *>(m_placeable_objects[i])->get_required_resources();
                 bool meets_requirement = true;
                 for (unsigned int j = 0; j < building_requirement.size(); j++) {
-                    for (auto resource_bank : m_resources) {
+                    for (auto &resource_bank : m_resources) {
                         if (resource_bank->get_resource_type() == building_requirement[j]->get_resource_type()) {
 
                             meets_requirement = resource_bank->check_resource(building_requirement[j]->get_count());
@@ -327,16 +330,36 @@ namespace domain {
                     }
                 }
             }
+
             if (no_resources) return;
+
+            // Set previous resource counts
+            for (auto &resource : m_resources) {
+                resource->set_previous_count(resource->get_count());
+            }
+
+            // Update the resources
             m_map.update_objects(this);
+
+            // Update the gamestats resources
+            update_game_resources_stats();
+        }
+
+        void game_level::update_game_resources_stats() {
+            for (auto &resource : m_resources) {
+                m_stats->set_counter(resource->get_resource_type(), resource->get_count());
+            }
+
+            // Check goals reached
+            check_goals_reached();
         }
 
         void game_level::decrement_building_cost(engine::draganddrop::dragable &building) {
 
             //Decrement the resources the buildings needs.
             std::vector<domain::resources::resource*> resources_to_decrement = dynamic_cast<domain::map::objects::building *>(&building)->get_required_resources();
-            for (auto resource_to_decrement : resources_to_decrement) {
-                for (auto resource_bank : m_resources) {
+            for (auto &resource_to_decrement : resources_to_decrement) {
+                for (auto &resource_bank : m_resources) {
                     if (resource_bank->get_resource_type() == resource_to_decrement->get_resource_type()) {
                         resource_bank->decrement_resource(resource_to_decrement->get_count());
                         break;
@@ -346,6 +369,8 @@ namespace domain {
 
             //Calls update an additional time apart form the main cycle so resources are updates instantly after placeing building.
             update(true);
+
+            update_game_resources_stats();
         }
 
         long game_level::get_max_duration() const {
@@ -377,11 +402,14 @@ namespace domain {
         }
 
         void game_level::execute_cheat(){
-            m_has_cheated =true;
-            for(auto resource_bank : m_resources){
+            m_has_cheated = true;
+            for(auto &resource_bank : m_resources) {
                 resource_bank->max_out_resource();
             }
+
             update(true);
+
+            update_game_resources_stats();
         }
 
         void game_level::clean_resources() {

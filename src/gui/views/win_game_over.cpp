@@ -218,7 +218,7 @@ namespace gui {
 
             // Create the time header box
             engine::graphics::box_builder builder7(time_header_size);
-            builder7.as_left_top(wrapper_box.left_top());
+            builder7.as_right_top(wrapper_box.right_top());
             m_time_header_box.reset(new engine::math::box2_t(builder7.build()));
 
             // Create the time header text box
@@ -238,7 +238,7 @@ namespace gui {
 
             // Reposition the goals box
             engine::graphics::box_builder builder6(stats_header_size);
-            builder6.as_right_top(wrapper_box.right_top());
+            builder6.as_left_top(wrapper_box.left_top());
             m_goals_view.m_stats_header_box.reset(new engine::math::box2_t(builder6.build()));
         }
 

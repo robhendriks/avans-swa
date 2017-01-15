@@ -78,24 +78,26 @@ namespace gui {
         // this needs to be handled by eventbus
         void main_map_controller::update() {
 
+            // Update the enemies
             auto current_enemies = m_model.world->get_current_level()->get_enemies_in_lvl();
             for (auto &enemy : m_wave_management_service.get_enemies(m_engine.get_time_elapsed())) {
                 current_enemies.push_back(enemy);
             }
 
-            std::vector<domain::nations::enemy*> disposed;
-
             for (auto &enemy : current_enemies) {
                 enemy->update(m_engine.get_time_elapsed());
-                if (enemy->is_disposed()) {
-                    disposed.push_back(enemy);
-                }
             }
 
             // Remove disposed enemies from current_enemies
             auto q = std::remove_if(current_enemies.begin(), current_enemies.end(), [](domain::nations::enemy *enemy) {
                 return enemy->is_disposed();
             });
+
+            // Update the enemies stats
+            for (auto it = q; it != current_enemies.end(); it++) {
+                m_model.world->get_current_level()->get_stats().increase("enemies defeated");
+            }
+
             current_enemies.erase(q, current_enemies.end());
 
 //            for (auto &dispose : disposed) {

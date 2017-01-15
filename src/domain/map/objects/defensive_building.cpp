@@ -42,9 +42,25 @@ namespace domain {
                     // Show damage
                     auto &font = *draw_managers.font_manager.get_font("roboto", 12);
 
+                    // Show name
+                    float min_left_width = 50;
+                    draw_managers.texture_manager.load_text(name, {0, 0, 0}, font, "e_p_name");
+                    engine::graphics::box_builder builder2(draw_managers.texture_manager.get_size("e_p_name"));
+                    builder2.as_right_bottom(get_box().left_top()).add_margin({0, 0});
+                    auto name_box = builder2.build();
+
+                    if (name_box.width() < min_left_width) {
+                        builder2.add_margin({(min_left_width - name_box.width()) * -1, 0});
+                        name_box = builder2.build();
+                    }
+
+                    draw_managers.texture_manager.draw("e_p_name", name_box);
+                    draw_managers.texture_manager.unload("e_p_name");
+
+                    // Show damage
                     draw_managers.texture_manager.load_text("Damage:", {0, 0, 0}, font, "d_d_title");
                     engine::graphics::box_builder builder(draw_managers.texture_manager.get_size("d_d_title"));
-                    builder.as_right_bottom(get_box().left_top());
+                    builder.as_left_top(name_box.left_bottom());
                     auto title_box = builder.build();
                     draw_managers.texture_manager.draw("d_d_title", title_box);
                     draw_managers.texture_manager.unload("d_d_title");
@@ -81,6 +97,17 @@ namespace domain {
                         auto red_box = red_builder.build();
                         draw_managers.color_manager.draw({127, 0, 0}, red_box);
                     }
+                }
+            }
+
+            void
+            defensive_building::update_game_stats(domain::game_level::game_stats &game_stats1, std::string action) {
+                building::update_game_stats(game_stats1, action);
+
+                if (action == "object-placed") {
+                    game_stats1.increase("defensive buildings");
+                } else if (action == "object-destroyed") {
+                    game_stats1.decrease("defensive buildings");
                 }
             }
         }

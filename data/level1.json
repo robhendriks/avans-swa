@@ -5,7 +5,23 @@
   "goals": [
     {
       "type" : "buildings",
-      "number" : 5
+      "number" : 7
+    },
+    {
+      "type" : "defensive buildings",
+      "number" : 2
+    },
+    {
+      "type" : "Silicium Factory",
+      "number" : 2
+    },
+    {
+      "type" : "wood",
+      "number" : 450
+    },
+    {
+      "type" : "enemies defeated",
+      "number" : 4
     }
   ],
   "resources" : [
