@@ -103,7 +103,7 @@ namespace services {
                                 domain::nations::enemy(enemy_name, enemey_min_damage, enemey_max_damage, 1000,
                                                        enemey_hitpoints, 100, 1, enemey_movement_speed, boss,
                                                        *current_nation, enemey_oppertunity_cost);
-                        curren_enemy->set_draw_settings("images/Fisher.png");
+                        curren_enemy->set_draw_settings("images/" + current_nation->get_name() + ".png");
                         curren_enemy->set_max_row(8);
                         curren_enemy->set_max_column(3);
                         pre_vec_enemies.push_back(curren_enemy);
@@ -413,7 +413,7 @@ namespace services {
                             enemy["boss"], *level_nation, enemy["oppertunity_costs"]);
 
                         new_enemy->set_box({{enemy["min_x"], enemy["min_y"]}, {enemy["max_x"], enemy["max_y"]}});
-                        new_enemy->set_draw_settings("images/Fisher.png");
+                        new_enemy->set_draw_settings("images/" + level_nation->get_name() + ".png");
                         new_enemy->set_max_row(8);
                         new_enemy->set_max_column(3);
                         new_enemy->set_current_field(*game_level->get_map().get_field({enemy["field_x"], enemy["field_y"]}));
