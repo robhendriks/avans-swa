@@ -1,24 +1,24 @@
 {
   "width": 16,
   "height": 16,
-  "time": 300000,
-  "nation": "the-demons",
+  "time": 240000,
+  "nation": "the-fisherman",
   "goals": [
     {
-      "type" : "defensive buildings",
-      "number" : 8
+      "type" : "buildings",
+      "number" : 12
     },
     {
-      "type" : "Skyscraper",
+      "type" : "defensive buildings",
       "number" : 6
     },
     {
-      "type" : "gold",
-      "number" : 1100
+      "type" : "Nuclear Reactor",
+      "number" : 1
     },
     {
-      "type" : "enemies defeated",
-      "number" : 40
+      "type" : "uranium",
+      "number" : 50
     }
   ],
   "resources" : [
@@ -32,15 +32,15 @@
     },
     {
       "type" : "ore",
-      "amount" : 100
+      "amount" : 250
     },
     {
       "type" : "silicium",
-      "amount" : 10
+      "amount" : 0
     },
     {
       "type" : "uranium",
-      "amount" : 300
+      "amount" : 0
     }
   ],
   "tiles": {

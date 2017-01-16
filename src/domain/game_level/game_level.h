@@ -162,15 +162,17 @@ namespace domain {
             // interval between waves
             long m_waves_interval = 30000;
             //(base size of the wave)
-            double m_base_wave_opportunity = 10;
+            double m_base_wave_opportunity = 5;
             //(size increase from wave to wave)
-            double m_wave_opportunity_increase = 0;
+
+            double m_wave_opportunity_increase = 5;
+
             // the time range in ms where all units of a single wave spawns. 1000 = all units of a wave spawn in a range of 1 sec
-            long m_wave_spawn_time_range = 3000;
+            long m_wave_spawn_time_range = 25000;
             // nation where enemies get spawned from
             domain::nations::nation &m_enemy;
             // spawn boss units
-            bool m_spawn_bosses = true;
+            bool m_spawn_bosses = false;
 
             bool m_paused;
 

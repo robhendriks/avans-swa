@@ -4,6 +4,7 @@
 
 #include "reclame.h"
 #include "../../engine/graphics/box_builder.h"
+#include "time.h"
 
 namespace gui {
     namespace views {
@@ -79,7 +80,8 @@ namespace gui {
                 if (m_help_view.m_help_loaded) {
 
                     // Load the texture
-                    int random_reclame = rand() % 9 + 1;
+                    srand(time(NULL));
+                    int random_reclame = rand() % 11 + 1;
                     std::string random_image_result;
                     random_image_result = "images/reclame" + std::to_string(random_reclame) + ".png";
                     //set random img

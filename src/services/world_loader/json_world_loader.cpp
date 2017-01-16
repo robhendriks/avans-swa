@@ -103,7 +103,7 @@ namespace services {
                                 domain::nations::enemy(enemy_name, enemey_min_damage, enemey_max_damage, 1000,
                                                        enemey_hitpoints, 100, 1, enemey_movement_speed, boss,
                                                        *current_nation, enemey_oppertunity_cost);
-                        curren_enemy->set_draw_settings("images/" + current_nation->get_name() + ".png");
+                        curren_enemy->set_draw_settings("images/" + enemy_name + ".png");
                         curren_enemy->set_max_row(8);
                         curren_enemy->set_max_column(3);
                         pre_vec_enemies.push_back(curren_enemy);
@@ -142,9 +142,6 @@ namespace services {
             for (json &elem : data) {
                 int x = elem["x"];
                 int y = elem["y"];
-                int type = elem["type"];
-
-                SDL_Log("%d %d %d", x, y, type);
 
                 // Create the field, note that the field will automatically be added to the map
                 auto *field = new domain::map::field(map1, {(float) x, (float) y});
@@ -269,12 +266,12 @@ namespace services {
                             //type 2 = dmg building
 
                             if (type == 2) {
-                                if (building_property_item.key() == "min-damage") {
-                                    min_dmg = static_cast<int>(building_property_item.value());
-                                } else if (building_property_item.key() == "max-damage") {
-                                    max_dmg = static_cast<int>(building_property_item.value());
-                                } else if (building_property_item.key() == "range") {
-                                    range = static_cast<int>(building_property_item.value());
+                                if (current_prop.key() == "min-damage") {
+                                    min_dmg = static_cast<int>(current_prop.value());
+                                } else if (current_prop.key() == "max-damage") {
+                                    max_dmg = static_cast<int>(current_prop.value());
+                                } else if (current_prop.key() == "range") {
+                                    range = static_cast<int>(current_prop.value());
                                 }
                             } else {
                                 output_sources = new domain::resources::resource(building_property_item.key(),
@@ -412,8 +409,9 @@ namespace services {
                             enemy["hitpoints"], enemy["granted_xp"], enemy["range"], enemy["movement"],
                             enemy["boss"], *level_nation, enemy["oppertunity_costs"]);
 
+                        std::string enemy_name = enemy["name"];
                         new_enemy->set_box({{enemy["min_x"], enemy["min_y"]}, {enemy["max_x"], enemy["max_y"]}});
-                        new_enemy->set_draw_settings("images/" + level_nation->get_name() + ".png");
+                        new_enemy->set_draw_settings("images/" + enemy_name + ".png");
                         new_enemy->set_max_row(8);
                         new_enemy->set_max_column(3);
                         new_enemy->set_current_field(*game_level->get_map().get_field({enemy["field_x"], enemy["field_y"]}));
