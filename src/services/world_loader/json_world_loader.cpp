@@ -142,9 +142,6 @@ namespace services {
             for (json &elem : data) {
                 int x = elem["x"];
                 int y = elem["y"];
-                int type = elem["type"];
-
-                SDL_Log("%d %d %d", x, y, type);
 
                 // Create the field, note that the field will automatically be added to the map
                 auto *field = new domain::map::field(map1, {(float) x, (float) y});
