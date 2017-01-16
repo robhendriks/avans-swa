@@ -46,7 +46,7 @@ namespace domain {
                     float min_left_width = 50;
                     draw_managers.texture_manager.load_text(name, {0, 0, 0}, font, "e_p_name");
                     engine::graphics::box_builder builder2(draw_managers.texture_manager.get_size("e_p_name"));
-                    builder2.as_right_bottom(get_box().left_top()).add_margin({0, 0});
+                    builder2.as_right_bottom(get_box().left_top()).add_margin({0, -17});
                     auto name_box = builder2.build();
 
                     if (name_box.width() < min_left_width) {
