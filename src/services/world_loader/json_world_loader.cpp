@@ -266,12 +266,12 @@ namespace services {
                             //type 2 = dmg building
 
                             if (type == 2) {
-                                if (building_property_item.key() == "min-damage") {
-                                    min_dmg = static_cast<int>(building_property_item.value());
-                                } else if (building_property_item.key() == "max-damage") {
-                                    max_dmg = static_cast<int>(building_property_item.value());
-                                } else if (building_property_item.key() == "range") {
-                                    range = static_cast<int>(building_property_item.value());
+                                if (current_prop.key() == "min-damage") {
+                                    min_dmg = static_cast<int>(current_prop.value());
+                                } else if (current_prop.key() == "max-damage") {
+                                    max_dmg = static_cast<int>(current_prop.value());
+                                } else if (current_prop.key() == "range") {
+                                    range = static_cast<int>(current_prop.value());
                                 }
                             } else {
                                 output_sources = new domain::resources::resource(building_property_item.key(),
