@@ -23,7 +23,7 @@ namespace domain {
                                                    int min_damage,
                                                    int max_damage)
                 : building(box, id, hitpoints, health_ragen, name, required_resources),
-                  attacker(min_damage, max_damage, 2.0, range, 0) {}
+                  attacker(min_damage, max_damage, 1000, range, 0) {}
 
             void defensive_building::update(domain::game_level::game_level &game_level, unsigned int elapsed_time) {
                 if(get_ai()){
