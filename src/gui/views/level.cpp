@@ -12,14 +12,15 @@
 namespace gui {
     namespace views {
 
-        level::level(in_game_menu &in_game_menu1, level_goals &goals_view, engine::audio::music_manager &music_manager,
+        level::level(in_game_menu &in_game_menu1, level_goals &goals_view, mayor_view &mayor_view1, engine::audio::music_manager &music_manager,
                      models::main_map_model &model, engine::audio::sound_manager &sound_manager)
-            : m_in_game_menu(in_game_menu1), m_goals_view(goals_view), m_music_manager(music_manager),
+            : m_in_game_menu(in_game_menu1), m_goals_view(goals_view), m_mayor_view(mayor_view1), m_music_manager(music_manager),
               m_model(model), m_sound_manager(sound_manager),
               m_texture_manager(m_in_game_menu.m_help_view.m_top_bar.m_texture_manager),
               m_color_manager(m_in_game_menu.m_help_view.m_top_bar.m_color_manager),
               m_font_manager(m_in_game_menu.m_help_view.m_top_bar.m_font_manager),
               m_current_page(1), m_speed_factor(1), x_margin_placeable_objects(200) {
+
         }
 
         void level::before() {
@@ -29,6 +30,15 @@ namespace gui {
             m_current_page = 1;
             m_speed_factor = 1;
             x_margin_placeable_objects = 200;
+
+            // Set mayor in mayor_view
+            auto mayor = m_model.world->get_mayor();
+            mayor->get_behavior();
+            m_mayor_view.set_mayor(mayor);
+            mayor->init(&m_model.world->get_current_level()->get_stats());
+
+            m_mayor_view.before();
+            m_mayor_view.set_current_response(mayor->get_fifo_milestone_response());
 
             // Add callback on menu show
             m_in_game_menu.call_on_show_change([&](bool show) {
@@ -90,6 +100,7 @@ namespace gui {
         void level::on_display_change(engine::math::box2_t display_box) {
             m_in_game_menu.on_display_change(display_box);
             m_goals_view.on_display_change(display_box);
+            m_mayor_view.on_display_change(display_box);
 
             // Create the box for the placeable objects
             float height = 128;
@@ -120,7 +131,6 @@ namespace gui {
             if (m_current_page > m_pages) {
                 m_current_page = m_pages;
             }
-
 
             // Set the draw boxes for the placeable objects
             update_placeable_objects_page();
@@ -251,6 +261,9 @@ namespace gui {
             // Draw the map
             current_level->get_map().draw(m_in_game_menu.m_help_view.m_top_bar.m_draw_managers, time_elapsed);
 
+            // Draw the mayor_view
+            m_mayor_view.draw(time_elapsed, display_box);
+
             // Draw the arrows
             float left_arrow_y = (m_current_page == 1 ? 128 : 0);
             m_texture_manager.draw("arrows", {0, left_arrow_y}, *m_arrow_left_box);
@@ -327,32 +340,10 @@ namespace gui {
                 m_texture_manager.unload("l_countdown");
             }
 
-            //std::map<domain::map::field*, unsigned int> fields;
-
             // Draw enemies
             for (auto &enemy : current_level->get_enemies_in_lvl()) {
                 enemy->draw(m_in_game_menu.m_help_view.m_top_bar.m_draw_managers, time_elapsed);
-
-//                if (enemy->get_current_field() == nullptr) continue;
-
-//                if (fields.find(enemy->get_current_field()) != fields.end()) {
-//                    fields[enemy->get_current_field()]++;
-//                } else {
-//                    fields.insert(std::make_pair<domain::map::field*, unsigned int>(enemy->get_current_field(), 1));
-//                }
             }
-
-//            // Draw enemy count
-//            auto font = m_font_manager.get_font("roboto", 32);
-//
-//            if (!fields.empty()) {
-//                auto it = fields.begin();
-//                for (; it != fields.end(); ++it) {
-//                    m_texture_manager.load_text(std::to_string(it->second), {255, 255, 255}, *font, "enemy_count");
-//                    //m_texture_manager.draw("enemy_count", {0, 0}, it->first->get_box());
-//                    m_texture_manager.unload("enemy_count");
-//                }
-//            }
 
             // Draw overflow on pause
             if (m_model.paused && !m_in_game_menu.m_show && !m_in_game_menu.m_help_view.m_show) {
@@ -468,6 +459,7 @@ namespace gui {
         void level::after() {
             m_in_game_menu.after();
             m_goals_view.after();
+            m_mayor_view.after();
 
             m_texture_manager.unload("background-game");
 

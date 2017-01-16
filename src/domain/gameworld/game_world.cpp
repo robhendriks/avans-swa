@@ -6,7 +6,9 @@ namespace domain {
     namespace gameworld{
 
         game_world::game_world(std::vector<game_level::game_level*> game_levels) :
-            m_levels(game_levels), m_current_level(-1) {}
+            m_levels(game_levels), m_current_level(-1) {
+            set_mayor(nullptr);
+        }
 
         game_world::~game_world() {
             // Remove all levels
@@ -60,6 +62,31 @@ namespace domain {
 
         std::vector<game_level::game_level *> game_world::get_levels() const {
             return m_levels;
+        }
+
+        mayor * game_world::get_mayor() const {
+            return m_mayor;
+        }
+
+        void game_world::set_mayor(mayor *_mayor) {
+            if(_mayor == nullptr)
+            {
+                mayor* ravanna = new mayor("Ravanna", {"Playing dictator"}, {"Aggresive", "Conquest orientated"});
+                milestone milestone1 = milestone();
+                milestone1.min = 4;
+                milestone1.max = 4;
+                milestone1.responses = {"This is only the beginning my servant.",
+                "Do something I want and you should win today."};
+                milestone_group group1 = milestone_group();
+                group1.display_name = "Buildings";
+                group1.counter_name = "buildings";
+                group1.milestones = {milestone1};
+                ravanna->add_milestone_group(group1);
+                m_mayor = ravanna;
+            }
+            else{
+                m_mayor = _mayor;
+            }
         }
     }
 }

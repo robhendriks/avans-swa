@@ -21,6 +21,7 @@
 #include "level_goals.h"
 #include "../../events/goal_reached.h"
 #include "in_game_menu.h"
+#include "mayor_view.h"
 
 namespace gui {
     namespace controllers {
@@ -42,7 +43,7 @@ namespace gui {
                       engine::eventbus::subscriber<events::goal_reached> {
         public:
 
-            level(in_game_menu &in_game_menu1, level_goals &goals_view, engine::audio::music_manager &music_manager,
+            level(in_game_menu &in_game_menu1, level_goals &goals_view, mayor_view &mayor_view1, engine::audio::music_manager &music_manager,
                   models::main_map_model &model, engine::audio::sound_manager &sound_manager);
 
             void set_controller(controllers::main_map_controller &controller);
@@ -81,6 +82,7 @@ namespace gui {
 
             in_game_menu &m_in_game_menu;
             level_goals &m_goals_view;
+            mayor_view &m_mayor_view;
             engine::audio::music_manager &m_music_manager;
             models::main_map_model &m_model;
             engine::audio::sound_manager &m_sound_manager;

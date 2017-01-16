@@ -5,6 +5,7 @@
 #ifndef CITY_DEFENCE_BOX_FACTORY_H
 #define CITY_DEFENCE_BOX_FACTORY_H
 
+#include <memory>
 #include "../math/box2.hpp"
 
 namespace engine {
@@ -36,6 +37,8 @@ namespace engine {
             box_builder &start_on_x(float x);
 
             math::box2_t build();
+
+            void set_box(math::box2_t* box);
 
         private:
             math::box2_t m_box;

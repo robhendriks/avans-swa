@@ -14,23 +14,6 @@ namespace domain{
     mayor::mayor(std::string name, std::vector<std::string> hobbies, std::vector<std::string> behavior) :
             m_name(name), m_behavior(behavior), m_hobbies(hobbies){}
 
-    void mayor::notify(game_level::game_stats *p_observee, std::string title) {
-        update(p_observee, title);
-
-        /** EXAMPLE
-        mayor ravanna = mayor("Ravanna", {"Playing god"}, {"Aggresive", "Conquest orientated"});
-        milestone milestone1 = milestone();
-        milestone1.min = 4;
-        milestone1.max = 4;
-        milestone1.responses = {"This is only the beginning my servant."};
-        milestone_group group1 = milestone_group();
-        group1.display_name = "Buildings";
-        group1.counter_name = "buildings";
-        group1.milestones = {milestone1};
-        ravanna.add_milestone_group(group1);
-        */
-    }
-
     const milestone_group mayor::get_milestone_group(std::string counter_name) {
         if(m_milestone_groups.find(counter_name) != m_milestone_groups.end())
         {
@@ -53,7 +36,6 @@ namespace domain{
         }
     }
 
-
     std::string mayor::get_name() const {
         return m_name;
     }
@@ -61,7 +43,6 @@ namespace domain{
     std::vector<std::string> mayor::get_behavior() const {
         return m_behavior;
     }
-
 
     void mayor::set_behavior(std::vector<std::string> behavior) {
         m_behavior = behavior;
@@ -75,32 +56,53 @@ namespace domain{
         m_hobbies = hobbies;
     }
 
+    void mayor::init(game_level::game_stats* init) {
+        setup(init);
+    }
+
+    void mayor::reset() {
+        std::queue<milestone> empty;
+        std::swap(m_queue, empty );
+    }
+
+    void mayor::setup(game_level::game_stats* init) {
+        // set all the init milestones to reached without adding it to queue to avoid a mass amount of milestones in queue
+        get_new_reached_milestones(init);
+    }
+
+    void mayor::notify(game_level::game_stats *p_observee, std::string title) {
+        update(p_observee, title);
+
+        /** EXAMPLE
+        mayor ravanna = mayor("Ravanna", {"Playing dictator"}, {"Aggresive", "Conquest orientated"});
+        milestone milestone1 = milestone();
+        milestone1.min = 4;
+        milestone1.max = 4;
+        milestone1.responses = {"This is only the beginning my servant."};
+        milestone_group group1 = milestone_group();
+        group1.display_name = "Buildings";
+        group1.counter_name = "buildings";
+        group1.milestones = {milestone1};
+        ravanna.add_milestone_group(group1);
+        */
+    }
+
     void mayor::update(game_level::game_stats *p_observee, std::string title) {
         for(milestone m : get_new_reached_milestones(p_observee, title)){
             m_queue.push(m);
         }
     }
 
-    int mayor::get_response_index(milestone milestone) {
+    std::string mayor::get_random_response(milestone milestone) {
         if( milestone.responses.size() == 0){
-            return -1;
+            return "<milestone has no response text>";
         }
         else{
             std::random_device rd;
             std::mt19937 rnd(rd());
             std::uniform_int_distribution<> response_index(0, milestone.responses.size() - 1);
-            return response_index(rnd);
+            return milestone.responses[response_index(rnd)];
         }
-    }
-
-    void mayor::init(game_level::game_stats* init) {
-        last_time_current_milestone_shown = -1;
-        setup(init);
-    }
-
-    void mayor::setup(game_level::game_stats* init) {
-        // set all the init milestones to reached without adding it to queue to avoid a mass amount of milestones in queue
-        get_new_reached_milestones(init);
     }
 
     std::vector<milestone> mayor::get_new_reached_milestones(game_level::game_stats* game_stats, std::string counter_name) {
@@ -139,4 +141,18 @@ namespace domain{
 
         return result;
     }
+
+    std::string mayor::get_fifo_milestone_response() {
+        if (!m_queue.empty())
+        {
+            auto r = m_queue.front();
+            m_queue.pop();
+            return get_random_response(r);
+        }
+        else{
+            return "";
+        }
+    }
+
+
 }

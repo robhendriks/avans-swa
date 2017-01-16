@@ -4,6 +4,7 @@
 #include <vector>
 #include "../drawable/abstract_drawable_game_object.h"
 #include "../game_level/game_level.h"
+#include "../mayor/mayor.h"
 
 namespace domain {
     namespace gameworld {
@@ -23,11 +24,16 @@ namespace domain {
 
             std::vector<game_level::game_level*> get_levels() const;
 
+            mayor * get_mayor() const;
+            void set_mayor(mayor * mayor);
+
             ~game_world();
 
         private:
             std::vector<game_level::game_level*> m_levels;
             int m_current_level;
+
+            mayor* m_mayor;
         };
     }
 }
