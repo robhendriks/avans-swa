@@ -1,46 +1,38 @@
 {
   "width": 16,
   "height": 16,
-  "time": 300000,
-  "nation": "the-demons",
+  "time": 480000,
+  "nation": "the-fallen",
   "goals": [
     {
-      "type" : "defensive buildings",
-      "number" : 8
-    },
-    {
-      "type" : "Skyscraper",
-      "number" : 6
-    },
-    {
-      "type" : "gold",
-      "number" : 1100
+      "type" : "Ultimate Death Laser",
+      "number" : 1
     },
     {
       "type" : "enemies defeated",
-      "number" : 40
+      "number" : 100
     }
   ],
   "resources" : [
     {
       "type" : "wood",
-      "amount" : 500
+      "amount" : 300
     },
     {
       "type" : "gold",
-      "amount" : 500
+      "amount" : 300
     },
     {
       "type" : "ore",
-      "amount" : 100
+      "amount" : 200
     },
     {
       "type" : "silicium",
-      "amount" : 10
+      "amount" : 50
     },
     {
       "type" : "uranium",
-      "amount" : 300
+      "amount" : 15
     }
   ],
   "tiles": {
