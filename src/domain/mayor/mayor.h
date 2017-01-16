@@ -24,7 +24,7 @@ namespace domain{
         std::vector<milestone> milestones;
     };
 
-    class mayor : engine::observer::observer<domain::game_level::game_stats>{
+    class mayor : public engine::observer::observer<domain::game_level::game_stats>{
     public:
         mayor();
         mayor(std::string name, std::vector<std::string> hobbies, std::vector<std::string> behavior);
