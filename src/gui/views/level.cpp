@@ -36,6 +36,7 @@ namespace gui {
             mayor->get_behavior();
             m_mayor_view.set_mayor(mayor);
             mayor->init(&m_model.world->get_current_level()->get_stats());
+            m_model.world->get_current_level()->get_stats().add_observer(mayor);
 
             m_mayor_view.before();
             m_mayor_view.set_current_response(mayor->get_fifo_milestone_response());
