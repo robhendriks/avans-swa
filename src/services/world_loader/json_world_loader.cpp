@@ -404,12 +404,13 @@ namespace services {
                 if (enemies.is_array()) {
                     std::vector<domain::nations::enemy*> enemies_for_level;
                     for (json &enemy : map_root["enemies"]) {
+                        std::string enemy_name = enemy["name"];
+
                         auto *new_enemy = new domain::nations::enemy(
                             enemy["name"], enemy["min_damage"], enemy["max_damage"], enemy["attacks_per_second"],
                             enemy["hitpoints"], enemy["granted_xp"], enemy["range"], enemy["movement"],
                             enemy["boss"], *level_nation, enemy["oppertunity_costs"]);
 
-                        std::string enemy_name = enemy["name"];
                         new_enemy->set_box({{enemy["min_x"], enemy["min_y"]}, {enemy["max_x"], enemy["max_y"]}});
                         new_enemy->set_draw_settings("images/" + enemy_name + ".png");
                         new_enemy->set_max_row(8);

@@ -7,7 +7,7 @@ namespace domain {
                 :  domain::combat::attacker(min_damage, max_damage, attacks_per_second, range, movement),
                    domain::combat::defender(hitpoints, granted_xp),
                    m_destination({0,0},{0,0}), m_name(name), m_oppertunity_cost(oppertunity_costs), m_boss(boss),
-                   m_disposed(false), m_nation(&nation1) {}
+                   m_disposed(false), m_nation(&nation1), m_box_isset(false) {}
 
         // Copy constructor
         enemy::enemy(const enemy &other) :
@@ -17,6 +17,7 @@ namespace domain {
             m_oppertunity_cost = other.m_oppertunity_cost;
             m_boss = other.m_boss;
             m_disposed = false;
+            m_box_isset = other.m_box_isset;
         }
 
         void enemy::dispose() {
@@ -25,6 +26,10 @@ namespace domain {
 
         std::string enemy::get_name() {
             return m_nation->get_prefix_name() + " - " + m_name;
+        }
+
+        std::string enemy::get_name_without_prefix() const {
+            return m_name;
         }
 
         int enemy::get_oppertunity_cost() const {
@@ -44,6 +49,7 @@ namespace domain {
         }
 
         void enemy::set_box(engine::math::box2_t destination) {
+            m_box_isset = true;
             m_destination = destination;
         }
 
@@ -66,6 +72,10 @@ namespace domain {
 
         void enemy::set_nation(nation &nation1) {
             m_nation = &nation1;
+        }
+
+        bool enemy::is_box_set() const {
+            return m_box_isset;
         }
     }
 }

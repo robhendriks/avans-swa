@@ -31,6 +31,8 @@ namespace domain {
             //Returns nationname + unitname
             std::string get_name();
 
+            std::string get_name_without_prefix() const;
+
             int get_oppertunity_cost() const;
 
             bool is_boss() const;
@@ -42,6 +44,8 @@ namespace domain {
             virtual engine::math::box2_t get_box() const;
 
             void update(unsigned int elapsed_time);
+
+            bool is_box_set() const;
 
             enemy *clone() const;
 
@@ -55,6 +59,7 @@ namespace domain {
             bool m_boss;
             bool m_disposed;
             nation *m_nation;
+            bool m_box_isset;
         };
 
         bool operator<(const enemy &s1, const enemy &s2);
