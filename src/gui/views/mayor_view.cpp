@@ -32,8 +32,15 @@ void gui::views::mayor_view::draw(unsigned int time_elapsed, engine::math::box2_
     m_current_display_time = time_elapsed - m_last_transition_time;
     if (m_current_display_time > m_max_display_time) {
         m_current_response = m_mayor->get_fifo_milestone_response();
+        if(m_current_response == ""){
+            m_current_response = "I have nothing to say";
+        }
         m_last_transition_time = time_elapsed;
     }
+
+    m_draw_managers.texture_manager.unload("mayor_text");
+    m_draw_managers.texture_manager.load_text(m_current_response, {255, 255, 255},
+                                              *m_draw_managers.font_manager.get_font("roboto", 14), "mayor_text", 150);
 
     engine::math::vec2_t margin = {display_box.max.x - m_mayor_box->size().x - 20, display_box.max.y - m_mayor_box->size().y - 100};
     auto mayor_img_size = m_draw_managers.texture_manager.get_size("img_mayor_bart");

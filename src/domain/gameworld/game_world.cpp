@@ -36,6 +36,8 @@ namespace domain {
                 m_current_level = number;
 
                 get_current_level()->start();
+                get_current_level()->get_stats().add_observer(m_mayor);
+                m_mayor->init(&get_current_level()->get_stats());
             }
         }
 

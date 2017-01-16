@@ -74,7 +74,6 @@ namespace domain{
         // set all the init milestones to reached without adding it to queue to avoid a mass amount of milestones in queue
         get_new_reached_milestones(init);
         std::queue<milestone> empty;
-        std::swap(m_queue, empty );
     }
 
     void mayor::notify(game_level::game_stats *p_observee, std::string title) {
