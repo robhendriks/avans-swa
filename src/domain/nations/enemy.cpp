@@ -28,6 +28,10 @@ namespace domain {
             return m_nation->get_prefix_name() + " - " + m_name;
         }
 
+        std::string enemy::get_name_without_prefix() const {
+            return m_name;
+        }
+
         int enemy::get_oppertunity_cost() const {
             return m_oppertunity_cost;
         }

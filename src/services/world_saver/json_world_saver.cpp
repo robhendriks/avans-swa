@@ -102,7 +102,8 @@ namespace services {
                     if (enemy->is_box_set() && enemy->get_current_field() != nullptr) {
                         auto box = enemy->get_box();
 
-                        j["enemies"].push_back({{"name", enemy->get_name()}, {"min_damage", enemy->get_min_damage()},
+                        j["enemies"].push_back({{"name", enemy->get_name_without_prefix()},
+                                                {"min_damage", enemy->get_min_damage()},
                                                 {"max_damage", enemy->get_max_damage()},
                                                 {"attacks_per_second", enemy->get_attack_speed()},
                                                 {"hitpoints", enemy->get_current_hp()},

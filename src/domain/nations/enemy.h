@@ -31,6 +31,8 @@ namespace domain {
             //Returns nationname + unitname
             std::string get_name();
 
+            std::string get_name_without_prefix() const;
+
             int get_oppertunity_cost() const;
 
             bool is_boss() const;
