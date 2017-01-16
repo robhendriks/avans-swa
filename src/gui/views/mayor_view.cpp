@@ -30,23 +30,23 @@ void gui::views::mayor_view::on_display_change(engine::math::box2_t display_box)
 }
 
 void gui::views::mayor_view::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
+    auto margin = 1220;
     auto mayor_img_size = m_draw_managers.texture_manager.get_size("img_mayor_bart");
     auto mayor_text_size = m_draw_managers.texture_manager.get_size("mayor_text");
     engine::graphics::box_builder builder(mayor_img_size);
     engine::graphics::box_builder builder1(mayor_text_size);
+    builder.as_left_top(m_mayor_box->left_top()).center_vertical(m_mayor_box->min.y, m_mayor_box->max.y)
+            .add_margin({margin, 200});
+    builder1.as_left_top(m_mayor_box->left_top()).center_vertical(m_mayor_box->min.y, m_mayor_box->max.y)
+            .add_margin({margin, 200});
 
     // set box to hidden place
     set_boxes(display_box);
-
-//    builder.add_margin({display_box.max.x, display_box.max.y - mayor_text_size.y - mayor_img_size.y});
-//    builder1.add_margin({display_box.max.x, display_box.max.y - mayor_text_size.y - 300});
 
     if (m_state == visible) {
         m_current_display_time = time_elapsed - m_last_transition_time;
 
         if (m_current_display_time > m_max_display_time) {
-//            builder.add_margin({-mayor_text_size.x - mayor_img_size.x, 0});
-//            builder1.add_margin({-mayor_text_size.x - 100, 0});
 
             m_previous_state = m_state;
             m_state = animating;

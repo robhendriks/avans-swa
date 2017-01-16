@@ -20,6 +20,7 @@ namespace gui {
               m_color_manager(m_in_game_menu.m_help_view.m_top_bar.m_color_manager),
               m_font_manager(m_in_game_menu.m_help_view.m_top_bar.m_font_manager),
               m_current_page(1), m_speed_factor(1), x_margin_placeable_objects(200) {
+
         }
 
         void level::before() {

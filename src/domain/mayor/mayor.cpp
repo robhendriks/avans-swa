@@ -57,7 +57,6 @@ namespace domain{
     }
 
     void mayor::init(game_level::game_stats* init) {
-        reset();
         setup(init);
     }
 

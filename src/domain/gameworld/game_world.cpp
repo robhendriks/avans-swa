@@ -6,7 +6,9 @@ namespace domain {
     namespace gameworld{
 
         game_world::game_world(std::vector<game_level::game_level*> game_levels) :
-            m_levels(game_levels), m_current_level(-1) {}
+            m_levels(game_levels), m_current_level(-1) {
+            set_mayor(nullptr);
+        }
 
         game_world::~game_world() {
             // Remove all levels

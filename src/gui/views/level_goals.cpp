@@ -51,7 +51,7 @@ namespace gui {
 
                 // Center stat image
                 builder3.as_left_top(stat_box.left_top()).center_vertical(stat_box.min.y, stat_box.max.y)
-                    .add_margin({20, 0});
+                        .add_margin({20, 0});
 
                 auto image_box = builder3.build();
 
