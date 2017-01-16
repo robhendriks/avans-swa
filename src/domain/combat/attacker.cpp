@@ -9,7 +9,8 @@
 namespace domain {
     namespace combat {
         attacker::attacker(int min_damage, int max_damage, double attackspeed, int range, int movement) :
-            m_min_damage(min_damage), m_max_damage(max_damage), m_attack_speed(attackspeed), m_range(range), m_movement(movement) {}
+            m_min_damage(min_damage), m_max_damage(max_damage), m_attack_speed(attackspeed), m_range(range),
+            m_movement(movement), m_current_field(nullptr) {}
 
         attacker::attacker(const attacker &other) {
             m_min_damage = other.m_min_damage;
@@ -17,6 +18,7 @@ namespace domain {
             m_attack_speed = other.m_attack_speed;
             m_range = other.m_range;
             m_movement = other.m_movement;
+            m_current_field = nullptr;
         }
 
         domain::map::field *attacker::get_current_field() const {

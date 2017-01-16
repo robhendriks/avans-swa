@@ -43,6 +43,8 @@ namespace domain {
 
             void update(unsigned int elapsed_time);
 
+            bool is_box_set() const;
+
             enemy *clone() const;
 
             ~enemy();
@@ -55,6 +57,7 @@ namespace domain {
             bool m_boss;
             bool m_disposed;
             nation *m_nation;
+            bool m_box_isset;
         };
 
         bool operator<(const enemy &s1, const enemy &s2);
