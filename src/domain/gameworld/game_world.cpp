@@ -75,7 +75,8 @@ namespace domain {
                 milestone milestone1 = milestone();
                 milestone1.min = 4;
                 milestone1.max = 4;
-                milestone1.responses = {"This is only the beginning my servant."};
+                milestone1.responses = {"This is only the beginning my servant.",
+                "Do something I want and you should win today."};
                 milestone_group group1 = milestone_group();
                 group1.display_name = "Buildings";
                 group1.counter_name = "buildings";
