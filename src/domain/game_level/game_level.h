@@ -164,7 +164,7 @@ namespace domain {
             //(base size of the wave)
             double m_base_wave_opportunity = 10;
             //(size increase from wave to wave)
-            double m_wave_opportunity_increase = 0;
+            double m_wave_opportunity_increase = 2;
             // the time range in ms where all units of a single wave spawns. 1000 = all units of a wave spawn in a range of 1 sec
             long m_wave_spawn_time_range = 3000;
             // nation where enemies get spawned from
