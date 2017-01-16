@@ -256,14 +256,14 @@ namespace gui {
             m_texture_manager.draw("l_speed", speed_builder.build());
             m_texture_manager.unload("l_speed");
 
+            // Draw the mayor_view
+            m_mayor_view.draw(time_elapsed, display_box);
+
             // Draw the goals
             m_goals_view.draw(time_elapsed, display_box);
 
             // Draw the map
             current_level->get_map().draw(m_in_game_menu.m_help_view.m_top_bar.m_draw_managers, time_elapsed);
-
-            // Draw the mayor_view
-            m_mayor_view.draw(time_elapsed, display_box);
 
             // Draw the arrows
             float left_arrow_y = (m_current_page == 1 ? 128 : 0);
