@@ -39,6 +39,12 @@ namespace gui {
             top_bar &m_top_bar;
             models::load_model &m_load_model;
             controllers::load_controller *m_load_controller;
+            std::unique_ptr<engine::math::box2_t> m_back_box1;
+            std::unique_ptr<engine::math::box2_t> m_back_text_box;
+            std::unique_ptr<engine::math::box2_t> m_back_text_box1;
+            std::unique_ptr<engine::math::box2_t> m_back_box2;
+            std::vector<std::unique_ptr<engine::math::box2_t>> m_load_games;
+
         };
     }
 }

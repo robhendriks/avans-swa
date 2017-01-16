@@ -29,6 +29,7 @@ namespace gui {
             friend class credits;
             friend class help;
             friend class reclame;
+            friend class load;
         public:
             top_bar(domain::drawable::draw_managers_wrapper &draw_managers, engine::engine &engine);
 
