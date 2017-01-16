@@ -57,12 +57,12 @@ namespace domain{
     }
 
     void mayor::init(game_level::game_stats* init) {
-        reset();
         setup(init);
     }
 
     void mayor::reset() {
-        std::queue<domain::milestone>().swap(m_queue);
+        std::queue<milestone> empty;
+        std::swap(m_queue, empty );
     }
 
     void mayor::setup(game_level::game_stats* init) {

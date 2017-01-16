@@ -33,7 +33,7 @@ namespace gui {
             // Set mayor in mayor_view
             auto mayor = m_model.world->get_mayor();
             m_mayor_view.set_mayor(mayor);
-            mayor->init(m_model.world->get_current_level().get_stats().get());
+            mayor->init(&m_model.world->get_current_level()->get_stats());
 
             m_mayor_view.before();
             m_mayor_view.set_current_response(mayor->get_fifo_milestone_response());
