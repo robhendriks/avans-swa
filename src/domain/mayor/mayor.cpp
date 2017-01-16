@@ -57,17 +57,24 @@ namespace domain{
     }
 
     void mayor::init(game_level::game_stats* init) {
+        reset();
         setup(init);
     }
 
     void mayor::reset() {
-        std::queue<milestone> empty;
-        std::swap(m_queue, empty );
+        for(const std::pair<std::string, milestone_group>& group : m_milestone_groups){
+            // for each milestone set reached to false
+            for(milestone m : group.second.milestones){
+                    m.reached = false;
+            }
+        }
     }
 
     void mayor::setup(game_level::game_stats* init) {
         // set all the init milestones to reached without adding it to queue to avoid a mass amount of milestones in queue
         get_new_reached_milestones(init);
+        std::queue<milestone> empty;
+        std::swap(m_queue, empty );
     }
 
     void mayor::notify(game_level::game_stats *p_observee, std::string title) {
