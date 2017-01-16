@@ -12,7 +12,7 @@
 
 namespace domain {
     namespace game_level {
-        class game_stats : engine::observer::observee<game_stats>{
+        class game_stats : public engine::observer::observee<game_stats>{
         public:
 
             /**
