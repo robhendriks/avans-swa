@@ -33,18 +33,18 @@ namespace domain {
                 m_object->draw(draw_managers, time_elapsed);
             }
 
-            if ((m_flags & FLAG_WEIGHT) != 0) {
-                // Printing the weight on the fields
-                draw_managers.texture_manager.load_text(std::to_string(m_weight), {254, 12, 10},
-                                                        *draw_managers.font_manager.get_font("roboto", 32),
-                                                        "heatmap_weight");
-                draw_managers.texture_manager.draw("heatmap_weight", {0, 0}, get_box());
-                draw_managers.texture_manager.unload("heatmap_weight");
-            }
+//            if ((m_flags & FLAG_WEIGHT) != 0) {
+//                // Printing the weight on the fields
+//                draw_managers.texture_manager.load_text(std::to_string(m_weight), {254, 12, 10},
+//                                                        *draw_managers.font_manager.get_font("roboto", 32),
+//                                                        "heatmap_weight");
+//                draw_managers.texture_manager.draw("heatmap_weight", {0, 0}, get_box());
+//                draw_managers.texture_manager.unload("heatmap_weight");
+//            }
 
-            if ((m_flags & FLAG_TARGET) != 0) {
-                draw_managers.color_manager.stroke({255, 0, 0}, get_box());
-            }
+//            if ((m_flags & FLAG_TARGET) != 0) {
+//                draw_managers.color_manager.stroke({255, 0, 0}, get_box());
+//            }
         }
         /**
          * Get the box where the field is placed on the screen

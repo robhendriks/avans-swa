@@ -8,8 +8,9 @@
 namespace gui {
     namespace views {
 
-        in_game_menu::in_game_menu(help &help_view) : m_help_view(help_view), m_show(false),
-                                                      m_help_just_disappeared(false) {
+        in_game_menu::in_game_menu(help &help_view, engine::engine &engine1) :
+            m_help_view(help_view), m_engine(engine1), m_show(false), m_help_just_disappeared(false),
+            m_last_saved_time(-1) {
 
         }
 
@@ -18,6 +19,8 @@ namespace gui {
 
             // Make sure it's not shown
             m_show = false;
+            m_help_just_disappeared = false;
+            m_last_saved_time = -1;
 
             // Add callback on help show
             m_help_view.call_on_show_change([&](bool show) {
@@ -43,6 +46,8 @@ namespace gui {
             // Load texts
             m_help_view.m_top_bar.m_texture_manager.load_text("Save", {255, 255, 255},
                                                   *m_help_view.m_top_bar.m_font_manager.get_font("roboto", 25), "igm_save");
+            m_help_view.m_top_bar.m_texture_manager.load_text("Just saved, wait...", {255, 255, 255},
+                                                              *m_help_view.m_top_bar.m_font_manager.get_font("roboto", 25), "igm_saved");
             m_help_view.m_top_bar.m_texture_manager.load_text("Back to Main Menu", {255, 255, 255},
                                                   *m_help_view.m_top_bar.m_font_manager.get_font("roboto", 25), "igm_quit");
             m_help_view.m_top_bar.m_texture_manager.load_text("Help", {255, 255, 255},
@@ -80,6 +85,10 @@ namespace gui {
             builder4.as_left_top(m_menu_box->left_top()).center_horizontal(m_menu_box->min.x, m_menu_box->max.x)
                 .add_margin({0, margin_between_btns});
             m_save_btn_box.reset(new engine::math::box2_t(builder4.build()));
+
+            engine::graphics::box_builder builder10(m_help_view.m_top_bar.m_texture_manager.get_size("igm_saved"));
+            builder10.to_center(*m_save_btn_box);
+            m_saved_btn_text_box.reset(new engine::math::box2_t(builder10.build()));
 
             engine::graphics::box_builder builder5(m_help_view.m_top_bar.m_texture_manager.get_size("igm_save"));
             builder5.to_center(*m_save_btn_box);
@@ -126,8 +135,14 @@ namespace gui {
                 m_help_view.m_top_bar.m_texture_manager.draw("igm_grey_panel", *m_menu_box);
 
                 // Menu buttons
-                m_help_view.m_top_bar.m_texture_manager.draw("igm_green_btn", *m_save_btn_box);
-                m_help_view.m_top_bar.m_texture_manager.draw("igm_save", *m_save_btn_text_box);
+                float test = m_engine.get_real_time_elapsed();
+                if (m_last_saved_time != -1 && m_last_saved_time >= test - 5000) {
+                    m_help_view.m_top_bar.m_texture_manager.draw("igm_red_btn", *m_save_btn_box);
+                    m_help_view.m_top_bar.m_texture_manager.draw("igm_saved", *m_saved_btn_text_box);
+                } else {
+                    m_help_view.m_top_bar.m_texture_manager.draw("igm_green_btn", *m_save_btn_box);
+                    m_help_view.m_top_bar.m_texture_manager.draw("igm_save", *m_save_btn_text_box);
+                }
 
                 m_help_view.m_top_bar.m_texture_manager.draw("igm_yellow_btn", *m_help_btn_box);
                 m_help_view.m_top_bar.m_texture_manager.draw("igm_help", *m_help_btn_text_box);
@@ -164,7 +179,10 @@ namespace gui {
                 } else if (m_help_btn_box->contains(*position)) {
                     m_help_view.toggle_show();
                 } else if (m_save_btn_box->contains(*position)) {
-                    m_main_map_controller->save();
+                    if (m_last_saved_time < 0 || m_last_saved_time < m_engine.get_real_time_elapsed() - 5000) {
+                        m_main_map_controller->save();
+                        m_last_saved_time = m_engine.get_real_time_elapsed();
+                    }
                 } else if (m_cross_circle_box->contains(*position)) {
                     change_show();
                 }
@@ -203,6 +221,7 @@ namespace gui {
 
             // Unload texts
             m_help_view.m_top_bar.m_texture_manager.unload("igm_save");
+            m_help_view.m_top_bar.m_texture_manager.unload("igm_saved");
             m_help_view.m_top_bar.m_texture_manager.unload("igm_quit");
             m_help_view.m_top_bar.m_texture_manager.unload("igm_help");
 
