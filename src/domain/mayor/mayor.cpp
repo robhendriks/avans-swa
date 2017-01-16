@@ -79,19 +79,6 @@ namespace domain{
 
     void mayor::notify(game_level::game_stats *p_observee, std::string title) {
         update(p_observee, title);
-
-        /** EXAMPLE
-        mayor ravanna = mayor("Ravanna", {"Playing dictator"}, {"Aggresive", "Conquest orientated"});
-        milestone milestone1 = milestone();
-        milestone1.min = 4;
-        milestone1.max = 4;
-        milestone1.responses = {"This is only the beginning my servant."};
-        milestone_group group1 = milestone_group();
-        group1.display_name = "Buildings";
-        group1.counter_name = "buildings";
-        group1.milestones = {milestone1};
-        ravanna.add_milestone_group(group1);
-        */
     }
 
     void mayor::update(game_level::game_stats *p_observee, std::string title) {
