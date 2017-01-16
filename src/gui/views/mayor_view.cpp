@@ -9,8 +9,6 @@ gui::views::mayor_view::mayor_view(domain::drawable::draw_managers_wrapper &draw
         draw_managers) {}
 
 void gui::views::mayor_view::before() {
-    m_show = true;
-
     // Load textures
     m_draw_managers.texture_manager.load("images/mayor_bart.png", "img_mayor_bart");
 
@@ -40,73 +38,6 @@ void gui::views::mayor_view::draw(unsigned int time_elapsed, engine::math::box2_
     builder1.as_left_top(m_mayor_box->left_top()).center_vertical(m_mayor_box->min.y, m_mayor_box->max.y)
             .add_margin({margin, 200});
 
-    // set box to hidden place
-    set_boxes(display_box);
-
-    if (m_state == visible) {
-        m_current_display_time = time_elapsed - m_last_transition_time;
-
-        if (m_current_display_time > m_max_display_time) {
-
-            m_previous_state = m_state;
-            m_state = animating;
-            m_last_transition_time = time_elapsed;
-        }
-    } else if (m_state == animating) {
-        // count movement percentage
-        auto size_x = mayor_img_size.x + mayor_text_size.x;
-
-        // timer for the position of the box
-        auto current_time_moved = time_elapsed - m_time_moved;
-        auto speed = static_cast<double>(size_x) / static_cast<double>(m_max_animation_time);
-
-        // % of total time
-        double percentage = static_cast<double>(current_time_moved) / speed * 100;
-
-        //pointer to new location
-        engine::math::box2_t * new_box = nullptr;
-
-        // if completely moved set state
-        if (percentage >= 100) {
-            if (m_previous_state == hidden) {
-                m_state = visible;
-                new_box = m_dest_box.get();
-            } else {
-                m_state = hidden;
-                new_box = m_init_box.get();
-            }
-        } else {
-
-            if (m_previous_state == hidden) {
-                engine::math::vec2_t vec_min = {static_cast<float>(m_init_box->min.x - (speed * percentage)),
-                                                static_cast<float>(0)};
-                engine::math::vec2_t vec_max = {static_cast<float>(m_init_box->max.x - (speed * percentage)),
-                                                static_cast<float>(0)};
-
-                // Pointer to new position of the box, draw on screen
-                new_box = new engine::math::box2_t{vec_min, vec_max};
-            } else {
-                engine::math::vec2_t vec_min = {static_cast<float>(m_dest_box->min.x + (speed * percentage)),
-                                                static_cast<float>(0)};
-                engine::math::vec2_t vec_max = {static_cast<float>(m_dest_box->max.x + (speed * percentage)),
-                                                static_cast<float>(0)};
-                // Pointer to new position of the box, draw on screen
-                new_box = new engine::math::box2_t{vec_min, vec_max};
-                // draw
-            }
-        }
-        builder.set_box(new_box);
-        builder1.set_box(new_box);
-    } else {
-        // go to hidden state
-        // todo uitwerken
-        m_previous_state = m_state;
-
-        m_state = animating;
-        m_last_transition_time = time_elapsed;
-    }
-
-
     m_draw_managers.texture_manager.draw("img_mayor_bart", builder.build());
     m_draw_managers.texture_manager.draw("mayor_text", builder1.build());
 }
@@ -116,29 +47,8 @@ void gui::views::mayor_view::after() {
     m_draw_managers.texture_manager.unload("mayor_text");
 }
 
-void gui::views::mayor_view::change_show() {
-    m_show = !m_show;
-}
-
 void gui::views::mayor_view::set_mayor(domain::mayor* _mayor) {
     m_mayor = _mayor;
-}
-
-void gui::views::mayor_view::set_boxes(const engine::math::box2_t display_box) {
-    auto mayor_img_size = m_draw_managers.texture_manager.get_size("img_mayor_bart");
-    auto mayor_text_size = m_draw_managers.texture_manager.get_size("mayor_text");
-
-    auto vec_min_hidden = engine::math::vec2_t{display_box.max.x,
-                                               display_box.max.y - mayor_text_size.y - mayor_img_size.y};
-    auto vec_max_hidden = engine::math::vec2_t{display_box.max.x + mayor_text_size.x + mayor_img_size.x,
-                                               display_box.max.y - mayor_text_size.y - mayor_img_size.y};
-
-    m_init_box.reset(new engine::math::box2_t(vec_min_hidden, vec_max_hidden));
-    m_dest_box.reset(
-            new engine::math::box2_t{{m_init_box->min.x - mayor_text_size.x - mayor_img_size.x, m_init_box->min.y},
-                                     {display_box.max.x,                                        display_box.max.y -
-                                                                                                mayor_text_size.y -
-                                                                                                mayor_img_size.y}});
 }
 
 void gui::views::mayor_view::set_current_response(const std::string &response) {
