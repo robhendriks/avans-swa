@@ -7,23 +7,22 @@
 
 namespace gui {
     namespace views {
-        main_menu::main_menu(help &help_view, engine::audio::music_manager &music_manager,
+        main_menu::main_menu(reclame &reclame_view, engine::audio::music_manager &music_manager,
                              engine::audio::sound_manager &sound_manager)
-            : m_help_view(help_view), m_music_manager(music_manager), m_sound_manager(sound_manager) {}
+            : m_reclame_view(reclame_view), m_music_manager(music_manager), m_sound_manager(sound_manager) {}
 
         void main_menu::before() {
-            m_help_view.before();
+            m_reclame_view.before();
 
             // Load textures
-            m_help_view.m_top_bar.m_texture_manager.load("images/logo.png", "logo");
-            m_help_view.m_top_bar.m_texture_manager.load("images/background.png", "background");
-            m_help_view.m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 244}, {1451, 289}}, 1.5, "blue_btn");
-            m_help_view.m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 64}, {1451, 110}}, 1.5, "yellow_btn");
-            m_help_view.m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 184}, {1451, 229}}, 1.5, "red_btn");
-            m_help_view.m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 124}, {1451, 169}}, 1.5, "green_btn");
-
-            m_help_view.m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1007, 570}, {1046, 601}}, 1, "green_slider_left");
-            m_help_view.m_top_bar.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1080, 570}, {1119, 601}}, 1, "green_slider_right");
+            m_reclame_view.m_texture_manager.load("images/logo.png", "logo");
+            m_reclame_view.m_texture_manager.load("images/background.png", "background");
+            m_reclame_view.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 244}, {1451, 289}}, 1.5, "blue_btn");
+            m_reclame_view.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 64}, {1451, 110}}, 1.5, "yellow_btn");
+            m_reclame_view.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 184}, {1451, 229}}, 1.5, "red_btn");
+            m_reclame_view.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1261, 124}, {1451, 169}}, 1.5, "green_btn");
+            m_reclame_view.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1007, 570}, {1046, 601}}, 1, "green_slider_left");
+            m_reclame_view.m_texture_manager.load_from_svg("images/ui-pack.svg", {{1080, 570}, {1119, 601}}, 1, "green_slider_right");
 
             // Load (and play) music
             m_music_manager.load("sounds/menu.wav", "menu_bg_music");
@@ -33,10 +32,10 @@ namespace gui {
             m_sound_manager.load("sounds/menu_rollover.wav", "menu_rollover");
 
             // Load the menu texts
-            m_help_view.m_top_bar.m_texture_manager.load_text("Play", {255, 255, 255}, *m_help_view.m_top_bar.m_font_manager.get_font("roboto", 46), "m_t_play");
-            m_help_view.m_top_bar.m_texture_manager.load_text("Load", {255, 255, 255}, *m_help_view.m_top_bar.m_font_manager.get_font("roboto", 46), "m_t_load");
-            m_help_view.m_top_bar.m_texture_manager.load_text("Help", {255, 255, 255}, *m_help_view.m_top_bar.m_font_manager.get_font("roboto", 46), "m_t_help");
-            m_help_view.m_top_bar.m_texture_manager.load_text("Credits", {255, 255, 255}, *m_help_view.m_top_bar.m_font_manager.get_font("roboto", 46), "m_t_credits");
+            m_reclame_view.m_texture_manager.load_text("Play", {255, 255, 255}, *m_reclame_view.m_help_view.m_top_bar.m_font_manager.get_font("roboto", 46), "m_t_play");
+            m_reclame_view.m_texture_manager.load_text("Load", {255, 255, 255}, *m_reclame_view.m_help_view.m_top_bar.m_font_manager.get_font("roboto", 46), "m_t_load");
+            m_reclame_view.m_texture_manager.load_text("Help", {255, 255, 255}, *m_reclame_view.m_help_view.m_top_bar.m_font_manager.get_font("roboto", 46), "m_t_help");
+            m_reclame_view.m_texture_manager.load_text("Credits", {255, 255, 255}, *m_reclame_view.m_help_view.m_top_bar.m_font_manager.get_font("roboto", 46), "m_t_credits");
 
             auto &eventbus = engine::eventbus::eventbus::get_instance();
             eventbus.subscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>*> (this));
@@ -45,12 +44,11 @@ namespace gui {
         }
 
         void main_menu::on_display_change(engine::math::box2_t display_box) {
-            m_help_view.on_display_change(display_box);
-
+            m_reclame_view.on_display_change(display_box);
             // Create the logo box
-            engine::graphics::box_builder builder1(m_help_view.m_top_bar.m_texture_manager.get_size("logo"));
-            builder1.as_left_top(m_help_view.m_top_bar.m_bar_box->left_bottom()).add_margin({0, 50})
-                .center_horizontal(m_help_view.m_top_bar.m_bar_box->min.x, m_help_view.m_top_bar.m_bar_box->max.x);
+            engine::graphics::box_builder builder1(m_reclame_view.m_texture_manager.get_size("logo"));
+            builder1.as_left_top(m_reclame_view.m_help_view.m_top_bar.m_bar_box->left_bottom()).add_margin({0, 50})
+                .center_horizontal(m_reclame_view.m_help_view.m_top_bar.m_bar_box->min.x, m_reclame_view.m_help_view.m_top_bar.m_bar_box->max.x);
             m_logo_box.reset(new engine::math::box2_t(builder1.build()));
 
             auto menu_btn_size = engine::math::vec2_t({380, 90});
@@ -66,7 +64,7 @@ namespace gui {
             m_play_btn_box.reset(new engine::math::box2_t(builder2.build()));
 
             // Create the play text box
-            engine::graphics::box_builder builder3(m_help_view.m_top_bar.m_texture_manager.get_size("m_t_play"));
+            engine::graphics::box_builder builder3(m_reclame_view.m_texture_manager.get_size("m_t_play"));
             builder3.to_center(*m_play_btn_box);
             m_play_text_box.reset(new engine::math::box2_t(builder3.build()));
 
@@ -75,7 +73,7 @@ namespace gui {
             m_load_btn_box.reset(new engine::math::box2_t(builder2.build()));
 
             // Create the load text box
-            engine::graphics::box_builder builder4(m_help_view.m_top_bar.m_texture_manager.get_size("m_t_load"));
+            engine::graphics::box_builder builder4(m_reclame_view.m_texture_manager.get_size("m_t_load"));
             builder4.to_center(*m_load_btn_box);
             m_load_text_box.reset(new engine::math::box2_t(builder4.build()));
 
@@ -84,7 +82,7 @@ namespace gui {
             m_help_btn_box.reset(new engine::math::box2_t(builder2.build()));
 
             // Create the help text box
-            engine::graphics::box_builder builder5(m_help_view.m_top_bar.m_texture_manager.get_size("m_t_help"));
+            engine::graphics::box_builder builder5(m_reclame_view.m_texture_manager.get_size("m_t_help"));
             builder5.to_center(*m_help_btn_box);
             m_help_text_box.reset(new engine::math::box2_t(builder5.build()));
 
@@ -93,7 +91,7 @@ namespace gui {
             m_credits_btn_box.reset(new engine::math::box2_t(builder2.build()));
 
             // Create the credits text box
-            engine::graphics::box_builder builder6(m_help_view.m_top_bar.m_texture_manager.get_size("m_t_credits"));
+            engine::graphics::box_builder builder6(m_reclame_view.m_texture_manager.get_size("m_t_credits"));
             builder6.to_center(*m_credits_btn_box);
             m_credits_text_box.reset(new engine::math::box2_t(builder6.build()));
 
@@ -110,37 +108,37 @@ namespace gui {
         }
 
         void main_menu::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
-            m_help_view.m_top_bar.m_texture_manager.draw("background", display_box);
+            m_reclame_view.m_texture_manager.draw("background", display_box);
 
             // Draw the logo
-            m_help_view.m_top_bar.m_texture_manager.draw("logo", *m_logo_box);
+            m_reclame_view.m_texture_manager.draw("logo", *m_logo_box);
 
             // Draw the play btn
-            m_help_view.m_top_bar.m_texture_manager.draw("green_btn", *m_play_btn_box);
-            m_help_view.m_top_bar.m_texture_manager.draw("m_t_play", *m_play_text_box);
+            m_reclame_view.m_texture_manager.draw("green_btn", *m_play_btn_box);
+            m_reclame_view.m_texture_manager.draw("m_t_play", *m_play_text_box);
 
             // Draw the load btn
-            m_help_view.m_top_bar.m_texture_manager.draw("red_btn", *m_load_btn_box);
-            m_help_view.m_top_bar.m_texture_manager.draw("m_t_load", *m_load_text_box);
+            m_reclame_view.m_texture_manager.draw("red_btn", *m_load_btn_box);
+            m_reclame_view.m_texture_manager.draw("m_t_load", *m_load_text_box);
 
             // Draw the help btn
-            m_help_view.m_top_bar.m_texture_manager.draw("yellow_btn", *m_help_btn_box);
-            m_help_view.m_top_bar.m_texture_manager.draw("m_t_help", *m_help_text_box);
+            m_reclame_view.m_texture_manager.draw("yellow_btn", *m_help_btn_box);
+            m_reclame_view.m_texture_manager.draw("m_t_help", *m_help_text_box);
 
             // Draw the credits btn
-            m_help_view.m_top_bar.m_texture_manager.draw("blue_btn", *m_credits_btn_box);
-            m_help_view.m_top_bar.m_texture_manager.draw("m_t_credits", *m_credits_text_box);
+            m_reclame_view.m_texture_manager.draw("blue_btn", *m_credits_btn_box);
+            m_reclame_view.m_texture_manager.draw("m_t_credits", *m_credits_text_box);
 
             // Draw the sliders
-            m_help_view.m_top_bar.m_texture_manager.draw("green_slider_right", *m_slider_left_box);
-            m_help_view.m_top_bar.m_texture_manager.draw("green_slider_left", *m_slider_right_box);
+            m_reclame_view.m_texture_manager.draw("green_slider_right", *m_slider_left_box);
+            m_reclame_view.m_texture_manager.draw("green_slider_left", *m_slider_right_box);
 
-            // Draw at the end because of the overlay
-            m_help_view.draw(time_elapsed, display_box);
+            m_reclame_view.draw(time_elapsed,display_box);
+
         }
 
         void main_menu::on_event(engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT> &event) {
-            if (!m_help_view.m_show) {
+            if (!m_reclame_view.m_help_view.m_show && !m_reclame_view.m_show) {
                 engine::math::vec2_t *position = engine::input::input_handler::get_instance()->get_mouse_position();
 
                 menu_btn_click(*position);
@@ -149,18 +147,21 @@ namespace gui {
 
         void main_menu::menu_btn_click(engine::math::vec2_t mouse_pos) {
             if (m_play_btn_box->contains(mouse_pos)) {
-                m_help_view.m_top_bar.m_menu_controller->play();
+
+                m_reclame_view.m_help_view.m_top_bar.m_menu_controller->play();
             } else if (m_load_btn_box->contains(mouse_pos)) {
-                m_help_view.m_top_bar.m_menu_controller->load();
+                m_reclame_view.m_show = true;
+
+                //m_help_view.m_top_bar.m_menu_controller->load();
             } else if (m_help_btn_box->contains(mouse_pos)) {
-                m_help_view.toggle_show();
+                m_reclame_view.m_help_view.toggle_show();
             } else if (m_credits_btn_box->contains(mouse_pos)) {
-                m_help_view.m_top_bar.m_menu_controller->credits();
+                m_reclame_view.m_help_view.m_top_bar.m_menu_controller->credits();
             }
         }
 
         void main_menu::on_event(engine::events::key_down &event) {
-            if (!m_help_view.m_show) {
+            if (!m_reclame_view.m_help_view.m_show && !m_reclame_view.m_show) {
                 auto keycode = event.get_keycode();
 
                 switch (keycode) {
@@ -180,7 +181,7 @@ namespace gui {
         }
 
         void main_menu::on_event(engine::events::mouse_motion &event) {
-            if (!m_help_view.m_show) {
+            if (!m_reclame_view.m_help_view.m_show && !m_reclame_view.m_show) {
                 auto position = event.get_mouse_position();
 
                 for (size_t i = 0; i < m_slider_positions.size(); i++) {
@@ -196,13 +197,13 @@ namespace gui {
                 auto box = m_slider_positions[pos];
 
                 // Create the left slider box
-                engine::graphics::box_builder builder1(m_help_view.m_top_bar.m_texture_manager.get_size("green_slider_right"));
+                engine::graphics::box_builder builder1(m_reclame_view.m_texture_manager.get_size("green_slider_right"));
                 builder1.as_right_top(box.left_top())
                     .center_vertical(box.min.y, box.max.y).add_margin({-20, 0});
                 m_slider_left_box.reset(new engine::math::box2_t(builder1.build()));
 
                 // Create the right slider box
-                engine::graphics::box_builder builder2(m_help_view.m_top_bar.m_texture_manager.get_size("green_slider_left"));
+                engine::graphics::box_builder builder2(m_reclame_view.m_texture_manager.get_size("green_slider_left"));
                 builder2.as_left_top(box.right_top())
                     .center_vertical(box.min.y, box.max.y).add_margin({20, 0});
                 m_slider_right_box.reset(new engine::math::box2_t(builder2.build()));
@@ -215,17 +216,17 @@ namespace gui {
         }
 
         void main_menu::after() {
-            m_help_view.after();
+            m_reclame_view.after();
 
             // Unload textures
-            m_help_view.m_top_bar.m_texture_manager.unload("logo");
-            m_help_view.m_top_bar.m_texture_manager.unload("blue_btn");
-            m_help_view.m_top_bar.m_texture_manager.unload("yellow_btn");
-            m_help_view.m_top_bar.m_texture_manager.unload("red_btn");
-            m_help_view.m_top_bar.m_texture_manager.unload("green_btn");
-            m_help_view.m_top_bar.m_texture_manager.unload("green_slider_left");
-            m_help_view.m_top_bar.m_texture_manager.unload("green_slider_right");
-            m_help_view.m_top_bar.m_texture_manager.unload("background");
+            m_reclame_view.m_texture_manager.unload("logo");
+            m_reclame_view.m_texture_manager.unload("blue_btn");
+            m_reclame_view.m_texture_manager.unload("yellow_btn");
+            m_reclame_view.m_texture_manager.unload("red_btn");
+            m_reclame_view.m_texture_manager.unload("green_btn");
+            m_reclame_view.m_texture_manager.unload("green_slider_left");
+            m_reclame_view.m_texture_manager.unload("green_slider_right");
+            m_reclame_view.m_texture_manager.unload("background");
 
             // Unload music
             m_music_manager.unload("menu_bg_music");
@@ -234,9 +235,9 @@ namespace gui {
             m_sound_manager.unload("menu_rollover");
 
             // Unload texts
-            m_help_view.m_top_bar.m_texture_manager.unload("m_t_play");
-            m_help_view.m_top_bar.m_texture_manager.unload("m_t_load");
-            m_help_view.m_top_bar.m_texture_manager.unload("m_t_credits");
+            m_reclame_view.m_texture_manager.unload("m_t_play");
+            m_reclame_view.m_texture_manager.unload("m_t_load");
+            m_reclame_view.m_texture_manager.unload("m_t_credits");
 
             auto &eventbus = engine::eventbus::eventbus::get_instance();
             eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>*> (this));
@@ -244,8 +245,8 @@ namespace gui {
             eventbus.unsubscribe(dynamic_cast<engine::eventbus::subscriber<engine::events::key_down>*> (this));
         }
 
-        void main_menu::set_controller(std::shared_ptr<controllers::menu_controller> menu_controller) {
-            m_help_view.m_top_bar.set_controller(menu_controller);
+        void main_menu::set_controller(controllers::menu_controller &menu_controller) {
+            m_reclame_view.m_help_view.m_top_bar.set_controller(menu_controller);
         }
     }
 }

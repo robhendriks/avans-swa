@@ -12,9 +12,20 @@
 namespace gui {
     namespace models {
         struct main_map_model {
-            std::unique_ptr<domain::gameworld::game_world> world;
+            domain::gameworld::game_world *world;
             bool paused = false;
-            std::vector<std::shared_ptr<domain::resources::resource>> previous_resource;
+
+            void reset() {
+                if (world != nullptr) {
+                    delete world;
+                    world = nullptr;
+                }
+                paused = false;
+            }
+
+            ~main_map_model() {
+                reset();
+            }
         };
     }
 }

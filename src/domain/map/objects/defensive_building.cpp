@@ -2,6 +2,7 @@
 // Created by Mark on 5-12-2016.
 //
 
+#include <string>
 #include "defensive_building.h"
 #include "../../../engine/graphics/box_builder.h"
 
@@ -12,46 +13,25 @@ namespace domain {
     namespace map {
         namespace objects {
 
-            defensive_building::defensive_building(engine::math::box2_t box, const std::string &id, int hitpoints,
-                                                   double health_ragen, const std::string &name,
-                                                   const std::vector<std::shared_ptr<resources::resource>> &required_resources,
-                                                   int _range, int _min_dmg, int _max_dmg) : building(box,id,hitpoints,health_ragen,name,required_resources) {
-                range = _range;
-                min_dmg = _min_dmg;
-                max_dmg = _max_dmg;
+            defensive_building::defensive_building(const engine::math::box2_t &box,
+                                                   const std::string &id,
+                                                   int hitpoints,
+                                                   double health_ragen,
+                                                   const std::string &name,
+                                                   const std::vector<resources::resource*> &required_resources,
+                                                   int range,
+                                                   int min_damage,
+                                                   int max_damage)
+                : building(box, id, hitpoints, health_ragen, name, required_resources),
+                  attacker(min_damage, max_damage, 2.0, range, 0) {}
+
+            void defensive_building::update(domain::game_level::game_level &game_level, unsigned int elapsed_time) {
+                if(get_ai()){
+                    get_ai()->update(elapsed_time);
+                }
             }
 
-            defensive_building::defensive_building(std::shared_ptr<field> field1, int _range, int _min_dmg,
-                                                   int _max_dmg) : building(field1) {
-                range = _range;
-                min_dmg = _min_dmg;
-                max_dmg = _max_dmg;
-            }
-
-            defensive_building::defensive_building(const defensive_building &obj)
-                : domain::drawable::drawable_game_object(obj), building(obj) {
-                range = obj.range;
-                min_dmg = obj.min_dmg;
-                max_dmg = obj.max_dmg;
-            }
-
-            int defensive_building::get_min_dmg() {
-                return min_dmg;
-            }
-
-            int defensive_building::get_max_dmg() {
-                return max_dmg;
-            }
-
-            int defensive_building::get_range() {
-                return range;
-            }
-
-            void defensive_building::update(domain::game_level::game_level game_level) {
-                //TODO
-            }
-
-            dragable_field_object *defensive_building::clone() const {
+            dragable_field_object* defensive_building::clone() const {
                 return new defensive_building(*this);
             }
 
@@ -62,15 +42,31 @@ namespace domain {
                     // Show damage
                     auto &font = *draw_managers.font_manager.get_font("roboto", 12);
 
+                    // Show name
+                    float min_left_width = 50;
+                    draw_managers.texture_manager.load_text(name, {0, 0, 0}, font, "e_p_name");
+                    engine::graphics::box_builder builder2(draw_managers.texture_manager.get_size("e_p_name"));
+                    builder2.as_right_bottom(get_box().left_top()).add_margin({0, 0});
+                    auto name_box = builder2.build();
+
+                    if (name_box.width() < min_left_width) {
+                        builder2.add_margin({(min_left_width - name_box.width()) * -1, 0});
+                        name_box = builder2.build();
+                    }
+
+                    draw_managers.texture_manager.draw("e_p_name", name_box);
+                    draw_managers.texture_manager.unload("e_p_name");
+
+                    // Show damage
                     draw_managers.texture_manager.load_text("Damage:", {0, 0, 0}, font, "d_d_title");
                     engine::graphics::box_builder builder(draw_managers.texture_manager.get_size("d_d_title"));
-                    builder.as_right_bottom(get_box().left_top());
+                    builder.as_left_top(name_box.left_bottom());
                     auto title_box = builder.build();
                     draw_managers.texture_manager.draw("d_d_title", title_box);
                     draw_managers.texture_manager.unload("d_d_title");
 
                     // Load the text
-                    std::string text = std::to_string(get_min_dmg()) + " - " + std::to_string(get_max_dmg());
+                    std::string text = std::to_string(get_min_damage()) + " - " + std::to_string(get_max_damage());
                     draw_managers.texture_manager.load_text(text, {0, 0, 0}, font, "hover");
                     // Draw
                     engine::graphics::box_builder builder1(draw_managers.texture_manager.get_size("hover"));
@@ -101,6 +97,17 @@ namespace domain {
                         auto red_box = red_builder.build();
                         draw_managers.color_manager.draw({127, 0, 0}, red_box);
                     }
+                }
+            }
+
+            void
+            defensive_building::update_game_stats(domain::game_level::game_stats &game_stats1, std::string action) {
+                building::update_game_stats(game_stats1, action);
+
+                if (action == "object-placed") {
+                    game_stats1.increase("defensive buildings");
+                } else if (action == "object-destroyed") {
+                    game_stats1.decrease("defensive buildings");
                 }
             }
         }

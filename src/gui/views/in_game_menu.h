@@ -12,6 +12,12 @@
 #include <memory>
 
 namespace gui {
+    namespace controllers {
+        class main_map_controller;
+    }
+}
+
+namespace gui {
     namespace views {
         class help;
     }
@@ -25,7 +31,9 @@ namespace gui {
             friend class level;
             friend class win_game_over;
         public:
-            in_game_menu(help &help_view);
+            in_game_menu(help &help_view, engine::engine &engine1);
+
+            void set_controller(controllers::main_map_controller &main_map_controller);
 
             void before();
 
@@ -45,13 +53,16 @@ namespace gui {
             void change_show();
 
             help &m_help_view;
+            engine::engine &m_engine;
             bool m_show;
             bool m_help_just_disappeared;
+            float m_last_saved_time;
             std::unique_ptr<engine::math::box2_t> m_menu_icon_box;
             std::unique_ptr<engine::math::box2_t> m_question_mark_icon_box;
             std::unique_ptr<engine::math::box2_t> m_menu_box;
             std::unique_ptr<engine::math::box2_t> m_save_btn_box;
             std::unique_ptr<engine::math::box2_t> m_save_btn_text_box;
+            std::unique_ptr<engine::math::box2_t> m_saved_btn_text_box;
             std::unique_ptr<engine::math::box2_t> m_help_btn_box;
             std::unique_ptr<engine::math::box2_t> m_help_btn_text_box;
             std::unique_ptr<engine::math::box2_t> m_quit_btn_box;
@@ -59,6 +70,7 @@ namespace gui {
             std::unique_ptr<engine::math::box2_t> m_cross_circle_box;
             std::unique_ptr<engine::math::box2_t> m_cross_box;
             std::vector<std::function<void(bool)>> m_callbacks;
+            controllers::main_map_controller *m_main_map_controller;
         };
     }
 }

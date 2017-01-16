@@ -28,11 +28,11 @@ namespace domain {
                 return m_rotation;
             }
 
-            void field_object::set_field(std::shared_ptr<field> field1) {
+            void field_object::set_field(field *field1) {
                 m_field = field1;
             }
 
-            std::shared_ptr<field> field_object::get_field() const {
+            field *field_object::get_field() const {
                 return m_field;
             }
         }

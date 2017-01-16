@@ -26,6 +26,7 @@ namespace gui {
             friend class level;
             friend class win_game_over;
             friend class main_menu;
+            friend class reclame;
         public:
             help(top_bar &top_bar1);
 
@@ -51,6 +52,7 @@ namespace gui {
             top_bar &m_top_bar;
             std::string m_image;
             bool m_show;
+            bool m_help_loaded;
             std::unique_ptr<engine::math::box2_t> m_overlay_box;
             std::unique_ptr<engine::math::box2_t> m_help_box;
             std::unique_ptr<engine::math::box2_t> m_image_box;

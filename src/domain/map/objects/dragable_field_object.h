@@ -16,13 +16,13 @@ namespace domain {
             public:
                 dragable_field_object(engine::math::box2_t box);
 
-                dragable_field_object(std::shared_ptr<field> field1);
+                dragable_field_object(field &field1);
 
                 dragable_field_object(const dragable_field_object &obj);
 
                 virtual ~dragable_field_object() = default;
 
-                virtual void set_box(std::shared_ptr<engine::math::box2_t> box);
+                virtual void set_box(engine::math::box2_t box);
 
                 virtual engine::math::box2_t get_box() const;
 

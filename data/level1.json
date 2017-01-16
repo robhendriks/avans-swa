@@ -1,6 +1,52 @@
 {
   "width": 16,
   "height": 16,
+  "time": 125000,
+  "nation": "the-demons",
+  "goals": [
+    {
+      "type" : "buildings",
+      "number" : 7
+    },
+    {
+      "type" : "defensive buildings",
+      "number" : 2
+    },
+    {
+      "type" : "Silicium Factory",
+      "number" : 2
+    },
+    {
+      "type" : "wood",
+      "number" : 450
+    },
+    {
+      "type" : "enemies defeated",
+      "number" : 4
+    }
+  ],
+  "resources" : [
+    {
+      "type" : "wood",
+      "amount" : 500
+    },
+    {
+      "type" : "gold",
+      "amount" : 500
+    },
+    {
+      "type" : "ore",
+      "amount" : 100
+    },
+    {
+      "type" : "silicium",
+      "amount" : 10
+    },
+    {
+      "type" : "uranium",
+      "amount" : 300
+    }
+  ],
   "tiles": {
     "count": 155,
     "data": [
@@ -1058,12 +1104,6 @@
         "id": "road-straight",
         "x": 12,
         "y": 3,
-        "rotation": 0
-      },
-      {
-        "id": "building-a",
-        "x": 12,
-        "y": 5,
         "rotation": 0
       }
     ]

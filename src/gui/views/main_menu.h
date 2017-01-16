@@ -10,6 +10,7 @@
 #include "../../engine/events/key_down.h"
 #include "base_view.h"
 #include "help.h"
+#include "reclame.h"
 
 namespace gui {
     namespace controllers {
@@ -20,6 +21,7 @@ namespace gui {
 namespace gui {
     namespace views {
         class help;
+        class reclame;
     }
 }
 
@@ -30,7 +32,7 @@ namespace gui {
                           engine::eventbus::subscriber<engine::events::mouse_motion>,
                           engine::eventbus::subscriber<engine::events::key_down> {
         public:
-            main_menu(help &help_view, engine::audio::music_manager &music_manager, engine::audio::sound_manager &sound_manager);
+            main_menu(reclame &reclame_view, engine::audio::music_manager &music_manager, engine::audio::sound_manager &sound_manager);
 
             void before();
 
@@ -46,14 +48,14 @@ namespace gui {
 
             void on_event(engine::events::key_down &event);
 
-            void set_controller(std::shared_ptr<controllers::menu_controller> menu_controller);
+            void set_controller(controllers::menu_controller &menu_controller);
 
         private:
             void set_sliders(unsigned int pos, bool force = false);
 
             void menu_btn_click(engine::math::vec2_t mouse_pos);
 
-            help &m_help_view;
+            reclame &m_reclame_view;
             engine::audio::music_manager &m_music_manager;
             engine::audio::sound_manager &m_sound_manager;
             std::unique_ptr<engine::math::box2_t> m_logo_box;

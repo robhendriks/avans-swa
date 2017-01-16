@@ -11,8 +11,8 @@
 namespace gui {
     namespace models {
         struct level_goals_model {
-            std::shared_ptr<domain::game_level::game_stats> game_goals;
-            std::shared_ptr<domain::game_level::game_stats> game_stats;
+            domain::game_level::game_stats *game_goals;
+            domain::game_level::game_stats *game_stats;
         };
     }
 }

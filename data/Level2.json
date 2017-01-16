@@ -1,6 +1,36 @@
 {
   "width": 16,
   "height": 16,
+  "time": 25000,
+  "nation": "the-demons",
+  "goals": [
+    {
+      "type" : "buildings",
+      "number" : 5
+    }
+  ],
+  "resources" : [
+    {
+      "type" : "wood",
+      "amount" : 5
+    },
+    {
+      "type" : "gold",
+      "amount" : 5
+    },
+    {
+      "type" : "ore",
+      "amount" : 5
+    },
+    {
+      "type" : "silicium",
+      "amount" : 5
+    },
+    {
+      "type" : "uranium",
+      "amount" : 5
+    }
+  ],
   "tiles": {
     "count": 71,
     "data": [
@@ -449,7 +479,7 @@
         "rotation": 0
       },
       {
-        "id": "building-a",
+        "id": "wood-cutter-camp",
         "x": 7,
         "y": 5,
         "rotation": 0

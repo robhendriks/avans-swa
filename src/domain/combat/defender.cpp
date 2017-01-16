@@ -25,7 +25,7 @@ namespace domain {
             m_granted_xp = other.m_granted_xp;
         }
 
-        int defender::get_current_hp() {
+        int defender::get_current_hp() const {
             return m_current_hp;
         }
 
@@ -38,11 +38,15 @@ namespace domain {
             return m_current_hp;
         }
 
-        int defender::get_max_hp() {
+        int defender::get_granted_xp() const {
+            return m_granted_xp;
+        }
+
+        int defender::get_max_hp() const {
             return m_max_hp;
         }
 
-        int defender::get_current_hp_percentage_relative_to_max() {
+        int defender::get_current_hp_percentage_relative_to_max() const {
             if(m_current_hp == 0)
                 return 0;
            return static_cast<int>((static_cast<double>(m_current_hp) / m_max_hp) * 100);

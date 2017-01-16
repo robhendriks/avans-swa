@@ -9,37 +9,21 @@ namespace domain {
     namespace map {
         namespace objects {
 
-            building::building(engine::math::box2_t box, int hitpoints) : dragable_field_object(box),
-                                                                          domain::combat::defender(hitpoints, 0),
-                                                                          show_hover_info(false)
-            {
-                // Subscribe to event
-                engine::eventbus::eventbus::get_instance().subscribe(this);
-
-            }
-
-            building::building(std::shared_ptr<field> field1, int hitpoints) : dragable_field_object(field1),
-                                                                               domain::combat::defender(hitpoints, 0),
-                                                                               show_hover_info(false)
-            {
-                // Subscribe to event
-                engine::eventbus::eventbus::get_instance().subscribe(this);
-            }
+            building::building(field &field1, const std::string &id, int hitpoints, double health_ragen,
+                               const std::string &name,
+                               const std::vector<resources::resource*> &required_resources) :
+                dragable_field_object(field1), domain::combat::defender(hitpoints, 0), id(id), health_ragen(health_ragen), name(name),
+                required_resources(required_resources), show_hover_info(false)
+            {}
 
             building::building(const engine::math::box2_t &box, const std::string &id, int hitpoints,
                                double health_ragen, const std::string &name,
-                               const std::vector<std::shared_ptr<resources::resource>> &required_resources
+                               const std::vector<resources::resource*> &required_resources
             )
                 : dragable_field_object(box), domain::combat::defender(hitpoints, 0), id(id), health_ragen(health_ragen), name(name),
-                  required_resources(required_resources), show_hover_info(false) {
-                // Subscribe to event
-                engine::eventbus::eventbus::get_instance().subscribe(this);
-            }
+                  required_resources(required_resources), show_hover_info(false) {}
 
-            building::~building() {
-                // Unsubscribe to event
-                engine::eventbus::eventbus::get_instance().unsubscribe(this);
-            }
+            building::~building() {}
 
             // Copy constructor
             building::building(const building &obj) : dragable_field_object(obj), domain::combat::defender(obj) {
@@ -48,9 +32,6 @@ namespace domain {
                 name = obj.name;
                 required_resources = obj.required_resources;
                 show_hover_info = false;
-
-                // Subscribe to event
-                engine::eventbus::eventbus::get_instance().subscribe(this);
             }
 
             /**
@@ -73,23 +54,21 @@ namespace domain {
                 return new building(*this);
             }
 
-            std::vector<std::shared_ptr<domain::resources::resource>> building::get_required_resources() {
+            std::vector<domain::resources::resource*> building::get_required_resources() {
                 return required_resources;
             }
 
-            void building::set_required_resource(std::vector<std::shared_ptr<domain::resources::resource>> resources){
-                required_resources = resources;
-            }
-
-            void building::update(domain::game_level::game_level game_level) {
+            void building::update(domain::game_level::game_level &game_level) {
 
             }
 
             void building::update_game_stats(domain::game_level::game_stats &game_stats1, std::string action) {
                 if (action == "object-placed") {
                     game_stats1.increase("buildings");
+                    game_stats1.increase(name);
                 } else if (action == "object-destroyed") {
                     game_stats1.decrease("buildings");
+                    game_stats1.decrease(name);
                 }
             }
 
@@ -105,7 +84,7 @@ namespace domain {
                 dragable_field_object::set_draw_settings(file_loc, image_start_position);
             }
 
-            void building::set_box(std::shared_ptr<engine::math::box2_t> box) {
+            void building::set_box(engine::math::box2_t box) {
                 dragable_field_object::set_box(box);
             }
 
@@ -114,7 +93,7 @@ namespace domain {
             }
 
             void building::on_event(engine::events::mouse_motion &event) {
-                if (id != "" && !m_drag_and_drop->is_dragging()) {
+                if (!m_drag_and_drop->is_dragging()) {
                     if (get_box().contains(event.get_mouse_position())) {
                         show_hover_info = true;
                         return;
@@ -158,6 +137,10 @@ namespace domain {
                         draw_managers.texture_manager.unload("hover");
                     }
                 }
+            }
+
+            std::string building::get_id() const {
+                return id;
             }
         }
     }

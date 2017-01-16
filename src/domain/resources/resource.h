@@ -14,11 +14,15 @@ namespace domain {
 
             void set_resource_type(std::string _resourcename);
 
-            std::string get_resource_type();
+            std::string get_resource_type() const;
 
             void set_count(int count);
 
-            int get_count();
+            int get_count() const;
+
+            void set_previous_count(int amount);
+
+            int get_previous_count() const;
 
             //Check if amount of resources exceeds the required amount.
             //Returns False when amount is higher than count; else true
@@ -38,6 +42,7 @@ namespace domain {
             std::string resourcename;
             int _count;
             bool max_out;
+            int m_previous_count;
         };
     }
 }

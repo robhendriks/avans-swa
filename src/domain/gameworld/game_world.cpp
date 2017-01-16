@@ -4,30 +4,62 @@
 
 namespace domain {
     namespace gameworld{
-        game_world::game_world(std::unique_ptr<game_level::game_level> game_level) : m_level(std::move(game_level)) {
-            set_mayor(nullptr);
+
+        game_world::game_world(std::vector<game_level::game_level*> game_levels) :
+            m_levels(game_levels), m_current_level(-1) {}
+
+        game_world::~game_world() {
+            // Remove all levels
+            for (auto &level : m_levels) {
+                delete level;
+            }
         }
 
-        game_world::~game_world() {}
-
-        game_level::game_level & game_world::get_current_level()  {
-            return *m_level;
-        }
-
-        void game_world::set_current_level(std::unique_ptr<game_level::game_level> game_lvl, bool tranfer_stats){
-            if(tranfer_stats){
-                lvl_id_and_game_stats s;
-                s.id = m_level->get_id();
-                s.name = m_level->get_name();
-                s.stat = m_level->get_stats();
-                m_all_stats.push_back(std::make_unique<lvl_id_and_game_stats>(s));
+        game_level::game_level *game_world::get_current_level()  {
+            if (m_current_level >= 0) {
+                return m_levels[m_current_level];
             }
 
-            m_level = std::move(game_lvl);
+            return nullptr;
         }
 
-        std::vector<std::unique_ptr<lvl_id_and_game_stats>> const& game_world::get_stats_of_previous_lvls() {
-            return m_all_stats;
+        void game_world::set_current_level(int number) {
+            if (number < m_levels.size()) {
+
+                if (m_current_level >= 0) {
+                    // Stop the previous level
+                    get_current_level()->stop();
+                }
+
+                m_current_level = number;
+
+                get_current_level()->start();
+            }
+        }
+
+        unsigned int game_world::calculate_score() const {
+            unsigned int score = 0;
+            for (auto &level : m_levels) {
+                if (level->get_state() == game_level::DONE || level->get_state() == game_level::TRANSITION) {
+                    score += level->get_max_duration() - level->get_duration();
+                }
+            }
+
+            return score;
+        }
+
+        bool game_world::has_next_level() const {
+            return m_current_level + 1 < m_levels.size();
+        }
+
+        void game_world::go_to_next_level() {
+            if (has_next_level()) {
+                set_current_level(m_current_level + 1);
+            }
+        }
+
+        std::vector<game_level::game_level *> game_world::get_levels() const {
+            return m_levels;
         }
 
         mayor * game_world::get_mayor() const {
@@ -52,8 +84,7 @@ namespace domain {
             else{
                 m_mayor = _mayor;
             }
+        }
     }
-
-}
 }
 #endif //CITY_DEFENCE_GAME_WORLD_CPP

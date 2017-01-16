@@ -16,7 +16,9 @@
 #include "../views/win_game_over.h"
 #include "menu_controller.h"
 #include "../../services/wave/wave_management.h"
-#include "../../services/level_loader/base_level_loader.h"
+#include "../../domain/map/objects/defensive_building.h"
+#include "../../data/json/highscore_json_repository.h"
+#include "../../services/world_saver/base_world_saver.h"
 
 namespace gui {
     namespace views {
@@ -38,13 +40,14 @@ namespace gui {
                                 models::main_map_model &model, models::transition_level_model &transition_model,
                                 models::level_goals_model &level_goals_model,
                                 game &game1, services::wave::wave_management &wave_management,
-                                services::level_loader::base_level_loader &level_loader);
+                                data::json::highscore_json_repository &highscore_repository,
+                                services::world_saver::base_world_saver &world_saver);
 
             void show();
 
-            void set_game_world(std::unique_ptr<domain::gameworld::game_world> &&game_world);
+            void set_game_world(domain::gameworld::game_world &game_world);
 
-            void set_menu_controller(std::shared_ptr<gui::controllers::menu_controller> menu_controller);
+            void set_menu_controller(gui::controllers::menu_controller &menu_controller);
 
             void next_lvl();
 
@@ -56,8 +59,10 @@ namespace gui {
 
             void resume_engine_if();
 
+            void save();
+
         private:
-            std::shared_ptr<gui::controllers::menu_controller> m_menu_controller;
+            gui::controllers::menu_controller *m_menu_controller;
             views::level &m_view;
             views::win_game_over &m_trans_view;
             engine::engine &m_engine;
@@ -65,11 +70,12 @@ namespace gui {
             models::transition_level_model &m_trans_model;
             models::level_goals_model &m_level_goals_model;
             services::wave::wave_management &m_wave_management_service;
-            services::level_loader::base_level_loader& m_level_loader;
             unsigned int m_previous_time;
+            data::json::highscore_json_repository &m_highscore_repository;
+            services::world_saver::base_world_saver &m_world_saver;
 
             // set values of the wave_management_service
-            void set_settings_wave_management_service(domain::game_level::game_level lvl);
+            void set_settings_wave_management_service(domain::game_level::game_level &lvl);
         };
     }
 }

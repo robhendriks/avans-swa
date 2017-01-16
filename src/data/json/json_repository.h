@@ -27,7 +27,7 @@ namespace data {
                     // Parse the string
                     nlohmann::json j = nlohmann::json::parse(json_string);
 
-                    // Loop through each json dragable_field_object, and add it to the vector
+                    // Loop through each json object, and add it to the vector
                     for (nlohmann::json::iterator it = j.begin(); it != j.end(); ++it) {
                         V* obj = create_from_json(it.value().dump());
                         if (obj != nullptr) {
@@ -53,7 +53,7 @@ namespace data {
                 }
             }
 
-            V* get_by_key(K& key) const {
+            V* get_by_key(K key) const {
                 auto it = m_map.find(key);
                 return (it != m_map.end() ? it->second : nullptr);
             }
@@ -76,8 +76,7 @@ namespace data {
             void commit() {
                 // Save the map to the json file
                 nlohmann::json j = nlohmann::json::array({});
-                for (auto it = m_map.begin(); it != m_map.end(); ++it)
-                {
+                for (auto it = m_map.begin(); it != m_map.end(); ++it) {
                     j.push_back(nlohmann::json::parse(to_json(*it->second)));
                 }
 
@@ -99,7 +98,7 @@ namespace data {
                 load();
             }
 
-            virtual K& get_key(V& obj) const = 0;
+            virtual K get_key(V& obj) const = 0;
             virtual std::string get_file_location() const = 0;
             virtual V* create_from_json(std::string json_string) const = 0;
             virtual std::string to_json(V& obj) const = 0;

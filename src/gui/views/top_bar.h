@@ -28,10 +28,11 @@ namespace gui {
             friend class win_game_over;
             friend class credits;
             friend class help;
+            friend class reclame;
         public:
             top_bar(domain::drawable::draw_managers_wrapper &draw_managers, engine::engine &engine);
 
-            void set_controller(std::shared_ptr<controllers::menu_controller> menu_controller);
+            void set_controller(controllers::menu_controller &menu_controller);
 
             void before();
 
@@ -53,7 +54,7 @@ namespace gui {
             engine::graphics::font_manager &m_font_manager;
             std::unique_ptr<engine::math::box2_t> m_bar_box;
             std::unique_ptr<engine::math::box2_t> m_close_box;
-            std::shared_ptr<controllers::menu_controller> m_menu_controller;
+            controllers::menu_controller *m_menu_controller;
 
             unsigned int m_previous_draw_time;
             unsigned int m_fps;
