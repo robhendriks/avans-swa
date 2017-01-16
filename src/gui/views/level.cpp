@@ -32,6 +32,7 @@ namespace gui {
 
             // Set mayor in mayor_view
             auto mayor = m_model.world->get_mayor();
+            mayor->get_behavior();
             m_mayor_view.set_mayor(mayor);
             mayor->init(&m_model.world->get_current_level()->get_stats());
 
