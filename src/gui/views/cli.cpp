@@ -34,22 +34,20 @@ namespace gui {
 
             m_command_manager->add("god", "god", [this](const utils::params &params) -> bool {
                 if (m_in_game_menu) {
-                    m_in_game_menu->m_main_map_controller->get_game_world()->get_current_level()->execute_cheat();
+                    if (m_in_game_menu->m_main_map_controller->get_game_world()->get_current_level()->execute_cheat()) {
+                        message("Godmode enabled.");
+                    } else {
+                        message("Godmode disabled.");
+                    }
                     return true;
                 }
                 return false;
             });
 
-            /*m_command_manager->add("wood", "wood <amount>", [this](const utils::params &params) -> bool {
-                if (params.size() < 2) {
-                    return false;
-                }
-                std::stringstream ss;
-                ss << "Got " << params[1] << " wood?";
-                message(ss.str());
-
+            m_command_manager->add("exit", "exit", [this](const utils::params &params) -> bool {
+                toggle_show();
                 return true;
-            });*/
+            });
 
             /*m_command_manager->add("gold", "gold <amount>", [this](const utils::params &params) -> bool {
                 if (params.size() < 2) {
