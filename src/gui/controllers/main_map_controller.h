@@ -45,6 +45,8 @@ namespace gui {
 
             void show();
 
+            domain::gameworld::game_world *get_game_world();
+
             void set_game_world(domain::gameworld::game_world &game_world);
 
             void set_menu_controller(gui::controllers::menu_controller &menu_controller);

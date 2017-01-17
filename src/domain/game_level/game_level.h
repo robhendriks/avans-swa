@@ -123,7 +123,7 @@ namespace domain {
 
             void decrement_building_cost(engine::draganddrop::dragable &building);
 
-            void execute_cheat();
+            bool execute_cheat();
 
         private:
             void subscribe_buildings_to_event() const;

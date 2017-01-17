@@ -30,19 +30,28 @@ namespace gui {
 
         cli::cli(top_bar &top_bar1)
             : m_top_bar(top_bar1), m_show(false), m_input_font(nullptr), m_input_texture(nullptr), m_input_size(0, 0),
-              m_command_manager(new utils::command_manager) {
+              m_command_manager(new utils::command_manager), m_in_game_menu(nullptr) {
 
-            m_command_manager->add("wood", "wood <amount>", [this](const utils::params &params) -> bool {
+            m_command_manager->add("god", "god", [this](const utils::params &params) -> bool {
+                if (m_in_game_menu) {
+                    m_in_game_menu->m_main_map_controller->get_game_world()->get_current_level()->execute_cheat();
+                    return true;
+                }
+                return false;
+            });
+
+            /*m_command_manager->add("wood", "wood <amount>", [this](const utils::params &params) -> bool {
                 if (params.size() < 2) {
                     return false;
                 }
                 std::stringstream ss;
                 ss << "Got " << params[1] << " wood?";
                 message(ss.str());
-                return true;
-            });
 
-            m_command_manager->add("gold", "gold <amount>", [this](const utils::params &params) -> bool {
+                return true;
+            });*/
+
+            /*m_command_manager->add("gold", "gold <amount>", [this](const utils::params &params) -> bool {
                 if (params.size() < 2) {
                     return false;
                 }
@@ -50,7 +59,7 @@ namespace gui {
                 ss << "Got " << params[1] << " gold?";
                 message(ss.str());
                 return true;
-            });
+            });*/
         }
 
         void cli::before() {
@@ -203,6 +212,10 @@ namespace gui {
                 m_items.pop_front();
             }
             m_items.emplace_back(message, texture, size);
+        }
+
+        void cli::set_in_game_menu(const std::shared_ptr<in_game_menu> &in_game_menu1) {
+            m_in_game_menu = in_game_menu1;
         }
     }
 }

@@ -28,8 +28,10 @@ namespace gui {
 namespace gui {
     namespace views {
         class in_game_menu : public base_view,
+                             public std::enable_shared_from_this<in_game_menu>,
                              engine::eventbus::subscriber<engine::events::mouse_button_down<engine::input::mouse_buttons::LEFT>>,
                              engine::eventbus::subscriber<engine::events::key_down> {
+            friend class cli;
             friend class level;
             friend class win_game_over;
         public:

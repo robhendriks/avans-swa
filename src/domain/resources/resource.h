@@ -36,6 +36,12 @@ namespace domain {
 
             void max_out_resource();
 
+            bool toggle_infinite_funds();
+
+            void disable_max_out_resource();
+
+            bool is_max_out() const;
+
             ~resource();
 
         private:

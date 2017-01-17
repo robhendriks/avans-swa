@@ -7,7 +7,7 @@ namespace domain {
     namespace resources {
 
         resource::resource(const std::string &resourcename, int _count) : resourcename(resourcename), _count(_count),
-            m_previous_count(-1) {}
+            m_previous_count(-1), max_out(false) {}
 
         resource::resource() : _count(-1), max_out(false), m_previous_count(-1) {}
 
@@ -51,9 +51,17 @@ namespace domain {
             resourcename = _resourcename;
         }
 
-        void resource::max_out_resource() {
-            max_out = true;
-            _count = 99999;
+        bool resource::toggle_infinite_funds() {
+            max_out = !max_out;
+            if (max_out) {
+                _count = 99999;
+                return true;
+            }
+            return false;
+        }
+
+        bool resource::is_max_out() const {
+            return max_out;
         }
 
         resource::~resource() {

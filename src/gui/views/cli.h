@@ -14,12 +14,14 @@
 #include "../../engine/events/key_down.h"
 #include "../../engine/input/input_handler.h"
 #include "top_bar.h"
+#include "in_game_menu.h"
 #include "../../utils/string_utils.h"
 #include "../../utils/command_manager.h"
 
 namespace gui {
     namespace views {
         class top_bar;
+        class in_game_menu;
     }
 }
 
@@ -78,6 +80,10 @@ namespace gui {
             void submit();
 
             void message(std::string message);
+
+            void set_in_game_menu(const std::shared_ptr<in_game_menu> &in_game_menu1);
+
+            std::shared_ptr<in_game_menu> m_in_game_menu;
 
             top_bar &m_top_bar;
             bool m_show;

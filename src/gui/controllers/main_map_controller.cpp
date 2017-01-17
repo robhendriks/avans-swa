@@ -129,6 +129,10 @@ namespace gui {
             }
         }
 
+        domain::gameworld::game_world *main_map_controller::get_game_world() {
+            return m_model.world;
+        }
+
         void main_map_controller::set_game_world(domain::gameworld::game_world &game_world) {
             m_model.reset();
             m_model.world = &game_world;

@@ -401,15 +401,17 @@ namespace domain {
             m_id = id;
         }
 
-        void game_level::execute_cheat(){
-            m_has_cheated = true;
+        bool game_level::execute_cheat(){
+            m_has_cheated = !m_has_cheated;
+
             for(auto &resource_bank : m_resources) {
-                resource_bank->max_out_resource();
+                resource_bank->toggle_infinite_funds();
             }
 
-            update(true);
-
+            update(m_has_cheated);
             update_game_resources_stats();
+
+            return m_has_cheated;
         }
 
         void game_level::clean_resources() {

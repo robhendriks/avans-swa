@@ -400,7 +400,7 @@ namespace gui {
                     } else if (event.get_keycode() == engine::input::keycodes::keycode::HOME) {
                         reset_speed();
                     } else if(event.get_keycode() == engine::input::keycodes::keycode::F){
-                        m_model.world->get_current_level()->execute_cheat();
+//                        m_model.world->get_current_level()->execute_cheat();
                     }
                 }
             }

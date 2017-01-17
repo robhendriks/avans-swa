@@ -17,6 +17,7 @@ namespace gui {
         void in_game_menu::before() {
             m_help_view.before();
             m_cli_view.before();
+            m_cli_view.set_in_game_menu(shared_from_this());
 
             // Make sure it's not shown
             m_show = false;
@@ -245,6 +246,7 @@ namespace gui {
 
         void in_game_menu::set_controller(controllers::main_map_controller &main_map_controller) {
             m_main_map_controller = &main_map_controller;
+
         }
     }
 }
