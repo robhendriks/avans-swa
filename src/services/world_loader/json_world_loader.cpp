@@ -55,8 +55,10 @@ namespace services {
             auto *world = new domain::gameworld::game_world(vec_levels);
 
             // Start on correct level
-            json start_level = m_root["start_level"];
-            if (start_level.is_number_unsigned()) {
+            json sl = m_root["start_level"];
+            if (sl.is_number_unsigned()) {
+                size_t start_level = sl.get<size_t>();
+
                 for (int i = 1; i < start_level; i++) {
                     world->go_to_next_level();
                 }

@@ -30,6 +30,7 @@ namespace gui {
             friend class help;
             friend class reclame;
             friend class load;
+            friend class cli;
         public:
             top_bar(domain::drawable::draw_managers_wrapper &draw_managers, engine::engine &engine);
 

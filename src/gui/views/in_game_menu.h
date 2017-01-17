@@ -9,6 +9,7 @@
 #include "../../engine/input/mouse_buttons.h"
 #include "../../engine/events/mouse_button_down.h"
 #include "help.h"
+#include "cli.h"
 #include <memory>
 
 namespace gui {
@@ -20,6 +21,7 @@ namespace gui {
 namespace gui {
     namespace views {
         class help;
+        class cli;
     }
 }
 
@@ -31,7 +33,7 @@ namespace gui {
             friend class level;
             friend class win_game_over;
         public:
-            in_game_menu(help &help_view, engine::engine &engine1);
+            in_game_menu(help &help_view, cli &cli_view, engine::engine &engine1);
 
             void set_controller(controllers::main_map_controller &main_map_controller);
 
@@ -52,6 +54,7 @@ namespace gui {
         private:
             void change_show();
 
+            cli &m_cli_view;
             help &m_help_view;
             engine::engine &m_engine;
             bool m_show;

@@ -8,14 +8,15 @@
 namespace gui {
     namespace views {
 
-        in_game_menu::in_game_menu(help &help_view, engine::engine &engine1) :
-            m_help_view(help_view), m_engine(engine1), m_show(false), m_help_just_disappeared(false),
+        in_game_menu::in_game_menu(help &help_view, cli &cli_view, engine::engine &engine1) :
+            m_cli_view(cli_view), m_help_view(help_view), m_engine(engine1), m_show(false), m_help_just_disappeared(false),
             m_last_saved_time(-1) {
 
         }
 
         void in_game_menu::before() {
             m_help_view.before();
+            m_cli_view.before();
 
             // Make sure it's not shown
             m_show = false;
@@ -62,6 +63,7 @@ namespace gui {
 
         void in_game_menu::on_display_change(engine::math::box2_t display_box) {
             m_help_view.on_display_change(display_box);
+            m_cli_view.on_display_change(display_box);
 
             // Create the menu icon box
             engine::graphics::box_builder builder1(m_help_view.m_top_bar.m_texture_manager.get_size("igm_icon"));
@@ -120,6 +122,7 @@ namespace gui {
 
         void in_game_menu::draw(unsigned int time_elapsed, engine::math::box2_t display_box) {
             m_help_view.draw(time_elapsed, display_box);
+            m_cli_view.draw(time_elapsed, display_box);
 
             // Draw the menu icon
             m_help_view.m_top_bar.m_texture_manager.draw("igm_icon", *m_menu_icon_box);
@@ -196,6 +199,10 @@ namespace gui {
                 change_show();
             }
 
+            if (event.get_keycode() == engine::input::keycodes::keycode::GRAVE) {
+                m_cli_view.toggle_show();
+            }
+
             m_help_just_disappeared = false;
         }
 
@@ -210,6 +217,7 @@ namespace gui {
 
         void in_game_menu::after() {
             m_help_view.after();
+            m_cli_view.after();
 
             // Unload textures
             m_help_view.m_top_bar.m_texture_manager.unload("igm_icon");
