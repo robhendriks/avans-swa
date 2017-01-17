@@ -132,15 +132,15 @@ namespace gui {
         }
 
         void cli::after() {
-            if (m_input_texture) {
-                SDL_DestroyTexture(m_input_texture);
-                m_input_texture = nullptr;
-            }
-            if (m_input_font) {
-                TTF_CloseFont(m_input_font);
-                m_input_font = nullptr;
-            }
-
+//            if (m_input_texture) {
+//                SDL_DestroyTexture(m_input_texture);
+//                m_input_texture = nullptr;
+//            }
+//            if (m_input_font) {
+//                TTF_CloseFont(m_input_font);
+//                m_input_font = nullptr;
+//            }
+//
             input_reset();
             m_items.clear();
 
