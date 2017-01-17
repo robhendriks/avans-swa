@@ -32,14 +32,24 @@ namespace gui {
             : m_top_bar(top_bar1), m_show(false), m_input_font(nullptr), m_input_texture(nullptr), m_input_size(0, 0),
                 m_command_manager(new utils::command_manager) {
 
-            m_command_manager->add("foo", "foo <arg0> [arg1]", [](const utils::params &params) -> bool {
-                SDL_Log("Foo");
-                return false;
+            m_command_manager->add("wood", "wood <amount>", [this](const utils::params &params) -> bool {
+                if (params.size() < 2) {
+                    return false;
+                }
+                std::stringstream ss;
+                ss << "Got " << params[1] << " wood?";
+                message(ss.str());
+                return true;
             });
 
-            m_command_manager->add("bar", "bar <arg0>", [](const utils::params &params) -> bool {
-               SDL_Log("Bar");
-                return false;
+            m_command_manager->add("gold", "gold <amount>", [this](const utils::params &params) -> bool {
+                if (params.size() < 2) {
+                    return false;
+                }
+                std::stringstream ss;
+                ss << "Got " << params[1] << " gold?";
+                message(ss.str());
+                return true;
             });
         }
 
